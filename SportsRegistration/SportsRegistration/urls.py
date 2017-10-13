@@ -15,7 +15,10 @@ Including another URLconf
 """
 from django.conf.urls import url
 from . import view
+from django.conf.urls.static import static
+from django.conf import settings
+
 
 urlpatterns = [
     url(r'^$', view.firstView),
-]
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
