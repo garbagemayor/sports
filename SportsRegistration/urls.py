@@ -17,10 +17,11 @@ from django.conf.urls import url
 from . import view
 from django.conf.urls.static import static
 from django.conf import settings
+from Events import views as  Events_view
 
 
 urlpatterns = [
                   url(r'^$', view.HomePageView),
-                  url(r'^events$', view.EventsView),
-                  url(r'^users$', view.UsersView),
+                  url(r'^events/$', Events_view.index),
+                  url(r'^users/$', view.UsersView),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
