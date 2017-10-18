@@ -17,8 +17,14 @@ from django.conf.urls import url
 from . import view
 from django.conf.urls.static import static
 from django.conf import settings
+from Events import view as events_view
+from HomePage import view as homepage_view
+from Users import view as users_view
 
 
 urlpatterns = [
     url(r'^$', view.firstView),
+    url(r'^events/$', events_view.index, name='events'),
+    url(r'^login/$', users_view.login, name='login'),
+    url(r'^user/$', users_view.profile, name='profile'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
