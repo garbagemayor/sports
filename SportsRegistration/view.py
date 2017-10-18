@@ -13,6 +13,5 @@ def HomePageView(request):
 def EventsView(request):
     return render(request, "Events/events.html")
 
-
 def UsersView(request):
     return render(request, "Users/users.html")
