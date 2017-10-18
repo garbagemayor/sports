@@ -6,5 +6,10 @@ from django.shortcuts import render_to_response
 from django.contrib import auth
 from django.views.decorators.csrf import csrf_exempt,csrf_protect
 
-def firstView(request):
+
+def HomePageView(request):
     return render(request, "HomePage/homepage.html")
+
+
+def EventsView(request):
+    return render(request, "Events/events.html")
