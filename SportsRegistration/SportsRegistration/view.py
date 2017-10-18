@@ -7,4 +7,4 @@ from django.contrib import auth
 from django.views.decorators.csrf import csrf_exempt,csrf_protect
 
 def firstView(request):
-    return render(request, "index.html")
+    return render(request, "HomePage/homepage.html")
