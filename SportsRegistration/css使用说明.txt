@@ -1,0 +1,12 @@
+样式表位于
+HomePage/static/style.css
+HomePage/static/send_sheet.css
+
+send_sheet.css是一种提交表单的样式
+包含样式：
+	input
+	textarea
+	.form label
+	.submit input
+
+然后关联到issue
