@@ -16,12 +16,17 @@ Including another URLconf
 from django.conf.urls import url
 from . import view
 from django.conf.urls.static import static
+from django.views.generic import RedirectView
 from django.conf import settings
 from Events import views as  Events_view
+from Users import views as  Users_view
 
 
 urlpatterns = [
-                  url(r'^$', view.HomePageView),
-                  url(r'^events/$', Events_view.index),
-                  url(r'^users/$', view.UsersView),
+                  url(r'^$', RedirectView.as_view(url='/main/') ),
+                  url(r'^main/$', view.HomePageView, name='homepage'),
+                  url(r'^events/$', Events_view.index, name='eventslist'),
+                  url(r'^events/(\d+)/$', Events_view.page, name='eventspage'),
+                  url(r'^users/$', view.UsersView, name='user'),
+                  url(r'^authorized/$', Users_view.auth),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

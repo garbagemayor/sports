@@ -3,6 +3,8 @@ from __future__ import unicode_literals
 
 from django.shortcuts import render
 from HomePage.models import Events
+from django.core.paginator import Paginator
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 # Create your views here.
 def index(request):
@@ -15,5 +17,18 @@ def index(request):
             l.s2 = "已截止"
         elif l.status =="info":
             l.s2 = "尚未开始"
+    paginator=Paginator(events_list, 3)
+    page = request.GET.get('page')
+    try:
+        events_list = paginator.page(page)
+    except PageNotAnInteger:
+        events_list = paginator.page(1)
+    except EmptyPage:
+        events_list = paginator.page(paginator.num_pages)
+
+    
     return render(request, 'Events/events.html', {'events_list':events_list})
     
+def page(request, Id):
+    events=Events.objects.get(id=Id)
+    return render(request, 'Events/page.html', {'events':events})

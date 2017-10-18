@@ -8,6 +8,11 @@
 <div class="container-fluid">
     <div class="row-fluid">
         <div class="span12">
+	<div class="page-header">
+        <h1 style="text-align: center">
+          赛事列表 <small></small>
+        </h1>
+      </div>
             <table class="table table-hover">
                 <thead>
                 <tr>
@@ -34,7 +39,7 @@
                     <td>
                         {{line.id}}
                     </td>
-                    <td>
+                    <td onclick="location.href='/events/{{line.id}}'">
                         {{line.name}}
                     </td>
                     <td>
@@ -53,4 +58,28 @@
         </div>
     </div>
 </div>
+
+<nav style="text-align: center">
+<ul class="pagination">
+    {% if events_list.has_previous %}
+        <li><a href="?page={{ events_list.previous_page_number }}">&laquo;</a></li>
+    {% endif %}
+    {% if events_list.number > 2 %}
+        <li><a href="?page={{ events_list.number|add:"-2"}}">{{events_list.number|add:"-2"}}</a></li>
+    {% endif %}
+    {% if events_list.number > 1 %}
+        <li><a href="?page={{ events_list.previous_page_number }}">{{events_list.number|add:"-1"}}</a></li>
+    {% endif %}
+        <li class="active"><a>{{events_list.number}}<span class="sr-only">(current)</span></a></li>
+    {% if events_list.number < events_list.paginator.num_pages %}
+        <li><a href="?page={{ events_list.next_page_number }}">{{events_list.number|add:"1"}}</a></li>
+    {% endif %}
+    {% if events_list.number < events_list.paginator.num_pages|add:"-1" %}
+        <li><a href="?page={{ events_list.number|add:"2"}}">{{events_list.number|add:"2"}}</a></li>
+    {% endif %}
+    {% if events_list.has_next %}
+        <li><a href="?page={{ events_list.next_page_number }}">&raquo;</a></li>
+    {% endif %}
+</ul>
+</nav>
 {% endblock %}

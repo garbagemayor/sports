@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -14,10 +14,10 @@
       {% endblock %}
 
     <!-- Bootstrap core CSS -->
-	<link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-	<script src="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"></script>
-	<script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
-	<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"></script>
+  <script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+  <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link href="/static/style.css" rel="stylesheet">
     {% load staticfiles %}
   </head>
@@ -26,9 +26,16 @@
 
   {% include 'header.html' %}
   <br><br><br>
-    {% block content %}
-    <div></div>
-    {% endblock %}
+  <div class="container">
+    <div class="row clearfix">
+      <div class="col-md-12 column">
+      {% block content %}
+      <div>加载中</div>
+      {% endblock %}
+
+      </div>
+    </div>
+  </div>
 
     {% include 'footer.html' %}
 
