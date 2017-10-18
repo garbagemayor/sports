@@ -8,3 +8,5 @@ send_sheet.css是一种提交表单的样式
 	textarea
 	.form label
 	.submit input
+
+然后关联到issue
