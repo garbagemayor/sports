@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block title %}
+<title>用户</title>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span12">
+            <form>
+                <fieldset>
+                    <legend contenteditable="true">用户</legend>
+                    <label contenteditable="true">用户名</label>
+                    <input placeholder="root" type="text"/><font color="red">不可修改</font><br>
+                    <label contenteditable="true">性别</label>
+                    <div class="btn-group">
+                        <button class="btn" contenteditable="true">选择性别</button>
+                        <button class="btn dropdown-toggle" data-toggle="dropdown">↓</button>
+                        <ul class="dropdown-menu" contenteditable="true">
+                            <li><a href="#">男</a></li>
+                            <li><a href="#">女</a></li>
+                            <li><a href="#">其他</a></li>
+                            <li class="divider">&nbsp;</li>
+                            <li class="dropdown-submenu"><a href="#" tabindex="-1">更多选项</a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#">单身男</a></li>
+                                    <li><a href="#">单身女</a></li>
+                                    <li><a href="#">已脱单</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </fieldset>
+            </form>
+            <br>
+            <form>
+                <fieldset>
+                    <legend contenteditable="true">密码</legend>
+                    <label contenteditable="true">原密码</label>
+                    <input type="text"/><font color="red">*</font>
+                    <label class="checkbox" contenteditable="true">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox"/>显示密码
+                    </label>
+                    <label contenteditable="true">新密码</label>
+                    <input type="text"/><font color="red">*</font>
+                    <label class="checkbox" contenteditable="true">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox"/>显示密码
+                    </label>
+                    <label contenteditable="true">确认密码</label>
+                    <input type="text"/><font color="red">*</font>
+                    <label class="checkbox" contenteditable="true">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox"/>显示密码
+                    </label>
+                    <button class="btn" contenteditable="true" type="submit">提交</button>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

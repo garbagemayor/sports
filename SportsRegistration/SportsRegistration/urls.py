@@ -22,4 +22,5 @@ from django.conf import settings
 urlpatterns = [
                   url(r'^$', view.HomePageView),
                   url(r'^events$', view.EventsView),
+                  url(r'^users$', view.UsersView),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
