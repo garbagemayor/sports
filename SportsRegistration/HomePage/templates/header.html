@@ -12,10 +12,10 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="/">主页</a></li>
-            <li><a href="/events">赛事</a></li>
-            <li class="个人">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+            <li {% if request.path == "/" %}class="active"{% endif %}><a href="/">主页</a></li>
+            <li {% if request.path|slice:"3" == "/ev" %}class="active"{% endif %}><a href="/events">赛事</a></li>
+            <li {% if request.path|slice:"3" == "/us" %}class="active"{% endif %}>
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">个人<span class="caret"></span></a>
               <ul class="dropdown-menu">
                   <li><a href="/users">个人信息</a></li>
                 <li role="separator" class="divider"></li>

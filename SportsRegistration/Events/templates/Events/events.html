@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+﻿{% extends 'base.html' %}
 
 {% block title %}
 <title>赛事</title>
@@ -29,92 +29,26 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr class="success">
+                {% for line in events_list %}
+                <tr class="{{line.status}}" ondblclick="location.href='/events/{{line.id}}'">
                     <td>
-                        1
+                        {{line.id}}
                     </td>
                     <td>
-                        男子跳高
+                        {{line.name}}
                     </td>
                     <td>
-                        2017/10/18-8:00
+                        {{line.date}}
                     </td>
                     <td>
-                        正在报名
+                        {{line.s2}}
                     </td>
                     <td>
-                        立即报名
-                    </td>
-                </tr>
-                <tr class="success">
-                    <td>
-                        2
-                    </td>
-                    <td>
-                        女子100米
-                    </td>
-                    <td>
-                        2017/10/18-9:00
-                    </td>
-                    <td>
-                        正在报名
-                    </td>
-                    <td>
-                        立即报名
+                        {{line.s3}}
                     </td>
                 </tr>
-                <tr class="error">
-                    <td>
-                        3
-                    </td>
-                    <td>
-                        女子铁人三项
-                    </td>
-                    <td>
-                        2017/10/18-9:40
-                    </td>
-                    <td>
-                        报名截止
-                    </td>
-                    <td>
-                        ————
-                    </td>
-                </tr>
-                <tr class="success">
-                    <td>
-                        4
-                    </td>
-                    <td>
-                        男子3000米
-                    </td>
-                    <td>
-                        2017/10/18-10:20
-                    </td>
-                    <td>
-                        正在报名
-                    </td>
-                    <td>
-                        立即报名
-                    </td>
-                </tr>
-                <tr class="info">
-                    <td>
-                        5
-                    </td>
-                    <td>
-                        麻将
-                    </td>
-                    <td>
-                        2017/10/18-21:00
-                    </td>
-                    <td>
-                        尚未开启
-                    </td>
-                    <td>
-                        ————
-                    </td>
-                </tr>
-                </tbody>
+                {% endfor %}
+                
             </table>
         </div>
     </div>
