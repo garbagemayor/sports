@@ -21,6 +21,7 @@ from django.conf import settings
 from Events import views as  Events_view
 from Users import views as  Users_view
 from django.contrib import admin
+from RegistrationRecord import views as Record_view
 
 
 urlpatterns = [
@@ -35,4 +36,7 @@ urlpatterns = [
                   url(r'^user/myevents/$', Users_view.my_events, name='my_events'),
                   url(r'^managers/$', Users_view.manager, name='manager'),
                   url(r'^admin/', admin.site.urls),
+                  url(r'^record/(\d+)/$', Record_view.recordPage, name='recordpage'),
+                  url(r'^record_download_csv/(\d+)/$', Record_view.recordDownloadCSV, name='recorddownload'),
+                  url(r'^record_download_xlsx/(\d+)/$', Record_view.recordDownloadXLSX, name='recorddownload'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
