@@ -6,6 +6,7 @@ from django.shortcuts import render
 import requests
 import json
 from django.core.mail import send_mail
+from HomePage.models import Sign
 from HomePage.models import Events
 from django.core.paginator import Paginator
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -38,15 +39,17 @@ def send_email(request):
 
 def my_events(request):
     # TODO: my_events_list=list(Events.objects.get(userid=""))
-    events_list=list(Events.objects.all()[::-1])
-    for l in events_list:
+    sign_list=list(Sign.objects.get(userid="7"))
+    events_list = []
+    for event in sign_list:
+        l = list(Events.objects.get(id=event.eventsid))
         if l.status =="success":
-            l.s2 = "正在报名"
-            l.s3 = "立即报名"
+            l.event_status = "正在报名"
         elif l.status =="error":
-            l.s2 = "已截止"
+            l.event_status = "已截止"
         elif l.status =="info":
-            l.s2 = "尚未开始"
+            l.event_status = "尚未开始"
+        events_list.add(l)
     paginator=Paginator(events_list, 3)
     page = request.GET.get('page')
     try:
@@ -55,7 +58,8 @@ def my_events(request):
         events_list = paginator.page(1)
     except EmptyPage:
         events_list = paginator.page(paginator.num_pages)
-    return render(request, 'Users/my_events.html', {'events_list':events_list})
+    return render(request, 'Users/my_events.html', {'events_list':events_list,
+        'sign_list':sign_list})
 
 def my_event(request, Id):
     events=Events.objects.get(id=Id)

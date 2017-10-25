@@ -21,5 +21,6 @@ class Sign(models.Model):
     id = models.IntegerField(primary_key=True)
     userid = models.IntegerField()
     eventsid = models.IntegerField()
+    result = models.IntegerField(null=True)
 
 

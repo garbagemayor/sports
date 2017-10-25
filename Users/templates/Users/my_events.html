@@ -29,7 +29,7 @@
                         报名状态
                     </th>
                     <th>
-                        操作
+                        我的成绩
                     </th>
                 </tr>
                 </thead>
@@ -48,8 +48,12 @@
                     <td>
                         {{line.s2}}
                     </td>
+                </tr>
+                {% endfor %}
+                {% for line in sign_list %}
+                <tr class="{{line.status}}" ondblclick="location.href='/events/{{line.id}}'">
                     <td>
-                        {{line.s3}}
+                        {{line.result}}
                     </td>
                 </tr>
                 {% endfor %}
