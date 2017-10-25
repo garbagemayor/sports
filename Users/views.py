@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from django.http import HttpResponse
-from django.shortcuts import render
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render, redirect
 import requests
 import json
 from HomePage.models import User 
@@ -12,12 +12,12 @@ def auth(request):
             + request.GET['code'])
     rr = requests.get('https://accounts.net9.org/api/userinfo?access_token=' + r.json()['access_token'])
     j=rr.json()
-    #User.objects.get_or_create(name=j['user']['name'], classNumber=j['user']['group'][0])
+    user=User.objects.get_or_create(name=j['user']['name'], email=j['user']['email'], mobile=j['user']['mobile'], fullname=j['user']['fullname'], classnumber=j['user']['groups'][0])
     request.session['username']=j['user']['name']
-    return render(request, "Events/events.html")
-    #  return HttpResponse(rr.json()['user'])
+    request.session['userid']=user[0].id;
+    return HttpResponseRedirect("/events/")
 
 def logout(request):
     if (request.session['username']):
         del request.session['username']
-    return render(request, "HomePage/homepage.html")
+    return HttpResponseRedirect("/")

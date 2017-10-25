@@ -13,8 +13,8 @@
           {{events.name}} <small>{{events.name}}</small>
         </h1>
       </div>
-      <div class="alert alert-{{events.status}}">
-        可参加
+      <div id="status" class="alert alert-{{events.status}}">
+        正在报名
       </div>
       <dl class="dl-horizontal">
         <dt>
@@ -29,12 +29,34 @@
         <dd>
           {{events.content}}
         </dd>
-      </dl>
+      </dl>	  
       <nav style="text-align: center; margin-bottom:20px"> 
-        <button class="btn btn-primary" type="button"
-        {% if signed %} disabled="disabled"{% endif %}>立即报名</button>
+	    <form method="post" action="">
+		  {% csrf_token %}
+		  <button class="btn btn-primary" type="submit" onclick="register()">立即报名</button>
+	    </form>
+	  </nav>
+	  <!--{% if request.session.username %}
+      <nav style="text-align: center; margin-bottom:20px"> 
+        <button id="register" class="btn btn-primary" type="button"
+        {% if signed %} disabled="disabled"{% endif %} onclick="register()">立即报名</button>
       </nav>
+	  {% endif %}-->
     </div>
   </div>
 </div>
+
+<script type="text/javascript">
+ function openwin()
+ {
+	var status = {{status|safe}};
+	if (status == 1) 
+		alert("报名成功！\n请等待审核。");
+	else if (status == 2)
+		alert("已报名！");
+ }			
+
+
+</script>
+
 {% endblock %}

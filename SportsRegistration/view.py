@@ -8,10 +8,13 @@ from django.views.decorators.csrf import csrf_exempt,csrf_protect
 
 
 def HomePageView(request):
+    print request.method
     return render(request, "HomePage/homepage.html")
 
 def EventsView(request):
+    print request.method
     return render(request, "Events/events.html")
 
 def UsersView(request):
+    print request.method
     return render(request, "Users/users.html")
