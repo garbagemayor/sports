@@ -23,7 +23,7 @@ def recordPage(request, event_id):
     return render(request, 'RegistrationRecord/registration_record.html', message_map)
 
 
-def recordDownload(request, event_id):
+def recordDownloadCSV(request, event_id):
     event_id = int(event_id)
     # 生成文件
     record_list = list(MSign.objects.filter(eventsid=event_id))

@@ -30,5 +30,6 @@ urlpatterns = [
                   url(r'^users/$', view.UsersView, name='user'),
                   url(r'^authorized/$', Users_view.auth, name='auth'),
                   url(r'^record/(\d+)/$', Record_view.recordPage, name='recordpage'),
-                  url(r'^record_download/(\d+)/$', Record_view.recordDownload, name='recorddownload'),
+                  url(r'^record_download_csv/(\d+)/$', Record_view.recordDownloadCSV, name='recorddownload'),
+                  url(r'^record_download_xlsx/(\d+)/$', Record_view.recordDownloadXLSX, name='recorddownload'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
