@@ -4,7 +4,10 @@ from __future__ import unicode_literals
 from HomePage.models import Events as MEvents
 from HomePage.models import Sign as MSign
 
+import os,sys
+
 from django.shortcuts import render
+from django.http import StreamingHttpResponse
 
 def recordPage(request, event_id):
     event_id = int(event_id)
@@ -17,4 +20,31 @@ def recordPage(request, event_id):
     message_map['record_list'] = record_list
     return render(request, 'RegistrationRecord/registration_record.html', message_map)
 
+
+def recordDownload(request, event_id):
+    event_id = int(event_id)
+    # 生成文件
+    record_list = MSign.objects.filter(eventsid=event_id)
+    abspath = os.path.abspath('.')
+    file_name = abspath + "/RegistrationRecord/templates/Temp/RecordList.csv"
+    file = open(file_name, "w")
+    for record in record_list:
+        file.write("%d," % (record.id))
+        file.write("%d," % (record.userid))
+        file.write("%d\n" % (record.eventsid))
+    file.close()
+    # 文件传输迭代器
+    def file_iterator(file_name, chunk_size=512):
+        with open(file_name) as f:
+            while True:
+                c = f.read(chunk_size)
+                if c:
+                    yield c
+                else:
+                    break
+    # 传输下载
+    response = StreamingHttpResponse(file_iterator(file_name))
+    response['Content-Type'] = 'application/octet-stream'
+    response['Content-Disposition'] = 'attachment;filename="{0}"'.format(file_name)
+    return response
 
