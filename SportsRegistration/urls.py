@@ -27,5 +27,6 @@ urlpatterns = [
                   url(r'^events/$', Events_view.index, name='eventslist'),
                   url(r'^events/(\d+)/$', Events_view.page, name='eventspage'),
                   url(r'^users/$', view.UsersView, name='user'),
-                  url(r'^authorized/$', Users_view.auth, name='auth'),
+                  url(r'^authorized/$', Users_view.auth, name='login'),
+                  url(r'^logout/$', Users_view.logout, name='logout'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

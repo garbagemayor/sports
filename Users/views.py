@@ -11,10 +11,13 @@ def auth(request):
     r = requests.post('https://accounts.net9.org/api/access_token?client_id=0eHhovG3K1NYkhbnYuYmej1h9wY&client_secret=moK3EkYsQvossfoMwmCd&code='
             + request.GET['code'])
     rr = requests.get('https://accounts.net9.org/api/userinfo?access_token=' + r.json()['access_token'])
-    print type(rr)
-    print rr
-    j = rr.json()
-    print j.keys()
-    User.objects.get_or_create(name=j['user']['name'])
-    return render(request, "Users/authorized.html", rr.json()['user'])
+    j=rr.json()
+    #User.objects.get_or_create(name=j['user']['name'], classNumber=j['user']['group'][0])
+    request.session['username']=j['user']['name']
+    return render(request, "Events/events.html")
     #  return HttpResponse(rr.json()['user'])
+
+def logout(request):
+    if (request.session['username']):
+        del request.session['username']
+    return render(request, "HomePage/homepage.html")
