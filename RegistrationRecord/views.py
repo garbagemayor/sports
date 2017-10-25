@@ -6,6 +6,8 @@ from HomePage.models import Sign as MSign
 
 import os,sys
 
+import pandas as pd
+
 from django.shortcuts import render
 from django.http import StreamingHttpResponse
 
@@ -24,15 +26,19 @@ def recordPage(request, event_id):
 def recordDownload(request, event_id):
     event_id = int(event_id)
     # 生成文件
-    record_list = MSign.objects.filter(eventsid=event_id)
+    record_list = list(MSign.objects.filter(eventsid=event_id))
     abspath = os.path.abspath('.')
     file_name = abspath + "/RegistrationRecord/templates/Temp/RecordList.csv"
-    file = open(file_name, "w")
+    recordid_list = []
+    userid_list = []
+    eventsid_list = []
     for record in record_list:
-        file.write("%d," % (record.id))
-        file.write("%d," % (record.userid))
-        file.write("%d\n" % (record.eventsid))
-    file.close()
+        recordid_list.append(record.id)
+        userid_list.append(record.userid)
+        eventsid_list.append(record.eventsid)
+    pd.DataFrame({'recordid': recordid_list,
+                  'userid': userid_list,
+                  'eventsid': eventsid_list})
     # 文件传输迭代器
     def file_iterator(file_name, chunk_size=512):
         with open(file_name) as f:
