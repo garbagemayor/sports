@@ -28,14 +28,11 @@
                     <th>
                         报名状态
                     </th>
-                    <th>
-                        操作
-                    </th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for line in events_list %}
-                <tr class="{{line.status}}" ondblclick="location.href='/events/{{line.id}}'">
+                <tr class="{{line.s3}}" ondblclick="location.href='/events/{{line.id}}'">
                     <td>
                         {{line.id}}
                     </td>
@@ -47,9 +44,6 @@
                     </td>
                     <td>
                         {{line.s2}}
-                    </td>
-                    <td>
-                        {{line.s3}}
                     </td>
                 </tr>
                 {% endfor %}

@@ -17,7 +17,7 @@ class User(models.Model):
 class Events(models.Model):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=30)
-    status = models.CharField(max_length=20)
+    status = models.IntegerField(default=1)
     date = models.DateTimeField(default = timezone.now)
     content = models.CharField(max_length=300, null=True)
 

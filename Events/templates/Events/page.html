@@ -13,8 +13,8 @@
           {{events.name}} <small>{{events.name}}</small>
         </h1>
       </div>
-      <div id="status" class="alert alert-{{events.status}}">
-        正在报名
+      <div id="status" class="alert alert-{{events.s3}}">
+        {{events.s2}}
       </div>
       <dl class="dl-horizontal">
         <dt>
@@ -30,12 +30,14 @@
           {{events.content}}
         </dd>
       </dl>	  
+	  {% if request.session.username %}
       <nav style="text-align: center; margin-bottom:20px"> 
 	    <form method="post" action="">
 		  {% csrf_token %}
 		  <button class="btn btn-primary" type="submit" onclick="register()">立即报名</button>
 	    </form>
 	  </nav>
+	  {% endif %}
 	  <!--{% if request.session.username %}
       <nav style="text-align: center; margin-bottom:20px"> 
         <button id="register" class="btn btn-primary" type="button"
