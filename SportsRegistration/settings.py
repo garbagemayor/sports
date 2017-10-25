@@ -122,3 +122,10 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'HomePage/static')
+
+EMAIL_HOST = 'smtp.qq.com'
+EMAIL_PORT = 25
+EMAIL_HOST_USER = '924486024@qq.com'
+EMAIL_HOST_PASSWORD = 'jkwajyryghgnbaji'
+EMAIL_USE_TLS = True
+EMAIL_FROM = '924486024@qq.com'

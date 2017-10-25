@@ -20,6 +20,7 @@ from django.views.generic import RedirectView
 from django.conf import settings
 from Events import views as  Events_view
 from Users import views as  Users_view
+from django.contrib import admin
 
 
 urlpatterns = [
@@ -29,4 +30,7 @@ urlpatterns = [
                   url(r'^users/$', view.UsersView, name='user'),
                   url(r'^authorized/$', Users_view.auth, name='login'),
                   url(r'^logout/$', Users_view.logout, name='logout'),
+                  url(r'^send_email/$', Users_view.send_email, name='send_email'),
+                  url(r'^my_events/$', Users_view.my_events, name='my_events'),
+                  url(r'^admin/', admin.site.urls),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
