@@ -35,11 +35,14 @@ def page(request, Id):
     events.s2 = gets2(events.status)
     events.s3 = gets3(events.status)
     if request.method == "POST":
-        s = Sign.objects.get_or_create(userid=request.session['userid'], eventsid=Id, status=1)
-        if (s[1]):
-            status=1
+        if request.session['userid']:
+            s = Sign.objects.get_or_create(userid=request.session['userid'], eventsid=Id, status=1)
+            if (s[1]):
+                status=1
+            else:
+                status=2
         else:
-            status=2
+            status=3
 
         return render(request, 'Events/page.html', {'events':events, 'status':json.dumps(status)})
     else:

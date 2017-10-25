@@ -24,13 +24,14 @@ from django.contrib import admin
 
 
 urlpatterns = [
-                  url(r'^$', view.HomePageView, name='homepage'),
+                  url(r'^$',  RedirectView.as_view(url='/main/')),
+                  url(r'^main/$', view.HomePageView, name='homepage'),
                   url(r'^events/$', Events_view.index, name='eventslist'),
                   url(r'^events/(\d+)/$', Events_view.page, name='eventspage'),
-                  url(r'^users/$', view.UsersView, name='user'),
+                  url(r'^user/$', Users_view.my_information, name='user'),
                   url(r'^authorized/$', Users_view.auth, name='login'),
                   url(r'^logout/$', Users_view.logout, name='logout'),
                   url(r'^send_email/$', Users_view.send_email, name='send_email'),
-                  url(r'^my_events/$', Users_view.my_events, name='my_events'),
+                  url(r'^user/myevents/$', Users_view.my_events, name='my_events'),
                   url(r'^admin/', admin.site.urls),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
