@@ -30,4 +30,5 @@ urlpatterns = [
                   url(r'^authorized/$', Users_view.auth, name='login'),
                   url(r'^logout/$', Users_view.logout, name='logout'),
                   url(r'^send_email/$', Users_view.send_email, name='send_email'),
+                  url(r'^my_events/$', Users_view.my_events, name='my_events'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
