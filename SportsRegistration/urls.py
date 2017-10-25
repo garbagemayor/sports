@@ -23,8 +23,7 @@ from Users import views as  Users_view
 
 
 urlpatterns = [
-                  url(r'^$', RedirectView.as_view(url='/main/') ),
-                  url(r'^main/$', view.HomePageView, name='homepage'),
+                  url(r'^$', view.HomePageView, name='homepage'),
                   url(r'^events/$', Events_view.index, name='eventslist'),
                   url(r'^events/(\d+)/$', Events_view.page, name='eventspage'),
                   url(r'^users/$', view.UsersView, name='user'),
