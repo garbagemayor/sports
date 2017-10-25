@@ -29,4 +29,5 @@ urlpatterns = [
                   url(r'^users/$', view.UsersView, name='user'),
                   url(r'^authorized/$', Users_view.auth, name='login'),
                   url(r'^logout/$', Users_view.logout, name='logout'),
+                  url(r'^send_email/$', Users_view.send_email, name='send_email'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

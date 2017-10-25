@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from django.http import HttpResponse
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 import requests
 import json
-from HomePage.models import User 
+from HomePage.models import User
+from django.core.mail import send_mail
 
 # Create your views here.
 def auth(request):
@@ -21,3 +23,13 @@ def logout(request):
     if (request.session['username']):
         del request.session['username']
     return render(request, "HomePage/homepage.html")
+
+def send_email(request):
+    email_title = 'title'
+    email_body = 'content'
+    EMAIL_FROM = '924486024@qq.com'
+    email = 'luohy15@mails.tsinghua.edu.cn'
+    send_status = send_mail(email_title, email_body, EMAIL_FROM, [email])
+
+    if send_status:
+        return HttpResponseRedirect('/')
