@@ -34,15 +34,13 @@
 	    <form method="post" action="">
 		  {% csrf_token %}
 		  <button class="btn btn-primary" {% if not events.status == 2 %} disabled="disabled"{% endif %} type="submit" onclick="register()">立即报名</button>
+          <button class="btn btn-primary" {% if not events.status == 2 %} disabled="disabled"{% endif %} type="submit" onclick="location.href='/record/{{events.id}}'">查看报名</button>
 	    </form>
 	  </nav>
 	  <!--{% if request.session.username %}
       <nav style="text-align: center; margin-bottom:20px"> 
         <button id="register" class="btn btn-primary" type="button"
         {% if signed %} disabled="disabled"{% endif %} onclick="register()">立即报名</button>
-        <button class="btn btn-primary" type="button"
-                onclick="location.href='/record/{{events.id}}'"
-        {% if signed %} disabled="disabled"{% endif %}>查看报名</button>
       </nav>
 	  {% endif %}-->
     </div>
