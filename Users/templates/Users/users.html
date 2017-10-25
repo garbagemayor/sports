@@ -18,7 +18,8 @@
                 </fieldset>
             </form>
             <br>
-            <form method="post" action="" name="forms">
+            <form method="post" name="forms">
+                {% csrf_token %}
                 <fieldset>
                     <legend contenteditable="false">密码</legend>
                     <label contenteditable="false">原密码</label>
@@ -47,14 +48,14 @@
                     </label></span>
                     <script language="JavaScript">
                         function showpw2() {
-                            if (this.forms.old_password.type="password") {
-                                document.getElementById("pwbox2").innerHTML="<input type=\"text\" name=\"new_password\" value="+this.forms.old_password.value+">";
+                            if (this.forms.new_password.type="password") {
+                                document.getElementById("pwbox2").innerHTML="<input type=\"text\" name=\"new_password\" value="+this.forms.new_password.value+">";
                                 document.getElementById("click2").innerHTML="<label class=\"checkbox\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type=\"checkbox\" onclick=\"hidepw2()\" checked=\"true\"/>显示密码</label>"
                             }
                         }
                         function hidepw2() {
-                            if (this.forms.old_password.type="text") {
-                                document.getElementById("pwbox2").innerHTML="<input type=\"password\" name=\"new_password\" value="+this.forms.old_password.value+">";
+                            if (this.forms.new_password.type="text") {
+                                document.getElementById("pwbox2").innerHTML="<input type=\"password\" name=\"new_password\" value="+this.forms.new_password.value+">";
                                 document.getElementById("click2").innerHTML="<label class=\"checkbox\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type=\"checkbox\" onclick=\"showpw2()\"/>显示密码</label>"
                             }
                         }
@@ -66,19 +67,20 @@
                     </label></span>
                     <script language="JavaScript">
                         function showpw3() {
-                            if (this.forms.old_password.type="password") {
-                                document.getElementById("pwbox3").innerHTML="<input type=\"text\" name=\"assure_password\" value="+this.forms.old_password.value+">";
+                            if (this.forms.assure_password.type="password") {
+                                document.getElementById("pwbox3").innerHTML="<input type=\"text\" name=\"assure_password\" value="+this.forms.assure_password.value+">";
                                 document.getElementById("click3").innerHTML="<label class=\"checkbox\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type=\"checkbox\" onclick=\"hidepw3()\" checked=\"true\"/>显示密码</label>"
                             }
                         }
                         function hidepw3() {
-                            if (this.forms.old_password.type="text") {
-                                document.getElementById("pwbox3").innerHTML="<input type=\"password\" name=\"assure_password\" value="+this.forms.old_password.value+">";
+                            if (this.forms.assure_password.type="text") {
+                                document.getElementById("pwbox3").innerHTML="<input type=\"password\" name=\"assure_password\" value="+this.forms.assure_password.value+">";
                                 document.getElementById("click3").innerHTML="<label class=\"checkbox\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type=\"checkbox\" onclick=\"showpw3()\"/>显示密码</label>"
                             }
                         }
                     </script>
-                    <button class="btn" contenteditable="true" type="submit">提交</button>
+                    <p> {{ rlt }} </p>
+                    <button class="btn" type="submit">提交</button>
                 </fieldset>
             </form>
         </div>
