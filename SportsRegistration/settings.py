@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'Users',
     'HomePage',
     'Events',
+    'RegistrationRecord',
 ]
 
 MIDDLEWARE = [

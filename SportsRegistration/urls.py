@@ -18,8 +18,9 @@ from . import view
 from django.conf.urls.static import static
 from django.views.generic import RedirectView
 from django.conf import settings
-from Events import views as  Events_view
-from Users import views as  Users_view
+from Events import views as Events_view
+from Users import views as Users_view
+from RegistrationRecord import views as Record_view
 
 
 urlpatterns = [
@@ -28,4 +29,5 @@ urlpatterns = [
                   url(r'^events/(\d+)/$', Events_view.page, name='eventspage'),
                   url(r'^users/$', view.UsersView, name='user'),
                   url(r'^authorized/$', Users_view.auth, name='auth'),
+                  url(r'^record/(\d+)/$', Record_view.recordPage, name='recordpage'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

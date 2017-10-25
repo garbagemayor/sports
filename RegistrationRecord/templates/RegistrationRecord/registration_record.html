@@ -1,0 +1,85 @@
+﻿{% extends 'base.html' %}
+
+{% block title %}
+<title>报名记录</title>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span12">
+	<div class="page-header">
+        <h1 style="text-align: center">
+          报名记录 <small></small>
+        </h1>
+      </div>
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>
+                        流水号
+                    </th>
+                    <th>
+                        用户名
+                    </th>
+                    <th>
+                        真实姓名
+                    </th>
+                    <th>
+                        报名时间
+                    </th>
+                    <th>
+                        报名状态
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for record in record_list %}
+                <tr class="{{record.status}}">
+                    <td>
+                        {{record.id}}
+                    </td>
+                    <td>
+                        {{record.userName}}
+                    </td>
+                    <td>
+                        {{record.userRealName}}
+                    </td>
+                    <td>
+                        {{record.signTime}}
+                    </td>
+                    <td>
+                        {{record.status}}
+                    </td>
+                </tr>
+                {% endfor %}
+
+            </table>
+        </div>
+    </div>
+</div>
+
+<nav style="text-align: center">
+<ul class="pagination">
+    {% if record_list.has_previous %}
+        <li><a href="?page={{ record_list.previous_page_number }}">&laquo;</a></li>
+    {% endif %}
+    {% if record_list.number > 2 %}
+        <li><a href="?page={{ record_list.number|add:"-2"}}">{{record_list.number|add:"-2"}}</a></li>
+    {% endif %}
+    {% if record_list.number > 1 %}
+        <li><a href="?page={{ record_list.previous_page_number }}">{{record_list.number|add:"-1"}}</a></li>
+    {% endif %}
+        <li class="active"><a>{{record_list.number}}<span class="sr-only">(current)</span></a></li>
+    {% if record_list.number < record_list.paginator.num_pages %}
+        <li><a href="?page={{ record_list.next_page_number }}">{{record_list.number|add:"1"}}</a></li>
+    {% endif %}
+    {% if record_list.number < record_list.paginator.num_pages|add:"-1" %}
+        <li><a href="?page={{ record_list.number|add:"2"}}">{{record_list.number|add:"2"}}</a></li>
+    {% endif %}
+    {% if record_list.has_next %}
+        <li><a href="?page={{ record_list.next_page_number }}">&raquo;</a></li>
+    {% endif %}
+</ul>
+</nav>
+{% endblock %}
