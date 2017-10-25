@@ -7,6 +7,7 @@ import json
 from HomePage.models import User, Sign, Events
 from django.core.paginator import Paginator
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.views.decorators.csrf import csrf_exempt,csrf_protect
 
 # Create your views here.
 def auth(request):
@@ -53,8 +54,25 @@ def my_events(request):
     else:
         HttpResponseRedirect("/authorized/")
 
-
-
+@csrf_exempt 
+def manager(request):    
+    user=User.objects.filter(authority=1)
+    status=0
+    if request.method == "POST":
+        if len(user)<3:
+            if len(User.objects.filter(name=request.POST['name'])) == 0 :
+                status = 2
+            else:
+                user=User.objects.get(name=request.POST['name'])
+                if user.authority<1:
+                    User.objects.filter(name=request.POST['name']).update(authority=1)
+                    status = 3
+                else:
+                    status = 4
+            user=User.objects.filter(authority=1)
+        else:
+            status = 1
+    return render(request, 'Users/manager.html', {'users_list':user, 'status':json.dumps(status)})
 
 
 def send_email(request):

@@ -19,7 +19,33 @@
                 </fieldset>
             </form>
             <br>
-            <form method="post" name="forms">
+			<form>
+                <fieldset>
+                    <legend contenteditable="false">班级</legend>
+                    <label contenteditable="false">用户名</label>
+                    <input type="text" value="root" disabled="true" style="color: gray;"/><span style="color: red; ">*</span>
+                </fieldset>
+            </form>
+            <br>
+			<form>
+                <fieldset>
+                    <legend contenteditable="false">手机</legend>
+                    <label contenteditable="false">用户名</label>
+                    <input type="text" value="root" disabled="true" style="color: gray;"/><span style="color: red; ">*</span>
+                </fieldset>
+            </form>
+            <br>
+			<form>
+                <fieldset>
+                    <legend contenteditable="false">邮箱</legend>
+                    <label contenteditable="false">用户名</label>
+                    <input type="text" value="root" disabled="true" style="color: gray;"/><span style="color: red; ">*</span>
+                </fieldset>
+            </form>
+            <br>			
+            <button class="btn btn-primary" type="submit">确认</button>
+            
+			<!--<form method="post" name="forms">
                 {% csrf_token %}
                 <fieldset>
                     <legend contenteditable="false">密码</legend>
@@ -83,7 +109,7 @@
                     <p> {{ rlt }} </p>
                     <button class="btn" type="submit">提交</button>
                 </fieldset>
-            </form>
+            </form>--?
         </div>
     </div>
 </div>

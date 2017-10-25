@@ -12,7 +12,6 @@ from HomePage.models import Sign
 
 # Create your views here.
 def index(request):
-    print request.method
     events_list=list(Events.objects.all()[::-1])
     for l in events_list:
         l.s2 = gets2(l.status)

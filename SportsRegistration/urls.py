@@ -33,5 +33,6 @@ urlpatterns = [
                   url(r'^logout/$', Users_view.logout, name='logout'),
                   url(r'^send_email/$', Users_view.send_email, name='send_email'),
                   url(r'^user/myevents/$', Users_view.my_events, name='my_events'),
+                  url(r'^managers/$', Users_view.manager, name='manager'),
                   url(r'^admin/', admin.site.urls),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
