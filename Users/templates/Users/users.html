@@ -4,54 +4,80 @@
 <title>用户</title>
 {% endblock %}
 
+{% block extracss %}<link href="/static/send_sheet.css" rel="stylesheet">{% endblock %}
+
 {% block content %}
 <div class="container-fluid">
     <div class="row-fluid">
         <div class="span12">
             <form>
                 <fieldset>
-                    <legend contenteditable="true">用户</legend>
-                    <label contenteditable="true">用户名</label>
-                    <input placeholder="root" type="text"/><font color="red">不可修改</font><br>
-                    <label contenteditable="true">性别</label>
-                    <div class="btn-group">
-                        <button class="btn" contenteditable="true">选择性别</button>
-                        <button class="btn dropdown-toggle" data-toggle="dropdown">↓</button>
-                        <ul class="dropdown-menu" contenteditable="true">
-                            <li><a href="#">男</a></li>
-                            <li><a href="#">女</a></li>
-                            <li><a href="#">其他</a></li>
-                            <li class="divider">&nbsp;</li>
-                            <li class="dropdown-submenu"><a href="#" tabindex="-1">更多选项</a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="#">单身男</a></li>
-                                    <li><a href="#">单身女</a></li>
-                                    <li><a href="#">已脱单</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
+                    <legend contenteditable="false">用户</legend>
+                    <label contenteditable="false">用户名</label>
+                    <input type="text" value="root" disabled="true" style="color: gray;"/><span style="color: red; ">*</span>
                 </fieldset>
             </form>
             <br>
-            <form>
+            <form method="post" action="" name="forms">
                 <fieldset>
-                    <legend contenteditable="true">密码</legend>
-                    <label contenteditable="true">原密码</label>
-                    <input type="text"/><font color="red">*</font>
-                    <label class="checkbox" contenteditable="true">
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox"/>显示密码
-                    </label>
-                    <label contenteditable="true">新密码</label>
-                    <input type="text"/><font color="red">*</font>
-                    <label class="checkbox" contenteditable="true">
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox"/>显示密码
-                    </label>
-                    <label contenteditable="true">确认密码</label>
-                    <input type="text"/><font color="red">*</font>
-                    <label class="checkbox" contenteditable="true">
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox"/>显示密码
-                    </label>
+                    <legend contenteditable="false">密码</legend>
+                    <label contenteditable="false">原密码</label>
+                    <span id=pwbox1><input type="password" name="old_password"/><span style="color: red; ">*</span></span>
+                    <span id=click1><label class="checkbox">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" onclick="showpw1()"/>显示密码
+                    </label></span>
+                    <script language="JavaScript">
+                        function showpw1() {
+                            if (this.forms.old_password.type="password") {
+                                document.getElementById("pwbox1").innerHTML="<input type=\"text\" name=\"old_password\" value="+this.forms.old_password.value+">";
+                                document.getElementById("click1").innerHTML="<label class=\"checkbox\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type=\"checkbox\" onclick=\"hidepw1()\" checked=\"true\"/>显示密码</label>"
+                            }
+                        }
+                        function hidepw1() {
+                            if (this.forms.old_password.type="text") {
+                                document.getElementById("pwbox1").innerHTML="<input type=\"password\" name=\"old_password\" value="+this.forms.old_password.value+">";
+                                document.getElementById("click1").innerHTML="<label class=\"checkbox\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type=\"checkbox\" onclick=\"showpw1()\"/>显示密码</label>"
+                            }
+                        }
+                    </script>
+                    <label contenteditable="false">新密码</label>
+                    <span id=pwbox2><input type="password" name="new_password"/><span style="color: red; ">*</span></span>
+                    <span id=click2><label class="checkbox">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" onclick="showpw2()"/>显示密码
+                    </label></span>
+                    <script language="JavaScript">
+                        function showpw2() {
+                            if (this.forms.old_password.type="password") {
+                                document.getElementById("pwbox2").innerHTML="<input type=\"text\" name=\"new_password\" value="+this.forms.old_password.value+">";
+                                document.getElementById("click2").innerHTML="<label class=\"checkbox\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type=\"checkbox\" onclick=\"hidepw2()\" checked=\"true\"/>显示密码</label>"
+                            }
+                        }
+                        function hidepw2() {
+                            if (this.forms.old_password.type="text") {
+                                document.getElementById("pwbox2").innerHTML="<input type=\"password\" name=\"new_password\" value="+this.forms.old_password.value+">";
+                                document.getElementById("click2").innerHTML="<label class=\"checkbox\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type=\"checkbox\" onclick=\"showpw2()\"/>显示密码</label>"
+                            }
+                        }
+                    </script>
+                    <label contenteditable="false">确认密码</label>
+                    <span id=pwbox3><input type="password" name="assure_password"/><span style="color: red; ">*</span></span>
+                    <span id=click3><label class="checkbox">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" onclick="showpw3()"/>显示密码
+                    </label></span>
+                    <script language="JavaScript">
+                        function showpw3() {
+                            if (this.forms.old_password.type="password") {
+                                document.getElementById("pwbox3").innerHTML="<input type=\"text\" name=\"assure_password\" value="+this.forms.old_password.value+">";
+                                document.getElementById("click3").innerHTML="<label class=\"checkbox\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type=\"checkbox\" onclick=\"hidepw3()\" checked=\"true\"/>显示密码</label>"
+                            }
+                        }
+                        function hidepw3() {
+                            if (this.forms.old_password.type="text") {
+                                document.getElementById("pwbox3").innerHTML="<input type=\"password\" name=\"assure_password\" value="+this.forms.old_password.value+">";
+                                document.getElementById("click3").innerHTML="<label class=\"checkbox\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type=\"checkbox\" onclick=\"showpw3()\"/>显示密码</label>"
+                            }
+                        }
+                    </script>
                     <button class="btn" contenteditable="true" type="submit">提交</button>
                 </fieldset>
             </form>
