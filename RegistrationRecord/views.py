@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+ï»¿# -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
 from HomePage.models import Events as MEvents
@@ -14,10 +14,10 @@ from django.http import StreamingHttpResponse
 def recordPage(request, event_id):
     event_id = int(event_id)
     message_map = {}
-    # µ±Ç°ÈüÊÂµÄĞÅÏ¢
+    # å½“å‰èµ›äº‹çš„ä¿¡æ¯
     event = MEvents.objects.get(id=event_id)
     message_map['event'] = event
-    # µ±Ç°ÈüÊÂµÄËùÓĞ±¨Ãû¼ÇÂ¼
+    # å½“å‰èµ›äº‹çš„æ‰€æœ‰æŠ¥åè®°å½•
     record_list = list(MSign.objects.filter(eventsid=event_id))
     message_map['record_list'] = record_list
     return render(request, 'RegistrationRecord/registration_record.html', message_map)
@@ -25,7 +25,7 @@ def recordPage(request, event_id):
 
 def recordDownload(request, event_id):
     event_id = int(event_id)
-    # Éú³ÉÎÄ¼ş
+    # ç”Ÿæˆæ–‡ä»¶
     record_list = list(MSign.objects.filter(eventsid=event_id))
     abspath = os.path.abspath('.')
     file_name = abspath + "/RegistrationRecord/templates/Temp/RecordList.csv"
@@ -39,7 +39,7 @@ def recordDownload(request, event_id):
     pd.DataFrame({'recordid': recordid_list,
                   'userid': userid_list,
                   'eventsid': eventsid_list})
-    # ÎÄ¼ş´«Êäµü´úÆ÷
+    # æ–‡ä»¶ä¼ è¾“è¿­ä»£å™¨
     def file_iterator(file_name, chunk_size=512):
         with open(file_name) as f:
             while True:
@@ -48,7 +48,7 @@ def recordDownload(request, event_id):
                     yield c
                 else:
                     break
-    # ´«ÊäÏÂÔØ
+    # ä¼ è¾“ä¸‹è½½
     response = StreamingHttpResponse(file_iterator(file_name))
     response['Content-Type'] = 'application/octet-stream'
     response['Content-Disposition'] = 'attachment;filename="{0}"'.format(file_name)
