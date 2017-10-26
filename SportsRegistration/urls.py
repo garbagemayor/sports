@@ -32,7 +32,7 @@ urlpatterns = [
                   url(r'^user/$', Users_view.my_information, name='user'),
                   url(r'^authorized/$', Users_view.auth, name='login'),
                   url(r'^logout/$', Users_view.logout, name='logout'),
-                  url(r'^send_email/$', Users_view.send_email, name='send_email'),
+                  url(r'^edit_email/(\d+)$', Record_view.edit_email, name='edit_email'),
                   url(r'^user/myevents/$', Users_view.my_events, name='my_events'),
                   url(r'^managers/$', Users_view.manager, name='manager'),
                   url(r'^admin/', admin.site.urls),
