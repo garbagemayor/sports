@@ -34,8 +34,8 @@
 	    <form method="post" action="">
 		  {% csrf_token %}
 		  <button class="btn btn-primary" {% if not events.status == 2 %} disabled="disabled"{% endif %} type="submit" onclick="register()">立即报名</button>
-          <button class="btn btn-primary" {% if not events.status == 2 %} disabled="disabled"{% endif %} type="submit" onclick="location.href='/record/{{events.id}}'">查看报名</button>
 	    </form>
+        <button class="btn btn-primary" onclick="location.href='/record/{{events.id}}'">查看报名</button>
 	  </nav>
 	  <!--{% if request.session.username %}
       <nav style="text-align: center; margin-bottom:20px"> 
