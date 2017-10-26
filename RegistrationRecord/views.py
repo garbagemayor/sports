@@ -203,18 +203,28 @@ def recordDownloadXLSX(request, event_id):
     response['Content-Disposition'] = 'attachment;filename="{0}"'.format(file_name)
     return response
 
-def edit_email(request, eventsid):
+def edit_email(request, event_id):
+    record_list = list(MSign.objects.filter(eventsid=event_id))
+    email_list = []
+    email_str = ""
+    for record in record_list:
+        email_list.append(MUser.objects.get(id=record.userid).email)
+    for email in email_list:
+        email_str = email_str + str(email) + "; "
+    print email_str
     if (request.method == 'POST'):
         form = PostForm(request.POST)
         if form.is_valid():
-            email_addr = request.POST['addr']
-            email_title = request.POST['title']
-            email_content = request.POST['content']
-            EMAIL_FROM = '924486024@qq.com'
-            send_status = send_mail(email_title, email_content, EMAIL_FROM,
-                    [email_addr])
+            for email_addr in email_list:
+                email_title = request.POST['title']
+                email_content = request.POST['content']
+                EMAIL_FROM = '924486024@qq.com'
+                send_status = send_mail(email_title, email_content, EMAIL_FROM,
+                        [email_addr])
             if send_status:
-                return HttpResponseRedirect('/')
+                return HttpResponseRedirect('/record/'+str(event_id))
     else:
-        form = PostForm
-        return render(request, 'RegistrationRecord/edit_email.html', {'form': form})
+        form = PostForm(initial={'addr': email_str, 'title': "报名成功",
+            'content': "以下是赛事详情"})
+        return render(request, 'RegistrationRecord/edit_email.html', {'form':
+            form})
