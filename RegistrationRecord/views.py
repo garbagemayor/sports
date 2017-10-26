@@ -12,6 +12,9 @@ import xlwt, xlsxwriter
 from django.shortcuts import render
 from django.http import StreamingHttpResponse
 
+from django.core.paginator import Paginator
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
 def recordPage(request, event_id):
     event_id = int(event_id)
     message_map = {}
@@ -20,6 +23,16 @@ def recordPage(request, event_id):
     message_map['event'] = event
     # 当前赛事的所有报名记录
     record_list = list(MSign.objects.filter(eventsid=event_id))
+    print record_list
+    paginator=Paginator(record_list, 10)
+    page = request.GET.get('page')
+    print page
+    try:
+        record_list = paginator.page(page)
+    except PageNotAnInteger:
+        record_list = paginator.page(1)
+    except EmptyPage:
+        record_list = paginator.page(paginator.num_pages)
     message_map['record_list'] = record_list
     return render(request, 'RegistrationRecord/registration_record.html', message_map)
 
