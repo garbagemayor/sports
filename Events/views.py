@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from django.shortcuts import render
-from HomePage.models import Events
+from HomePage.models import Events, Sign
 from django.core.paginator import Paginator
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -60,6 +60,21 @@ def delete_events(request, Id):
         return HttpResponseRedirect('/events/')
     else:
         return HttpResponseRedirect('/events/')
+
+def nextphase(request, Id):    
+    events = Events.objects.get(id=Id)
+    if request.method == "GET":
+        if request.session['userid']:
+            if request.session['auth']>0:
+                e=Events.objects.get(id=Id)
+                e.status+=1
+                e.save()
+        else:
+            status=3
+
+        return HttpResponseRedirect('/events/'+Id)
+    else:
+        return HttpResponseRedirect('/events/'+Id)
 
 @csrf_exempt
 def addevents(request):

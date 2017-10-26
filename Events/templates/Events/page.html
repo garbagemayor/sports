@@ -12,9 +12,10 @@
         <h1 style="text-align: center">
           {{events.name}} <small>{{events.name}}</small>		
         </h1>
-		{% if request.session.auth > 0 %}
-		  <button class="btn btn-default" onclick="location.href='/record/{{events.id}}'">查看报名</button>
+		{% if request.session.auth > 0 %}		  
+		  <button class="btn btn-default" type='button' onclick="location.href='/events/next/{{events.id}}'">下一阶段</button>
 		  <button class="btn btn-default" type='button' onclick="asdf()">删除该赛事</button>
+		  <button class="btn btn-default" onclick="location.href='/record/{{events.id}}'">查看报名</button>
 		{% endif %}
       </div>
       <div id="status" class="alert alert-{{events.s3}}">
@@ -37,7 +38,8 @@
       <nav style="text-align: center; margin-bottom:20px"> 
 	    <form method="post" action="">
 		  {% csrf_token %}
-		  <button class="btn btn-primary" {% if not events.status == 2 %} disabled="disabled"{% endif %} type="submit" >立即报名</button>
+		  <button class="btn btn-primary" {% if not events.status == 2 %} name="sign" disabled="disabled"{% endif %} type="submit" >立即报名</button>
+		  <button class="btn btn-link" {% if not events.status == 2 %} name="sign" disabled="disabled"{% endif %} type="submit" >取消报名</button>
 	    </form>
 	  </nav>
 	  <!--{% if request.session.username %}
