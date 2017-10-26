@@ -2,3 +2,4 @@
 .idea/*
 .coverage
 Coverage_Python/
+*.sqlite3
