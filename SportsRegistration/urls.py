@@ -25,17 +25,21 @@ from RegistrationRecord import views as Record_view
 
 
 urlpatterns = [
+                  url(r'^admin/', admin.site.urls),
+
+                  
                   url(r'^$',  RedirectView.as_view(url='/main/')),
                   url(r'^main/$', view.HomePageView, name='homepage'),
                   url(r'^events/$', Events_view.index, name='eventslist'),
-                  url(r'^events/(\d+)/$', Events_view.page, name='eventspage'),
+                  url(r'^events/(\d+)/$', Events_view.page, name='eventspage'),                  
+                  url(r'^events/delete/(\d+)/$', Events_view.delete_events, name='deletepage'),
                   url(r'^user/$', Users_view.my_information, name='user'),
                   url(r'^authorized/$', Users_view.auth, name='login'),
                   url(r'^logout/$', Users_view.logout, name='logout'),
                   url(r'^edit_email/(\d+)$', Record_view.edit_email, name='edit_email'),
                   url(r'^user/myevents/$', Users_view.my_events, name='my_events'),
                   url(r'^managers/$', Users_view.manager, name='manager'),
-                  url(r'^admin/', admin.site.urls),
+                  url(r'^events/addevents$', Events_view.addevents, name='addevents'), 
                   url(r'^record/(\d+)/$', Record_view.recordPage, name='recordpage'),
                   url(r'^record_download_csv/(\d+)/$', Record_view.recordDownloadCSV, name='recorddownload'),
                   url(r'^record_download_xlsx/(\d+)/$', Record_view.recordDownloadXLSX, name='recorddownload'),

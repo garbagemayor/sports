@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 from django.shortcuts import render
 from HomePage.models import Events
 from django.core.paginator import Paginator
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.decorators.csrf import csrf_exempt,csrf_protect
 import json
@@ -47,6 +47,26 @@ def page(request, Id):
     else:
         return render(request, 'Events/page.html', {'events':events})
 
+
+def delete_events(request, Id):    
+    events = Events.objects.get(id=Id)
+    if request.method == "GET":
+        if request.session['userid']:
+            if request.session['auth']>0:
+                Events.objects.filter(id=Id).delete()
+        else:
+            status=3
+
+        return HttpResponseRedirect('/events/')
+    else:
+        return HttpResponseRedirect('/events/')
+
+@csrf_exempt
+def addevents(request):
+    if request.method =="POST":
+        if Events.objects.get_or_create(name=request.POST['name'], content=request.POST['detail']):
+            return HttpResponseRedirect('/events/')
+    return render(request, "Events/addevents.html")
 
 def gets2(i):
     if i == 1:

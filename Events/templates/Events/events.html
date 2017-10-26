@@ -13,7 +13,7 @@
           所有赛事 <small>共{{events_list.paginator.num_pages}}页</small>
         </h1>		
 		{% if request.session.auth > 0 %}
-		  <button class="btn btn-default" onclick="location.href='/record/{{events.id}}'">添加赛事</button>
+		  <button class="btn btn-default" onclick="location.href='/events/addevents'">添加赛事</button>
 		{% endif %}
       </div>
             <table class="table table-hover">
