@@ -27,5 +27,6 @@ class Sign(models.Model):
     eventsid = models.IntegerField()
     status = models.IntegerField(default=1)     #0 未报名 1 等待审核 2 报名成功
     prize = models.CharField(max_length=30, null=True)
+    time = models.DateTimeField(default = timezone.now)
 
 

@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 from HomePage.models import Events as MEvents
 from HomePage.models import Sign as MSign
+from HomePage.models import User as MUser
 
 import os,sys
 
@@ -12,8 +13,32 @@ import xlwt, xlsxwriter
 from django.shortcuts import render
 from django.http import StreamingHttpResponse
 
+import django.utils.timezone as timezone
+
 from django.core.paginator import Paginator
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
+class RecordItem:
+    '''
+    用来记录一堆信息，给registration_record.html使用
+    '''
+    def __init__(self, record_db):
+        self.record_id = record_db.id
+        self.user_id = record_db.userid
+        self.record_time = record_db.time
+        # self.record_time = timezone.now
+        user_db = MUser.objects.get(id=record_db.userid)
+        self.user_name = user_db.name
+        self.user_mobile = user_db.mobile
+        self.user_fullname = user_db.fullname
+        self.user_classnumber = user_db.classnumber
+        self.user_email = user_db.email
+        if record_db.status == 0:
+            self.record_status = "审核未通过"
+        elif record_db.status == 1:
+            self.record_status = "等待审核"
+        elif record_db.status == 2:
+            self.record_status = "审核通过"
 
 def recordPage(request, event_id):
     event_id = int(event_id)
@@ -22,11 +47,13 @@ def recordPage(request, event_id):
     event = MEvents.objects.get(id=event_id)
     message_map['event'] = event
     # 当前赛事的所有报名记录
-    record_list = list(MSign.objects.filter(eventsid=event_id))
-    print record_list
+    record_db_list = list(MSign.objects.filter(eventsid=event_id))
+    record_list = []
+    for record_db in record_db_list:
+        record_list.append(RecordItem(record_db))
+    # 分页模块
     paginator=Paginator(record_list, 10)
     page = request.GET.get('page')
-    print page
     try:
         record_list = paginator.page(page)
     except PageNotAnInteger:

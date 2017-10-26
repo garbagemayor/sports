@@ -10,7 +10,7 @@
         <div class="span12">
 	<div class="page-header">
         <h1 style="text-align: center">
-          报名记录 <small></small>
+            {{event.name}} 的报名记录 <small></small>
         </h1>
         <button class="btn btn-primary" type="button"
                 onclick="location.href='/record_download_csv/{{event.id}}'"
@@ -23,19 +23,19 @@
                 <thead>
                 <tr>
                     <th>
-                        流水号
+                        时间
                     </th>
                     <th>
                         用户名
                     </th>
                     <th>
-                        真实姓名
+                        姓名
                     </th>
                     <th>
-                        报名时间
+                        联系电话
                     </th>
                     <th>
-                        报名状态
+                        邮箱
                     </th>
                 </tr>
                 </thead>
@@ -43,19 +43,22 @@
                 {% for record in record_list %}
                 <tr class="{{record.status}}">
                     <td>
-                        {{record.id}}
+                        {{record.record_time}}
                     </td>
                     <td>
-                        {{record.userName}}
+                        {{record.user_name}}
                     </td>
                     <td>
-                        {{record.userRealName}}
+                        {{record.user_fullname}}
                     </td>
                     <td>
-                        {{record.signTime}}
+                        {{record.user_mobile}}
                     </td>
                     <td>
-                        {{record.status}}
+                        {{record.user_email}}
+                    </td>
+                    <td>
+                        {{record.record_status}}
                     </td>
                 </tr>
                 {% endfor %}
