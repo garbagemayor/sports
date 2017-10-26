@@ -74,16 +74,6 @@ def manager(request):
             status = 1
     return render(request, 'Users/manager.html', {'users_list':user, 'status':json.dumps(status)})
 
-
-def send_email(request):
-    email_title = 'title'
-    email_body = 'content'
-    EMAIL_FROM = '924486024@qq.com'
-    email = 'luohy15@mails.tsinghua.edu.cn'
-    send_status = send_mail(email_title, email_body, EMAIL_FROM, [email])
-    if send_status:
-        return HttpResponseRedirect('/')
-
 def gets2(i):
     if i == 1:
         return "info"

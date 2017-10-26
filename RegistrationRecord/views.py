@@ -11,9 +11,12 @@ import xlwt, xlsxwriter
 
 from django.shortcuts import render
 from django.http import StreamingHttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 
 from django.core.paginator import Paginator
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from .forms import PostForm
+from django.core.mail import send_mail
 
 def recordPage(request, event_id):
     event_id = int(event_id)
@@ -173,3 +176,18 @@ def recordDownloadXLSX(request, event_id):
     response['Content-Disposition'] = 'attachment;filename="{0}"'.format(file_name)
     return response
 
+def edit_email(request, eventsid):
+    if (request.method == 'POST'):
+        form = PostForm(request.POST)
+        if form.is_valid():
+            email_addr = request.POST['addr']
+            email_title = request.POST['title']
+            email_content = request.POST['content']
+            EMAIL_FROM = '924486024@qq.com'
+            send_status = send_mail(email_title, email_content, EMAIL_FROM,
+                    [email_addr])
+            if send_status:
+                return HttpResponseRedirect('/')
+    else:
+        form = PostForm
+        return render(request, 'RegistrationRecord/edit_email.html', {'form': form})
