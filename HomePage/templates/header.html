@@ -31,7 +31,7 @@
           </ul>
           <ul class="nav navbar-nav navbar-right">
 			{% if not request.session.username %}
-				<li><a
+				<li><a 
                     href="https://accounts.net9.org/api/authorize?client_id=0eHhovG3K1NYkhbnYuYmej1h9wY&redirect_uri=http://{{request.get_host}}/authorized">登录</a></li>
             {% else %}
 				<li><a href="/user/myevents/">{{request.session.username}}</a></li>
@@ -44,3 +44,13 @@
         </div><!--/.nav-collapse -->
       </div>
     </nav>
+	
+	<script type="text/javascript">
+ function sign()
+ {
+	alert(“将使用account9账号进行登录”);
+
+ }			
+
+
+</script>

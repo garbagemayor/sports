@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block title %}
-<title>赛事</title>
+<title>我的赛事</title>
 {% endblock %}
 
 {% block content %}
@@ -10,7 +10,7 @@
         <div class="span12">
 	<div class="page-header">
         <h1 style="text-align: center">
-          赛事列表 <small></small>
+          赛事列表 <small>共{{events_list.paginator.num_pages}}页</small>
         </h1>
       </div>
             <table class="table table-hover">

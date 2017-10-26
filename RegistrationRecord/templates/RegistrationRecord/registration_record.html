@@ -12,10 +12,10 @@
         <h1 style="text-align: center">
           报名记录 <small></small>
         </h1>
-        <button class="btn btn-primary" type="button"
+        <button class="btn btn-default" type="button"
                 onclick="location.href='/record_download_csv/{{event.id}}'"
         {% if signed %} disabled="disabled"{% endif %}>下载报名表(.csv)</button>
-        <button class="btn btn-primary" type="button"
+        <button class="btn btn-default" type="button"
                 onclick="location.href='/record_download_xlsx/{{event.id}}'"
                 {% if signed %} disabled="disabled"{% endif %}>下载报名表(.xlsx)</button>
       </div>

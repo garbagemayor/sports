@@ -1,4 +1,4 @@
-﻿# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
 from HomePage.models import Events as MEvents
@@ -22,11 +22,8 @@ def recordPage(request, event_id):
     event = MEvents.objects.get(id=event_id)
     message_map['event'] = event
     # 当前赛事的所有报名记录
-    record_list = list(MSign.objects.filter(eventsid=event_id))
-    print record_list
-    paginator=Paginator(record_list, 10)
+    record_list = list(MSign.objects.filter(eventsid=event_id))    paginator=Paginator(record_list, 10)
     page = request.GET.get('page')
-    print page
     try:
         record_list = paginator.page(page)
     except PageNotAnInteger:
