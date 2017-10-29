@@ -4,7 +4,9 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 import requests
 import json
-from HomePage.models import User, Sign, Events
+from HomePage.models import Users as User
+from HomePage.models import Signs as Sign
+from HomePage.models import Events
 from django.core.paginator import Paginator
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.decorators.csrf import csrf_exempt,csrf_protect
@@ -16,9 +18,9 @@ def auth(request):
             + request.GET['code'])
     rr = requests.get('https://accounts.net9.org/api/userinfo?access_token=' + r.json()['access_token'])
     j=rr.json()
-    user=User.objects.get_or_create(name=j['user']['name'])
+    user=User.objects.get_or_create(account9Id=j['user']['name'])
     if user[1]:
-        User.objects.filter(name=j['user']['name']).update(email=j['user']['email'], mobile=j['user']['mobile'], fullname=j['user']['fullname'], classnumber=j['user']['groups'][0])
+        User.objects.filter(account9Id=j['user']['name']).update(email=j['user']['email'], mobile=j['user']['mobile'], fullname=j['user']['fullname'], classNum=j['user']['groups'][0])
     request.session['username']=j['user']['name']
     request.session['userid']=user[0].id
     request.session['auth']=user[0].authority
