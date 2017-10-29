@@ -18,8 +18,8 @@ from . import view
 from django.conf.urls.static import static
 from django.views.generic import RedirectView
 from django.conf import settings
-from Events import views as  Events_view
-from Users import views as  Users_view
+from Events import views as Events_view
+from Users import views as Users_view
 from django.contrib import admin
 from RegistrationRecord import views as Record_view
 
@@ -37,6 +37,7 @@ urlpatterns = [
                   url(r'^events/sign/(\d+)/$', Events_view.sign, name='signpage'),                                     
                   url(r'^events/design/(\d+)/$', Events_view.design, name='designpage'), 
                   url(r'^user/$', Users_view.my_information, name='user'),
+                  url(r'^user/profile', Users_view.edit_information, name='profile'),
                   url(r'^authorized/$', Users_view.auth, name='login'),
                   url(r'^logout/$', Users_view.logout, name='logout'),
                   url(r'^edit_email/(\d+)$', Record_view.edit_email, name='edit_email'),

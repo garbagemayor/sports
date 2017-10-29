@@ -43,6 +43,10 @@ def logout(request):
 
 
 def my_information(request):
+    return render(request, "Users/my_information.html")
+
+
+def edit_information(request):
     return render(request, "Users/users.html")
 
 

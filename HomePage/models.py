@@ -14,8 +14,8 @@ class User(models.Model):
     classnumber = models.CharField(max_length=30, null=True)
     authority = models.IntegerField(default=0)  # 权限 默认无权限为0，普通管理员为1，超管为2
     email = models.CharField(max_length=30, null=True)
-    certificate_type = models.IntegerField(default=0)  # 证件类型 默认0为身份证，护照为1
-    certificate_id = models.CharField(max_length=30)
+    certification_type = models.IntegerField(default=0)  # 证件类型 默认0为身份证，护照为1
+    certification_id = models.CharField(max_length=30)
     student_number = models.CharField(max_length=30)
     birthday = models.DateField(unique_for_date=True)
     CLOTH_SIZE_CHOICES = (
@@ -25,6 +25,12 @@ class User(models.Model):
     )
     cloth_size = models.CharField(max_length=1, null=True, choices=CLOTH_SIZE_CHOICES)
     room_address = models.CharField(max_length=30, null=True)
+    GENDER_CHOICES = (
+        ('M', 'Male'),
+        ('F', 'Female'),
+    )
+    gender = models.CharField(max_length=1, null=False, choices=GENDER_CHOICES)
+    degree = models.IntegerField(null=True)  # 攻读学位 0为本科 1为研究生
 
 
 class Events(models.Model):

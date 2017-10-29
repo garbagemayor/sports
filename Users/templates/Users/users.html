@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block title %}
-<title>用户</title>
+<title xmlns:color="http://www.w3.org/1999/xhtml">用户</title>
 {% endblock %}
 
 {% block extracss %}<link href="/static/send_sheet.css" rel="stylesheet">{% endblock %}
@@ -10,110 +10,67 @@
 <div class="container-fluid">
     <div class="row-fluid">
         <div class="span12">
-            <form>
+            <form method="post">
+                {% csrf_token %}
                 <fieldset>
-                    <legend contenteditable="false">用户</legend>
+                    <legend contenteditable="false">修改个人资料</legend>
+                    {{ rlt }}
                     <label contenteditable="false" style="width: 10%; height: 50px">姓名</label>
-                    <input type="text" value="张三" style="color: gray;"/><span style="color: red; ">*</span>
+                    <input type="text" value="请输入姓名" name="name" style="color: gray;" onfocus="if(this.value==='请输入姓名'){this.value='';this.style='color: black';}"/><span style="color: red; ">*</span>
                     <br/>
                     <label contenteditable="false" style="width: 10%; height: 50px">学号</label>
-                    <input type="text" value="201*******" style="color: gray;"/><span style="color: red; ">*</span>
+                    <input type="text" value="请输入学号" name="student_id" style="color: gray;" onfocus="if(this.value==='请输入学号'){this.value='';this.style='color: black';}"/><span style="color: red; ">*</span>
                     <br/>
                     <label contenteditable="false" style="width: 10%; height: 50px">证件类型</label>
-                    <input type="text" value="#修改为choice" style="color: gray;"/><span style="color: red; ">*</span>
+                    <select name="certification_type" id="parent">
+                        <option value="null">请选择</option>
+                        <option value="0">身份证</option>
+                        <option value="1">护照</option>
+                    </select>
+                    <span style="color: red; ">*</span>
                     <br/>
                     <label contenteditable="false" style="width: 10%; height: 50px">证件号</label>
-                    <input type="text" style="color: gray;"/><span style="color: red; ">*</span>
+                    <input type="text" value="请输入证件号" name="certification_id" style="color: gray;" onfocus="if(this.value==='请输入证件号'){this.value='';this.style='color: black';}"/><span style=" color: red; ">*</span>
                     <br/>
                     <label contenteditable="false" style="width: 10%; height: 50px">性别</label>
-                    <input type="text" value="#修改为choice" style="color: gray;"/><span style="color: red; ">*</span>
+                    <select name="gender" id="parent">
+                        <option value=null>请选择</option>
+                        <option value="M">男</option>
+                        <option value="F">女</option>
+                    </select>
+                    <span style="color: red; ">*</span>
                     <br/>
                     <label contenteditable="false" style="width: 10%; height: 50px">出生日期</label>
-                    <input type="text" value="19**-**-**" style="color: gray;"/><span style="color: red; ">*</span>
+                    <input type="text" value="输入格式为1997-01-01" name="birthday" style="color: gray;"  onfocus="if(this.value==='输入格式为1997-01-01'){this.value='';this.style='color: black';}"/><span style="color: red; ">*</span>
                     <br/>
                     <label contenteditable="false" style="width: 10%; height: 50px">攻读学位</label>
-                    <input type="text" value="#修改为choice" style="color: gray;"/><span style="color: red; ">*</span>
+                    <select name="degree" id="parent">
+                        <option value=null>请选择</option>
+                        <option value="0">本科生</option>
+                        <option value="1">研究生</option>
+                    </select>
+                    <span style="color: red; ">*</span>
                     <br/>
                     <label contenteditable="false" style="width: 10%; height: 50px">所在班级</label>
-                    <input type="text" value="计**" style="color: gray;"/><span style="color: red; ">*</span>
+                    <input type="text" value="计**" name="classnumber" style="color: gray;" onfocus="if(this.value==='计**'){this.value='';this.style='color: black';}"/><span style="color: red; ">*</span>
                     <br/>
                     <label contenteditable="false" style="width: 10%; height: 50px">衣服尺寸</label>
-                    <input type="text" value="#修改为choice" style="color: gray;"/><span style="color: red; ">*</span>
+                    <select name="cloth_size" id="parent">
+                        <option value=null>请选择</option>
+                        <option value="S">S(男生165/女生160)</option>
+                        <option value="M">M(男生170/女生165)</option>
+                        <option value="L">L(男生175/女生170)</option>
+                    </select>
+                    <span style="color: red; ">*</span>
                     <br/>
                     <label contenteditable="false" style="width: 10%; height: 50px">电子邮箱</label>
-                    <input type="text" value="*****@mails.tsinghua.edu.cn" style="color: gray;"/><span style="color: red; ">*</span>
+                    <input type="text" value="*****@mails.tsinghua.edu.cn" name="email" style="color: gray;" onfocus="if(this.value==='*****@mails.tsinghua.edu.cn'){this.value='';this.style='color: black';}"/><span style="color: red; ">*</span>
                     <br/>
                     <label contenteditable="false" style="width: 10%; height: 50px">手机号码</label>
-                    <input type="text" value="188********" style="color: gray;"/><span style="color: red; ">*</span>
+                    <input type="text" value="188********" name="mobile" style="color: gray;" onfocus="if(this.value==='188********'){this.value='';this.style='color: black';}"/><span style="color: red; ">*</span>
                 </fieldset>
             </form>
             <button class="btn btn-primary" type="submit">确认</button>
-            
-			<!--<form method="post" name="forms">
-                {% csrf_token %}
-                <fieldset>
-                    <legend contenteditable="false">密码</legend>
-                    <label contenteditable="false">原密码</label>
-                    <span id=pwbox1><input type="password" name="old_password"/><span style="color: red; ">*</span></span>
-                    <span id=click1><label class="checkbox">
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" onclick="showpw1()"/>显示密码
-                    </label></span>
-                    <script language="JavaScript">
-                        function showpw1() {
-                            if (this.forms.old_password.type="password") {
-                                document.getElementById("pwbox1").innerHTML="<input type=\"text\" name=\"old_password\" value="+this.forms.old_password.value+">";
-                                document.getElementById("click1").innerHTML="<label class=\"checkbox\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type=\"checkbox\" onclick=\"hidepw1()\" checked=\"true\"/>显示密码</label>"
-                            }
-                        }
-                        function hidepw1() {
-                            if (this.forms.old_password.type="text") {
-                                document.getElementById("pwbox1").innerHTML="<input type=\"password\" name=\"old_password\" value="+this.forms.old_password.value+">";
-                                document.getElementById("click1").innerHTML="<label class=\"checkbox\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type=\"checkbox\" onclick=\"showpw1()\"/>显示密码</label>"
-                            }
-                        }
-                    </script>
-                    <label contenteditable="false">新密码</label>
-                    <span id=pwbox2><input type="password" name="new_password"/><span style="color: red; ">*</span></span>
-                    <span id=click2><label class="checkbox">
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" onclick="showpw2()"/>显示密码
-                    </label></span>
-                    <script language="JavaScript">
-                        function showpw2() {
-                            if (this.forms.new_password.type="password") {
-                                document.getElementById("pwbox2").innerHTML="<input type=\"text\" name=\"new_password\" value="+this.forms.new_password.value+">";
-                                document.getElementById("click2").innerHTML="<label class=\"checkbox\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type=\"checkbox\" onclick=\"hidepw2()\" checked=\"true\"/>显示密码</label>"
-                            }
-                        }
-                        function hidepw2() {
-                            if (this.forms.new_password.type="text") {
-                                document.getElementById("pwbox2").innerHTML="<input type=\"password\" name=\"new_password\" value="+this.forms.new_password.value+">";
-                                document.getElementById("click2").innerHTML="<label class=\"checkbox\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type=\"checkbox\" onclick=\"showpw2()\"/>显示密码</label>"
-                            }
-                        }
-                    </script>
-                    <label contenteditable="false">确认密码</label>
-                    <span id=pwbox3><input type="password" name="assure_password"/><span style="color: red; ">*</span></span>
-                    <span id=click3><label class="checkbox">
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" onclick="showpw3()"/>显示密码
-                    </label></span>
-                    <script language="JavaScript">
-                        function showpw3() {
-                            if (this.forms.assure_password.type="password") {
-                                document.getElementById("pwbox3").innerHTML="<input type=\"text\" name=\"assure_password\" value="+this.forms.assure_password.value+">";
-                                document.getElementById("click3").innerHTML="<label class=\"checkbox\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type=\"checkbox\" onclick=\"hidepw3()\" checked=\"true\"/>显示密码</label>"
-                            }
-                        }
-                        function hidepw3() {
-                            if (this.forms.assure_password.type="text") {
-                                document.getElementById("pwbox3").innerHTML="<input type=\"password\" name=\"assure_password\" value="+this.forms.assure_password.value+">";
-                                document.getElementById("click3").innerHTML="<label class=\"checkbox\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type=\"checkbox\" onclick=\"showpw3()\"/>显示密码</label>"
-                            }
-                        }
-                    </script>
-                    <p> {{ rlt }} </p>
-                    <button class="btn" type="submit">提交</button>
-                </fieldset>
-            </form>-->
         </div>
     </div>
 </div>
