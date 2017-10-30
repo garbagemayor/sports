@@ -8,6 +8,7 @@ from HomePage.models import User, Sign, Events
 from django.core.paginator import Paginator
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.decorators.csrf import csrf_exempt,csrf_protect
+from django.contrib import messages
 
 # Create your views here.
 def auth(request):
@@ -19,13 +20,17 @@ def auth(request):
     request.session['username']=j['user']['name']
     request.session['userid']=user[0].id
     request.session['auth']=user[0].authority
+    messages.add_message(request, messages.INFO, '登陆成功! '+request.session['username']+' 欢迎来到体育赛事报名平台！')
     return HttpResponseRedirect("/events/")
 
 def logout(request):
     if (request.session['username']):
         del request.session['username']
-        del request.session['userid']        
+    if (request.session['userid']):
+        del request.session['userid']   
+    if (request.session['auth']):     
         del request.session['auth']
+    messages.add_message(request, messages.INFO, '成功登出！')
     return HttpResponseRedirect("/")
 
 def my_information(request):
@@ -52,7 +57,8 @@ def my_events(request):
         
             
         return render(request, 'Events/myevents.html', {'events_list':events_list})
-    else:
+    else:        
+        messages.add_message(request, messages.INFO, '请登录！')
         HttpResponseRedirect("/authorized/")
 
 @csrf_exempt 
@@ -62,17 +68,17 @@ def manager(request):
     if request.method == "POST":
         if len(user)<3:
             if len(User.objects.filter(name=request.POST['name'])) == 0 :
-                status = 2
+                messages.add_message(request, messages.INFO, '查无此人！')
             else:
                 user=User.objects.get(name=request.POST['name'])
                 if user.authority<1:
                     User.objects.filter(name=request.POST['name']).update(authority=1)
-                    status = 3
+                    messages.add_message(request, messages.INFO, '成功将'+request.session['username']+'升至管理员！')
                 else:
-                    status = 4
+                    messages.add_message(request, messages.INFO, '无此操作权限！')
             user=User.objects.filter(authority=1)
         else:
-            status = 1
+            messages.add_message(request, messages.INFO, '管理员数量已达上限！')
     return render(request, 'Users/manager.html', {'users_list':user, 'status':json.dumps(status)})
 
 def gets2(i):
