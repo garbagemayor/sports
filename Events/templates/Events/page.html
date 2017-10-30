@@ -36,10 +36,8 @@
         </dd>
       </dl>	  
       <nav style="text-align: center; margin-bottom:20px"> 
-	    <form method="post" action="">
-		  {% csrf_token %}
-		  <button class="btn btn-primary" {% if not events.status == 2 %} name="sign" disabled="disabled"{% endif %} type="submit" >立即报名</button>
-		  <button class="btn btn-link" {% if not events.status == 2 %} name="sign" disabled="disabled"{% endif %} type="submit" >取消报名</button>
+		<button class="btn btn-primary" {% if not events.status == 2 %} name="sign" disabled="disabled"{% endif %} onclick="location.href='/events/sign/{{events.id}}/'" >立即报名</button>
+		<button class="btn btn-link" {% if not events.status == 2 %} name="sign" disabled="disabled"{% endif %} onclick="location.href='/events/design/{{events.id}}/'" >取消报名</button>
 	    </form>
 	  </nav>
 	  <!--{% if request.session.username %}
@@ -52,27 +50,13 @@
   </div>
 </div>
 
-<script type="text/javascript">
- function openwin()
- {
-	var status = {{status|safe}};
-	if (status == 1) 
-		alert("报名成功！\n请等待审核。");
-	else if (status == 2)
-		alert("已报名！");
-	else if (status == 3)
-		alert("请先登录！");
-	
- }	
-</script>
+
 <script type="text/javascript">
  function asdf()
  {
 	alert("删除该赛事！");
 	location.href="/events/delete/{{events.id}}/";
  }			
-
-
 </script>
 
 {% endblock %}

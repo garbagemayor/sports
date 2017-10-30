@@ -71,21 +71,6 @@
     </div>
 </div>
 
-<script type="text/javascript">
- function openwin()
- {
-	var status = {{status|safe}};
-	if (status == 1) 
-		alert("管理员数量太多！");
-	if (status == 2) 
-		alert("查无此人！");
-	if (status == 3)
-		alert("设置成功！");
-	if (status == 4)
-		alert("他已经是管理员了。");
- }			
 
-
-</script>
 
 {% endblock %}

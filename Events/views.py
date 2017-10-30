@@ -8,7 +8,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.decorators.csrf import csrf_exempt,csrf_protect
 import json
-from HomePage.models import Sign
+from django.contrib import messages
 
 # Create your views here.
 def index(request):
@@ -33,19 +33,7 @@ def page(request, Id):
     events = Events.objects.get(id=Id)
     events.s2 = gets2(events.status)
     events.s3 = gets3(events.status)
-    if request.method == "POST":
-        if request.session['userid']:
-            s = Sign.objects.get_or_create(userid=request.session['userid'], eventsid=Id, status=1)
-            if (s[1]):
-                status=1
-            else:
-                status=2
-        else:
-            status=3
-
-        return render(request, 'Events/page.html', {'events':events, 'status':json.dumps(status)})
-    else:
-        return render(request, 'Events/page.html', {'events':events})
+    return render(request, 'Events/page.html', {'events':events})
 
 
 def delete_events(request, Id):    
@@ -54,8 +42,13 @@ def delete_events(request, Id):
         if request.session['userid']:
             if request.session['auth']>0:
                 Events.objects.filter(id=Id).delete()
+                Sign.objects.filter(eventsid=Id).delete()
+                messages.add_message(request, messages.INFO, '删除成功！')
+            else:
+                messages.add_message(request, messages.INFO, '当前用户无此操作权限！')
         else:
-            status=3
+            messages.add_message(request, messages.INFO, '请登录！')
+            return HttpResponseRedirect('/authorized/')
 
         return HttpResponseRedirect('/events/')
     else:
@@ -69,17 +62,46 @@ def nextphase(request, Id):
                 e=Events.objects.get(id=Id)
                 e.status+=1
                 e.save()
+                messages.add_message(request, messages.INFO, '修改成功！')
+            else:
+                messages.add_message(request, messages.INFO, '当前用户无此操作权限！')
         else:
-            status=3
-
+            messages.add_message(request, messages.INFO, '请登录！')
+            return HttpResponseRedirect('/authorized/')
         return HttpResponseRedirect('/events/'+Id)
     else:
         return HttpResponseRedirect('/events/'+Id)
+
+def sign(request, Id):    
+    events = Events.objects.get(id=Id)
+    if request.session['userid']:
+        s = Sign.objects.get_or_create(userid=request.session['userid'], eventsid=Id, status=1)
+        if (s[1]):
+            messages.add_message(request, messages.INFO, '报名成功！')
+        else:
+            messages.add_message(request, messages.INFO, '已报名！')
+    else:
+        messages.add_message(request, messages.INFO, '请登录！')
+        return HttpResponseRedirect('/authorized/')
+
+    return HttpResponseRedirect('/events/'+Id+'/');
+
+def design(request, Id):    
+    events = Events.objects.get(id=Id)
+    if request.session['userid']:
+        Sign.objects.filter(userid=request.session['userid'], eventsid=Id, status=1).delete()
+        messages.add_message(request, messages.INFO, '取消成功！')
+    else:
+        messages.add_message(request, messages.INFO, '请登录！')
+        return HttpResponseRedirect('/authorized/')
+
+    return HttpResponseRedirect('/events/'+Id+'/');
 
 @csrf_exempt
 def addevents(request):
     if request.method =="POST":
         if Events.objects.get_or_create(name=request.POST['name'], content=request.POST['detail']):
+            messages.add_message(request, messages.INFO, '成功添加赛事'+request.POST['name']+'！')
             return HttpResponseRedirect('/events/')
     return render(request, "Events/addevents.html")
 
