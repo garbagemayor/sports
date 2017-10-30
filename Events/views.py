@@ -59,8 +59,10 @@ def nextphase(request, Id):
     if request.method == "GET":
         if request.session['userid']:
             if request.session['auth']>0:
-                e=Events.objects.get(id=Id)
+                e=Events.objects.get(id=Id)                
                 e.status+=1
+                if e.status >=5 :
+                    e.status =1
                 e.save()
                 messages.add_message(request, messages.INFO, '修改成功！')
             else:

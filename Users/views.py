@@ -16,7 +16,9 @@ def auth(request):
             + request.GET['code'])
     rr = requests.get('https://accounts.net9.org/api/userinfo?access_token=' + r.json()['access_token'])
     j=rr.json()
-    user=User.objects.get_or_create(name=j['user']['name'], email=j['user']['email'], mobile=j['user']['mobile'], fullname=j['user']['fullname'], classnumber=j['user']['groups'][0])
+    user=User.objects.get_or_create(name=j['user']['name'])
+    if user[1]:
+        User.objects.filter(name=j['user']['name']).update(email=j['user']['email'], mobile=j['user']['mobile'], fullname=j['user']['fullname'], classnumber=j['user']['groups'][0])
     request.session['username']=j['user']['name']
     request.session['userid']=user[0].id
     request.session['auth']=user[0].authority
@@ -63,7 +65,7 @@ def my_events(request):
 
 @csrf_exempt 
 def manager(request):    
-    user=User.objects.filter(authority=1)
+    user=User.objects.filter().exclude(authority=0)
     status=0
     if request.method == "POST":
         if len(user)<3:

@@ -18,6 +18,9 @@
 		  <button class="btn btn-default" onclick="location.href='/record/{{events.id}}'">查看报名</button>
 		{% endif %}
       </div>
+	  <br><br><br>
+	  <div class="ystep1"></div>	  
+	  <br><br><br>
       <div id="status" class="alert alert-{{events.s3}}">
         {{events.s2}}
       </div>
@@ -56,7 +59,28 @@
  {
 	alert("删除该赛事！");
 	location.href="/events/delete/{{events.id}}/";
- }			
+ }	
+</script>
+<script src="/static/js/ystep.js"></script>
+<script type="text/javascript">
+$(".ystep1").loadStep({
+      size: "large",
+      color: "blue",
+      steps: [{
+        title: "即将开始",
+        content: "报名即将开始"
+      },{
+        title: "正在报名",
+        content: "报名后等待审核"
+      },{
+        title: "等待比赛",
+        content: "报名已截止，请等待比赛。"
+      },{
+        title: "比赛结束",
+        content: "比赛已结束，请查看成绩"
+      }]
+    });
+$(".ystep1").setStep({{events.status}});	
 </script>
 
 {% endblock %}
