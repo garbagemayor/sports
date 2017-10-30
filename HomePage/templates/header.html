@@ -26,6 +26,7 @@
               </ul>
 			</li>
 			{% endif %}
+			
 			{% if request.session.auth > 1 %}
 			  <li {% if request.path|slice:"4" == "/man" %}class="active"{% endif %}><a href="/managers">管理员</a></li>
 			{% endif %}

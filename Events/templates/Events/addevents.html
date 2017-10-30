@@ -15,19 +15,24 @@
 {% csrf_token %}
 	<div class="form-group">
 		<label class="col-sm-2 control-label">赛名</label>
-		<div class="col-sm-10">
+		<div class="col-sm-5">
 			<input class="form-control" name="name" type="text"  placeholder="赛事名">
 		</div>
 	</div>
 	<div class="form-group">
-		<label class="col-sm-2 control-label">赛事时间</label>
-		<div class="col-sm-10">
-			<input class="form-control" name="time" type="text"  placeholder="时间">
+        <label for="dtp_input1" class="col-sm-2 control-label">比赛时间</label>
+		<div class="col-sm-5">
+        <div class="input-group date form_datetime" data-date="" data-date-format="dd MM yyyy - HH:ii p" data-link-field="dtp_input1">
+            <input class="form-control" size="16" type="text" value="" readonly>
+            <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+			<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+        </div>
+		<input type="hidden" id="dtp_input1" value="" /><br/>
 		</div>
-	</div>
+    </div>
 	<div class="form-group">
 		<label for="name" class="col-sm-2 control-label">赛事详情</label>
-		<div class="col-sm-10">
+		<div class="col-sm-7">
 			<textarea class="form-control" name="detail" rows="5"></textarea>
 		</div>
 	</div>
@@ -39,5 +44,20 @@
 		</div>
 	</div>
 </form>
+
+<script type="text/javascript" src="/static/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+<script type="text/javascript" src="/static/js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+<script type="text/javascript">
+    $('.form_datetime').datetimepicker({
+        //language:  'fr',
+        weekStart: 1,
+        todayBtn:  1,
+		autoclose: 1,
+		todayHighlight: 1,
+		startView: 2,
+		forceParse: 0,
+        showMeridian: 1
+    });
+</script>
 
 {% endblock %}
