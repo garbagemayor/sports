@@ -33,13 +33,14 @@ def my_information(request):
 
 def my_events(request):
     if (request.session['userid']):
-        render(request, "Users/users.html")
         events_list = []
         elist = Sign.objects.filter(userid=request.session['userid'])
         for e in elist:
-            tmp = Events.objects.get(id=e.eventsid)
-            tmp.s2 = gets2(tmp.status)
-            events_list.append(tmp)
+            tmp = Events.objects.filter(id=e.eventsid)
+            if tmp:
+                tmp=tmp[0]
+                tmp.s2 = gets2(tmp.status)
+                events_list.append(tmp)
         paginator=Paginator(events_list, 3)
         page = request.GET.get('page')
         try:
