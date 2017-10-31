@@ -18,9 +18,9 @@ def auth(request):
             + request.GET['code'])
     rr = requests.get('https://accounts.net9.org/api/userinfo?access_token=' + r.json()['access_token'])
     j=rr.json()
-    user=User.objects.get_or_create(account9Id=j['user']['name'])
+    user=User.objects.get_or_create(name=j['user']['name'])
     if user[1]:
-        User.objects.filter(account9Id=j['user']['name']).update(email=j['user']['email'], mobile=j['user']['mobile'], fullname=j['user']['fullname'], classNum=j['user']['groups'][0])
+        User.objects.filter(name=j['user']['name']).update(email=j['user']['email'], mobile=j['user']['mobile'], fullname=j['user']['fullname'], classnumber=j['user']['groups'][0])
     request.session['username']=j['user']['name']
     request.session['userid']=user[0].id
     request.session['auth']=user[0].authority
@@ -43,7 +43,7 @@ def my_information(request):
 def my_events(request):
     if (request.session['userid']):
         events_list = []
-        elist = Sign.objects.filter(userid=request.session['userid'])
+        elist = Sign.objects.filter(userId=request.session['userid'])
         for e in elist:
             tmp = Events.objects.filter(id=e.eventsid)
             if tmp:

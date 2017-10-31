@@ -16,8 +16,8 @@ import pyqrcode
 def index(request):
     events_list=list(Events.objects.all()[::-1])
     for l in events_list:
-        l.s2 = gets2(l.status)
-        l.s3 = gets3(l.status)
+        l.s2 = gets2(l.getStatus())
+        l.s3 = gets3(l.getStatus())
     paginator=Paginator(events_list, 3)
     page = request.GET.get('page')
     try:
@@ -33,8 +33,8 @@ def index(request):
 @csrf_exempt 
 def page(request, Id):    
     events = Events.objects.get(id=Id)
-    events.s2 = gets2(events.status)
-    events.s3 = gets3(events.status)
+    events.s2 = gets2(events.getStatus())
+    events.s3 = gets3(events.getStatus())
     return render(request, 'Events/page.html', {'events':events})
 
 
