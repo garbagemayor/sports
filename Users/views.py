@@ -42,6 +42,10 @@ def logout(request):
 
 
 def my_information(request):
+    user_id = request.session['userid']
+    if user_id:
+        my_infos = User.objects.filter(id=user_id)
+        name = my_infos.id
     return render(request, "Users/my_information.html")
 
 
