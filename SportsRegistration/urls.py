@@ -43,6 +43,7 @@ urlpatterns = [
                   url(r'^edit_email/(\d+)$', Record_view.edit_email, name='edit_email'),
                   url(r'^user/myevents/$', Users_view.my_events, name='my_events'),
                   url(r'^managers/$', Users_view.manager, name='manager'),
+                  url(r'^managers/(\d+)/$', Users_view.demanager, name='demanager'),
                   url(r'^events/addevents$', Events_view.addevents, name='addevents'), 
                   url(r'^record/(\d+)/$', Record_view.recordPage, name='recordpage'),
                   url(r'^record_download_csv/(\d+)/$', Record_view.recordDownloadCSV, name='recorddownload'),
