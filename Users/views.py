@@ -61,7 +61,7 @@ def my_events(request):
         return render(request, 'Events/myevents.html', {'events_list':events_list})
     else:        
         messages.add_message(request, messages.INFO, '请登录！')
-        HttpResponseRedirect("/authorized/")
+        return HttpResponseRedirect("/authorized/")
 
 @csrf_exempt 
 def manager(request):    
@@ -82,6 +82,19 @@ def manager(request):
         else:
             messages.add_message(request, messages.INFO, '管理员数量已达上限！')
     return render(request, 'Users/manager.html', {'users_list':user, 'status':json.dumps(status)})
+
+def demanager(request, Id):
+    if request.session['auth']>1:
+        u=User.objects.filter(id=Id)
+        if u[0].authority>1:            
+            messages.add_message(request, messages.INFO, u[0].fullname+'是超级管理员！')
+        else:
+            User.objects.filter(id=Id).update(authority=0)
+            messages.add_message(request, messages.INFO, u[0].fullname+'已不再是管理员！')
+    else:
+        messages.add_message(request, messages.INFO, '无此操作权限！')
+    return HttpResponseRedirect("/managers/")
+
 
 def gets2(i):
     if i == 1:

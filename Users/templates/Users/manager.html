@@ -60,8 +60,10 @@
                     <td>
                         普通管理员
                     </td>
-					<td onclick="location.href='/user/{{user.id}}'">
+					<td>
+					<button  class="btn btn-link" onclick="location.href='/managers/{{user.id}}'">
                         降级
+					</button>
                     </td>
                 </tr>
                 {% endfor %}
