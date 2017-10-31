@@ -9,6 +9,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.decorators.csrf import csrf_exempt,csrf_protect
 import json
 from django.contrib import messages
+import pyqrcode
 
 # Create your views here.
 def index(request):
@@ -128,3 +129,11 @@ def gets3(i):
         return "danger"
     elif i == 4:
         return "warning"
+
+def qrcode(request, Id):
+    url = 'http://' + str(request.get_host()) + '/events/' + Id;
+    print(url)
+    code = pyqrcode.create(url)
+    code.png('code.png')
+    image_data = open("code.png", "rb").read()
+    return HttpResponse(image_data, content_type="image/png")

@@ -45,6 +45,7 @@ urlpatterns = [
                   url(r'^managers/(\d+)/$', Users_view.demanager, name='demanager'),
                   url(r'^events/addevents$', Events_view.addevents, name='addevents'), 
                   url(r'^record/(\d+)/$', Record_view.recordPage, name='recordpage'),
+                  url(r'^qrcode/(\d+)/$', Events_view.qrcode, name='qrcode'),
                   url(r'^record_download_csv/(\d+)/$', Record_view.recordDownloadCSV, name='recorddownload'),
                   url(r'^record_download_xlsx/(\d+)/$', Record_view.recordDownloadXLSX, name='recorddownload'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
