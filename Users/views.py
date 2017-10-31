@@ -14,8 +14,7 @@ from django.contrib import messages
 # Create your views here.
 def auth(request):
     r = requests.post(
-        'https://accounts.net9.org/api/access_token?client_id=0eHhovG3K1NYkhbnYuYmej1h9wY&client_secret'
-        '=moK3EkYsQvossfoMwmCd&code= '
+        'https://accounts.net9.org/api/access_token?client_id=0eHhovG3K1NYkhbnYuYmej1h9wY&client_secret=moK3EkYsQvossfoMwmCd&code='
         + request.GET['code'])
     rr = requests.get('https://accounts.net9.org/api/userinfo?access_token=' + r.json()['access_token'])
     j = rr.json()
