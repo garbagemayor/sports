@@ -12,10 +12,49 @@
         <div class="span12">
             <fieldset>
                 <legend contenteditable="false">个人资料</legend>
-                <label contenteditable="false" style="width: 10%; height: 50px">姓名</label>
-                <label contenteditable="false" style="width: 10%; height: 50px">{{ my_name }}</label>
+                <label contenteditable="false" style="width: 20%; height: 50px">用户名</label>
+                <label contenteditable="false" style="width: 20%; height: 50px">{{ id }}</label>
+                <br/>
+                <label contenteditable="false" style="width: 20%; height: 50px">姓名</label>
+                <label contenteditable="false" style="width: 20%; height: 50px">{{ name }}</label>
+                <br/>
+                <label contenteditable="false" style="width: 20%; height: 50px">性别</label>
+                <label contenteditable="false" style="width: 20%; height: 50px">{{ gender }}</label>
+                <br/>
+                <label contenteditable="false" style="width: 20%; height: 50px">所在班级</label>
+                <label contenteditable="false" style="width: 20%; height: 50px">{{ classnumber }}</label>
+                <br/>
+                <label contenteditable="false" style="width: 20%; height: 50px">用户类型</label>
+                <label contenteditable="false" style="width: 20%; height: 50px">{{ authority }}</label>
+                <br/>
+                <label contenteditable="false" style="width: 20%; height: 50px">手机号</label>
+                <label contenteditable="false" style="width: 20%; height: 50px">{{ mobile }}</label>
+                <br/>
+                <label contenteditable="false" style="width: 20%; height: 50px">电子邮箱</label>
+                <label contenteditable="false" style="width: 20%; height: 50px">{{ email }}</label>
+                <br/>
+                <label contenteditable="false" style="width: 20%; height: 50px">学号</label>
+                <label contenteditable="false" style="width: 20%; height: 50px">{{ student_number }}</label>
+                <br/>
+                <label contenteditable="false" style="width: 20%; height: 50px">证件类型</label>
+                <label contenteditable="false" style="width: 20%; height: 50px">{{ certification_type }}</label>
+                <br/>
+                <label contenteditable="false" style="width: 20%; height: 50px">证件号</label>
+                <label contenteditable="false" style="width: 20%; height: 50px">{{ certification_id }}</label>
+                <br/>
+                <label contenteditable="false" style="width: 20%; height: 50px">出生年月日</label>
+                <label contenteditable="false" style="width: 20%; height: 50px">{{ birthday }}</label>
+                <br/>
+                <label contenteditable="false" style="width: 20%; height: 50px">衣服尺码</label>
+                <label contenteditable="false" style="width: 20%; height: 50px">{{ cloth_size }}</label>
+                <br/>
+                <label contenteditable="false" style="width: 20%; height: 50px">所在宿舍</label>
+                <label contenteditable="false" style="width: 20%; height: 50px">{{ room_address }}</label>
+                <br/>
+                <label contenteditable="false" style="width: 20%; height: 50px">攻读学位</label>
+                <label contenteditable="false" style="width: 20%; height: 50px">{{ degree }}</label>
             </fieldset>
-            <button class="btn btn-primary" type="submit">修改</button>
+            <button class="btn btn-primary" type="submit" onclick="location.href='/user/profile'">修改</button>
         </div>
     </div>
 </div>
