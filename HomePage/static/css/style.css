@@ -1214,15 +1214,15 @@ ul.styled-list.list-star li:before {
   padding: 0;
   display: block;
 }
-.pricing {
+.events {
   padding: 100px 0;
 }
-.pricing-table {
+.events-table {
   border: 1px solid #f2f2f2;
   border-radius: 5px;
   background-color: #fff;
 }
-.pricing-table .pricing-header .pt-price {
+.events-table .events-header .pt-price {
   font-family: "Microsoft YaHei";
   color: #4c4c4c;
   font-size: 40px;
@@ -1231,12 +1231,12 @@ ul.styled-list.list-star li:before {
   text-align: center;
   padding: 10px 40px;
 }
-.pricing-table .pricing-header .pt-price small {
+.events-table .events-header .pt-price small {
   font-size: 13px;
   color: #9a9a9a;
   font-weight: 300;
 }
-.pricing-table .pricing-header .pt-name {
+.events-table .events-header .pt-name {
   font-family: "Microsoft YaHei";
   padding: 10px 40px;
   text-align: center;
@@ -1247,43 +1247,43 @@ ul.styled-list.list-star li:before {
   border-top: 1px solid #f2f2f2;
   border-bottom: 1px solid #f2f2f2;
 }
-.pricing-table .pricing-body ul {
+.events-table .events-body ul {
   margin: 0;
   padding: 0;
   list-style: none;
 }
-.pricing-table .pricing-body ul li {
+.events-table .events-body ul li {
   padding: 8px 25px;
   margin: 0;
 }
-.pricing-table .pricing-body ul li:nth-child(even) {
+.events-table .events-body ul li:nth-child(even) {
   background-color: #fafafa;
 }
-.pricing-table .pricing-body ul li .fa-times {
+.events-table .events-body ul li .fa-times {
   color: #ff6666;
 }
-.pricing-table .pricing-body ul li .fa-check {
+.events-table .events-body ul li .fa-check {
   color: #2894ff;
 }
-.pricing-table .pricing-footer {
+.events-table .events-footer {
   text-align: center;
   padding: 15px 40px;
   border-top: 1px solid #f2f2f2;
 }
-.pricing-table.featured .pricing-header {
+.events-table.featured .events-header {
   position: relative;
   overflow: hidden;
 }
-.pricing-table.featured .pricing-header .pt-price {
+.events-table.featured .events-header .pt-price {
   color: #2894ff;
 }
-.pricing-table.featured .pricing-header .pt-price small {
+.events-table.featured .events-header .pt-price small {
   color: #2894ff;
 }
-.pricing-table.featured .pricing-header .pt-name {
+.events-table.featured .events-header .pt-name {
   color: #2894ff;
 }
-.pricing-table.featured .pricing-header .featured-text {
+.events-table.featured .events-header .featured-text {
   font-family: "Microsoft YaHei";
   font-size: 13px;
   line-height: 15px;
@@ -1291,7 +1291,7 @@ ul.styled-list.list-star li:before {
   font-weight: 300;
   text-transform: uppercase;
   text-align: center;
-  background-color: #2894ff;
+  background-color: #ff0000;
   color: #fff;
   position: absolute;
   top: 22px;
