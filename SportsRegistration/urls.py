@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """SportsRegistration URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
@@ -27,24 +29,33 @@ from RegistrationRecord import views as Record_view
 urlpatterns = [
                   url(r'^admin/', admin.site.urls),
 
-                  
+                  #主页
                   url(r'^$',  RedirectView.as_view(url='/main/')),
                   url(r'^main/$', view.HomePageView, name='homepage'),
-                  url(r'^events/$', Events_view.index, name='eventslist'),
-                  url(r'^events/(\d+)/$', Events_view.page, name='eventspage'),                  
-                  url(r'^events/delete/(\d+)/$', Events_view.delete_events, name='deletepage'),                                    
-                  url(r'^events/next/(\d+)/$', Events_view.nextphase, name='nextphase'),                                     
-                  url(r'^events/sign/(\d+)/$', Events_view.sign, name='signpage'),                                     
-                  url(r'^events/design/(\d+)/$', Events_view.design, name='designpage'), 
-                  url(r'^user/$', Users_view.my_information, name='user'),
-                  url(r'^authorized/$', Users_view.auth, name='login'),
-                  url(r'^logout/$', Users_view.logout, name='logout'),
-                  url(r'^edit_email/(\d+)$', Record_view.edit_email, name='edit_email'),
-                  url(r'^user/myevents/$', Users_view.my_events, name='my_events'),
+
+                  #赛事
+                  url(r'^events/$', Events_view.index, name='eventslist'),                      #所有赛事页
+                  url(r'^events/(\d+)/$', Events_view.page, name='eventspage'),                 #赛事详情页            
+                  url(r'^events/delete/(\d+)/$', Events_view.delete_events, name='deletepage'),    #删除赛事                                  
+                  url(r'^events/next/(\d+)/$', Events_view.nextphase, name='nextphase'),       #改变阶段                              
+                  url(r'^events/sign/(\d+)/$', Events_view.sign, name='signpage'),              #报名                      
+                  url(r'^events/design/(\d+)/$', Events_view.design, name='designpage'),        #取消报名
+                  url(r'^events/addevents$', Events_view.addevents, name='addevents'),           #添加赛事
+
+                  #用户
+                  url(r'^user/$', Users_view.my_information, name='user'),                  #个人页
+                  #url(r'^user/(\d+)/$')                                                    #浏览其他用户信息  （暂无）
+                  url(r'^authorized/$', Users_view.auth, name='login'),                     #登录完成
+                  url(r'^logout/$', Users_view.logout, name='logout'),                      #登出
+                  url(r'^edit_email/(\d+)$', Record_view.edit_email, name='edit_email'),    #修改邮件
+                  url(r'^user/myevents/$', Users_view.my_events, name='my_events'),         #查看我的赛事
+
+                  #管理员
                   url(r'^managers/$', Users_view.manager, name='manager'),
-                  url(r'^managers/(\d+)/$', Users_view.demanager, name='demanager'),
-                  url(r'^events/addevents$', Events_view.addevents, name='addevents'), 
-                  url(r'^record/(\d+)/$', Record_view.recordPage, name='recordpage'),
+                  url(r'^managers/(\d+)/$', Users_view.demanager, name='demanager'),        #删除管理员
+
+                  #记录
+                  url(r'^record/(\d+)/$', Record_view.recordPage, name='recordpage'),       #某赛事报名情况
                   url(r'^record_download_csv/(\d+)/$', Record_view.recordDownloadCSV, name='recorddownload'),
                   url(r'^record_download_xlsx/(\d+)/$', Record_view.recordDownloadXLSX, name='recorddownload'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
