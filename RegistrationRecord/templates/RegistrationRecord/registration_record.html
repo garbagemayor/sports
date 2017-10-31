@@ -18,13 +18,13 @@
         <button class="btn btn-default" type="button"
                 onclick="location.href='/record_download_xlsx/{{event.id}}'"
                 {% if signed %} disabled="disabled"{% endif %}>下载报名表(.xlsx)</button>
-        <button class="btn btn-default" type="button"
-                onclick="location.href='/edit_email/{{event.id}}'"
-                {% if signed %} disabled="disabled"{% endif %}>发送确认邮件</button>
       </div>
             <table class="table table-hover">
                 <thead>
                 <tr>
+                    <th>
+                        选择
+                    </th>
                     <th>
                         时间
                     </th>
@@ -45,6 +45,9 @@
                 <tbody>
                 {% for record in record_list %}
                 <tr class="{{record.status}}">
+                    <td><input type="checkbox" name={{record.user_email}}/>
+                        &nbsp;
+                    </td>
                     <td>
                         {{record.record_time}}
                     </td>
@@ -94,4 +97,8 @@
     {% endif %}
 </ul>
 </nav>
+<div style="text-align: center;">
+    <button class="btn btn-default" type="button" onclick="location.href='/edit_email/{{event.id}}'"
+    {% if signed %} disabled="disabled"{% endif %}>发送确认邮件</button>
+</div>
 {% endblock %}
