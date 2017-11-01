@@ -37,3 +37,135 @@
 .nicescroll-rails > div {
   background: #2894ff !important;
 }
+.btn {
+  font-family: "Microsoft YaHei";
+  font-size: 14px;
+  letter-spacing: 1px;
+  border-radius: 40px;
+  padding: 8px 30px;
+  margin-bottom: 5px;
+  -webkit-transition: color 0.3s, background-color 0.3s, border-color 0.3s;
+          transition: color 0.3s, background-color 0.3s, border-color 0.3s;
+}
+.btn.btn-lg {
+  padding: 10px 35px;
+  letter-spacing: 2px;
+  font-size: 21px;
+}
+.btn.btn-sm {
+  padding: 7px 20px;
+  font-size: 14px;
+}
+.btn.btn-xs {
+  padding: 5px 15px;
+  font-size: 12px;
+}
+.btn-default {
+  color: #676767;
+  border-color: #e5e5e5;
+}
+.btn-default:hover {
+  color: #fff;
+  background-color: #2894ff;
+  border-color: #2894ff;
+}
+.btn-default-o {
+  color: #f2f2f2;
+  border-color: #f2f2f2;
+  background-color: transparent;
+}
+.btn-default-o:hover {
+  color: #2894ff;
+  background-color: #fff;
+  border-color: #fff;
+}
+.btn-main-o {
+  color: #2894ff;
+  border-color: #2894ff;
+  background-color: transparent;
+}
+.btn-main-o:hover {
+  color: #fff;
+  background-color: #2894ff;
+  border-color: #2894ff;
+}
+.btn-dark-o {
+  color: #4c4c4c;
+  border-color: #4c4c4c;
+  background-color: transparent;
+}
+.btn-dark-o:hover {
+  color: #fff;
+  background-color: #4c4c4c;
+  border-color: #4c4c4c;
+}
+.btn-dark {
+  color: #fff;
+  background-color: #4c4c4c;
+  border-color: #4c4c4c;
+}
+.btn-dark:hover,
+.btn-dark:focus,
+.btn-dark:active {
+  background-color: #333333;
+  border-color: #333333;
+  color: #fff;
+}
+.btn-main {
+  color: #fff;
+  background-color: #2894ff;
+  border-color: #2894ff;
+}
+.btn-main:hover,
+.btn-main:focus,
+.btn-main:active {
+  background-color: #33b5ac;
+  border-color: #33b5ac;
+  color: #fff;
+}
+.btn-link {
+  font-weight: 400;
+  color: #2894ff;
+}
+.btn-link:hover,
+.btn-link:focus,
+.btn-link:active {
+  color: #4c4c4c;
+  text-decoration: none;
+}
+.navbar-default {
+  background-color: rgba(40, 40, 170, 0.95);
+  height: 60px;
+}
+.navbar-default .navbar-brand {
+  padding: 15px 15px;
+}
+.navbar-default .navbar-brand img {
+  height: 30px;
+}
+.navbar-default .navbar-nav > li.active > a,
+.navbar-default .navbar-nav > li.active a:hover,
+.navbar-default .navbar-nav > li.active a:focus,
+.navbar-default .navbar-nav > li.active a:active {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.navbar-nav > li > a {
+  font-family: "Microsoft YaHei";
+  font-size: 15px;
+  font-weight: 300;
+  font-color:#fff;
+  letter-spacing: 1px;
+  padding-left: 20px;
+  padding-right: 20px;
+  color: #fff;
+  -webkit-transition: color 0.3s, background-color 0.3s, padding 0.3s;
+          transition: color 0.3s, background-color 0.3s, padding 0.3s;
+}
+
+.navbar-nav > li > a:hover,
+.navbar-nav > li > a:focus,
+.navbar-nav > li > a:active {
+  color: #2894ff;
+  outline-width: 0;
+}

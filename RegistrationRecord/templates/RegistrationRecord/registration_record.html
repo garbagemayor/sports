@@ -14,16 +14,12 @@
         </h1>
 		<form action="" method="POST"> 
 		{% csrf_token %}
-        <button class="btn btn-default" type="button"
-                onclick="location.href='/record_download_csv/{{event.id}}'"
-        {% if signed %} disabled="disabled"{% endif %}>下载报名表(.csv)</button>
-        <button class="btn btn-default" type="button"
-                onclick="location.href='/record_download_xlsx/{{event.id}}'"
-                {% if signed %} disabled="disabled"{% endif %}>下载报名表(.xlsx)</button>		
-		<div style="text-align: right;">
-			<button class="btn btn-primary" type="submit" onclick="///location.href='/edit_email/{{event.id}}'"
-			{% if signed %} disabled="disabled"{% endif %}>审核并发送邮件</button>
-		</div>
+        <button class="btn btn-default" type="button" onclick="location.href='/record_download_csv/{{event.id}}'">
+				下载报名表(.csv)</button>
+        <button class="btn btn-default" type="button" onclick="location.href='/record_download_xlsx/{{event.id}}'">
+				下载报名表(.xlsx)</button>	
+		<button class="btn btn-success" type="submit" onclick="///location.href='/edit_email/{{event.id}}'" style="float:right">
+				审核并发送邮件</button>
 		</div>
             <table class="table table-hover">
                 <thead>
@@ -54,12 +50,12 @@
                 </thead>
                 <tbody>
                 {% for record in record_list %}
-                <tr class="{{record.status}}">
+                <tr class="{{record.status}}" ondblclick="location.href='/user/{{record.user_id}}'">>
                     <td>
                         {{record.record_time}}
                     </td>
                     <td>
-                        {{record.user_name}}
+                        <a href="/user/{{record.user_id}}">{{record.user_name}}</a>
                     </td>
                     <td>
                         {{record.user_fullname}}
@@ -73,8 +69,11 @@
                     <td>
                         {{record.record_status}}
                     </td>
-                    <td><input type="checkbox" name="checked" value="{{record.user_id}}"/>
+                    <td>
+					{%if record.status == 2 %} 
+						<input type="checkbox" name="checked" value="{{record.user_id}}" />
                         &nbsp;
+					{% endif %}
                     </td>
                 </tr>
                 {% endfor %}

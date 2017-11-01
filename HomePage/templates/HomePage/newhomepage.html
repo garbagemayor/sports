@@ -225,13 +225,9 @@
 							</div>
 							<div class="events-body">
 								<ul>
-									<li> 无</li>
-									<li> 无</li>
-									<li> 无</li>
-									<li> 无</li>
-									<li> 无</li>
-									<li> 无</li>
-									<li> 无</li>
+								{% for line in events1 %}
+									<li> <a href="/events/{{line.id}}">{{line.name}} </a></li>
+								{% endfor %}
 								</ul>
 							</div>
 							<div class="events-footer">
@@ -248,13 +244,9 @@
 							</div>
 							<div class="events-body">
 								<ul>
-									<li> 无</li>
-									<li> 无</li>
-									<li> 无</li>
-									<li> 无</li>
-									<li> 无</li>
-									<li> 无</li>
-									<li> 无</li>
+								{% for line in events2 %}
+									<li> <a href="/events/{{line.id}}">{{line.name}} </a></li>
+								{% endfor %}
 								</ul>
 							</div>
 							<div class="events-footer">
@@ -270,14 +262,10 @@
 							</div>
 							<div class="events-body">
 								<ul>
-									<li> 无</li>
-									<li> 无</li>
-									<li> 无</li>
-									<li> 无</li>
-									<li> 无</li>
-									<li> 无</li>
-									<li> 无</li>
-								</ul>
+								{% for line in events3 %}
+									<li> <a href="/events/{{line.id}}">{{line.name}} </a></li>
+								{% endfor %}
+								</ul>								
 							</div>
 							<div class="events-footer">
 								<a href="#" class="btn btn-default">查看</a>
