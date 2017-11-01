@@ -42,10 +42,13 @@ urlpatterns = [
                   url(r'^events/sign/(\d+)/$', Events_view.sign, name='signpage'),                  #报名                      
                   url(r'^events/design/(\d+)/$', Events_view.design, name='designpage'),            #取消报名
                   url(r'^events/addevents$', Events_view.addevents, name='addevents'),              #添加赛事
+                  url(r'^events/setprizes$', Events_view.addevents, name='setprize'),                  
+                  url(r'^events/viewprizes$', Events_view.addevents, name='prize'), 
                   url(r'^qrcode/(\d+)/$', Events_view.qrcode, name='qrcode'),
 
                   #用户
-                  url(r'^user/$', Users_view.my_information, name='user'),                  #个人页
+                  url(r'^user/mypage/$', Users_view.my_information, name='user'),            #个人页
+                  url(r'^user/alter/$', Users_view.alter, name='user'),                     #修改信息
                   url(r'^user/(\d+)/$', Users_view.others, name='others'),                  #浏览其他用户信息  （暂无）
                   url(r'^authorized/$', Users_view.auth, name='login'),                     #登录完成
                   url(r'^logout/$', Users_view.logout, name='logout'),                      #登出

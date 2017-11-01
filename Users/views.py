@@ -36,6 +36,11 @@ def logout(request):
     return HttpResponseRedirect("/")
 
 def my_information(request):
+    user=User.objects.get(id=request.session['userid'])    
+    user.auth=getauth(user.authority)
+    return render(request, "Users/mypage.html", {'user':user})
+
+def alter(request):
     return render(request, "Users/users.html")
 
 def my_events(request):

@@ -12,6 +12,7 @@
         <h1 style="text-align: center">
           {{events.name}} <small>{{events.name}}</small>		
         </h1>
+		<br><br>
 		{% if request.session.auth > 0 %}		  
 		  <button class="btn btn-default" type='button' onclick="location.href='/events/next/{{events.id}}'">下一阶段</button>
 		  <button class="btn btn-default" data-toggle="modal" data-target="#myModal">删除该赛事</button>
