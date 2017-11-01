@@ -16,6 +16,8 @@
 		  <button class="btn btn-default" type='button' onclick="location.href='/events/next/{{events.id}}'">下一阶段</button>
 		  <button class="btn btn-default" type='button' onclick="asdf()">删除该赛事</button>
 		  <button class="btn btn-default" onclick="location.href='/record/{{events.id}}'">查看报名</button>
+		  <button class="btn btn-default"
+              onclick="location.href='/qrcode/{{events.id}}'">生成报名二维码</button>
 		{% endif %}
       </div>
 	  <br><br><br>

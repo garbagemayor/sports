@@ -9,7 +9,7 @@ from django.views.decorators.csrf import csrf_exempt,csrf_protect
 
 def HomePageView(request):
     print request.method
-    return render(request, "HomePage/homepage.html")
+    return render(request, "HomePage/newhomepage.html")
 
 def EventsView(request):
     print request.method

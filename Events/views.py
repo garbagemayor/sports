@@ -6,17 +6,19 @@ from HomePage.models import Events, Sign
 from django.core.paginator import Paginator
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.views.decorators.csrf import csrf_exempt,csrf_protect
+from django.views.decorators.csrf import csrf_exempt, csrf_protect
 import json
 from django.contrib import messages
+import pyqrcode
+
 
 # Create your views here.
 def index(request):
-    events_list=list(Events.objects.all()[::-1])
+    events_list = list(Events.objects.all()[::-1])
     for l in events_list:
         l.s2 = gets2(l.status)
         l.s3 = gets3(l.status)
-    paginator=Paginator(events_list, 3)
+    paginator = Paginator(events_list, 3)
     page = request.GET.get('page')
     try:
         events_list = paginator.page(page)
@@ -25,22 +27,22 @@ def index(request):
     except EmptyPage:
         events_list = paginator.page(paginator.num_pages)
 
-    
-    return render(request, 'Events/events.html', {'events_list':events_list})
+    return render(request, 'Events/events.html', {'events_list': events_list})
 
-@csrf_exempt 
-def page(request, Id):    
+
+@csrf_exempt
+def page(request, Id):
     events = Events.objects.get(id=Id)
     events.s2 = gets2(events.status)
     events.s3 = gets3(events.status)
-    return render(request, 'Events/page.html', {'events':events})
+    return render(request, 'Events/page.html', {'events': events})
 
 
-def delete_events(request, Id):    
+def delete_events(request, Id):
     events = Events.objects.get(id=Id)
     if request.method == "GET":
         if request.session['userid']:
-            if request.session['auth']>0:
+            if request.session['auth'] > 0:
                 Events.objects.filter(id=Id).delete()
                 Sign.objects.filter(eventsid=Id).delete()
                 messages.add_message(request, messages.INFO, '删除成功！')
@@ -54,15 +56,16 @@ def delete_events(request, Id):
     else:
         return HttpResponseRedirect('/events/')
 
-def nextphase(request, Id):    
+
+def nextphase(request, Id):
     events = Events.objects.get(id=Id)
     if request.method == "GET":
         if request.session['userid']:
-            if request.session['auth']>0:
-                e=Events.objects.get(id=Id)                
-                e.status+=1
-                if e.status >=5 :
-                    e.status =1
+            if request.session['auth'] > 0:
+                e = Events.objects.get(id=Id)
+                e.status += 1
+                if e.status >= 5:
+                    e.status = 1
                 e.save()
                 messages.add_message(request, messages.INFO, '修改成功！')
             else:
@@ -70,11 +73,12 @@ def nextphase(request, Id):
         else:
             messages.add_message(request, messages.INFO, '请登录！')
             return HttpResponseRedirect('/authorized/')
-        return HttpResponseRedirect('/events/'+Id)
+        return HttpResponseRedirect('/events/' + Id)
     else:
-        return HttpResponseRedirect('/events/'+Id)
+        return HttpResponseRedirect('/events/' + Id)
 
-def sign(request, Id):    
+
+def sign(request, Id):
     events = Events.objects.get(id=Id)
     if request.session['userid']:
         s = Sign.objects.get_or_create(userid=request.session['userid'], eventsid=Id, status=1)
@@ -86,9 +90,10 @@ def sign(request, Id):
         messages.add_message(request, messages.INFO, '请登录！')
         return HttpResponseRedirect('/authorized/')
 
-    return HttpResponseRedirect('/events/'+Id+'/');
+    return HttpResponseRedirect('/events/' + Id + '/');
 
-def design(request, Id):    
+
+def design(request, Id):
     events = Events.objects.get(id=Id)
     if request.session['userid']:
         Sign.objects.filter(userid=request.session['userid'], eventsid=Id, status=1).delete()
@@ -97,15 +102,17 @@ def design(request, Id):
         messages.add_message(request, messages.INFO, '请登录！')
         return HttpResponseRedirect('/authorized/')
 
-    return HttpResponseRedirect('/events/'+Id+'/');
+    return HttpResponseRedirect('/events/' + Id + '/');
+
 
 @csrf_exempt
 def addevents(request):
-    if request.method =="POST":
+    if request.method == "POST":
         if Events.objects.get_or_create(name=request.POST['name'], content=request.POST['detail']):
-            messages.add_message(request, messages.INFO, '成功添加赛事'+request.POST['name']+'！')
+            messages.add_message(request, messages.INFO, '成功添加赛事' + request.POST['name'] + '！')
             return HttpResponseRedirect('/events/')
     return render(request, "Events/addevents.html")
+
 
 def gets2(i):
     if i == 1:
@@ -119,6 +126,7 @@ def gets2(i):
     else:
         return "???"
 
+
 def gets3(i):
     if i == 1:
         return "info"
@@ -128,3 +136,12 @@ def gets3(i):
         return "danger"
     elif i == 4:
         return "warning"
+
+
+def qrcode(request, Id):
+    url = 'http://' + str(request.get_host()) + '/events/' + Id;
+    print(url)
+    code = pyqrcode.create(url)
+    code.png('code.png')
+    image_data = open("code.png", "rb").read()
+    return HttpResponse(image_data, content_type="image/png")

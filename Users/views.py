@@ -138,6 +138,16 @@ def my_events(request):
         return HttpResponseRedirect("/authorized/")
 
 
+def others(request, Id):
+    user = User.objects.filter(id=Id)
+    if user:
+        user = user[0]
+        user.auth = getauth(user.authority)
+        return render(request, 'Users/userpage.html', {'user': user})
+    else:
+        return HttpResponseRedirect('/main/')
+
+
 @csrf_exempt
 def manager(request):
     user = User.objects.filter().exclude(authority=0)
@@ -181,3 +191,12 @@ def gets2(i):
         return "danger"
     elif i == 4:
         return "warning"
+
+
+def getauth(i):
+    if i == 0:
+        return "普通用户"
+    elif i == 1:
+        return "管理员"
+    elif i >= 2:
+        return "超级管理员"

@@ -11,7 +11,7 @@ body {
   font-family: "Open Sans";
   color: #808080;
   font-weight: 400;
-  font-size: 14px;
+  font-size: 16px;
   line-height: 26px;
   word-spacing: 2px;
   -webkit-font-smoothing: antialiased;
@@ -20,7 +20,7 @@ p {
   margin-bottom: 26px;
 }
 a {
-  color: #4ecdc4;
+  color: #2894ff;
   text-decoration: none !important;
   -webkit-transition: color 0.3s;
           transition: color 0.3s;
@@ -34,7 +34,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: "Oswald";
+  font-family: "Microsoft YaHei";
   color: #4c4c4c;
   letter-spacing: 1px;
   font-weight: 400;
@@ -47,7 +47,7 @@ h6 {
   box-shadow: none !important;
 }
 .form-control:focus {
-  border-color: #4ecdc4 !important;
+  border-color: #2894ff !important;
 }
 .mb250 {
   margin-bottom: 250px !important;
@@ -218,7 +218,7 @@ h6 {
   *zoom: 1;
 }
 .btn {
-  font-family: "Oswald";
+  font-family: "Microsoft YaHei";
   font-size: 16px;
   letter-spacing: 1px;
   border-radius: 40px;
@@ -246,8 +246,8 @@ h6 {
 }
 .btn-default:hover {
   color: #fff;
-  background-color: #4ecdc4;
-  border-color: #4ecdc4;
+  background-color: #2894ff;
+  border-color: #2894ff;
 }
 .btn-default-o {
   color: #f2f2f2;
@@ -255,19 +255,19 @@ h6 {
   background-color: transparent;
 }
 .btn-default-o:hover {
-  color: #4ecdc4;
+  color: #2894ff;
   background-color: #fff;
   border-color: #fff;
 }
 .btn-main-o {
-  color: #4ecdc4;
-  border-color: #4ecdc4;
+  color: #2894ff;
+  border-color: #2894ff;
   background-color: transparent;
 }
 .btn-main-o:hover {
   color: #fff;
-  background-color: #4ecdc4;
-  border-color: #4ecdc4;
+  background-color: #2894ff;
+  border-color: #2894ff;
 }
 .btn-dark-o {
   color: #4c4c4c;
@@ -293,8 +293,8 @@ h6 {
 }
 .btn-main {
   color: #fff;
-  background-color: #4ecdc4;
-  border-color: #4ecdc4;
+  background-color: #2894ff;
+  border-color: #2894ff;
 }
 .btn-main:hover,
 .btn-main:focus,
@@ -305,7 +305,7 @@ h6 {
 }
 .btn-link {
   font-weight: 400;
-  color: #4ecdc4;
+  color: #2894ff;
 }
 .btn-link:hover,
 .btn-link:focus,
@@ -317,7 +317,7 @@ h6 {
   margin-bottom: 70px;
 }
 .section-title h3 {
-  font-family: "Oswald";
+  font-family: "Microsoft YaHei";
   text-transform: uppercase;
   color: #4c4c4c;
   font-weight: 400;
@@ -332,10 +332,10 @@ h6 {
   padding: 0 10px;
 }
 .section-title p {
-  font-family: "Oswald";
+  font-family: "Microsoft YaHei";
   text-transform: uppercase;
-  color: #4ecdc4;
-  font-size: 38px;
+  color: #2894ff;
+  font-size: 20px;
   line-height: 58px;
   font-weight: 700;
   letter-spacing: 3px;
@@ -351,7 +351,7 @@ h6 {
   display: block;
   width: 150px;
   height: 51px;
-  background-image: url(../images/title-top.png);
+  background-image: url(/static/img/title-top.png);
   background-repeat: no-repeat;
 }
 .bottom-line {
@@ -362,7 +362,7 @@ h6 {
   display: block;
   width: 50px;
   height: 2px;
-  background-color: #4ecdc4;
+  background-color: #2894ff;
   margin-top: 5px;
 }
 .tooltip.top .tooltip-arrow {
@@ -380,7 +380,7 @@ h6 {
   opacity: 1 !important;
 }
 .nicescroll-rails > div {
-  background: #4ecdc4 !important;
+  background: #2894ff !important;
 }
 /* ---------------------------------------------- /*
  * Mouse animate icon
@@ -457,7 +457,7 @@ h6 {
   }
 }
 .home {
-  background-image: url(../images/hero-img9.jpg);
+  background-image: url(/static/img/new1.jpg);
   background-position: top center;
   background-attachment: fixed;
   background-repeat: no-repeat;
@@ -480,7 +480,7 @@ h6 {
   text-align: center;
 }
 .home .hero-txt .hero-title {
-  font-family: "Oswald";
+  font-family: "Microsoft YaHei";
   color: #fff;
   text-transform: uppercase;
   font-size: 70px;
@@ -493,7 +493,7 @@ h6 {
   padding: 20px 10px;
 }
 .home .hero-txt .hero-work {
-  font-family: "Oswald";
+  font-family: "Microsoft YaHei";
   font-weight: 300;
   letter-spacing: 2px;
   margin-bottom: 0;
@@ -516,7 +516,7 @@ h6 {
   margin-right: 20px !important;
 }
 .home .hero-txt .hero-sub-title {
-  font-family: "Oswald";
+  font-family: "Microsoft YaHei";
   font-size: 30px;
   letter-spacing: 5px;
   font-weight: 300;
@@ -526,7 +526,7 @@ h6 {
   margin-top: 80px;
 }
 .st-highlight {
-  color: #4ecdc4;
+  color: #2894ff;
 }
 .navbar-default {
   background-color: transparent;
@@ -537,7 +537,7 @@ h6 {
           transition: background-color 0.3s, height 0.3s;
 }
 .st-navbar-mini .navbar-default {
-  background-color: rgba(40, 40, 40, 0.95);
+  background-color: rgba(40, 40, 170, 0.95);
   height: 60px;
 }
 .st-navbar-mini .navbar-default .navbar-brand {
@@ -564,7 +564,7 @@ h6 {
           transition: height 0.3s;
 }
 .navbar-nav > li > a {
-  font-family: "Oswald";
+  font-family: "Microsoft YaHei";
   font-size: 15px;
   font-weight: 300;
   letter-spacing: 1px;
@@ -577,14 +577,14 @@ h6 {
 .navbar-nav > li > a:hover,
 .navbar-nav > li > a:focus,
 .navbar-nav > li > a:active {
-  color: #4ecdc4;
+  color: #2894ff;
   outline-width: 0;
 }
 .navbar-nav > li.active > a,
 .navbar-nav > li.active a:hover,
 .navbar-nav > li.active a:focus,
 .navbar-nav > li.active a:active {
-  color: #4ecdc4;
+  color: #2894ff;
 }
 .navbar-default .navbar-nav > li > a {
   color: #fff;
@@ -593,12 +593,12 @@ h6 {
 .navbar-default .navbar-nav > li.active a:hover,
 .navbar-default .navbar-nav > li.active a:focus,
 .navbar-default .navbar-nav > li.active a:active {
-  color: #4ecdc4;
+  color: #2894ff;
   background-color: rgba(0, 0, 0, 0);
 }
 .navbar-default .navbar-nav > li > a:hover,
 .navbar-default .navbar-nav > li > a:focus {
-  color: #4ecdc4;
+  color: #2894ff;
 }
 .page-header {
   background-image: url(../images/hero-img14.png);
@@ -621,7 +621,7 @@ h6 {
 }
 .page-breadcrumb {
   background-color: #f7f7f7;
-  background-color: #4ecdc4;
+  background-color: #2894ff;
   color: #fff;
   box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.01);
   border-botom: 1px solid #f2f2f2;
@@ -678,7 +678,7 @@ h6 {
           transition: transform 0.5s ease 0.2s;
 }
 .st-member .st-member-info .st-member-name {
-  font-family: "Oswald";
+  font-family: "Microsoft YaHei";
   display: block;
   color: #4c4c4c;
   font-size: 30px;
@@ -692,12 +692,12 @@ h6 {
   display: block;
   height: 2px;
   width: 35px;
-  background-color: #4ecdc4;
+  background-color: #2894ff;
   margin: 0 auto;
 }
 .st-member .st-member-info .st-member-pos {
   display: block;
-  font-family: "Oswald";
+  font-family: "Microsoft YaHei";
   font-size: 20px;
   line-height: 18px;
   font-weight: 300;
@@ -840,7 +840,7 @@ h6 {
           animation-delay: 0.2s;
 }
 .progress-bar-sept {
-  background-color: #4ecdc4;
+  background-color: #2894ff;
 }
 @-webkit-keyframes process {
   0% {
@@ -871,7 +871,7 @@ h6 {
   padding: 100px 0;
 }
 .funfacts .funfact {
-  font-family: "Oswald";
+  font-family: "Microsoft YaHei";
   text-align: center;
   color: #fff;
 }
@@ -895,7 +895,7 @@ h6 {
   display: block;
   width: 35px;
   height: 2px;
-  background-color: #4ecdc4;
+  background-color: #2894ff;
   margin: 0 auto;
 }
 .service {
@@ -910,7 +910,7 @@ h6 {
   font-size: 42px;
   color: #fff;
   margin: 0 auto 20px;
-  background-color: #4ecdc4;
+  background-color: #2894ff;
   border-radius: 50%;
   position: relative;
   -webkit-transform: rotate(0) scale(1);
@@ -921,7 +921,7 @@ h6 {
 }
 .st-feature .st-feature-title {
   display: block;
-  font-family: "Oswald";
+  font-family: "Microsoft YaHei";
   font-size: 25px;
   line-height: 45px;
   letter-spacing: 1px;
@@ -930,8 +930,8 @@ h6 {
   margin-bottom: 10px;
 }
 .st-feature:hover .st-feature-icon {
-  color: #4ecdc4;
-  border-color: #4ecdc4;
+  color: #2894ff;
+  border-color: #2894ff;
   background-color: transparent;
   -webkit-transform: rotate(360deg) scale(1.8);
       -ms-transform: rotate(360deg) scale(1.8);
@@ -951,7 +951,7 @@ ul.styled-list li:before {
   display: inline-block;
   margin-left: -1.5em;
   width: 1.5em;
-  color: #4ecdc4;
+  color: #2894ff;
 }
 ul.styled-list.list-caret li:before {
   content: '\f0da';
@@ -992,7 +992,7 @@ ul.styled-list.list-star li:before {
   display: block;
   width: 80px;
   height: 1px;
-  background-color: #4ecdc4;
+  background-color: #2894ff;
   margin: 15px auto 20px;
 }
 .c2a p {
@@ -1074,7 +1074,7 @@ ul.styled-list.list-star li:before {
   width: 80px;
   margin-left: -40px;
   height: 1px;
-  background: #4ecdc4;
+  background: #2894ff;
   content: '';
   -webkit-transform: translate3d(0, 40px, 0);
           transform: translate3d(0, 40px, 0);
@@ -1144,6 +1144,14 @@ ul.styled-list.list-star li:before {
 .clients-carousel li:hover {
   opacity: 1;
 }
+.team {
+  padding: 100px 0;
+  background-color: #f0f8ff;
+}
+.celebrity {
+  padding: 100px 0;
+  background-color: #f0f8ff;
+}
 .testimonials {
   padding: 100px 0;
   background-image: url(../images/testimonials.png);
@@ -1163,13 +1171,13 @@ ul.styled-list.list-star li:before {
   width: 40px;
   height: 40px;
   border-radius: 40px;
-  background-color: #4ecdc4;
+  background-color: #2894ff;
   position: absolute;
   bottom: 5%;
   left: 5%;
 }
 .testimonial .testimonial-img:before {
-  font-family: "Oswald";
+  font-family: "Microsoft YaHei";
   content: '\201C';
   font-size: 40px;
   position: absolute;
@@ -1206,16 +1214,16 @@ ul.styled-list.list-star li:before {
   padding: 0;
   display: block;
 }
-.pricing {
+.events {
   padding: 100px 0;
 }
-.pricing-table {
+.events-table {
   border: 1px solid #f2f2f2;
   border-radius: 5px;
   background-color: #fff;
 }
-.pricing-table .pricing-header .pt-price {
-  font-family: "Oswald";
+.events-table .events-header .pt-price {
+  font-family: "Microsoft YaHei";
   color: #4c4c4c;
   font-size: 40px;
   line-height: 70px;
@@ -1223,13 +1231,13 @@ ul.styled-list.list-star li:before {
   text-align: center;
   padding: 10px 40px;
 }
-.pricing-table .pricing-header .pt-price small {
+.events-table .events-header .pt-price small {
   font-size: 13px;
   color: #9a9a9a;
   font-weight: 300;
 }
-.pricing-table .pricing-header .pt-name {
-  font-family: "Oswald";
+.events-table .events-header .pt-name {
+  font-family: "Microsoft YaHei";
   padding: 10px 40px;
   text-align: center;
   font-weight: 300;
@@ -1239,51 +1247,51 @@ ul.styled-list.list-star li:before {
   border-top: 1px solid #f2f2f2;
   border-bottom: 1px solid #f2f2f2;
 }
-.pricing-table .pricing-body ul {
+.events-table .events-body ul {
   margin: 0;
   padding: 0;
   list-style: none;
 }
-.pricing-table .pricing-body ul li {
+.events-table .events-body ul li {
   padding: 8px 25px;
   margin: 0;
 }
-.pricing-table .pricing-body ul li:nth-child(even) {
+.events-table .events-body ul li:nth-child(even) {
   background-color: #fafafa;
 }
-.pricing-table .pricing-body ul li .fa-times {
+.events-table .events-body ul li .fa-times {
   color: #ff6666;
 }
-.pricing-table .pricing-body ul li .fa-check {
-  color: #4ecdc4;
+.events-table .events-body ul li .fa-check {
+  color: #2894ff;
 }
-.pricing-table .pricing-footer {
+.events-table .events-footer {
   text-align: center;
   padding: 15px 40px;
   border-top: 1px solid #f2f2f2;
 }
-.pricing-table.featured .pricing-header {
+.events-table.featured .events-header {
   position: relative;
   overflow: hidden;
 }
-.pricing-table.featured .pricing-header .pt-price {
-  color: #4ecdc4;
+.events-table.featured .events-header .pt-price {
+  color: #2894ff;
 }
-.pricing-table.featured .pricing-header .pt-price small {
-  color: #4ecdc4;
+.events-table.featured .events-header .pt-price small {
+  color: #2894ff;
 }
-.pricing-table.featured .pricing-header .pt-name {
-  color: #4ecdc4;
+.events-table.featured .events-header .pt-name {
+  color: #2894ff;
 }
-.pricing-table.featured .pricing-header .featured-text {
-  font-family: "Oswald";
+.events-table.featured .events-header .featured-text {
+  font-family: "Microsoft YaHei";
   font-size: 13px;
   line-height: 15px;
   letter-spacing: 1px;
   font-weight: 300;
   text-transform: uppercase;
   text-align: center;
-  background-color: #4ecdc4;
+  background-color: #ff0000;
   color: #fff;
   position: absolute;
   top: 22px;
@@ -1305,11 +1313,11 @@ ul.styled-list.list-star li:before {
   margin-bottom: 15px;
 }
 .faq h3 i {
-  color: #4ecdc4;
+  color: #2894ff;
 }
 .call-us {
   padding: 50px 0;
-  background-color: #4ecdc4;
+  background-color: #2894ff;
   text-align: center;
 }
 .call-us h3 {
@@ -1344,7 +1352,7 @@ ul.styled-list.list-star li:before {
   color: #4c4c4c;
 }
 .blog-post .post-meta a:hover {
-  color: #4ecdc4;
+  color: #2894ff;
 }
 .blog-post .post-meta strong {
   color: #4c4c4c;
@@ -1415,7 +1423,7 @@ ul.styled-list.list-star li:before {
   color: #4c4c4c;
 }
 .widget ul li .recent-post .post-meta a:hover {
-  color: #4ecdc4;
+  color: #2894ff;
 }
 .widget ul li .recent-post a {
   display: inline-block;
@@ -1432,7 +1440,7 @@ ul.styled-list.list-star li:before {
   vertical-align: middle;
   margin-top: 5px;
   text-indent: 0;
-  background-color: #4ecdc4;
+  background-color: #2894ff;
   -webkit-transition: background-color 0.3s;
           transition: background-color 0.3s;
 }
@@ -1459,8 +1467,8 @@ ul.styled-list.list-star li:before {
           transition: color 0.3s, background-color 0.3s, border-color 0.3s;
 }
 .widget .tagcloud a:hover {
-  border-color: #4ecdc4;
-  background-color: #4ecdc4;
+  border-color: #2894ff;
+  background-color: #2894ff;
   color: #fff;
 }
 .subscribe {
@@ -1481,7 +1489,7 @@ ul.styled-list.list-star li:before {
   font-weight: 300;
 }
 .subscribe .subscribe-or {
-  font-family: "Oswald";
+  font-family: "Microsoft YaHei";
   color: #fff;
   text-align: center;
   font-size: 20px;
@@ -1516,10 +1524,10 @@ ul.styled-list.list-star li:before {
   padding: 14px 20px 14px 30px !important;
 }
 a.social {
-  font-family: "Oswald";
+  font-family: "Microsoft YaHei";
   letter-spacing: 1px;
   display: inline-block;
-  background-color: #4ecdc4;
+  background-color: #2894ff;
   color: #fff;
   padding: 8px 20px 8px 65px;
   border-radius: 50px;
@@ -1606,7 +1614,7 @@ footer.site-footer a {
   color: #808080;
 }
 footer.site-footer a:hover {
-  color: #4ecdc4;
+  color: #2894ff;
 }
 @media (min-width: 768px) {
   .navbar-nav > li > a {
