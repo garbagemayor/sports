@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{user.name}}
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="row-fluid">
+    <div class="span12">
+      <div class="page-header">
+        <h1 style="text-align: center">
+          {{user.name}} <small>{{user.classnumber}}</small>		
+        </h1>
+      </div>
+	  <br><br><br>
+      <dl class="dl-horizontal">
+        <dt>
+          姓名
+        </dt>
+        <dd>
+          {{user.fullname}}
+        </dd>
+		</br>
+		<dt>
+          班级
+        </dt>
+        <dd>
+          {{user.classnumber}}
+        </dd>
+		</br>
+        <dt>
+          手机
+        </dt>
+        <dd>
+          {{user.mobile}}
+        </dd>
+		</br>
+		<dt>
+          邮箱
+        </dt>
+        <dd>
+          {{user.email}}
+        </dd>
+		</br>
+		<dt>
+          类别
+        </dt>
+        <dd>
+          {{user.auth}}
+        </dd>
+      </dl>
+    </div>
+  </div>
+</div>
+
+
+
+{% endblock %}

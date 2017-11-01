@@ -12,19 +12,19 @@
         <h1 style="text-align: center">
             {{event.name}} 的报名记录 <small></small>
         </h1>
-        <button class="btn btn-default" type="button"
-                onclick="location.href='/record_download_csv/{{event.id}}'"
-        {% if signed %} disabled="disabled"{% endif %}>下载报名表(.csv)</button>
-        <button class="btn btn-default" type="button"
-                onclick="location.href='/record_download_xlsx/{{event.id}}'"
-                {% if signed %} disabled="disabled"{% endif %}>下载报名表(.xlsx)</button>
-      </div>
+		<form action="" method="POST"> 
+		{% csrf_token %}
+        <button class="btn btn-default" type="button" onclick="location.href='/record_download_csv/{{event.id}}'">
+				下载报名表(.csv)</button>
+        <button class="btn btn-default" type="button" onclick="location.href='/record_download_xlsx/{{event.id}}'">
+				下载报名表(.xlsx)</button>	
+		<button class="btn btn-success" type="submit" onclick="///location.href='/edit_email/{{event.id}}'" style="float:right">
+				审核并发送邮件</button>
+		</div>
             <table class="table table-hover">
                 <thead>
                 <tr>
-                    <th>
-                        选择
-                    </th>
+                    
                     <th>
                         时间
                     </th>
@@ -40,19 +40,22 @@
                     <th>
                         邮箱
                     </th>
+					<th>
+                        
+                    </th>
+					<th>
+                        审核
+                    </th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for record in record_list %}
-                <tr class="{{record.status}}">
-                    <td><input type="checkbox" name={{record.user_email}}/>
-                        &nbsp;
-                    </td>
+                <tr class="{{record.status}}" ondblclick="location.href='/user/{{record.user_id}}'">>
                     <td>
                         {{record.record_time}}
                     </td>
                     <td>
-                        {{record.user_name}}
+                        <a href="/user/{{record.user_id}}">{{record.user_name}}</a>
                     </td>
                     <td>
                         {{record.user_fullname}}
@@ -66,11 +69,18 @@
                     <td>
                         {{record.record_status}}
                     </td>
+                    <td>
+					{%if record.status == 2 %} 
+						<input type="checkbox" name="checked" value="{{record.user_id}}" />
+                        &nbsp;
+					{% endif %}
+                    </td>
                 </tr>
                 {% endfor %}
 
             </table>
         </div>
+		</form>
     </div>
 </div>
 
@@ -97,8 +107,4 @@
     {% endif %}
 </ul>
 </nav>
-<div style="text-align: center;">
-    <button class="btn btn-default" type="button" onclick="location.href='/edit_email/{{event.id}}'"
-    {% if signed %} disabled="disabled"{% endif %}>发送确认邮件</button>
-</div>
 {% endblock %}

@@ -20,6 +20,7 @@ from . import view
 from django.conf.urls.static import static
 from django.views.generic import RedirectView
 from django.conf import settings
+from HomePage import views as  HomePage_view
 from Events import views as  Events_view
 from Users import views as  Users_view
 from django.contrib import admin
@@ -31,21 +32,24 @@ urlpatterns = [
 
                   #主页
                   url(r'^$',  RedirectView.as_view(url='/main/')),
-                  url(r'^main/$', view.HomePageView, name='homepage'),
+                  url(r'^main/$', HomePage_view.index, name='homepage'),
 
                   #赛事
-                  url(r'^events/$', Events_view.index, name='eventslist'),                      #所有赛事页
-                  url(r'^events/(\d+)/$', Events_view.page, name='eventspage'),                 #赛事详情页            
-                  url(r'^events/delete/(\d+)/$', Events_view.delete_events, name='deletepage'),    #删除赛事                                  
-                  url(r'^events/next/(\d+)/$', Events_view.nextphase, name='nextphase'),       #改变阶段                              
-                  url(r'^events/sign/(\d+)/$', Events_view.sign, name='signpage'),              #报名                      
-                  url(r'^events/design/(\d+)/$', Events_view.design, name='designpage'),        #取消报名
-                  url(r'^events/addevents$', Events_view.addevents, name='addevents'),           #添加赛事
+                  url(r'^events/$', Events_view.index, name='eventslist'),                          #所有赛事页
+                  url(r'^events/(\d+)/$', Events_view.page, name='eventspage'),                     #赛事详情页            
+                  url(r'^events/delete/(\d+)/$', Events_view.delete_events, name='deletepage'),     #删除赛事                                  
+                  url(r'^events/next/(\d+)/$', Events_view.nextphase, name='nextphase'),            #改变阶段                              
+                  url(r'^events/sign/(\d+)/$', Events_view.sign, name='signpage'),                  #报名                      
+                  url(r'^events/design/(\d+)/$', Events_view.design, name='designpage'),            #取消报名
+                  url(r'^events/addevents$', Events_view.addevents, name='addevents'),              #添加赛事
+                  url(r'^events/setprizes$', Events_view.addevents, name='setprize'),                  
+                  url(r'^events/viewprizes$', Events_view.addevents, name='prize'), 
                   url(r'^qrcode/(\d+)/$', Events_view.qrcode, name='qrcode'),
 
                   #用户
-                  url(r'^user/$', Users_view.my_information, name='user'),                  #个人页
-                  #url(r'^user/(\d+)/$')                                                    #浏览其他用户信息  （暂无）
+                  url(r'^user/mypage/$', Users_view.my_information, name='user'),            #个人页
+                  url(r'^user/alter/$', Users_view.alter, name='user'),                     #修改信息
+                  url(r'^user/(\d+)/$', Users_view.others, name='others'),                  #浏览其他用户信息  （暂无）
                   url(r'^authorized/$', Users_view.auth, name='login'),                     #登录完成
                   url(r'^logout/$', Users_view.logout, name='logout'),                      #登出
                   url(r'^edit_email/(\d+)$', Record_view.edit_email, name='edit_email'),    #修改邮件

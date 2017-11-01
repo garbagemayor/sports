@@ -36,6 +36,11 @@ def logout(request):
     return HttpResponseRedirect("/")
 
 def my_information(request):
+    user=User.objects.get(id=request.session['userid'])    
+    user.auth=getauth(user.authority)
+    return render(request, "Users/mypage.html", {'user':user})
+
+def alter(request):
     return render(request, "Users/users.html")
 
 def my_events(request):
@@ -62,6 +67,16 @@ def my_events(request):
     else:        
         messages.add_message(request, messages.INFO, '请登录！')
         return HttpResponseRedirect("/authorized/")
+
+def others(request, Id):
+    user=User.objects.filter(id=Id)
+    if user:
+        user=user[0]
+        user.auth=getauth(user.authority)
+        return render(request, 'Users/userpage.html', {'user':user})
+    else:
+        return HttpResponseRedirect('/main/')
+    
 
 @csrf_exempt 
 def manager(request):    
@@ -105,3 +120,11 @@ def gets2(i):
         return "danger"
     elif i == 4:
         return "warning"
+
+def getauth(i):
+    if i == 0:
+        return "普通用户"
+    elif i == 1:
+        return "管理员"
+    elif i >= 2:
+        return "超级管理员"

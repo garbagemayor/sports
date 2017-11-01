@@ -8,8 +8,6 @@
  * This theme under "Attribution-NonCommercial CC BY-NC". You can't remove footer credit link.
  */
 body {
-  font-family: "Open Sans";
-  color: #808080;
   font-weight: 400;
   font-size: 16px;
   line-height: 26px;
@@ -219,7 +217,7 @@ h6 {
 }
 .btn {
   font-family: "Microsoft YaHei";
-  font-size: 16px;
+  font-size: 14px;
   letter-spacing: 1px;
   border-radius: 40px;
   padding: 8px 30px;

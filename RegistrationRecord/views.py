@@ -21,6 +21,8 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .forms import PostForm
 from django.core.mail import send_mail
 
+from django.views.decorators.csrf import csrf_exempt,csrf_protect
+
 class RecordItem:
     '''
     用来记录一堆信息，给registration_record.html使用
@@ -43,7 +45,12 @@ class RecordItem:
         elif record_db.status == 2:
             self.record_status = "审核通过"
 
+@csrf_exempt
 def recordPage(request, event_id):
+    if request.method=="POST":
+        checkbox_list=request.POST.getlist("checked")
+        for i in checkbox_list:
+            MSign.objects.filter(id=i).update(status=2)
     event_id = int(event_id)
     message_map = {}
     # 当前赛事的信息

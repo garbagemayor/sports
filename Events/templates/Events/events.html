@@ -11,7 +11,8 @@
 	<div class="page-header">
         <h1 style="text-align: center">
           所有赛事 <small>共{{events_list.paginator.num_pages}}页</small>
-        </h1>		
+        </h1>	
+		<br><br>
 		{% if request.session.auth > 0 %}
 		  <button class="btn btn-default" onclick="location.href='/events/addevents'">添加赛事</button>
 		{% endif %}
@@ -79,4 +80,5 @@
     {% endif %}
 </ul>
 </nav>
+
 {% endblock %}
