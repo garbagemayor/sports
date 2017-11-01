@@ -52,7 +52,18 @@
 							<li><a href="#celebrity">名人堂</a></li>
 							<li><a href="#events">赛事</a></li>
 						</ul>
+						<ul class="nav navbar-nav navbar-right">
+							{% if not request.session.username %}
+								<li><a 
+									href="https://accounts.net9.org/api/authorize?client_id=0eHhovG3K1NYkhbnYuYmej1h9wY&redirect_uri=http://{{request.get_host}}/authorized">登录</a></li>
+							{% else %}
+								<li><a href="/user/myevents/">{{request.session.username}}</a></li>
+								<li><a href="/logout/">登出</a></li>	
+							{% endif %}
+			
+          </ul>
 					</div><!-- /.navbar-collapse -->
+					
 				</div>
 			</nav>
 		</header>
