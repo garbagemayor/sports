@@ -18,13 +18,13 @@
 				下载报名表(.csv)</button>
         <button class="btn btn-default" type="button" onclick="location.href='/record_download_xlsx/{{event.id}}'">
 				下载报名表(.xlsx)</button>	
-		<button class="btn btn-success" type="submit" onclick="///location.href='/edit_email/{{event.id}}'" style="float:right">
+		<button class="btn btn-success" type="submit" onclick="location.href='/edit_email/{{event.id}}'" style="float:right">
 				审核并发送邮件</button>
-		</div>
+        </form>
+        <div>
             <table class="table table-hover">
                 <thead>
                 <tr>
-                    
                     <th>
                         时间
                     </th>
@@ -50,37 +50,36 @@
                 </thead>
                 <tbody>
                 {% for record in record_list %}
-                <tr class="{{record.status}}" ondblclick="location.href='/user/{{record.user_id}}'">>
+                <tr class="{{record.statusToClass}}" ondblclick="location.href='/user/{{record.record.userId}}'">
                     <td>
-                        {{record.record_time}}
+                        {{record.timeRegStr}}
                     </td>
                     <td>
-                        <a href="/user/{{record.user_id}}">{{record.user_name}}</a>
+                        <a href="/user/{{record.user.id}}">{{record.user.name}}</a>
                     </td>
                     <td>
-                        {{record.user_fullname}}
+                        {{record.user.fullname}}
                     </td>
                     <td>
-                        {{record.user_mobile}}
+                        {{record.user.mobile}}
                     </td>
                     <td>
-                        {{record.user_email}}
+                        {{record.user.email}}
                     </td>
                     <td>
-                        {{record.record_status}}
+                        {{record.statusStr}}
                     </td>
                     <td>
-					{%if record.status == 2 %} 
-						<input type="checkbox" name="checked" value="{{record.user_id}}" />
+					{%if record.status == 1 %}
+						<input type="checkbox" name="checked" value="{{record.record.userId}}" />
                         &nbsp;
 					{% endif %}
                     </td>
                 </tr>
                 {% endfor %}
-
+                </tbody>
             </table>
         </div>
-		</form>
     </div>
 </div>
 

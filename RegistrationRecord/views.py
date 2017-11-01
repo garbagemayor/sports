@@ -27,23 +27,20 @@ class RecordItem:
     '''
     用来记录一堆信息，给registration_record.html使用
     '''
-    def __init__(self, record_db):
-        self.record_id = record_db.id
-        self.user_id = record_db.userid
-        self.record_time = record_db.time
-        # self.record_time = timezone.now
-        user_db = MUser.objects.get(id=record_db.userid)
-        self.user_name = user_db.name
-        self.user_mobile = user_db.mobile
-        self.user_fullname = user_db.fullname
-        self.user_classnumber = user_db.classnumber
-        self.user_email = user_db.email
-        if record_db.status == 0:
-            self.record_status = "审核未通过"
-        elif record_db.status == 1:
-            self.record_status = "等待审核"
-        elif record_db.status == 2:
-            self.record_status = "审核通过"
+    def __init__(self, record):
+        self.record = record
+        self.user = MUser.objects.get(id=record.userId)
+        self.status = record.exmStatus
+        self.timeRegStr = record.timeReg.strftime("%Y-%m-%d %H:%M:%S")
+        if record.exmStatus == 1:
+            self.statusStr = "等待审核"
+            self.statusToClass = "info"
+        elif record.exmStatus == 2:
+            self.statusStr = "审核通过"
+            self.statusToClass = "success"
+        elif record.exmStatus == 3:
+            self.statusStr = "审核未通过"
+            self.statusToClass = "error"
 
 @csrf_exempt
 def recordPage(request, event_id):
@@ -51,16 +48,18 @@ def recordPage(request, event_id):
         checkbox_list=request.POST.getlist("checked")
         for i in checkbox_list:
             MSign.objects.filter(id=i).update(status=2)
+        return HttpResponseRedirect('/edit_email/' + str(event_id))
     event_id = int(event_id)
     message_map = {}
     # 当前赛事的信息
     event = MEvents.objects.get(id=event_id)
     message_map['event'] = event
     # 当前赛事的所有报名记录
-    record_db_list = list(MSign.objects.filter(eventsid=event_id))
+    record_db_list = list(MSign.objects.filter(eventId=event_id))
     record_list = []
     for record_db in record_db_list:
-        record_list.append(RecordItem(record_db))
+        ri = RecordItem(record_db)
+        record_list.append(ri)
     # 分页模块
     paginator=Paginator(record_list, 10)
     page = request.GET.get('page')
@@ -77,7 +76,7 @@ def recordPage(request, event_id):
 def recordDownloadCSV(request, event_id):
     event_id = int(event_id)
     # 生成文件
-    record_list = list(MSign.objects.filter(eventsid=event_id))
+    record_list = list(MSign.objects.filter(eventId=event_id))
     abspath = os.path.abspath('.')
     file_name = str(abspath + "/RegistrationRecord/templates/Temp/RecordList.csv")
     recordid_list = []
@@ -85,8 +84,8 @@ def recordDownloadCSV(request, event_id):
     eventsid_list = []
     for record in record_list:
         recordid_list.append(str(record.id))
-        userid_list.append(str(record.userid))
-        eventsid_list.append(str(record.eventsid))
+        userid_list.append(str(record.userId))
+        eventsid_list.append(str(record.eventId))
     dataFrame = pd.DataFrame({'recordid': recordid_list,
                               'userid': userid_list,
                               'eventsid': eventsid_list})
@@ -182,8 +181,8 @@ def writeExcelFile(record_list, file_name):
     # 写入数据
     for i in range(len(record_list)):
         sheet.write(i + 1, 0, u'%s' % record_list[i].id)
-        sheet.write(i + 1, 1, u'%s' % record_list[i].userid)
-        sheet.write(i + 1, 2, u'%s' % record_list[i].eventsid)
+        sheet.write(i + 1, 1, u'%s' % record_list[i].userId)
+        sheet.write(i + 1, 2, u'%s' % record_list[i].eventId)
 
     # 保存文件
     workbook.close()
@@ -191,7 +190,7 @@ def writeExcelFile(record_list, file_name):
 def recordDownloadXLSX(request, event_id):
     event_id = int(event_id)
     # 生成文件
-    record_list = list(MSign.objects.filter(eventsid=event_id))
+    record_list = list(MSign.objects.filter(eventId=event_id))
     abspath = os.path.abspath('.')
     file_name = abspath + "/RegistrationRecord/templates/Temp/RecordList.xlsx"
     writeExcelFile(record_list, file_name)
@@ -211,11 +210,11 @@ def recordDownloadXLSX(request, event_id):
     return response
 
 def edit_email(request, event_id):
-    record_list = list(MSign.objects.filter(eventsid=event_id))
+    record_list = list(MSign.objects.filter(eventId=event_id))
     email_list = []
     email_str = ""
     for record in record_list:
-        email_list.append(MUser.objects.get(id=record.userid).email)
+        email_list.append(MUser.objects.get(id=record.userId).email)
     for email in email_list:
         email_str = email_str + str(email) + "; "
     print email_str

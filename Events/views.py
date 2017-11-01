@@ -34,8 +34,9 @@ def index(request):
 @csrf_exempt
 def page(request, Id):
     events = Events.objects.get(id=Id)
-    events.s2 = gets2(events.getStatus())
-    events.s3 = gets3(events.getStatus())
+    events.status = events.getStatus()
+    events.s2 = gets2(events.status)
+    events.s3 = gets3(events.status)
     return render(request, 'Events/page.html', {'events':events})
 
 
@@ -82,7 +83,7 @@ def nextphase(request, Id):
 def sign(request, Id):
     events = Events.objects.get(id=Id)
     if request.session['userid']:
-        s = Sign.objects.get_or_create(userid=request.session['userid'], eventsid=Id, status=1)
+        s = Sign.objects.get_or_create(userId=request.session['userid'], eventId=Id, exmStatus=1)
         if (s[1]):
             messages.add_message(request, messages.INFO, '报名成功！')
         else:
@@ -109,7 +110,7 @@ def design(request, Id):
 @csrf_exempt
 def addevents(request):
     if request.method == "POST":
-        if Events.objects.get_or_create(name=request.POST['name'], content=request.POST['detail']):
+        if Events.objects.get_or_create(name=request.POST['name'], desc=request.POST['detail']):
             messages.add_message(request, messages.INFO, '成功添加赛事' + request.POST['name'] + '！')
             return HttpResponseRedirect('/events/')
     return render(request, "Events/addevents.html")
