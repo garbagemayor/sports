@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block title %}
-<title>用户</title>
+<title xmlns:color="http://www.w3.org/1999/xhtml">用户</title>
 {% endblock %}
 
 {% block extracss %}<link href="/static/send_sheet.css" rel="stylesheet">{% endblock %}
@@ -10,105 +10,93 @@
 <div class="container-fluid">
     <div class="row-fluid">
         <div class="span12">
-            <form>
-                <fieldset>
-                    <legend contenteditable="false">用户</legend>
-                    <label contenteditable="false">用户名</label>
-                    <input type="text" value="root" disabled="true" style="color: gray;"/><span style="color: red; ">*</span>
-                </fieldset>
-            </form>
-            <br>
-			<form>
-                <fieldset>
-                    <legend contenteditable="false">班级</legend>
-                    <label contenteditable="false">用户名</label>
-                    <input type="text" value="root" disabled="true" style="color: gray;"/><span style="color: red; ">*</span>
-                </fieldset>
-            </form>
-            <br>
-			<form>
-                <fieldset>
-                    <legend contenteditable="false">手机</legend>
-                    <label contenteditable="false">用户名</label>
-                    <input type="text" value="root" disabled="true" style="color: gray;"/><span style="color: red; ">*</span>
-                </fieldset>
-            </form>
-            <br>
-			<form>
-                <fieldset>
-                    <legend contenteditable="false">邮箱</legend>
-                    <label contenteditable="false">用户名</label>
-                    <input type="text" value="root" disabled="true" style="color: gray;"/><span style="color: red; ">*</span>
-                </fieldset>
-            </form>
-            <br>			
-            <button class="btn btn-primary" type="submit">确认</button>
-            
-			<!--<form method="post" name="forms">
+            <form action="/user/profile" method="POST">
                 {% csrf_token %}
                 <fieldset>
-                    <legend contenteditable="false">密码</legend>
-                    <label contenteditable="false">原密码</label>
-                    <span id=pwbox1><input type="password" name="old_password"/><span style="color: red; ">*</span></span>
-                    <span id=click1><label class="checkbox">
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" onclick="showpw1()"/>显示密码
-                    </label></span>
-                    <script language="JavaScript">
-                        function showpw1() {
-                            if (this.forms.old_password.type="password") {
-                                document.getElementById("pwbox1").innerHTML="<input type=\"text\" name=\"old_password\" value="+this.forms.old_password.value+">";
-                                document.getElementById("click1").innerHTML="<label class=\"checkbox\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type=\"checkbox\" onclick=\"hidepw1()\" checked=\"true\"/>显示密码</label>"
-                            }
-                        }
-                        function hidepw1() {
-                            if (this.forms.old_password.type="text") {
-                                document.getElementById("pwbox1").innerHTML="<input type=\"password\" name=\"old_password\" value="+this.forms.old_password.value+">";
-                                document.getElementById("click1").innerHTML="<label class=\"checkbox\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type=\"checkbox\" onclick=\"showpw1()\"/>显示密码</label>"
-                            }
-                        }
+                    <legend contenteditable="false">修改个人资料</legend>
+                    <span style="height: 50px">{{ rlt }}</span>
+                    <br/>
+                    <label contenteditable="false" style="width: 10%; height: 50px">用户名</label>
+                    <label contenteditable="false" style="width: 10%; height: 50px">{{ id }}</label>
+                    <br/>
+                    <label contenteditable="false" style="width: 10%; height: 50px">姓名</label>
+                    <input type="text" value="{{ name }}" name="name" style="color: gray;" onfocus="this.style='color: black'"/><span style="color: red; ">*</span>
+                    <br/>
+                    <label contenteditable="false" style="width: 10%; height: 50px">性别</label>
+                    <select name="gender" id="parent" class="gender">
+                        <option value=null>请选择</option>
+                        <option value="M">男</option>
+                        <option value="F">女</option>
+                    </select>
+                    <script>
+                        var type = '{{ gender }}';
+                        $(".gender").find("option[value="+type+"]").attr("selected", true);
                     </script>
-                    <label contenteditable="false">新密码</label>
-                    <span id=pwbox2><input type="password" name="new_password"/><span style="color: red; ">*</span></span>
-                    <span id=click2><label class="checkbox">
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" onclick="showpw2()"/>显示密码
-                    </label></span>
-                    <script language="JavaScript">
-                        function showpw2() {
-                            if (this.forms.new_password.type="password") {
-                                document.getElementById("pwbox2").innerHTML="<input type=\"text\" name=\"new_password\" value="+this.forms.new_password.value+">";
-                                document.getElementById("click2").innerHTML="<label class=\"checkbox\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type=\"checkbox\" onclick=\"hidepw2()\" checked=\"true\"/>显示密码</label>"
-                            }
-                        }
-                        function hidepw2() {
-                            if (this.forms.new_password.type="text") {
-                                document.getElementById("pwbox2").innerHTML="<input type=\"password\" name=\"new_password\" value="+this.forms.new_password.value+">";
-                                document.getElementById("click2").innerHTML="<label class=\"checkbox\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type=\"checkbox\" onclick=\"showpw2()\"/>显示密码</label>"
-                            }
-                        }
+                    <span style="color: red; ">*</span>
+                    <br/>
+                    <label contenteditable="false" style="width: 10%; height: 50px">所在班级</label>
+                    <input type="text" value="{{ classnumber }}" name="classnumber" style="color: gray;" onfocus="this.style='color: black'"/><span style="color: red; ">*</span>
+                    <br/>
+                    <label contenteditable="false" style="width: 10%; height: 50px">用户类型</label>
+                    <label contenteditable="false" style="width: 10%; height: 50px">{{ authority }}</label>
+                    <br/>
+                    <label contenteditable="false" style="width: 10%; height: 50px">手机号</label>
+                    <input type="text" value="{{ mobile }}" name="mobile" style="color: gray;" onfocus="this.style='color: black'"/><span style="color: red; ">*</span>
+                    <br/>
+                    <label contenteditable="false" style="width: 10%; height: 50px">电子邮箱</label>
+                    <input type="text" value="{{ email }}" name="email" style="color: gray;" onfocus="this.style='color: black'"/><span style="color: red; ">*</span>
+                    <br/>
+                    <label contenteditable="false" style="width: 10%; height: 50px">学号</label>
+                    <input type="text" value="{{ student_number }}" name="student_number" style="color: gray;" onfocus="this.style='color: black'"/><span style="color: red; ">*</span>
+                    <br/>
+                    <label contenteditable="false" style="width: 10%; height: 50px">证件类型</label>
+                    <select name="certification_type" id="parent" class="certification_type">
+                        <option value="null">请选择</option>
+                        <option value="0">身份证</option>
+                        <option value="1">护照</option>
+                    </select>
+                    <script>
+                        var type = '{{ certification_type }}';
+                        $(".certification_type").find("option[value="+type+"]").attr("selected", true);
                     </script>
-                    <label contenteditable="false">确认密码</label>
-                    <span id=pwbox3><input type="password" name="assure_password"/><span style="color: red; ">*</span></span>
-                    <span id=click3><label class="checkbox">
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" onclick="showpw3()"/>显示密码
-                    </label></span>
-                    <script language="JavaScript">
-                        function showpw3() {
-                            if (this.forms.assure_password.type="password") {
-                                document.getElementById("pwbox3").innerHTML="<input type=\"text\" name=\"assure_password\" value="+this.forms.assure_password.value+">";
-                                document.getElementById("click3").innerHTML="<label class=\"checkbox\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type=\"checkbox\" onclick=\"hidepw3()\" checked=\"true\"/>显示密码</label>"
-                            }
-                        }
-                        function hidepw3() {
-                            if (this.forms.assure_password.type="text") {
-                                document.getElementById("pwbox3").innerHTML="<input type=\"password\" name=\"assure_password\" value="+this.forms.assure_password.value+">";
-                                document.getElementById("click3").innerHTML="<label class=\"checkbox\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type=\"checkbox\" onclick=\"showpw3()\"/>显示密码</label>"
-                            }
-                        }
+                    <span style="color: red; ">*</span>
+                    <br/>
+                    <label contenteditable="false" style="width: 10%; height: 50px">证件号</label>
+                    <input type="text" value="{{ certification_id }}" name="certification_id" style="color: gray;" onfocus="this.style='color: black'"/><span style=" color: red; ">*</span>
+                    <br/>
+                    <label contenteditable="false" style="width: 10%; height: 50px">出生日期</label>
+                    <input type="text" value="{{ birthday }}" name="birthday" style="color: gray;"  onfocus="this.style='color: black'"/><span style="color: red; ">*</span> (请以1990-01-01的格式填写)
+                    <br/>
+                    <label contenteditable="false" style="width: 10%; height: 50px">攻读学位</label>
+                    <select name="degree" id="parent" class="degree">
+                        <option value=null>请选择</option>
+                        <option value="0">本科生</option>
+                        <option value="1">研究生</option>
+                    </select>
+                    <script>
+                        var type = '{{ degree }}';
+                        $(".degree").find("option[value="+type+"]").attr("selected", true);
                     </script>
-                    <p> {{ rlt }} </p>
-                    <button class="btn" type="submit">提交</button>
+                    <span style="color: red; ">*</span>
+                    <br/>
+                    <label contenteditable="false" style="width: 10%; height: 50px">衣服尺寸</label>
+                    <select name="cloth_size" id="parent" class="size">
+                        <option value=null>请选择</option>
+                        <option value="S">S(男生165/女生160)</option>
+                        <option value="M">M(男生170/女生165)</option>
+                        <option value="L">L(男生175/女生170)</option>
+                    </select>
+                    <script>
+                        var type = '{{ cloth_size }}';
+                        $(".size").find("option[value="+type+"]").attr("selected", true);
+                    </script>
+                    <span style="color: red; ">*</span>
+                    <br/>
+                    <label contenteditable="false" style="width: 10%; height: 50px">所在宿舍</label>
+                    <input type="text" value="{{ room_address }}" name="room_address" style="color: gray;" onfocus="this.style='color: black'"/><span style="color: red; ">*</span>
                 </fieldset>
-            </form>--?
+                <button class="btn btn-primary" type="submit">确认</button>
+            </form>
         </div>
     </div>
 </div>

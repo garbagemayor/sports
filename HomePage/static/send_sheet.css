@@ -2,7 +2,7 @@ body { padding:50px 100px; font:13px/150% Verdana, Tahoma, sans-serif; }
 
 /* tutorial */
 
-input, textarea { 
+input, textarea {
 	padding: 9px;
 	border: solid 1px #E5E5E5;
 	outline: 0;
@@ -48,3 +48,25 @@ input:focus, textarea:focus {
 .checkbox input {
 	box-shadow: none;
 }
+
+#parent{
+    /*background: url('http://ourjs.github.io/static/2015/arrow.png') right center no-repeat;
+   /* the width and the height of your image */
+    width: 110px;
+    height: 40px;
+    overflow: hidden;
+    border: solid 1px #ccc;
+}
+
+#parent select{
+    -webkit-appearance:none;
+    -moz-appearance:none;
+    appearance:none;
+    background:transparent;
+    border:none;
+    padding-left:10px;
+    width: 120px;
+    height:100%;
+}
+
+select::-ms-expand { display: none }
