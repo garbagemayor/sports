@@ -20,6 +20,7 @@ from . import view
 from django.conf.urls.static import static
 from django.views.generic import RedirectView
 from django.conf import settings
+from HomePage import views as  HomePage_view
 from Events import views as  Events_view
 from Users import views as  Users_view
 from django.contrib import admin
@@ -31,7 +32,7 @@ urlpatterns = [
 
                   #主页
                   url(r'^$',  RedirectView.as_view(url='/main/')),
-                  url(r'^main/$', view.HomePageView, name='homepage'),
+                  url(r'^main/$', HomePage_view.index, name='homepage'),
 
                   #赛事
                   url(r'^events/$', Events_view.index, name='eventslist'),                          #所有赛事页
