@@ -19,13 +19,25 @@
                 <label contenteditable="false" style="width: 20%; height: 50px">{{ name }}</label>
                 <br/>
                 <label contenteditable="false" style="width: 20%; height: 50px">性别</label>
-                <label contenteditable="false" style="width: 20%; height: 50px">{{ gender }}</label>
+                <label contenteditable="false" style="width: 20%; height: 50px" id="gender">{{ gender }}</label>
+                 <script>
+                    var gender = '{{ gender }}';
+                    if (gender === 'M') {$("#gender").html("男");}
+                    if (gender === 'F') {$("#gender").html("女");}
+                    if (gender === 'null') {$('#gender').html("尚未登记");}
+                </script>
                 <br/>
                 <label contenteditable="false" style="width: 20%; height: 50px">所在班级</label>
                 <label contenteditable="false" style="width: 20%; height: 50px">{{ classnumber }}</label>
                 <br/>
                 <label contenteditable="false" style="width: 20%; height: 50px">用户类型</label>
-                <label contenteditable="false" style="width: 20%; height: 50px">{{ authority }}</label>
+                <label contenteditable="false" style="width: 20%; height: 50px" id="authority">{{ authority }}</label>
+                 <script>
+                    var authority = '{{ authority }}';
+                    if (authority === '0') {$("#authority").html("普通用户");}
+                    else if (authority === '1') {$("#authority").html("管理员");}
+                    else {$('#degree').html("超级管理员");}
+                </script>
                 <br/>
                 <label contenteditable="false" style="width: 20%; height: 50px">手机号</label>
                 <label contenteditable="false" style="width: 20%; height: 50px">{{ mobile }}</label>
@@ -42,17 +54,30 @@
                 <label contenteditable="false" style="width: 20%; height: 50px">证件号</label>
                 <label contenteditable="false" style="width: 20%; height: 50px">{{ certification_id }}</label>
                 <br/>
-                <label contenteditable="false" style="width: 20%; height: 50px">出生年月日</label>
+                <label contenteditable="false" style="width: 20%; height: 50px">出生日期</label>
                 <label contenteditable="false" style="width: 20%; height: 50px">{{ birthday }}</label>
                 <br/>
+                <label contenteditable="false" style="width: 20%; height: 50px">攻读学位</label>
+                <label contenteditable="false" style="width: 20%; height: 50px" id="degree">{{ degree }}</label>
+                <script>
+                    var degree = '{{ degree }}';
+                    if (degree === '0') {$("#degree").html("本科生");}
+                    if (degree === '1') {$("#degree").html("研究生");}
+                    if (degree === 'null') {$('#degree').html("尚未登记");}
+                </script>
+                <br/>
                 <label contenteditable="false" style="width: 20%; height: 50px">衣服尺码</label>
-                <label contenteditable="false" style="width: 20%; height: 50px">{{ cloth_size }}</label>
+                <label contenteditable="false" style="width: 20%; height: 50px" id="size">{{ cloth_size }}</label>
+                <script>
+                    var size = '{{ cloth_size }}';
+                    if (size === 'S') {$("#size").html("S(男生165/女生160)");}
+                    if (size === 'M') {$("#size").html("M(男生170/女生165)");}
+                    if (size === 'L') {$("#size").html("L(男生175/女生170)");}
+                    if (size === 'null') {$('#size').html("尚未登记");}
+                </script>
                 <br/>
                 <label contenteditable="false" style="width: 20%; height: 50px">所在宿舍</label>
                 <label contenteditable="false" style="width: 20%; height: 50px">{{ room_address }}</label>
-                <br/>
-                <label contenteditable="false" style="width: 20%; height: 50px">攻读学位</label>
-                <label contenteditable="false" style="width: 20%; height: 50px">{{ degree }}</label>
             </fieldset>
             <button class="btn btn-primary" type="submit" onclick="location.href='/user/profile'">修改</button>
         </div>

@@ -17,7 +17,7 @@ class User(models.Model):
     certification_type = models.IntegerField(default=0)  # 证件类型 默认0为身份证，护照为1
     certification_id = models.CharField(max_length=30, null=True)
     student_number = models.CharField(max_length=30, null=True)
-    birthday = models.DateField(unique_for_date=True, null=True)
+    birthday = models.CharField(max_length=30, null=True)
     CLOTH_SIZE_CHOICES = (
         ('S', 'Small'),
         ('M', 'Middle'),

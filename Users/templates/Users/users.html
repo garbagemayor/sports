@@ -10,67 +10,93 @@
 <div class="container-fluid">
     <div class="row-fluid">
         <div class="span12">
-            <form method="post">
+            <form action="/user/profile" method="POST">
                 {% csrf_token %}
                 <fieldset>
                     <legend contenteditable="false">修改个人资料</legend>
-                    {{ rlt }}
+                    <span style="height: 50px">{{ rlt }}</span>
+                    <br/>
+                    <label contenteditable="false" style="width: 10%; height: 50px">用户名</label>
+                    <label contenteditable="false" style="width: 10%; height: 50px">{{ id }}</label>
+                    <br/>
                     <label contenteditable="false" style="width: 10%; height: 50px">姓名</label>
-                    <input type="text" value="请输入姓名" name="name" style="color: gray;" onfocus="if(this.value==='请输入姓名'){this.value='';this.style='color: black';}"/><span style="color: red; ">*</span>
-                    <br/>
-                    <label contenteditable="false" style="width: 10%; height: 50px">学号</label>
-                    <input type="text" value="请输入学号" name="student_id" style="color: gray;" onfocus="if(this.value==='请输入学号'){this.value='';this.style='color: black';}"/><span style="color: red; ">*</span>
-                    <br/>
-                    <label contenteditable="false" style="width: 10%; height: 50px">证件类型</label>
-                    <select name="certification_type" id="parent">
-                        <option value="null">请选择</option>
-                        <option value="0">身份证</option>
-                        <option value="1">护照</option>
-                    </select>
-                    <span style="color: red; ">*</span>
-                    <br/>
-                    <label contenteditable="false" style="width: 10%; height: 50px">证件号</label>
-                    <input type="text" value="请输入证件号" name="certification_id" style="color: gray;" onfocus="if(this.value==='请输入证件号'){this.value='';this.style='color: black';}"/><span style=" color: red; ">*</span>
+                    <input type="text" value="{{ name }}" name="name" style="color: gray;" onfocus="this.style='color: black'"/><span style="color: red; ">*</span>
                     <br/>
                     <label contenteditable="false" style="width: 10%; height: 50px">性别</label>
-                    <select name="gender" id="parent">
+                    <select name="gender" id="parent" class="gender">
                         <option value=null>请选择</option>
                         <option value="M">男</option>
                         <option value="F">女</option>
                     </select>
+                    <script>
+                        var type = '{{ gender }}';
+                        $(".gender").find("option[value="+type+"]").attr("selected", true);
+                    </script>
                     <span style="color: red; ">*</span>
                     <br/>
+                    <label contenteditable="false" style="width: 10%; height: 50px">所在班级</label>
+                    <input type="text" value="{{ classnumber }}" name="classnumber" style="color: gray;" onfocus="this.style='color: black'"/><span style="color: red; ">*</span>
+                    <br/>
+                    <label contenteditable="false" style="width: 10%; height: 50px">用户类型</label>
+                    <label contenteditable="false" style="width: 10%; height: 50px">{{ authority }}</label>
+                    <br/>
+                    <label contenteditable="false" style="width: 10%; height: 50px">手机号</label>
+                    <input type="text" value="{{ mobile }}" name="mobile" style="color: gray;" onfocus="this.style='color: black'"/><span style="color: red; ">*</span>
+                    <br/>
+                    <label contenteditable="false" style="width: 10%; height: 50px">电子邮箱</label>
+                    <input type="text" value="{{ email }}" name="email" style="color: gray;" onfocus="this.style='color: black'"/><span style="color: red; ">*</span>
+                    <br/>
+                    <label contenteditable="false" style="width: 10%; height: 50px">学号</label>
+                    <input type="text" value="{{ student_number }}" name="student_number" style="color: gray;" onfocus="this.style='color: black'"/><span style="color: red; ">*</span>
+                    <br/>
+                    <label contenteditable="false" style="width: 10%; height: 50px">证件类型</label>
+                    <select name="certification_type" id="parent" class="certification_type">
+                        <option value="null">请选择</option>
+                        <option value="0">身份证</option>
+                        <option value="1">护照</option>
+                    </select>
+                    <script>
+                        var type = '{{ certification_type }}';
+                        $(".certification_type").find("option[value="+type+"]").attr("selected", true);
+                    </script>
+                    <span style="color: red; ">*</span>
+                    <br/>
+                    <label contenteditable="false" style="width: 10%; height: 50px">证件号</label>
+                    <input type="text" value="{{ certification_id }}" name="certification_id" style="color: gray;" onfocus="this.style='color: black'"/><span style=" color: red; ">*</span>
+                    <br/>
                     <label contenteditable="false" style="width: 10%; height: 50px">出生日期</label>
-                    <input type="text" value="输入格式为1997-01-01" name="birthday" style="color: gray;"  onfocus="if(this.value==='输入格式为1997-01-01'){this.value='';this.style='color: black';}"/><span style="color: red; ">*</span>
+                    <input type="text" value="{{ birthday }}" name="birthday" style="color: gray;"  onfocus="this.style='color: black'"/><span style="color: red; ">*</span> (请以1990-01-01的格式填写)
                     <br/>
                     <label contenteditable="false" style="width: 10%; height: 50px">攻读学位</label>
-                    <select name="degree" id="parent">
+                    <select name="degree" id="parent" class="degree">
                         <option value=null>请选择</option>
                         <option value="0">本科生</option>
                         <option value="1">研究生</option>
                     </select>
+                    <script>
+                        var type = '{{ degree }}';
+                        $(".degree").find("option[value="+type+"]").attr("selected", true);
+                    </script>
                     <span style="color: red; ">*</span>
                     <br/>
-                    <label contenteditable="false" style="width: 10%; height: 50px">所在班级</label>
-                    <input type="text" value="计**" name="classnumber" style="color: gray;" onfocus="if(this.value==='计**'){this.value='';this.style='color: black';}"/><span style="color: red; ">*</span>
-                    <br/>
                     <label contenteditable="false" style="width: 10%; height: 50px">衣服尺寸</label>
-                    <select name="cloth_size" id="parent">
+                    <select name="cloth_size" id="parent" class="size">
                         <option value=null>请选择</option>
                         <option value="S">S(男生165/女生160)</option>
                         <option value="M">M(男生170/女生165)</option>
                         <option value="L">L(男生175/女生170)</option>
                     </select>
+                    <script>
+                        var type = '{{ cloth_size }}';
+                        $(".size").find("option[value="+type+"]").attr("selected", true);
+                    </script>
                     <span style="color: red; ">*</span>
                     <br/>
-                    <label contenteditable="false" style="width: 10%; height: 50px">电子邮箱</label>
-                    <input type="text" value="*****@mails.tsinghua.edu.cn" name="email" style="color: gray;" onfocus="if(this.value==='*****@mails.tsinghua.edu.cn'){this.value='';this.style='color: black';}"/><span style="color: red; ">*</span>
-                    <br/>
-                    <label contenteditable="false" style="width: 10%; height: 50px">手机号码</label>
-                    <input type="text" value="188********" name="mobile" style="color: gray;" onfocus="if(this.value==='188********'){this.value='';this.style='color: black';}"/><span style="color: red; ">*</span>
+                    <label contenteditable="false" style="width: 10%; height: 50px">所在宿舍</label>
+                    <input type="text" value="{{ room_address }}" name="room_address" style="color: gray;" onfocus="this.style='color: black'"/><span style="color: red; ">*</span>
                 </fieldset>
+                <button class="btn btn-primary" type="submit">确认</button>
             </form>
-            <button class="btn btn-primary" type="submit">确认</button>
         </div>
     </div>
 </div>

@@ -1,14 +1,16 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render, redirect
-import requests
+
 import json
-from HomePage.models import User, Sign, Events
-from django.core.paginator import Paginator
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.views.decorators.csrf import csrf_exempt, csrf_protect
+
+import requests
 from django.contrib import messages
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.http import HttpResponseRedirect
+from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
+
+from HomePage.models import User, Sign, Events
 
 
 # Create your views here.
@@ -70,7 +72,45 @@ def my_information(request):
 
 
 def edit_information(request):
-    return render(request, "Users/users.html")
+    user_id = request.session['userid']
+    info_list = {}
+    if user_id:
+        my_infos = User.objects.get(id=user_id)
+        info_list['id'] = my_infos.name
+        info_list['name'] = my_infos.fullname
+        info_list['mobile'] = my_infos.mobile
+        info_list['classnumber'] = my_infos.classnumber
+        info_list['authority'] = my_infos.authority
+        info_list['email'] = my_infos.email
+        info_list['gender'] = my_infos.gender
+        info_list['student_number'] = my_infos.student_number
+        info_list['certification_type'] = my_infos.certification_type
+        info_list['certification_id'] = my_infos.certification_id
+        info_list['birthday'] = my_infos.birthday
+        info_list['cloth_size'] = my_infos.cloth_size
+        info_list['room_address'] = my_infos.room_address
+        info_list['degree'] = my_infos.degree
+    if request.POST:
+        if request.POST['gender'] != 'null':
+            User.objects.filter(id=user_id).update(gender=request.POST['gender'])
+        if request.POST['certification_type'] != 'null':
+            User.objects.filter(id=user_id).update(certification_type=request.POST['certification_type'])
+        if request.POST['degree'] != 'null':
+            User.objects.filter(id=user_id).update(degree=request.POST['degree'])
+        if request.POST['cloth_size'] != 'null':
+            User.objects.filter(id=user_id).update(cloth_size=request.POST['cloth_size'])
+        User.objects.filter(id=user_id).update(
+            fullname=request.POST['name'],
+            classnumber=request.POST['classnumber'],
+            mobile=request.POST['mobile'],
+            email=request.POST['email'],
+            student_number=request.POST['student_number'],
+            certification_id=request.POST['certification_id'],
+            birthday=request.POST['birthday'],
+            room_address=request.POST['room_address']
+        )
+        info_list['rlt'] = u"修改成功"
+    return render(request, "Users/users.html", info_list)
 
 
 def my_events(request):
@@ -120,13 +160,13 @@ def manager(request):
 
 
 def demanager(request, Id):
-    if request.session['auth']>1:
-        u=User.objects.filter(id=Id)
-        if u[0].authority>1:            
-            messages.add_message(request, messages.INFO, u[0].fullname+'是超级管理员！')
+    if request.session['auth'] > 1:
+        u = User.objects.filter(id=Id)
+        if u[0].authority > 1:
+            messages.add_message(request, messages.INFO, u[0].fullname + '是超级管理员！')
         else:
             User.objects.filter(id=Id).update(authority=0)
-            messages.add_message(request, messages.INFO, u[0].fullname+'已不再是管理员！')
+            messages.add_message(request, messages.INFO, u[0].fullname + '已不再是管理员！')
     else:
         messages.add_message(request, messages.INFO, '无此操作权限！')
     return HttpResponseRedirect("/managers/")
