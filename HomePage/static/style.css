@@ -25,3 +25,15 @@
   margin-bottom: 0;
 
 }
+
+.nicescroll-rails {
+  background: rgba(0, 0, 0, 0.1);
+  width: 5px;
+  z-index: 9999 !important;
+}
+.nicescroll-rails:hover {
+  opacity: 1 !important;
+}
+.nicescroll-rails > div {
+  background: #2894ff !important;
+}

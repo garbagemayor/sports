@@ -17,7 +17,7 @@ def index(request):
     for l in events_list:
         l.s2 = gets2(l.status)
         l.s3 = gets3(l.status)
-    paginator=Paginator(events_list, 3)
+    paginator=Paginator(events_list, 10)
     page = request.GET.get('page')
     try:
         events_list = paginator.page(page)
