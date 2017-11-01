@@ -17,7 +17,7 @@
 
 	<!-- Bootstrap -->
 	<link href="/static/css/bootstrap.min.css" rel="stylesheet">
-	<!----><link href="/static/css/font-awesome.min.css" rel="stylesheet">
+	<link href="/static/css/font-awesome.min.css" rel="stylesheet">
 
 	<link href="/static/css/owl.carousel.css" rel="stylesheet">
 	<link href="/static/css/owl.theme.css" rel="stylesheet">
@@ -29,7 +29,6 @@
 	
 	<link  href="/static/css/ystep.css" rel="stylesheet">		  
 	<link href="/static/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
-	<link type="text/css" href="/static/try/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     {% load staticfiles %}
 
   </head>
@@ -43,46 +42,89 @@
         <div class="wrapper">
             <div class="container">
                 <div class="row">
-                    <div class="col-md-3">
-                        <div class="sidebar">
-                            <ul class="widget widget-menu unstyled">
-                                <li class="active"><a href="index.html"><i class="menu-icon icon-dashboard"></i>Dashboard
-                                </a></li>
-                                <li><a href="activity.html"><i class="menu-icon icon-bullhorn"></i>News Feed </a>
-                                </li>
-                                <li><a href="message.html"><i class="menu-icon icon-inbox"></i>Inbox <b class="label green pull-right">
-                                    11</b> </a></li>
-                                <li><a href="task.html"><i class="menu-icon icon-tasks"></i>Tasks <b class="label orange pull-right">
-                                    19</b> </a></li>
-                            </ul>
-                            <!--/.widget-nav-->
-                            
-                            
-                            <ul class="widget widget-menu unstyled">
-                                <li><a href="ui-button-icon.html"><i class="menu-icon icon-bold"></i> Buttons </a></li>
-                                <li><a href="ui-typography.html"><i class="menu-icon icon-book"></i>Typography </a></li>
-                                <li><a href="form.html"><i class="menu-icon icon-paste"></i>Forms </a></li>
-                                <li><a href="table.html"><i class="menu-icon icon-table"></i>Tables </a></li>
-                                <li><a href="charts.html"><i class="menu-icon icon-bar-chart"></i>Charts </a></li>
-                            </ul>
-                            <!--/.widget-nav-->
-                            <ul class="widget widget-menu unstyled">
-                                <li><a class="collapsed" data-toggle="collapse" href="#togglePages"><i class="menu-icon icon-cog">
-                                </i><i class="icon-chevron-down pull-right"></i><i class="icon-chevron-up pull-right">
-                                </i>More Pages </a>
-                                    <ul id="togglePages" class="collapse unstyled">
-                                        <li><a href="other-login.html"><i class="icon-inbox"></i>Login </a></li>
-                                        <li><a href="other-user-profile.html"><i class="icon-inbox"></i>Profile </a></li>
-                                        <li><a href="other-user-listing.html"><i class="icon-inbox"></i>All Users </a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="#"><i class="menu-icon icon-signout"></i>Logout </a></li>
-                            </ul>
+                    <div class="col-md-3">	
+					
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-target="#c1">赛事</a>
+                                </h4>
+                            </div>
+                            <div id="c1" class="panel-collapse collapse in">
+                                <div class="panel-body">
+                                    <nav class="navbar " id="sidebar-wrapper" role="navigation">
+										<ul class="nav sidebar-nav">
+                                            <li>
+                                                <a href="#"><i class="fa fa-fw fa-home"></i> 查看赛事</a>
+                                            </li>
+                                            <li>
+                                                <a href="#"><i class="fa fa-fw fa-home"></i> 添加赛事</a>
+                                            </li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
                         </div>
-                        <!--/.sidebar-->
+					
+						<div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-target="#c2">用户</a>
+                                </h4>
+                            </div>
+                            <div id="c2" class="panel-collapse collapse in">
+                                <div class="panel-body">
+                                    <nav class="navbar " id="sidebar-wrapper" role="navigation">
+										<ul class="nav sidebar-nav">
+                                            <li>
+                                                <a href="#"><i class="fa fa-fw fa-home"></i> 我的信息</a>
+                                            </li>											
+                                            <li>
+                                                <a href="#"><i class="fa fa-fw fa-home"></i> 查看他人</a>
+                                            </li>
+                                            <li>
+                                                <a href="#"><i class="fa fa-fw fa-home"></i> 我的赛事</a>
+                                            </li>												
+                                            <li>
+                                                <a href="#"><i class="fa fa-fw fa-home"></i> 修改信息</a>
+                                            </li>
+                                            <li>
+                                                <a href="#"><i class="fa fa-fw fa-logout"></i> 登出</a>
+                                            </li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+						
+						<div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-target="#c3">管理</a>
+                                </h4>
+                            </div>
+                            <div id="c3" class="panel-collapse collapse in">
+                                <div class="panel-body">
+                                    <nav class="navbar " id="sidebar-wrapper" role="navigation">
+										<ul class="nav sidebar-nav">
+                                            <li>
+                                                <a href="#"><i class="fa fa-fw fa-home"></i> 名人堂</a>
+                                            </li>
+                                            <li>
+                                                <a href="#"><i class="fa fa-fw fa-home"></i> 风采展示</a>
+                                            </li>
+                                            <li>
+                                                <a href="#"><i class="fa fa-fw fa-home"></i> 查看管理员</a>
+                                            </li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+						
                     </div>
                     <!--/.span3-->
-                    <div class="col-md-8">
+                    <div class="col-md-6">
 						{% block content %}
 						<div>加载中</div>
 						{% endblock %}
