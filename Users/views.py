@@ -2,18 +2,21 @@
 from __future__ import unicode_literals
 
 import json
-
 import requests
+from HomePage.models import Users as User
+from HomePage.models import Signs as Sign
+from HomePage.models import Events
+from django.core.paginator import Paginator
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.views.decorators.csrf import csrf_exempt,csrf_protect
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 
-from HomePage.models import User, Sign, Events
 
 
-# Create your views here.
 def auth(request):
     r = requests.post(
         'https://accounts.net9.org/api/access_token?client_id=0eHhovG3K1NYkhbnYuYmej1h9wY&client_secret=moK3EkYsQvossfoMwmCd&code='
@@ -116,7 +119,7 @@ def edit_information(request):
 def my_events(request):
     if request.session['userid']:
         events_list = []
-        elist = Sign.objects.filter(userid=request.session['userid'])
+        elist = Sign.objects.filter(userId=request.session['userid'])
         for e in elist:
             tmp = Events.objects.filter(id=e.eventsid)
             if tmp:

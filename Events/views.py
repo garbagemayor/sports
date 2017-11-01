@@ -2,7 +2,8 @@
 from __future__ import unicode_literals
 
 from django.shortcuts import render
-from HomePage.models import Events, Sign
+from HomePage.models import Signs as Sign
+from HomePage.models import Events
 from django.core.paginator import Paginator
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -16,9 +17,9 @@ import pyqrcode
 def index(request):
     events_list = list(Events.objects.all()[::-1])
     for l in events_list:
-        l.s2 = gets2(l.status)
-        l.s3 = gets3(l.status)
-    paginator = Paginator(events_list, 3)
+        l.s2 = gets2(l.getStatus())
+        l.s3 = gets3(l.getStatus())
+    paginator=Paginator(events_list, 3)
     page = request.GET.get('page')
     try:
         events_list = paginator.page(page)
@@ -33,9 +34,9 @@ def index(request):
 @csrf_exempt
 def page(request, Id):
     events = Events.objects.get(id=Id)
-    events.s2 = gets2(events.status)
-    events.s3 = gets3(events.status)
-    return render(request, 'Events/page.html', {'events': events})
+    events.s2 = gets2(events.getStatus())
+    events.s3 = gets3(events.getStatus())
+    return render(request, 'Events/page.html', {'events':events})
 
 
 def delete_events(request, Id):
