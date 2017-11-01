@@ -1,12 +1,36 @@
+
+p {
+  margin-bottom: 26px;
+}
+a {
+  color: #2894ff;
+  text-decoration: none !important;
+  -webkit-transition: color 0.3s;
+          transition: color 0.3s;
+}
+a:hover {
+  color: #4c4c4c;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Microsoft YaHei";
+  color: #4c4c4c;
+  letter-spacing: 1px;
+  font-weight: 400;
+}
 .body {
 	font-size: 13px;
 	background: #fff;
 	min-height: 4000px;
 	padding-top: 70px;
-	color: #777
+	color: #f0f8ff;
 }
 .wrapper {
-	background: url(../images/bg.png) #eee;
+	
 	border-bottom: 1px solid #bbb;
 	-webkit-box-shadow: 0 1px 2px rgba(0,0,0,0.1);
 	-moz-box-shadow: 0 1px 2px rgba(0,0,0,0.1);
