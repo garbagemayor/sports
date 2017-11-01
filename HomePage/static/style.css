@@ -167,13 +167,6 @@
   color: #2894ff;
   background-color: rgba(0, 0, 0, 0.5);
 }
-.navbar-default .navbar-nav .dropdown-toggle > li.active > a,
-.navbar-default .navbar-nav .dropdown-toggle > li.active a:hover,
-.navbar-default .navbar-nav .dropdown-toggle > li.active a:focus,
-.navbar-default .navbar-nav .dropdown-toggle > li.active a:active {
-  color: #2894ff;
-  background-color: rgba(0, 0, 0, 0.5);
-}
 .navbar-default .navbar-nav > li > a:hover,
 .navbar-default .navbar-nav > li > a:focus {
   color: #2894ff;
