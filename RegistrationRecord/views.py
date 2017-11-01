@@ -2,8 +2,8 @@
 from __future__ import unicode_literals
 
 from HomePage.models import Events as MEvents
-from HomePage.models import Sign as MSign
-from HomePage.models import User as MUser
+from HomePage.models import Signs as MSign
+from HomePage.models import Users as MUser
 
 import os,sys
 

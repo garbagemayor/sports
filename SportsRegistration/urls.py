@@ -30,7 +30,7 @@ from RegistrationRecord import views as Record_view
 urlpatterns = [
                   url(r'^admin/', admin.site.urls),
 
-                  #主页
+                  # 主页
                   url(r'^$',  RedirectView.as_view(url='/main/')),
                   url(r'^main/$', HomePage_view.index, name='homepage'),
 
@@ -47,20 +47,20 @@ urlpatterns = [
                   url(r'^qrcode/(\d+)/$', Events_view.qrcode, name='qrcode'),
 
                   #用户
-                  url(r'^user/mypage/$', Users_view.my_information, name='user'),            #个人页
-                  url(r'^user/alter/$', Users_view.alter, name='user'),                     #修改信息
+                  url(r'^user/$', Users_view.my_information, name='user'),           #个人页
+                  url(r'^user/profile/$', Users_view.edit_information, name='user'),        #修改信息
                   url(r'^user/(\d+)/$', Users_view.others, name='others'),                  #浏览其他用户信息  （暂无）
                   url(r'^authorized/$', Users_view.auth, name='login'),                     #登录完成
                   url(r'^logout/$', Users_view.logout, name='logout'),                      #登出
                   url(r'^edit_email/(\d+)$', Record_view.edit_email, name='edit_email'),    #修改邮件
-                  url(r'^user/myevents/$', Users_view.my_events, name='my_events'),         #查看我的赛事
+                  url(r'^user/myevents/$', Users_view.my_events, name='my_events'),
 
-                  #管理员
+                  # 管理员
                   url(r'^managers/$', Users_view.manager, name='manager'),
-                  url(r'^managers/(\d+)/$', Users_view.demanager, name='demanager'),        #删除管理员
+                  url(r'^managers/(\d+)/$', Users_view.demanager, name='demanager'),        # 删除管理员
 
-                  #记录
-                  url(r'^record/(\d+)/$', Record_view.recordPage, name='recordpage'),       #某赛事报名情况
+                  # 记录
+                  url(r'^record/(\d+)/$', Record_view.recordPage, name='recordpage'),       # 某赛事报名情况
                   url(r'^record_download_csv/(\d+)/$', Record_view.recordDownloadCSV, name='recorddownload'),
                   url(r'^record_download_xlsx/(\d+)/$', Record_view.recordDownloadXLSX, name='recorddownload'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -17,7 +17,7 @@
             <li {% if request.path|slice:"3" == "/ev" %}class="active"{% endif %}><a href="/events">赛事</a></li>
             
 			{% if request.session.username %}
-				<li {% if request.path|slice:"3" == "/us" %}class="active"{% endif %}><a href="/user/mypage">个人</a></li>
+				<li {% if request.path|slice:"3" == "/us" %}class="active"{% endif %}><a href="/user">个人</a></li>
 				{% if request.session.auth > 1 %}
 					<li {% if request.path|slice:"4" == "/man" %}class="active"{% endif %}><a href="/managers">管理</a></li>
 				{% endif %}
@@ -38,5 +38,7 @@
       </div>
     </nav>
 </header> 
+
+<br><br><br>
 	
 
