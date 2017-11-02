@@ -34,6 +34,7 @@ def index(request):
 @csrf_exempt
 def page(request, Id):
     events = Events.objects.get(id=Id)
+    events.status=events.getStatus()
     events.s2 = gets2(events.getStatus())
     events.s3 = gets3(events.getStatus())
     return render(request, 'Events/page.html', {'events':events})
@@ -109,7 +110,7 @@ def design(request, Id):
 @csrf_exempt
 def addevents(request):
     if request.method == "POST":
-        if Events.objects.get_or_create(name=request.POST['name'], content=request.POST['detail']):
+        if Events.objects.get_or_create(name=request.POST['name'], desc=request.POST['detail']):
             messages.add_message(request, messages.INFO, '成功添加赛事' + request.POST['name'] + '！')
             return HttpResponseRedirect('/events/')
     return render(request, "Events/addevents.html")
