@@ -18,8 +18,8 @@ import django.utils.timezone as timezone
 
 from django.core.paginator import Paginator
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from .forms import PostForm
 from django.core.mail import send_mail
+from .forms import EmailForm
 
 from django.views.decorators.csrf import csrf_exempt,csrf_protect
 
@@ -47,8 +47,8 @@ def recordPage(request, event_id):
     if request.method=="POST":
         checkbox_list=request.POST.getlist("checked")
         for i in checkbox_list:
-            MSign.objects.filter(id=i).update(status=2)
-        return HttpResponseRedirect('/edit_email/' + str(event_id))
+            MSign.objects.filter(eventId=event_id,userId=i).update(exmStatus=2)
+        return HttpResponseRedirect('/edit_email/'+str(event_id))
     event_id = int(event_id)
     message_map = {}
     # 当前赛事的信息
@@ -210,27 +210,22 @@ def recordDownloadXLSX(request, event_id):
     return response
 
 def edit_email(request, event_id):
-    record_list = list(MSign.objects.filter(eventId=event_id))
-    email_list = []
-    email_str = ""
-    for record in record_list:
-        email_list.append(MUser.objects.get(id=record.userId).email)
-    for email in email_list:
-        email_str = email_str + str(email) + "; "
-    print email_str
-    if (request.method == 'POST'):
-        form = PostForm(request.POST)
+    if request.method == 'POST':
+        form = EmailForm(request.POST)
         if form.is_valid():
-            for email_addr in email_list:
-                email_title = request.POST['title']
-                email_content = request.POST['content']
-                EMAIL_FROM = '924486024@qq.com'
-                send_status = send_mail(email_title, email_content, EMAIL_FROM,
-                        [email_addr])
+            email_title = form.cleaned_data['title']
+            email_content = form.cleaned_data['content']
+            EMAIL_FROM = '924486024@qq.com'
+            email_list = []
+            for obj in MSign.objects.filter(eventId=event_id,exmStatus=2):
+                email_list.append(MUser.objects.get(id=obj.userId).email)
+            print email_list
+            send_status = send_mail(email_title, email_content, EMAIL_FROM,
+                    email_list)
             if send_status:
-                return HttpResponseRedirect('/record/'+str(event_id))
+                return HttpResponseRedirect('/record/' + str(event_id))
+            return render(request, 'RegistrationRecord/edit_email.html', {'form': form})
+        return render(request, 'RegistrationRecord/edit_email.html', {'form': form})
     else:
-        form = PostForm(initial={'addr': email_str, 'title': "报名成功",
-            'content': "以下是赛事详情"})
-        return render(request, 'RegistrationRecord/edit_email.html', {'form':
-            form})
+        form = EmailForm()
+        return render(request, 'RegistrationRecord/edit_email.html', {'form': form})
