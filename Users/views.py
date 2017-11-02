@@ -2,19 +2,17 @@
 from __future__ import unicode_literals
 
 import json
+
 import requests
-from HomePage.models import Users as User
-from HomePage.models import Signs as Sign
-from HomePage.models import Events
-from django.core.paginator import Paginator
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.views.decorators.csrf import csrf_exempt,csrf_protect
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, render_to_response
 from django.views.decorators.csrf import csrf_exempt
 
+from HomePage.models import Events
+from HomePage.models import Signs as Sign
+from HomePage.models import Users as User
 
 
 def auth(request):
@@ -55,24 +53,17 @@ def my_information(request):
         info_list['name'] = my_infos.fullname
         info_list['mobile'] = my_infos.mobile
         info_list['classnumber'] = my_infos.classnumber
-        if my_infos.authority == 0:
-            info_list['authority'] = "普通用户"
-        else:
-            info_list['authority'] = "管理员"
+        info_list['authority'] = my_infos.authority
         info_list['email'] = my_infos.email
         info_list['gender'] = my_infos.gender
         info_list['student_number'] = my_infos.student_number
-        if my_infos.certification_type == 0:
-            info_list['certification_type'] = "身份证"
-        else:
-            info_list['certification_type'] = "护照"
+        info_list['certification_type'] = my_infos.certification_type
         info_list['certification_id'] = my_infos.certification_id
         info_list['birthday'] = my_infos.birthday
         info_list['cloth_size'] = my_infos.cloth_size
         info_list['room_address'] = my_infos.room_address
         info_list['degree'] = my_infos.degree
     return render(request, "Users/my_information.html", info_list)
-
 
 
 @csrf_exempt
@@ -114,8 +105,26 @@ def edit_information(request):
             birthday=request.POST['birthday'],
             room_address=request.POST['room_address']
         )
+
+        my_infos = User.objects.get(id=user_id)
+        info_list['id'] = my_infos.name
+        info_list['name'] = my_infos.fullname
+        info_list['mobile'] = my_infos.mobile
+        info_list['classnumber'] = my_infos.classnumber
+        info_list['authority'] = my_infos.authority
+        info_list['email'] = my_infos.email
+        info_list['gender'] = my_infos.gender
+        info_list['student_number'] = my_infos.student_number
+        info_list['certification_type'] = my_infos.certification_type
+        info_list['certification_id'] = my_infos.certification_id
+        info_list['birthday'] = my_infos.birthday
+        info_list['cloth_size'] = my_infos.cloth_size
+        info_list['room_address'] = my_infos.room_address
+        info_list['degree'] = my_infos.degree
+
         info_list['rlt'] = u"修改成功"
-    return render(request, "Users/users.html", info_list)
+    # return render(request, "Users/users.html", info_list)
+    return render_to_response("Users/users.html", info_list)
 
 
 def my_events(request):

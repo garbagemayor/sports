@@ -49,7 +49,7 @@ urlpatterns = [
                   #用户
                   url(r'^user/$', Users_view.my_information, name='user'),           #个人页
                   url(r'^user/profile/$', Users_view.edit_information, name='user'),        #修改信息
-                  url(r'^user/(\d+)/$', Users_view.others, name='others'),                  #浏览其他用户信息  （暂无）
+                  url(r'^user/(\d+)/$', Users_view.others, name='others'),                  #浏览其他用户信息
                   url(r'^authorized/$', Users_view.auth, name='login'),                     #登录完成
                   url(r'^logout/$', Users_view.logout, name='logout'),                      #登出
                   url(r'^edit_email/(\d+)$', Record_view.edit_email, name='edit_email'),    #修改邮件
