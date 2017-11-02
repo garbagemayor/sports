@@ -55,15 +55,13 @@
                         {{user.fullname}}
                     </td>
                     <td>
-                        ————
+                        {{user.student_number}}
                     </td>
                     <td>
                         普通管理员
                     </td>
 					<td>
-					<button  class="btn btn-link" onclick="location.href='/managers/{{user.id}}'">
-                        降级
-					</button>
+					<a href="/managers/{{user.id}}">降级</a>
                     </td>
                 </tr>
                 {% endfor %}

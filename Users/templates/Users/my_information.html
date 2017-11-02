@@ -33,6 +33,7 @@
                     var gender = '{{ gender }}';
                     if (gender === 'M') {$("#gender").html("男");}
                     if (gender === 'F') {$("#gender").html("女");}
+                    if (gender === 'null') {$('#gender').html("尚未登记");}
                 </script>
                 <br/>
                 <label contenteditable="false" style="width: 20%; height: 50px">所在班级</label>
@@ -44,7 +45,7 @@
                     var authority = '{{ authority }}';
                     if (authority === '0') {$("#authority").html("普通用户");}
                     else if (authority === '1') {$("#authority").html("管理员");}
-                    else {$('#authority').html("超级管理员");}
+                    else {$('#degree').html("超级管理员");}
                 </script>
                 <br/>
                 <label contenteditable="false" style="width: 20%; height: 50px">手机号</label>
@@ -57,12 +58,7 @@
                 <label contenteditable="false" style="width: 20%; height: 50px">{{ student_number }}</label>
                 <br/>
                 <label contenteditable="false" style="width: 20%; height: 50px">证件类型</label>
-                <label contenteditable="false" style="width: 20%; height: 50px" id="c_type">{{ certification_type }}</label>
-                 <script>
-                    var type = '{{ certification_type }}';
-                    if (type === '0') {$("#c_type").html("身份证");}
-                    else if (type === '1') {$("#c_type").html("护照");}
-                </script>
+                <label contenteditable="false" style="width: 20%; height: 50px">{{ certification_type }}</label>
                 <br/>
                 <label contenteditable="false" style="width: 20%; height: 50px">证件号</label>
                 <label contenteditable="false" style="width: 20%; height: 50px">{{ certification_id }}</label>
@@ -75,8 +71,8 @@
                 <script>
                     var degree = '{{ degree }}';
                     if (degree === '0') {$("#degree").html("本科生");}
-                    else if (degree === '1') {$("#degree").html("研究生");}
-                    else {$('#degree').html("尚未登记");}
+                    if (degree === '1') {$("#degree").html("研究生");}
+                    if (degree === 'null') {$('#degree').html("尚未登记");}
                 </script>
                 <br/>
                 <label contenteditable="false" style="width: 20%; height: 50px">衣服尺码</label>
@@ -84,16 +80,13 @@
                 <script>
                     var size = '{{ cloth_size }}';
                     if (size === 'S') {$("#size").html("S(男生165/女生160)");}
-                    else if (size === 'M') {$("#size").html("M(男生170/女生165)");}
-                    else if (size === 'L') {$("#size").html("L(男生175/女生170)");}
+                    if (size === 'M') {$("#size").html("M(男生170/女生165)");}
+                    if (size === 'L') {$("#size").html("L(男生175/女生170)");}
+                    if (size === 'null') {$('#size').html("尚未登记");}
                 </script>
                 <br/>
                 <label contenteditable="false" style="width: 20%; height: 50px">所在宿舍</label>
                 <label contenteditable="false" style="width: 20%; height: 50px">{{ room_address }}</label>
-
-                <script>
-                    $("label:contains('None')").html("尚未登记")
-                </script>
             </fieldset>
             <button class="btn btn-primary" type="submit" onclick="location.href='/user/profile'">修改</button>
         </div>

@@ -10,11 +10,11 @@
 <div class="container-fluid">
     <div class="row-fluid">
         <div class="span12">
-            <form action="/user/profile/" method="POST" >
+            <form action="/user/profile/" method="POST">
                 {% csrf_token %}
                 <fieldset>
                     <legend contenteditable="false">修改个人资料</legend>
-                    <label style="height: 50px; color: firebrick" onchange="window.location.reload()">{{ rlt }}</label>
+                    <span style="height: 50px">{{ rlt }}</span>
                     <br/>
                     <label contenteditable="false" style="width: 10%; height: 50px">用户名</label>
                     <label contenteditable="false" style="width: 10%; height: 50px">{{ id }}</label>
@@ -38,13 +38,7 @@
                     <input type="text" value="{{ classnumber }}" name="classnumber" style="color: gray;" onfocus="this.style='color: black'"/><span style="color: red; ">*</span>
                     <br/>
                     <label contenteditable="false" style="width: 10%; height: 50px">用户类型</label>
-                    <label contenteditable="false" style="width: 10%; height: 50px" id="authority">{{ authority }}</label>
-                    <script>
-                        var authority = '{{ authority }}';
-                        if (authority === '0') {$("#authority").html("普通用户");}
-                        else if (authority === '1') {$("#authority").html("管理员");}
-                        else {$('#authority').html("超级管理员");}
-                    </script>
+                    <label contenteditable="false" style="width: 10%; height: 50px">{{ authority }}</label>
                     <br/>
                     <label contenteditable="false" style="width: 10%; height: 50px">手机号</label>
                     <input type="text" value="{{ mobile }}" name="mobile" style="color: gray;" onfocus="this.style='color: black'"/><span style="color: red; ">*</span>

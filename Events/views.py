@@ -34,15 +34,10 @@ def index(request):
 @csrf_exempt
 def page(request, Id):
     events = Events.objects.get(id=Id)
-    events.status = events.getStatus()
-    events.s2 = gets2(events.status)
-    events.s3 = gets3(events.status)
-    from HomePage.models import Users
-    member_list = list(Users.objects.filter(id=request.session['userid']))
-    user_now = member_list[0]
-    for member in member_list:
-        member.printAll()
-    return render(request, 'Events/page.html', {'events':events, 'user_now':user_now, 'member_list':member_list})
+    events.status=events.getStatus()
+    events.s2 = gets2(events.getStatus())
+    events.s3 = gets3(events.getStatus())
+    return render(request, 'Events/page.html', {'events':events})
 
 
 def delete_events(request, Id):
@@ -136,25 +131,11 @@ def sign(request, Id):
 
     return HttpResponseRedirect('/events/' + Id + '/');
 
-def teamsign(request, Id):
-    # TODO
-    events = Events.objects.get(id=Id)
-    if request.session['userid']:
-        s = Sign.objects.get_or_create(userId=request.session['userid'], eventId=Id, exmStatus=1)
-        if (s[1]):
-            messages.add_message(request, messages.INFO, '报名成功！')
-        else:
-            messages.add_message(request, messages.INFO, '已报名！')
-    else:
-        messages.add_message(request, messages.INFO, '请登录！')
-        return HttpResponseRedirect('/authorized/')
-
-    return HttpResponseRedirect('/events/' + Id + '/');
 
 def design(request, Id):
     events = Events.objects.get(id=Id)
     if request.session['userid']:
-        Sign.objects.filter(userId=request.session['userid'], eventId=Id, exmStatus=1).delete()
+        Sign.objects.filter(userid=request.session['userid'], eventsid=Id, status=1).delete()
         messages.add_message(request, messages.INFO, '取消成功！')
     else:
         messages.add_message(request, messages.INFO, '请登录！')
