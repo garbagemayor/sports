@@ -121,7 +121,7 @@ class Signs(models.Model):
     exmTime = models.DateTimeField(null=True)                   # 审核时间
     exmStatus = models.IntegerField(default=1)                  # 1等待审核，2审核通过报名成功，3审核GG报名无效
     score = models.CharField(max_length=256, null=True)         # 成绩
-    prize = models.CharField(max_length=256, null=True)         # 获奖情况
+    prize = models.CharField(max_length=256, default='0')         # 获奖情况
 
     def printAll(self):
         print u'<class HomePage.models.Signs> {'

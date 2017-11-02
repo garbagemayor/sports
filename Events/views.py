@@ -59,6 +59,12 @@ def delete_events(request, Id):
         return HttpResponseRedirect('/events/')
 
 
+def setprizes(request, Id):    
+    events = Events.objects.get(id=Id)
+    return render(request, 'Events/setprizes.html', {'event':events})
+
+def viewprizes(request, Id):
+
 def nextphase(request, Id):
     events = Events.objects.get(id=Id)
     if request.method == "GET":
