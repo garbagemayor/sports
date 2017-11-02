@@ -146,6 +146,6 @@ def qrcode(request, Id):
     url = 'http://' + str(request.get_host()) + '/events/' + Id;
     print(url)
     code = pyqrcode.create(url)
-    code.png('code.png')
+    code.png('code.png', scale=8)
     image_data = open("code.png", "rb").read()
     return HttpResponse(image_data, content_type="image/png")
