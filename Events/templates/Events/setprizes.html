@@ -34,25 +34,26 @@
                 </thead>
                 <tbody>
                 {% for i in prize_number %}
-                <tr class="{{record.status}}" ondblclick="location.href='/user/{{record.user_id}}'">>
+                <tr class="{{record.status}}" ondblclick="location.href='/user/{{record.user_id}}'">
                     <td>
-                        <input id="rank_{{i}}" type="text" class="form-control" placeholder="名次">
+                        <input id="rank_{{i}}" name="rank_{{i}}" type="text" class="form-control" placeholder="名次">
                     </td>
                     <td>
-                        <input id="score_{{i}}" type="text" class="form-control" placeholder="获奖者成绩">
+                        <input id="score_{{i}}" name="score_{{i}}" type="text" class="form-control" placeholder="获奖者成绩">
                     </td>
                     <td>                        
-                        <input id="number_{{i}}" type="text" class="form-control" placeholder="获奖者学号">
+                        <input id="number_{{i}}" name="number_{{i}}" type="text" class="form-control" placeholder="获奖者学号">
                     </td>
                 </tr>
                 {% endfor %}
 				
                 </tbody>
-				<div style="text-align:center">
-					<button class="btn btn-info" type="submit" onclick="///location.href='/edit_email/{{event.id}}'" >确认</button>
-				</div>
             </table>
         </div>
+		
+		<div style="text-align:center">
+			<button class="btn btn-info" type="submit" onclick="///location.href='/edit_email/{{event.id}}'" >确认</button>
+		</div>
 		</form>
     </div>
 </div>
