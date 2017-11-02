@@ -120,7 +120,8 @@ class Signs(models.Model):
     timeReg = models.DateTimeField(default=timezone.now)        # 报名时间
     exmTime = models.DateTimeField(null=True)                   # 审核时间
     exmStatus = models.IntegerField(default=1)                  # 1等待审核，2审核通过报名成功，3审核GG报名无效
-    prize = models.CharField(max_length=256, null=True)         # 获奖情况
+    score = models.CharField(max_length=256, null=True)         # 成绩
+    prize = models.CharField(max_length=256, default='0')         # 获奖情况
 
     def printAll(self):
         print u'<class HomePage.models.Signs> {'
@@ -131,6 +132,7 @@ class Signs(models.Model):
         print u'    ' + u'timeReg = ' + unicode(self.timeReg)
         print u'    ' + u'exmTime = ' + unicode(self.exmTime)
         print u'    ' + u'exmStatus = ' + unicode(self.exmStatus)
+        print u'    ' + u'score = ' + unicode(self.score)
         print u'    ' + u'prize = ' + unicode(self.prize)
         print u'}'
 

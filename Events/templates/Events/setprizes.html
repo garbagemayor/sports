@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block title %}
+<title>设置奖项</title>
+{% endblock %}
+
+{% block extracss %}<link href="/static/send_sheet.css" rel="stylesheet">{% endblock %}
+
+{% block content %}
+	
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span12">
+	<div class="page-header">
+        <h1 style="text-align: center">
+            {{event.name}} 的获奖 <small></small>
+        </h1> 
+		</div>
+		<form action="" method="POST">
+		{% csrf_token %}
+            <table class="table table-hover">
+                <thead>
+                <tr>                    
+                    <th>
+                        名次
+                    </th>
+                    <th>
+                        学号
+                    </th>
+                    <th>
+                        成绩
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for i in prize_number %}
+                <tr class="{{record.status}}" ondblclick="location.href='/user/{{record.user_id}}'">
+                    <td>
+                        <input id="rank_{{i}}" name="rank_{{i}}" type="text" class="form-control" placeholder="名次">
+                    </td>
+                    <td>
+                        <input id="score_{{i}}" name="score_{{i}}" type="text" class="form-control" placeholder="获奖者成绩">
+                    </td>
+                    <td>                        
+                        <input id="number_{{i}}" name="number_{{i}}" type="text" class="form-control" placeholder="获奖者学号">
+                    </td>
+                </tr>
+                {% endfor %}
+				
+                </tbody>
+            </table>
+        </div>
+		
+		<div style="text-align:center">
+			<button class="btn btn-info" type="submit" onclick="///location.href='/edit_email/{{event.id}}'" >确认</button>
+		</div>
+		</form>
+    </div>
+</div>
+{% endblock %}

@@ -50,14 +50,14 @@ def recordPage(request, event_id):
     if request.method=="POST":
         checkbox_list=request.POST.getlist("checked")
         for i in checkbox_list:
-            MSign.objects.filter(id=i).update(status=2)
+            MSign.objects.filter(id=i).update(exmStatus=2)
     event_id = int(event_id)
     message_map = {}
     # 当前赛事的信息
     event = MEvents.objects.get(id=event_id)
     message_map['event'] = event
     # 当前赛事的所有报名记录
-    record_db_list = list(MSign.objects.filter(eventsid=event_id))
+    record_db_list = list(MSign.objects.filter(eventId=event_id))
     record_list = []
     for record_db in record_db_list:
         record_list.append(RecordItem(record_db))
@@ -77,7 +77,7 @@ def recordPage(request, event_id):
 def recordDownloadCSV(request, event_id):
     event_id = int(event_id)
     # 生成文件
-    record_list = list(MSign.objects.filter(eventsid=event_id))
+    record_list = list(MSign.objects.filter(eventId=event_id))
     abspath = os.path.abspath('.')
     file_name = str(abspath + "/RegistrationRecord/templates/Temp/RecordList.csv")
     recordid_list = []
@@ -86,7 +86,7 @@ def recordDownloadCSV(request, event_id):
     for record in record_list:
         recordid_list.append(str(record.id))
         userid_list.append(str(record.userid))
-        eventsid_list.append(str(record.eventsid))
+        eventsid_list.append(str(record.eventId))
     dataFrame = pd.DataFrame({'recordid': recordid_list,
                               'userid': userid_list,
                               'eventsid': eventsid_list})
@@ -191,7 +191,7 @@ def writeExcelFile(record_list, file_name):
 def recordDownloadXLSX(request, event_id):
     event_id = int(event_id)
     # 生成文件
-    record_list = list(MSign.objects.filter(eventsid=event_id))
+    record_list = list(MSign.objects.filter(eventId=event_id))
     abspath = os.path.abspath('.')
     file_name = abspath + "/RegistrationRecord/templates/Temp/RecordList.xlsx"
     writeExcelFile(record_list, file_name)
@@ -211,7 +211,7 @@ def recordDownloadXLSX(request, event_id):
     return response
 
 def edit_email(request, event_id):
-    record_list = list(MSign.objects.filter(eventsid=event_id))
+    record_list = list(MSign.objects.filter(eventId=event_id))
     email_list = []
     email_str = ""
     for record in record_list:

@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 from django.shortcuts import render
 from HomePage.models import Signs as Sign
-from HomePage.models import Events
+from HomePage.models import Events, Users
 from django.core.paginator import Paginator
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -34,6 +34,7 @@ def index(request):
 @csrf_exempt
 def page(request, Id):
     events = Events.objects.get(id=Id)
+    events.status=events.getStatus()
     events.s2 = gets2(events.getStatus())
     events.s3 = gets3(events.getStatus())
     return render(request, 'Events/page.html', {'events':events})
@@ -57,6 +58,43 @@ def delete_events(request, Id):
     else:
         return HttpResponseRedirect('/events/')
 
+
+def setprizes(request, Id):    
+    events = Events.objects.get(id=Id)
+    if request.method == "POST":
+        print request.POST['rank_1']
+        for i in range(1, 8):
+            if not (request.POST['rank_'+str(i)] and request.POST['score_'+str(i)] and request.POST['number_'+str(i)]):
+                messages.add_message(request, messages.INFO, '请完整填上全部信息！')
+                return render(request, 'Events/setprizes.html', {'event':events, 'prize_number':range(1, 8)})
+            
+        for i in range(1, 8):
+            u=Users.obejcts.filter(student_number=request.POST['number_'+i])
+            if not u[0]:
+                messages.add_message(request, messages.INFO, request.POST['number_'+i]+'不是有效学号！')
+                return render(request, 'Events/setprizes.html', {'event':events, 'prize_number':range(1, 8)})
+        for i in range(1, 8):
+            u=Users.obejcts.filter(student_number=request.POST['number_'+i])
+            u=u[0]
+            Sign.objects.filter(userId=u.id, eventId=Id).update(score=request.POST['score_'+i], prize=i)
+        return HttpResponseRedirect('/events/viewprizes/'+Id+'/')
+                
+        
+    return render(request, 'Events/setprizes.html', {'event':events, 'prize_number':range(1, 8)})
+
+def viewprizes(request, Id):
+    events = Events.objects.get(id=Id)
+    s=Sign.objects.filter(eventId=Id).exclude(prize='0')
+    prize_list=[]
+    for i in s:
+        prize={}
+        prize.rank=s.prize
+        user=Users.objects.get(id=s.userId)
+        prize.number=user.student_number
+        prize.name=user.fullname
+        prize.score=s.score
+        prize_list.append(prize)
+    return render(request, 'Events/prizes.html', {'event':events, 'prize_list':prize_list})
 
 def nextphase(request, Id):
     events = Events.objects.get(id=Id)
@@ -109,7 +147,7 @@ def design(request, Id):
 @csrf_exempt
 def addevents(request):
     if request.method == "POST":
-        if Events.objects.get_or_create(name=request.POST['name'], content=request.POST['detail']):
+        if Events.objects.get_or_create(name=request.POST['name'], desc=request.POST['detail']):
             messages.add_message(request, messages.INFO, '成功添加赛事' + request.POST['name'] + '！')
             return HttpResponseRedirect('/events/')
     return render(request, "Events/addevents.html")
