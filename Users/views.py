@@ -154,10 +154,24 @@ def my_events(request):
 
 def others(request, Id):
     user = User.objects.filter(id=Id)
+    info_list = {}
     if user:
-        user = user[0]
-        user.auth = getauth(user.authority)
-        return render(request, 'Users/userpage.html', {'user': user})
+        my_infos = User.objects.get(id=Id)
+        info_list['id'] = my_infos.name
+        info_list['name'] = my_infos.fullname
+        info_list['mobile'] = my_infos.mobile
+        info_list['classnumber'] = my_infos.classnumber
+        info_list['authority'] = my_infos.authority
+        info_list['email'] = my_infos.email
+        info_list['gender'] = my_infos.gender
+        info_list['student_number'] = my_infos.student_number
+        info_list['certification_type'] = my_infos.certification_type
+        info_list['certification_id'] = my_infos.certification_id
+        info_list['birthday'] = my_infos.birthday
+        info_list['cloth_size'] = my_infos.cloth_size
+        info_list['room_address'] = my_infos.room_address
+        info_list['degree'] = my_infos.degree
+        return render(request, 'Users/userpage.html', info_list)
     else:
         return HttpResponseRedirect('/main/')
 
