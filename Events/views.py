@@ -131,6 +131,20 @@ def sign(request, Id):
 
     return HttpResponseRedirect('/events/' + Id + '/');
 
+def teamsign(request, Id):
+    events = Events.objects.get(id=Id)
+    if request.session['userid']:
+        s = Sign.objects.get_or_create(userId=request.session['userid'], eventId=Id, exmStatus=1)
+        if (s[1]):
+            messages.add_message(request, messages.INFO, '报名成功！')
+        else:
+            messages.add_message(request, messages.INFO, '已报名！')
+    else:
+        messages.add_message(request, messages.INFO, '请登录！')
+        return HttpResponseRedirect('/authorized/')
+
+    return HttpResponseRedirect('/events/' + Id + '/');
+
 
 def design(request, Id):
     events = Events.objects.get(id=Id)
