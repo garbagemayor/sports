@@ -18,8 +18,8 @@ import django.utils.timezone as timezone
 
 from django.core.paginator import Paginator
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from .forms import PostForm
 from django.core.mail import send_mail
+from .forms import EmailForm
 
 from django.views.decorators.csrf import csrf_exempt,csrf_protect
 
@@ -27,30 +27,28 @@ class RecordItem:
     '''
     用来记录一堆信息，给registration_record.html使用
     '''
-    def __init__(self, record_db):
-        self.record_id = record_db.id
-        self.user_id = record_db.userid
-        self.record_time = record_db.time
-        # self.record_time = timezone.now
-        user_db = MUser.objects.get(id=record_db.userid)
-        self.user_name = user_db.name
-        self.user_mobile = user_db.mobile
-        self.user_fullname = user_db.fullname
-        self.user_classnumber = user_db.classnumber
-        self.user_email = user_db.email
-        if record_db.status == 0:
-            self.record_status = "审核未通过"
-        elif record_db.status == 1:
-            self.record_status = "等待审核"
-        elif record_db.status == 2:
-            self.record_status = "审核通过"
+    def __init__(self, record):
+        self.record = record
+        self.user = MUser.objects.get(id=record.userId)
+        self.status = record.exmStatus
+        self.timeRegStr = record.timeReg.strftime("%Y-%m-%d %H:%M:%S")
+        if record.exmStatus == 1:
+            self.statusStr = "等待审核"
+            self.statusToClass = "info"
+        elif record.exmStatus == 2:
+            self.statusStr = "审核通过"
+            self.statusToClass = "success"
+        elif record.exmStatus == 3:
+            self.statusStr = "审核未通过"
+            self.statusToClass = "error"
 
 @csrf_exempt
 def recordPage(request, event_id):
     if request.method=="POST":
         checkbox_list=request.POST.getlist("checked")
         for i in checkbox_list:
-            MSign.objects.filter(id=i).update(exmStatus=2)
+            MSign.objects.filter(eventId=event_id,userId=i).update(exmStatus=2)
+        return HttpResponseRedirect('/edit_email/'+str(event_id))
     event_id = int(event_id)
     message_map = {}
     # 当前赛事的信息
@@ -60,7 +58,8 @@ def recordPage(request, event_id):
     record_db_list = list(MSign.objects.filter(eventId=event_id))
     record_list = []
     for record_db in record_db_list:
-        record_list.append(RecordItem(record_db))
+        ri = RecordItem(record_db)
+        record_list.append(ri)
     # 分页模块
     paginator=Paginator(record_list, 10)
     page = request.GET.get('page')
@@ -85,7 +84,7 @@ def recordDownloadCSV(request, event_id):
     eventsid_list = []
     for record in record_list:
         recordid_list.append(str(record.id))
-        userid_list.append(str(record.userid))
+        userid_list.append(str(record.userId))
         eventsid_list.append(str(record.eventId))
     dataFrame = pd.DataFrame({'recordid': recordid_list,
                               'userid': userid_list,
@@ -182,8 +181,8 @@ def writeExcelFile(record_list, file_name):
     # 写入数据
     for i in range(len(record_list)):
         sheet.write(i + 1, 0, u'%s' % record_list[i].id)
-        sheet.write(i + 1, 1, u'%s' % record_list[i].userid)
-        sheet.write(i + 1, 2, u'%s' % record_list[i].eventsid)
+        sheet.write(i + 1, 1, u'%s' % record_list[i].userId)
+        sheet.write(i + 1, 2, u'%s' % record_list[i].eventId)
 
     # 保存文件
     workbook.close()
@@ -211,27 +210,22 @@ def recordDownloadXLSX(request, event_id):
     return response
 
 def edit_email(request, event_id):
-    record_list = list(MSign.objects.filter(eventId=event_id))
-    email_list = []
-    email_str = ""
-    for record in record_list:
-        email_list.append(MUser.objects.get(id=record.userid).email)
-    for email in email_list:
-        email_str = email_str + str(email) + "; "
-    print email_str
-    if (request.method == 'POST'):
-        form = PostForm(request.POST)
+    if request.method == 'POST':
+        form = EmailForm(request.POST)
         if form.is_valid():
-            for email_addr in email_list:
-                email_title = request.POST['title']
-                email_content = request.POST['content']
-                EMAIL_FROM = '924486024@qq.com'
-                send_status = send_mail(email_title, email_content, EMAIL_FROM,
-                        [email_addr])
+            email_title = form.cleaned_data['title']
+            email_content = form.cleaned_data['content']
+            EMAIL_FROM = '924486024@qq.com'
+            email_list = []
+            for obj in MSign.objects.filter(eventId=event_id,exmStatus=2):
+                email_list.append(MUser.objects.get(id=obj.userId).email)
+            print email_list
+            send_status = send_mail(email_title, email_content, EMAIL_FROM,
+                    email_list)
             if send_status:
-                return HttpResponseRedirect('/record/'+str(event_id))
+                return HttpResponseRedirect('/record/' + str(event_id))
+            return render(request, 'RegistrationRecord/edit_email.html', {'form': form})
+        return render(request, 'RegistrationRecord/edit_email.html', {'form': form})
     else:
-        form = PostForm(initial={'addr': email_str, 'title': "报名成功",
-            'content': "以下是赛事详情"})
-        return render(request, 'RegistrationRecord/edit_email.html', {'form':
-            form})
+        form = EmailForm()
+        return render(request, 'RegistrationRecord/edit_email.html', {'form': form})

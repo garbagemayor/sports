@@ -120,7 +120,7 @@ def nextphase(request, Id):
 def sign(request, Id):
     events = Events.objects.get(id=Id)
     if request.session['userid']:
-        s = Sign.objects.get_or_create(userid=request.session['userid'], eventsid=Id, status=1)
+        s = Sign.objects.get_or_create(userId=request.session['userid'], eventId=Id, exmStatus=1)
         if (s[1]):
             messages.add_message(request, messages.INFO, '报名成功！')
         else:
