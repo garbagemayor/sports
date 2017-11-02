@@ -33,16 +33,16 @@
                 </tr>
                 </thead>
                 <tbody>
-                {% for record in record_list %}
+                {% for i in prize_number %}
                 <tr class="{{record.status}}" ondblclick="location.href='/user/{{record.user_id}}'">>
                     <td>
-                        <input type="text" class="form-control" placeholder="名次">
+                        <input id="rank_{{i}}" type="text" class="form-control" placeholder="名次">
                     </td>
                     <td>
-                        <input type="text" class="form-control" placeholder="获奖者成绩">
+                        <input id="score_{{i}}" type="text" class="form-control" placeholder="获奖者成绩">
                     </td>
                     <td>                        
-                        <input type="text" class="form-control" placeholder="获奖者学号">
+                        <input id="number_{{i}}" type="text" class="form-control" placeholder="获奖者学号">
                     </td>
                 </tr>
                 {% endfor %}

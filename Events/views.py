@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 from django.shortcuts import render
 from HomePage.models import Signs as Sign
-from HomePage.models import Events
+from HomePage.models import Events, User
 from django.core.paginator import Paginator
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -61,9 +61,29 @@ def delete_events(request, Id):
 
 def setprizes(request, Id):    
     events = Events.objects.get(id=Id)
-    return render(request, 'Events/setprizes.html', {'event':events})
+    if request.method == "POST":
+        for i in range(8):
+            if not (request.POST['rank_'+i] && request.POST['score_'+i] &&request.POST['number_'+i]):
+                messages.add_message(request, messages.INFO, '请完整填上全部信息！')
+                return render(request, 'Events/setprizes.html', {'event':events, 'prize_number':range(8)})
+            
+        for i in range(8):
+            u=User.obejcts.filter(student_number=request.POST['number_'+i])
+            if not u[0]:
+                messages.add_message(request, messages.INFO, request.POST['number_'+i]+'不是有效学号！')
+                return render(request, 'Events/setprizes.html', {'event':events, 'prize_number':range(8)})
+        for i in range(8):
+            u=User.obejcts.filter(student_number=request.POST['number_'+i])
+            u=u[0]
+            Sign.objects.filter(userId=u.id, eventId=Id).update(score=request.POST['score_'+i], prize=i)
+        return HttpResponseRedirect('/events/viewprizes/'+Id+'/')
+                
+        
+    return render(request, 'Events/setprizes.html', {'event':events, 'prize_number':range(8)})
 
 def viewprizes(request, Id):
+    events = Events.objects.get(id=Id)    
+    return render(request, 'Events/prizes.html', {'event':events})
 
 def nextphase(request, Id):
     events = Events.objects.get(id=Id)
