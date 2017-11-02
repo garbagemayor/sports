@@ -300,6 +300,14 @@
 				</div>
 			</div>
 		</footer>
+		
+		{% if messages %}
+		<script>
+			{% for msg in messages %}
+			alert('{{ msg.message }}');
+			{% endfor %}
+		</script>
+		{% endif %}
 
 		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 		<script src="/static/js/jquery.min.js"></script>

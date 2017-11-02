@@ -122,7 +122,8 @@ def edit_information(request):
         info_list['room_address'] = my_infos.room_address
         info_list['degree'] = my_infos.degree
 
-        info_list['rlt'] = u"修改成功"
+        messages.add_message(request, messages.INFO, '修改成功！')
+        return HttpResponseRedirect('/user/')
     # return render(request, "Users/users.html", info_list)
     return render_to_response("Users/users.html", info_list)
 
@@ -156,6 +157,7 @@ def others(request, Id):
     user = User.objects.filter(id=Id)
     info_list = {}
     if user:
+        user=user[0]
         my_infos = User.objects.get(id=Id)
         info_list['id'] = my_infos.name
         info_list['name'] = my_infos.fullname
@@ -181,7 +183,7 @@ def manager(request):
     user = User.objects.filter().exclude(authority=0)
     status = 0
     if request.method == "POST":
-        if len(user) < 3:
+        if len(user) < 7:
             if len(User.objects.filter(name=request.POST['name'])) == 0:
                 messages.add_message(request, messages.INFO, '查无此人！')
             else:
