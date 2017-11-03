@@ -1,7 +1,20 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
+
+import os
+import django
+from subprocess import Popen
+
+os.remove('db.sqlite3')
+Popen('py -2 manage.py makemigrations', shell=True).wait()
+Popen('py -2 manage.py migrate --run-syncdb', shell=True).wait()
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "SportsRegistration.settings")
+django.setup()
+
 from HomePage.models import Users, Events, Signs
 import django.utils.timezone as timezone
 import datetime
+
+print u'在Users表中添加对象'
 
 i = 0
 i += 1
@@ -67,6 +80,8 @@ u.name = u'userD'
 u.fullname = u'用户D'
 u.authority = 0
 u.save()
+
+print u'在Events表中添加对象'
 
 t0 = timezone.now()
 t1 = t0 + datetime.timedelta(days=-1000)
@@ -141,3 +156,13 @@ e.teamMin = 2
 e.teamMax = 4
 e.save()
 
+print u'添加完成'
+
+del Users, Events, Signs
+del timezone
+del datetime
+del django
+
+print u'检验数据库'
+Popen('py -2 manage.py syncdb', shell=True).wait()
+Popen('pause', shell=True).wait()
