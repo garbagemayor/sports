@@ -120,11 +120,16 @@ def nextphase(request, Id):
 def sign(request, Id):
     events = Events.objects.get(id=Id)
     if request.session['userid']:
-        s = Sign.objects.get_or_create(userId=request.session['userid'], eventId=Id, exmStatus=1)
-        if (s[1]):
-            messages.add_message(request, messages.INFO, '报名成功！')
+        sf = Sign.objects.filter(userId=request.session['userid'], eventId=Id)
+        if len(sf) >= 1:
+            messages.add_message(request, messages.INFO, '请勿重复报名！')
         else:
-            messages.add_message(request, messages.INFO, '已报名！')
+            s = Sign.objects.create(userId=request.session['userid'], eventId=Id)
+            s.teamSize = 1
+            import django.utils.timezone as timezone
+            s.timeReg = timezone.now()
+            s.exmStatus = 1
+            messages.add_message(request, messages.INFO, '报名成功！')
     else:
         messages.add_message(request, messages.INFO, '请登录！')
         return HttpResponseRedirect('/authorized/')
@@ -149,8 +154,18 @@ def teamsign(request, Id):
 def design(request, Id):
     events = Events.objects.get(id=Id)
     if request.session['userid']:
-        Sign.objects.filter(userid=request.session['userid'], eventsid=Id, status=1).delete()
-        messages.add_message(request, messages.INFO, '取消成功！')
+        sf = Sign.objects.filter(userId=request.session['userid'], eventId=Id)
+        if len(sf) == 0:
+            messages.add_message(request, messages.INFO, '您尚未报名！')
+        else:
+            if len(sf) >= 2:
+                messages.add_message(request, messages.INFO, '您怎么这么强啊，居然在这一个比赛里面报次%d个名！您这么强，您爸妈知道吗？' % (len(sf)))
+            for s in sf:
+                if s.exmStatus == 1 or s.exmStatus == 3:
+                    Sign.objects.filter(id=s.id).delete()
+                    messages.add_message(request, messages.INFO, '取消成功！')
+                elif s.exmStatus == 2:
+                    messages.add_message(request, messages.INFO, '报名已审核通过，若要取消报名请联系管理员！')
     else:
         messages.add_message(request, messages.INFO, '请登录！')
         return HttpResponseRedirect('/authorized/')

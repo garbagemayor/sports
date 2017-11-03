@@ -4,3 +4,4 @@
 Coverage_Python/
 *.sqlite3
 *.png
+RegistrationRecord/templates/Temp/*

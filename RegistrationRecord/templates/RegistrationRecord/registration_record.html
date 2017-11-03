@@ -8,77 +8,85 @@
 <div class="container-fluid">
     <div class="row-fluid">
         <div class="span12">
-	<div class="page-header">
-        <h1 style="text-align: center">
-            {{event.name}} 的报名记录 <small></small>
-        </h1>
-		<form action="" method="POST"> 
-		{% csrf_token %}
-        <button class="btn btn-default" type="button" onclick="location.href='/record_download_csv/{{event.id}}'">
-				下载报名表(.csv)</button>
-        <button class="btn btn-default" type="button" onclick="location.href='/record_download_xlsx/{{event.id}}'">
-				下载报名表(.xlsx)</button>	
-		<button class="btn btn-success" type="submit" onclick="location.href='/edit_email/{{event.id}}'" style="float:right">
-				审核并发送邮件</button>
-            <table class="table table-hover">
-                <thead>
-                <tr>
-                    <th>
-                        时间
-                    </th>
-                    <th>
-                        用户名
-                    </th>
-                    <th>
-                        姓名
-                    </th>
-                    <th>
-                        联系电话
-                    </th>
-                    <th>
-                        邮箱
-                    </th>
-					<th>
-                        
-                    </th>
-					<th>
-                        审核
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for record in record_list %}
-                <tr class="{{record.statusToClass}}" ondblclick="location.href='/user/{{record.record.userId}}'">
-                    <td>
-                        {{record.timeRegStr}}
-                    </td>
-                    <td>
-                        <a href="/user/{{record.user.id}}">{{record.user.name}}</a>
-                    </td>
-                    <td>
-                        {{record.user.fullname}}
-                    </td>
-                    <td>
-                        {{record.user.mobile}}
-                    </td>
-                    <td>
-                        {{record.user.email}}
-                    </td>
-                    <td>
-                        {{record.statusStr}}
-                    </td>
-                    <td>
-					{%if record.status == 1 %}
-						<input type="checkbox" name="checked" value="{{record.record.userId}}" />
-                        &nbsp;
-					{% endif %}
-                    </td>
-                </tr>
-                {% endfor %}
-				
-                </tbody>
-            </table>
-        </form>
+	        <div class="page-header">
+                <h1 style="text-align: center">
+                    {{event.name}} 的报名记录
+                    <small>
+                        {{event.name}} 的报名记录
+                    </small>
+                </h1>
+            </div>
+		    <form action="" method="POST">
+		        {% csrf_token %}
+                <button class="btn btn-default" type="button" onclick="location.href='/record_download_csv/{{event.id}}'">
+                    下载报名表(.csv)
+                </button>
+                <button class="btn btn-default" type="button" onclick="location.href='/record_download_xlsx/{{event.id}}'">
+                    下载报名表(.xlsx)
+                </button>
+        		<button class="btn btn-success" type="submit" onclick="location.href='/edit_email/{{event.id}}'" style="float:right">
+                    审核并发送邮件
+                </button>
+                <button class="btn btn-success" type="button" onclick="location.href='/events/{{event.id}}'" style="float:right">
+                    返回比赛页面
+                </button>
+                <table class="table table-hover">
+                    <thead>
+                       <tr>
+                            <th>
+                                时间
+                            </th>
+                            <th>
+                                用户名
+                            </th>
+                            <th>
+                                姓名
+                            </th>
+                            <th>
+                                联系电话
+                            </th>
+                            <th>
+                                邮箱
+                            </th>
+        					<th>
+                                审核状态
+                            </th>
+        					<th>
+                                选择
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for record in record_list %}
+                        <tr class="{{record.statusToClass}}" ondblclick="location.href='/user/{{record.record.userId}}'">
+                            <td>
+                                {{record.timeRegStr}}
+                            </td>
+                            <td>
+                                <a href="/user/{{record.user.id}}">{{record.user.name}}</a>
+                            </td>
+                            <td>
+                                {{record.user.fullname}}
+                            </td>
+                            <td>
+                                {{record.user.mobile}}
+                            </td>
+                            <td>
+                                {{record.user.email}}
+                            </td>
+                            <td>
+                                {{record.statusStr}}
+                            </td>
+                            <td>
+                                {% if record.status == 1 %}
+                                <input type="checkbox" name="checked" value="{{record.record.userId}}"/>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </form>
         </div>
     </div>
 </div>

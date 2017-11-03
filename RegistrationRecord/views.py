@@ -42,6 +42,12 @@ class RecordItem:
             self.statusStr = "审核未通过"
             self.statusToClass = "error"
 
+def toUtf8WithNone(x):
+    if x == None:
+        return u"--"
+    else:
+        return unicode(x)
+
 @csrf_exempt
 def recordPage(request, event_id):
     if request.method=="POST":
@@ -76,20 +82,32 @@ def recordPage(request, event_id):
 def recordDownloadCSV(request, event_id):
     event_id = int(event_id)
     # 生成文件
-    record_list = list(MSign.objects.filter(eventId=event_id))
+    sign_list = list(MSign.objects.filter(eventId=event_id, exmStatus=2))
     abspath = os.path.abspath('.')
     file_name = str(abspath + "/RegistrationRecord/templates/Temp/RecordList.csv")
-    recordid_list = []
-    userid_list = []
-    eventsid_list = []
-    for record in record_list:
-        recordid_list.append(str(record.id))
-        userid_list.append(str(record.userId))
-        eventsid_list.append(str(record.eventId))
-    dataFrame = pd.DataFrame({'recordid': recordid_list,
-                              'userid': userid_list,
-                              'eventsid': eventsid_list})
-    dataFrame.to_csv(file_name)
+    table_header = unicode(MEvents.objects.get(id=event_id).name) + u"的报名表"
+    table_map = {
+        u"姓名":[],
+        u"性别":[],
+        u"学号":[],
+        u"身份证号":[],
+        u"班级":[],
+        u"手机号":[],
+        u"邮箱":[],
+        u"衣服尺码":[],
+    }
+    for sign in sign_list:
+        user = MUser.objects.get(id=sign.userId)
+        table_map[u"姓名"].append(toUtf8WithNone(user.fullname))
+        table_map[u"性别"].append(toUtf8WithNone(user.gender))
+        table_map[u"学号"].append(toUtf8WithNone(user.student_number))
+        table_map[u"身份证号"].append(toUtf8WithNone(user.certification_id))
+        table_map[u"班级"].append(toUtf8WithNone(user.classnumber))
+        table_map[u"手机号"].append(toUtf8WithNone(user.mobile))
+        table_map[u"邮箱"].append(toUtf8WithNone(user.email))
+        table_map[u"衣服尺码"].append(toUtf8WithNone(user.cloth_size))
+    dataFrame = pd.DataFrame(table_map)
+    dataFrame.to_csv(file_name, encoding="utf-8", header=table_header, index=True, index_label=u'编号')
     # 文件传输迭代器
     def file_iterator(file_name, chunk_size=512):
         with open(file_name) as f:
@@ -164,25 +182,44 @@ def getContentStyle():
     return style
 '''
 
-def writeExcelFile(record_list, file_name):
+def writeExcelFile(table_header, table_map, file_name):
     # 打开一个Excel工作簿，新建一个sheet，如果对一个单元格重复操作，会引发异常，所以加上参数cell_overwrite_ok=True
     workbook = xlsxwriter.Workbook(file_name)
     sheet = workbook.add_worksheet(name=u'报名表')
 
-    # 写标题栏
-    fields = ['recordid', 'userid', 'eventsid']
-    for j in range(len(fields)):
-        sheet.write(0, j, u'%s' % fields[j])
-
-    # 单元格合并的信息
+    # 写表格标题，单元格合并的信息
     # sheet.write_merge(x, x + m, y, w + n, string, sytle)
     # x表示行，y表示列，m表示跨行个数，n表示跨列个数，string表示要写入的单元格内容，style表示单元格样式。其中，x，y，w，h，都是以0开始计算的。
+    sheet.merge_range(0, 0, 0, 8, data=table_header)
+    # sheet.write(0, 0 + 1, 0, 0 + 9, table_header)
+
+    # 写列标
+    fields = [
+        u"编号",
+        u"姓名",
+        u"性别",
+        u"学号",
+        u"身份证号",
+        u"班级",
+        u"手机号",
+        u"邮箱",
+        u"衣服尺码",
+    ]
+    for j in range(len(fields)):
+        sheet.write(1, j, u'%s' % fields[j])
 
     # 写入数据
-    for i in range(len(record_list)):
-        sheet.write(i + 1, 0, u'%s' % record_list[i].id)
-        sheet.write(i + 1, 1, u'%s' % record_list[i].userId)
-        sheet.write(i + 1, 2, u'%s' % record_list[i].eventId)
+    n = len(table_map[u"姓名"])
+    for i in range(n):
+        sheet.write(i + 2, 0, toUtf8WithNone(i))
+        sheet.write(i + 2, 1, toUtf8WithNone(table_map[u"姓名"][i]))
+        sheet.write(i + 2, 2, toUtf8WithNone(table_map[u"性别"][i]))
+        sheet.write(i + 2, 3, toUtf8WithNone(table_map[u"学号"][i]))
+        sheet.write(i + 2, 4, toUtf8WithNone(table_map[u"身份证号"][i]))
+        sheet.write(i + 2, 5, toUtf8WithNone(table_map[u"班级"][i]))
+        sheet.write(i + 2, 6, toUtf8WithNone(table_map[u"手机号"][i]))
+        sheet.write(i + 2, 7, toUtf8WithNone(table_map[u"邮箱"][i]))
+        sheet.write(i + 2, 8, toUtf8WithNone(table_map[u"衣服尺码"][i]))
 
     # 保存文件
     workbook.close()
@@ -190,10 +227,30 @@ def writeExcelFile(record_list, file_name):
 def recordDownloadXLSX(request, event_id):
     event_id = int(event_id)
     # 生成文件
-    record_list = list(MSign.objects.filter(eventId=event_id))
     abspath = os.path.abspath('.')
     file_name = abspath + "/RegistrationRecord/templates/Temp/RecordList.xlsx"
-    writeExcelFile(record_list, file_name)
+    table_header = unicode(MEvents.objects.get(id=event_id).name) + u"的报名表"
+    table_map = {
+        u"姓名":[],
+        u"性别":[],
+        u"学号":[],
+        u"身份证号":[],
+        u"班级":[],
+        u"手机号":[],
+        u"邮箱":[],
+        u"衣服尺码":[],
+    }
+    for sign in MSign.objects.filter(eventId=event_id):
+        user = MUser.objects.get(id=sign.userId)
+        table_map[u"姓名"].append(toUtf8WithNone(user.fullname))
+        table_map[u"性别"].append(toUtf8WithNone(user.gender))
+        table_map[u"学号"].append(toUtf8WithNone(user.student_number))
+        table_map[u"身份证号"].append(toUtf8WithNone(user.certification_id))
+        table_map[u"班级"].append(toUtf8WithNone(user.classnumber))
+        table_map[u"手机号"].append(toUtf8WithNone(user.mobile))
+        table_map[u"邮箱"].append(toUtf8WithNone(user.email))
+        table_map[u"衣服尺码"].append(toUtf8WithNone(user.cloth_size))
+    writeExcelFile(table_header, table_map, file_name)
     # 文件传输迭代器
     def file_iterator(file_name, chunk_size=512):
         with open(file_name) as f:
