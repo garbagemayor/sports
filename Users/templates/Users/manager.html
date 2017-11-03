@@ -57,9 +57,14 @@
                     <td>
                         {{user.student_number}}
                     </td>
-                    <td>
-                            普通管理员
-                    </td>
+                    {% ifequal user.authority 0 %}
+                        <td>普通用户</td>
+                    {% endifequal %}
+                    {% ifequal user.authority 1 %}
+                        <td>管理员</td>
+                    {% else %}
+                        <td>超级管理员</td>
+                    {% endifequal %}
 					<td>
 					<a href="/managers/{{user.id}}">降级</a>
                     </td>
