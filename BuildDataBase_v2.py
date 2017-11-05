@@ -22,6 +22,7 @@ Users.objects.get_or_create(id=i)
 u = Users.objects.get(id=i)
 u.name = u'nodgd'
 u.fullname = u'董又铭'
+u.student_number = u'2015011294'
 u.authority = 2
 u.save()
 
@@ -30,6 +31,7 @@ Users.objects.get_or_create(id=i)
 u = Users.objects.get(id=i)
 u.name = u'tyt123'
 u.fullname = u'谭懿峻'
+u.student_number = u'2015011292'
 u.authority = 2
 u.save()
 
@@ -38,6 +40,7 @@ Users.objects.get_or_create(id=i)
 u = Users.objects.get(id=i)
 u.name = u'luoy15'
 u.fullname = u'罗华一'
+u.student_number = u'2015011305'
 u.authority = 2
 u.save()
 
@@ -46,6 +49,7 @@ Users.objects.get_or_create(id=i)
 u = Users.objects.get(id=i)
 u.name = u'yangjy15'
 u.fullname = u'杨跻云'
+u.student_number = u'2015011298'
 u.authority = 2
 u.save()
 
@@ -54,6 +58,7 @@ Users.objects.get_or_create(id=i)
 u = Users.objects.get(id=i)
 u.name = u'userA'
 u.fullname = u'用户A'
+u.student_number = u'123'
 u.authority = 1
 u.save()
 
@@ -62,6 +67,7 @@ Users.objects.get_or_create(id=i)
 u = Users.objects.get(id=i)
 u.name = u'userB'
 u.fullname = u'用户B'
+u.student_number = u'233'
 u.authority = 1
 u.save()
 
