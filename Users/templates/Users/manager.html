@@ -58,7 +58,7 @@
                         {{user.student_number}}
                     </td>
                     <td>
-                        普通管理员
+                        {% if user.authority == 1 %} 管理员 {% else %} 超级管理员 {% endif %}
                     </td>
 					<td>
 					<a href="/managers/{{user.id}}">降级</a>
