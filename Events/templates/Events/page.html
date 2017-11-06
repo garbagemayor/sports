@@ -10,22 +10,22 @@
     <div class="span12">
       <div class="page-header">
         <h1 style="text-align: center">
-          {{events.name}} <small>{{events.name}}</small>		
+          {{events.name}} <small>{{events.name}}</small>        
         </h1>
       </div>
-		<br><br>
-		{% if request.session.auth > 0 %}		  
-		  <button class="btn btn-default" type='button' disabled="disabled" onclick="location.href='/events/next/{{events.id}}'">下一阶段</button>
-		  <button class="btn btn-default" data-toggle="modal" data-target="#myModal">删除该赛事</button>
-		  <button class="btn btn-default"
+        <br><br>
+        {% if request.session.auth > 0 %}          
+          <button class="btn btn-default" type='button' disabled="disabled" onclick="location.href='/events/next/{{events.id}}'">下一阶段</button>
+          <button class="btn btn-default" data-toggle="modal" data-target="#myModal">删除该赛事</button>
+          <button class="btn btn-default"
               onclick="location.href='/events/setprizes/{{events.id}}'">设置奖项</button>
-		{% endif %}
-		  <button class="btn btn-default" onclick="location.href='/events/qrcode/{{events.id}}'">生成报名二维码</button>
-		  <button class="btn btn-success" onclick="location.href='/record/{{events.id}}'" style="float:right">查看报名</button>
-		  <button class="btn btn-success" onclick="location.href='/events/viewprizes/{{events.id}}'" style="float:right">查看获奖</button>
-	  <br><br><br>
-	  <div class="ystep1"></div>	  
-	  <br><br><br>
+        {% endif %}
+          <button class="btn btn-default" onclick="location.href='/events/qrcode/{{events.id}}'">生成报名二维码</button>
+          <button class="btn btn-success" onclick="location.href='/record/{{events.id}}'" style="float:right">查看报名</button>
+          <button class="btn btn-success" onclick="location.href='/events/viewprizes/{{events.id}}'" style="float:right">查看获奖</button>
+      <br><br><br>
+      <div class="ystep1"></div>      
+      <br><br><br>
       <div id="status" class="alert alert-{{events.s3}}">
         {{events.s2}}
       </div>
@@ -42,56 +42,242 @@
         <dd>
           {{events.content}}
         </dd>
-      </dl>	  
-      <nav style="text-align: center; margin-bottom:20px"> 
-		<button class="btn btn-primary" {% if not events.status == 2 %} name="sign" disabled="disabled"{% endif %} onclick="location.href='/events/sign/{{events.id}}/'" >立即报名</button>
-		<button class="btn btn-link" {% if not events.status == 2 %} name="sign" disabled="disabled"{% endif %} onclick="location.href='/events/design/{{events.id}}/'" >取消报名</button>
-	    </form>
-	  </nav>
-	  <!--{% if request.session.username %}
+      </dl>
+	  <br><br>
+	  <!-- 这一坨屎就是用来组建团队的 -->
+	  <div id="makeTeanPart" {% if maketeam == False %} hidden="hidden" {% endif %}>
+		<table class="table table-hover">
+		  <tbody>
+		    <td style="width=45%;">
+		      <div style="width=100%;">
+			    <div class="page-header">
+				  <h1 style="text-align: center">
+					  <small>查找队友</small>
+				  </h1>
+			    </div>
+				<div name="searchForm">
+				  <div class="form-group">
+					<label for="fullName">姓名：</label>
+					<input type="text" class="form-control" id="fullName" name="fullname" placeholder="请输入姓名"
+					    {% if fullName != ""  %} value="{{fullName}}" {% endif %}>
+				  </div>
+				  <div class="form-group">
+					<label for="studentNumber">学号：</label>
+					<input type="text" class="form-control" id="studentNumber" name="name" placeholder="请输入学号"
+						   {% if studentNumber != ""  %} value="{{studentNumber}}" {% endif %}>
+				  </div>
+				  <button type="submit" class="btn btn-default" onclick="searchTeammate()">查找</button>
+				</div>
+			    <table class="table table-hover">
+				  <thead>
+				    <tr>
+					  <th>昵称</th>
+					  <th>姓名</th>
+					  <th>学号</th>
+					  <th>操作</th>
+				    </tr>
+				  </thead>
+				  <tbody>
+				  {% for user in searchUserList %}
+				  <tr class="info" ondblclick="location.href='/user/{{user.id}}'">
+					  <td>
+						  {{user.name}}
+					  </td>
+					  <td>
+						  {{user.fullname}}
+					  </td>
+					  <td>
+						  {{user.student_number}}
+					  </td>
+					  <td>
+						  <a onclick="addTeammate('{{user.id}}')">添加</a>
+					  </td>
+				  </tr>
+				  {% endfor %}
+			  </table>
+		      </div>
+			</td>
+			<td style="width=10%;">
+			</td>
+			<td style="width=45%;">
+	  	      <div style="width=100%;">
+		  	    <div class="page-header">
+			  	  <h1 style="text-align: center">
+					  <small>已选队友</small>
+			      </h1>
+		      </div>
+			    <table class="table table-hover">
+			      <thead>
+			        <tr>
+				      <th>昵称</th>
+				  	  <th>姓名</th>
+				      <th>学号</th>
+					  <th>操作</th>
+			        </tr>
+			      </thead>
+			  <tbody>
+			  {% for user in selectedUserList %}
+			  <tr class="info" ondblclick="location.href='/user/{{user.id}}'">
+				  <td>
+					  {{user.name}}
+				  </td>
+				  <td>
+					  {{user.fullname}}
+				  </td>
+				  <td>
+					  {{user.student_number}}
+				  </td>
+				  <td>
+					  <a onclick="removeTeammate('{{user.id}}')">移除</a>
+				  </td>
+			  </tr>
+			  {% endfor %}
+		    </table>
+      	      </div>
+			</td>
+		  </tbody>
+		</table>
+	  </div>
+		<nav style="text-align: center; margin-bottom:20px">
+			<button class="btn btn-primary" id="signBtn"
+					{% if not events.status == 2 %} name="sign" disabled="disabled" {% endif %}
+					{% if events.teamMode == 0 %}
+					    onclick="location.href='/events/sign/{{events.id}}/'"
+					{% elif maketeam == False %}
+						onclick="showMakeTeamPart()"
+					{% else %}
+						onclick="teamsign()"
+					{% endif %}>
+				{% if events.teamMode == 0 %}
+					立即报名
+				{% elif maketeam == False %}
+					组建队伍
+				{% else %}
+					提交队伍
+				{% endif %}
+			</button>
+			<button class="btn btn-link"
+					{% if not events.status == 2 %} name="sign" disabled="disabled"{% endif %}
+					{% if events.teamMode == 0 %}
+						onclick="location.href='/events/design/{{events.id}}/'"
+					{% elif maketeam == False %}
+						onclick="location.href='/events/design/{{events.id}}/'"
+					{% else %}
+						onclick="location.href='/events/{{events.id}}/'"
+					{% endif %}>
+				{% if events.teamMode == 0 %}
+				取消报名
+				{% elif maketeam == False %}
+				取消报名
+				{% else %}
+				取消组队
+				{% endif %}
+			</button>
+			</form>
+		</nav>
+	  <br><br><br>
+      <!--{% if request.session.username %}
       <nav style="text-align: center; margin-bottom:20px"> 
         <button id="register" class="btn btn-primary" type="button"
         {% if signed %} disabled="disabled"{% endif %} onclick="register()">立即报名</button>
       </nav>
-	  {% endif %}-->
+      {% endif %}-->
     </div>
   </div>
 </div>
 
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" 
-						aria-hidden="true">×
-				</button>
-				<h3 class="modal-title" id="myModalLabel">
-					删除赛事
-				</h3>
-			</div>
-			<div class="modal-body">
-				是否删除该赛事
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-primary" onclick="delevents()">
-					确认
-				</button>
-				<button type="button" class="btn btn-default" 
-						data-dismiss="modal">取消
-				</button>
-			</div>
-		</div><!-- /.modal-content -->
-	</div><!-- /.modal-dialog -->
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">×
+                </button>
+                <h3 class="modal-title" id="myModalLabel">
+                    删除赛事
+                </h3>
+            </div>
+            <div class="modal-body">
+                是否删除该赛事
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="delevents()">
+                    确认
+                </button>
+                <button type="button" class="btn btn-default"
+                        data-dismiss="modal">取消
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
 </div>
-
-
 <script type="text/javascript">
- function delevents()
- {
-	alert("删除该赛事！");
-	location.href="/events/delete/{{events.id}}/";
- }	
+    function delevents()
+    {
+        alert("删除该赛事！");
+        location.href="/events/delete/{{events.id}}/";
+    }
 </script>
+
+<!-- 团队报名的时候要选队友 -->
+<script type="text/javascript">
+    function showMakeTeamPart() {
+        location.href='/events/{{events.id}}/maketeam/';
+    }
+</script>
+<script type="text/javascript">
+    function hiddenMakeTeamPart() {
+        document.getElementById("makeTeanPart").hidden="hidden";
+    }
+</script>
+<script type="text/javascript">
+    function searchTeammate() {
+    	var fn = document.getElementById("fullName").value;
+    	var sn = document.getElementById("studentNumber").value;
+    	var se = "{{ selectedStr }}";
+    	location.href = "/events/{{events.id}}/maketeam/"
+    	              + "fn=" + fn + ";"
+    	              + "sn=" + sn + ";"
+    	              + "se=" + se + "/";
+    }
+</script>
+<script type="text/javascript">
+    function addTeammate(userId) {
+    	var fn = "{{ fullName }}"
+    	var sn = "{{ studentNumber }}"
+    	var se = "{{ selectedStr }}";
+		if (("," + se).match("," + userId + ",") == null) {
+			se = se + userId + ","
+		}
+    	location.href = "/events/{{events.id}}/maketeam/"
+    	              + "fn=" + fn + ";"
+    	              + "sn=" + sn + ";"
+    	              + "se=" + se + "/";
+    }
+</script>
+<script type="text/javascript">
+    function removeTeammate(userId) {
+    	var fn = "{{ fullName }}"
+    	var sn = "{{ studentNumber }}"
+    	var se = "{{ selectedStr }}";
+		while (("," + se).match("," + userId + ",") != null) {
+			se = ("," + se).replace("," + userId + ",", ",").substring(1);
+		}
+    	location.href = "/events/{{events.id}}/maketeam/"
+    	              + "fn=" + fn + ";"
+    	              + "sn=" + sn + ";"
+    	              + "se=" + se + "/";
+    }
+</script>
+<script type="text/javascript">
+    function teamsign() {
+        alert("团队报名！");
+    	var se = "{{ selectedStr }}";
+    	location.href = "/events/teamsign/{{events.id}}/"
+    	              + "se=" + se + "/";
+    }
+</script>
+
 <script src="/static/js/ystep.js"></script>
 <script type="text/javascript">
 $(".ystep1").loadStep({
