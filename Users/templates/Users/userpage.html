@@ -34,7 +34,7 @@
                 <br/>
                 <label contenteditable="false" style="width: 20%; height: 50px">用户类型</label>
                 <label contenteditable="false" style="width: 20%; height: 50px" id="authority">{{ authority }}</label>
-                 <script>
+                <script>
                     var authority = '{{ authority }}';
                     if (authority === '0') {$("#authority").html("普通用户");}
                     else if (authority === '1') {$("#authority").html("管理员");}

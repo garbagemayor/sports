@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 import json
 
+import re
 import requests
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -74,11 +75,11 @@ def edit_information(request):
         my_infos = User.objects.get(id=user_id)
         info_list['id'] = my_infos.name
         info_list['name'] = my_infos.fullname
-        info_list['mobile'] = my_infos.mobile
         info_list['classnumber'] = my_infos.classnumber
         info_list['authority'] = my_infos.authority
-        info_list['email'] = my_infos.email
         info_list['gender'] = my_infos.gender
+        info_list['mobile'] = my_infos.mobile
+        info_list['email'] = my_infos.email
         info_list['student_number'] = my_infos.student_number
         info_list['certification_type'] = my_infos.certification_type
         info_list['certification_id'] = my_infos.certification_id
@@ -87,17 +88,35 @@ def edit_information(request):
         info_list['room_address'] = my_infos.room_address
         info_list['degree'] = my_infos.degree
     if request.POST:
-        if request.POST['gender'] != 'null':
-            User.objects.filter(id=user_id).update(gender=request.POST['gender'])
-        if request.POST['certification_type'] != 'null':
-            User.objects.filter(id=user_id).update(certification_type=request.POST['certification_type'])
-        if request.POST['degree'] != 'null':
-            User.objects.filter(id=user_id).update(degree=request.POST['degree'])
-        if request.POST['cloth_size'] != 'null':
-            User.objects.filter(id=user_id).update(cloth_size=request.POST['cloth_size'])
+        if request.POST['gender'] == 'null':
+            info_list['rlt'] = "请选择您的性别！"
+            info_list.update(keep_info(request))
+            return render(request, "Users/users.html", info_list)
+        if request.POST['certification_type'] == 'null':
+            info_list['rlt'] = "请选择您的证件类型！"
+            info_list.update(keep_info(request))
+            return render(request, "Users/users.html", info_list)
+        if request.POST['degree'] == 'null':
+            info_list['rlt'] = "请选择您的正在攻读的学位！"
+            info_list.update(keep_info(request))
+            return render(request, "Users/users.html", info_list)
+        if request.POST['cloth_size'] == 'null':
+            info_list['rlt'] = "请选择您的衣服尺码！"
+            info_list.update(keep_info(request))
+            return render(request, "Users/users.html", info_list)
+        if legal_mobile(request.POST['mobile']) is None:
+            info_list['rlt'] = "请输入正确的手机号码！"
+            info_list.update(keep_info(request))
+            return render(request, "Users/users.html", info_list)
+        if legal_email(request.POST['email']) is None:
+            info_list['rlt'] = "请输入正确的电子邮箱！"
+            info_list.update(keep_info(request))
+            return render(request, "Users/users.html", info_list)
         User.objects.filter(id=user_id).update(
-            fullname=request.POST['name'],
-            classnumber=request.POST['classnumber'],
+            gender=request.POST['gender'],
+            certification_type=request.POST['certification_type'],
+            degree=request.POST['degree'],
+            cloth_size=request.POST['cloth_size'],
             mobile=request.POST['mobile'],
             email=request.POST['email'],
             student_number=request.POST['student_number'],
@@ -230,3 +249,28 @@ def getauth(i):
         return "管理员"
     elif i >= 2:
         return "超级管理员"
+
+
+def keep_info(request):
+    info_list = {'gender': request.POST['gender'], 'mobile': request.POST['mobile'], 'email': request.POST['email'],
+                 'student_number': request.POST['student_number'],
+                 'certification_type': request.POST['certification_type'],
+                 'certification_id': request.POST['certification_id'], 'birthday': request.POST['birthday'],
+                 'cloth_size': request.POST['cloth_size'], 'room_address': request.POST['room_address'],
+                 'degree': request.POST['degree']}
+    return info_list
+
+
+def legal_mobile(mobile):
+    pattern = "^1[0-9]{10}$"
+    return re.match(pattern, mobile)
+
+
+def legal_email(email):
+    pattern = "^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$"
+    return re.match(pattern, email)
+
+
+def legal_student_number(student_number):
+    pattern = "^20[0-9]{8}$"
+    return re.match(pattern, student_number)
