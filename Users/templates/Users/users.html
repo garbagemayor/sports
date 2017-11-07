@@ -20,7 +20,7 @@
                     </div>
                     <script>
                         $("#alert_message").html("{{ rlt }}");
-                        if($("#alert_message").text()!=="test"){$("#alert").attr("class", "alert alert-warning")}
+                        if($("#alert_message").text()!==""){$("#alert").attr("class", "alert alert-warning")}
                     </script>
                     <br/>
                     <label contenteditable="false" style="width: 10%; height: 50px">用户名</label>
@@ -30,7 +30,7 @@
                     <label contenteditable="false" style="width: 10%; height: 50px">{{ name }}</label>
                     <br/>
                     <label contenteditable="false" style="width: 10%; height: 50px">性别</label>
-                    <select name="gender" id="parent" class="gender" onchange="discount()">
+                    <select name="gender" id="parent" class="gender">
                         <option value=null>请选择</option>
                         <option value="M">男</option>
                         <option value="F">女</option>
@@ -38,10 +38,6 @@
                     <script>
                         var type = '{{ gender }}';
                         $(".gender").find("option[value="+type+"]").attr("selected", true);
-                        /*function discount() {
-                            var discount = $(".gender option:selected").attr("value");
-                            $(".gender option[value="+discount+"]").attr("selected", true);
-                        }*/
                     </script>
                     <span style="color: red; ">*</span>
                     <br/>
@@ -96,7 +92,7 @@
                     </script>
                     <span style="color: red; ">*</span>
                     <br/>
-                    <label contenteditable="false" style="width: 10%; height: 50px">衣服尺寸</label>
+                    <label contenteditable="false" style="width: 10%; height: 50px" for="parent">衣服尺寸</label>
                     <select name="cloth_size" id="parent" class="size">
                         <option value=null>请选择</option>
                         <option value="S">S(男生165/女生160)</option>
