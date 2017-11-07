@@ -84,7 +84,12 @@ def recordDownloadCSV(request, event_id):
     # 生成文件
     sign_list = list(MSign.objects.filter(eventId=event_id, exmStatus=2))
     abspath = os.path.abspath('.')
-    file_name = str(abspath + "/RegistrationRecord/templates/Temp/RecordList.csv")
+    relpath = str("/RegistrationRecord/templates/Temp/")
+    print "abspath = ", abspath
+    if abspath.find("\\"):
+        relpath = relpath.replace("/", "\\")
+    os.mkdir(abspath + relpath)
+    file_name = str(abspath + relpath + "RecordList.csv")
     table_header = unicode(MEvents.objects.get(id=event_id).name) + u"的报名表"
     table_map = {
         u"姓名":[],
@@ -228,6 +233,7 @@ def recordDownloadXLSX(request, event_id):
     event_id = int(event_id)
     # 生成文件
     abspath = os.path.abspath('.')
+    os.mkdir(abspath + "/RegistrationRecord/templates/Temp/")
     file_name = abspath + "/RegistrationRecord/templates/Temp/RecordList.xlsx"
     table_header = unicode(MEvents.objects.get(id=event_id).name) + u"的报名表"
     table_map = {
