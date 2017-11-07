@@ -7,6 +7,7 @@ from HomePage.models import Events, Users
 from django.core.paginator import Paginator
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+import django.utils.timezone as timezone
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
 import json
 from django.contrib import messages
@@ -37,8 +38,59 @@ def page(request, Id):
     events.status=events.getStatus()
     events.s2 = gets2(events.getStatus())
     events.s3 = gets3(events.getStatus())
-    return render(request, 'Events/page.html', {'events':events})
+    return render(request, 'Events/page.html', {'events':events, "maketeam":False})
 
+@csrf_exempt
+def page_maketeam(request, Id):
+    events = Events.objects.get(id=Id)
+    events.status=events.getStatus()
+    events.s2 = gets2(events.getStatus())
+    events.s3 = gets3(events.getStatus())
+    return render(request, 'Events/page.html', {'events':events, "maketeam":True})
+
+@csrf_exempt
+def page_maketeam_search_selected(request, eventId, searchFullName='', searchStudentNumber='', selectedStr='', other=""):
+    event = Events.objects.get(id=eventId)
+    event.status = event.getStatus()
+    event.s2 = gets2(event.getStatus())
+    event.s3 = gets3(event.getStatus())
+    # 从数据库中找出搜索到的结果
+    print "searchFullName = ", searchFullName
+    print "searchStudentNumber = ", searchStudentNumber
+    if searchFullName == "":
+        if searchStudentNumber == "":
+            searchUserList = []
+        else:
+            searchUserList = list(Users.objects.filter(student_number=searchStudentNumber))
+    else:
+        if searchStudentNumber == "":
+            searchUserList = list(Users.objects.filter(fullname=searchFullName))
+        else:
+            searchUserList = list(Users.objects.filter(fullname=searchFullName, student_number=searchStudentNumber))
+    print "searchUserList = ", searchUserList
+    # 从数据库中找出选中的结果
+    print "selectedStr = ", selectedStr, type(selectedStr)
+    selectedUserList = []
+    selectedUserIdSet = set()
+    if len(selectedStr) > 0:
+        for userId in selectedStr.split(","):
+            print "userId = ", userId, type(userId)
+            if len(userId) > 0:
+                userIdInt = int(userId)
+                if userIdInt not in selectedUserIdSet:
+                    selectedUserIdSet.add(userIdInt)
+                    selectedUserList.append(Users.objects.filter(id=userIdInt)[0])
+    print "selectedUserList = ", selectedUserList
+
+    return render(request, 'Events/page.html',
+                  {'events': event,
+                   "maketeam":True,
+                   "fullName": searchFullName,
+                   "studentNumber": searchStudentNumber,
+                   "selectedStr": selectedStr,
+                   "searchUserList": searchUserList,
+                   "selectedUserList": selectedUserList,
+                   })
 
 def delete_events(request, Id):
     events = Events.objects.get(id=Id)
@@ -126,7 +178,6 @@ def sign(request, Id):
         else:
             s = Sign.objects.create(userId=request.session['userid'], eventId=Id)
             s.teamSize = 1
-            import django.utils.timezone as timezone
             s.timeReg = timezone.now()
             s.exmStatus = 1
             messages.add_message(request, messages.INFO, '报名成功！')
@@ -136,20 +187,30 @@ def sign(request, Id):
 
     return HttpResponseRedirect('/events/' + Id + '/');
 
-def teamsign(request, Id):
-    events = Events.objects.get(id=Id)
+def teamsign(request, eventId, selectedStr="", other=""):
+    event = Events.objects.get(id=eventId)
     if request.session['userid']:
-        s = Sign.objects.get_or_create(userId=request.session['userid'], eventId=Id, exmStatus=1)
-        if (s[1]):
-            messages.add_message(request, messages.INFO, '报名成功！')
+        sf = Sign.objects.filter(userId=request.session['userid'], eventId=eventId)
+        if len(sf) >= 1:
+            messages.add_message(request, messages.INFO, '请勿重复报名！')
         else:
-            messages.add_message(request, messages.INFO, '已报名！')
+            # 获取团队成员的userId，去重
+            teammateId = []
+            for userId in selectedStr.split(","):
+                if len(userId) > 0 and int(userId) not in teammateId:
+                    teammateId.append(int(userId))
+            # 向数据库中添加
+            s = Sign.objects.create(userId=request.session['userid'], eventId=eventId)
+            s.teamSize = len(teammateId)
+            s.teamMate = teammateId
+            s.timeReg = timezone.now()
+            s.exmStatus = 1
+            s.printAll()
+            messages.add_message(request, messages.INFO, '向数据库添加团队报名信息成功！')
     else:
         messages.add_message(request, messages.INFO, '请登录！')
         return HttpResponseRedirect('/authorized/')
-
-    return HttpResponseRedirect('/events/' + Id + '/');
-
+    return HttpResponseRedirect('/events/' + eventId + '/');
 
 def design(request, Id):
     events = Events.objects.get(id=Id)
