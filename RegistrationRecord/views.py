@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from HomePage.models import Events as MEvents
-from HomePage.models import Signs as MSign
-from HomePage.models import Users as MUser
+from HomePage.models import Events
+from HomePage.models import Signs as Sign
+from HomePage.models import Users as User
+from Users.models import Notification
 
 import os,sys
 
@@ -29,7 +30,7 @@ class RecordItem:
     '''
     def __init__(self, record):
         self.record = record
-        self.user = MUser.objects.get(id=record.userId)
+        self.user = User.objects.get(id=record.userId)
         self.status = record.exmStatus
         self.timeRegStr = record.timeReg.strftime("%Y-%m-%d %H:%M:%S")
         if record.exmStatus == 1:
@@ -52,16 +53,19 @@ def toUtf8WithNone(x):
 def recordPage(request, event_id):
     if request.method=="POST":
         checkbox_list=request.POST.getlist("checked")
+        title = str(event_id)
+        content = "已审核"
         for i in checkbox_list:
-            MSign.objects.filter(eventId=event_id,userId=i).update(exmStatus=2)
+            Sign.objects.filter(eventId=event_id,userId=i).update(exmStatus=2)
+            Notification.objects.create(userId=i,title=t,content=c)
         return HttpResponseRedirect('/edit_email/'+str(event_id))
     event_id = int(event_id)
     message_map = {}
     # 当前赛事的信息
-    event = MEvents.objects.get(id=event_id)
+    event = Events.objects.get(id=event_id)
     message_map['event'] = event
     # 当前赛事的所有报名记录
-    record_db_list = list(MSign.objects.filter(eventId=event_id))
+    record_db_list = list(Sign.objects.filter(eventId=event_id))
     record_list = []
     for record_db in record_db_list:
         ri = RecordItem(record_db)
@@ -82,7 +86,7 @@ def recordPage(request, event_id):
 def recordDownloadCSV(request, event_id):
     event_id = int(event_id)
     # 生成文件
-    sign_list = list(MSign.objects.filter(eventId=event_id, exmStatus=2))
+    sign_list = list(Sign.objects.filter(eventId=event_id, exmStatus=2))
     abspath = os.path.abspath('.')
     relpath = str("/RegistrationRecord/templates/Temp/")
     print "abspath = ", abspath
@@ -90,7 +94,7 @@ def recordDownloadCSV(request, event_id):
         relpath = relpath.replace("/", "\\")
     os.mkdir(abspath + relpath)
     file_name = str(abspath + relpath + "RecordList.csv")
-    table_header = unicode(MEvents.objects.get(id=event_id).name) + u"的报名表"
+    table_header = unicode(Events.objects.get(id=event_id).name) + u"的报名表"
     table_map = {
         u"姓名":[],
         u"性别":[],
@@ -102,7 +106,7 @@ def recordDownloadCSV(request, event_id):
         u"衣服尺码":[],
     }
     for sign in sign_list:
-        user = MUser.objects.get(id=sign.userId)
+        user = User.objects.get(id=sign.userId)
         table_map[u"姓名"].append(toUtf8WithNone(user.fullname))
         table_map[u"性别"].append(toUtf8WithNone(user.gender))
         table_map[u"学号"].append(toUtf8WithNone(user.student_number))
@@ -235,7 +239,7 @@ def recordDownloadXLSX(request, event_id):
     abspath = os.path.abspath('.')
     os.mkdir(abspath + "/RegistrationRecord/templates/Temp/")
     file_name = abspath + "/RegistrationRecord/templates/Temp/RecordList.xlsx"
-    table_header = unicode(MEvents.objects.get(id=event_id).name) + u"的报名表"
+    table_header = unicode(Events.objects.get(id=event_id).name) + u"的报名表"
     table_map = {
         u"姓名":[],
         u"性别":[],
@@ -246,8 +250,8 @@ def recordDownloadXLSX(request, event_id):
         u"邮箱":[],
         u"衣服尺码":[],
     }
-    for sign in MSign.objects.filter(eventId=event_id):
-        user = MUser.objects.get(id=sign.userId)
+    for sign in Sign.objects.filter(eventId=event_id):
+        user = User.objects.get(id=sign.userId)
         table_map[u"姓名"].append(toUtf8WithNone(user.fullname))
         table_map[u"性别"].append(toUtf8WithNone(user.gender))
         table_map[u"学号"].append(toUtf8WithNone(user.student_number))
@@ -280,8 +284,8 @@ def edit_email(request, event_id):
             email_content = form.cleaned_data['content']
             EMAIL_FROM = '924486024@qq.com'
             email_list = []
-            for obj in MSign.objects.filter(eventId=event_id,exmStatus=2):
-                email_list.append(MUser.objects.get(id=obj.userId).email)
+            for obj in Sign.objects.filter(eventId=event_id,exmStatus=2):
+                email_list.append(User.objects.get(id=obj.userId).email)
             print email_list
             send_status = send_mail(email_title, email_content, EMAIL_FROM,
                     email_list)

@@ -7,7 +7,8 @@ import django.utils.timezone as timezone
 
 # Create your models here.
 class Notification(models.Model):
-    userId = models.IntegerField(db_index=True)                     # 用户的数据库编号
+    id = models.IntegerField(primary_key=True)                  # 数据库中的编号
+    userId = models.IntegerField()                     # 用户的数据库编号
     title = models.CharField(max_length=256)         # 站内信标题
     content = models.TextField(default=u"暂无简介")             # 信息
     isRead = models.BooleanField(default=False)             # 是否已读

@@ -39,8 +39,6 @@ def auth(request):
     request.session['username'] = j['user']['name']
     request.session['userid'] = user[0].id
     request.session['auth'] = user[0].authority
-    #  unReadCount = NotificationController.objects.filter(userId=user[0].id).get(unReadCount)
-    request.session['notification'] = 0
     messages.add_message(request, messages.INFO, '登陆成功! ' + request.session['username'] + ' 欢迎来到体育赛事报名平台！')
     return HttpResponseRedirect("/events/")
 
@@ -258,12 +256,30 @@ def send_message(request, user_id):
         return render(request, 'RegistrationRecord/edit_email.html', {'form': form})
 
 def notification(request):
-    return HttpResponse('TODO')
+    user_id = request.session['userid']
+    record_list = list(Notification.objects.filter(userId=user_id))
+    # 分页模块
+    paginator=Paginator(record_list, 3)
+    page = request.GET.get('page')
+    try:
+        record_list = paginator.page(page)
+    except PageNotAnInteger:
+        record_list = paginator.page(1)
+    except EmptyPage:
+        record_list = paginator.page(paginator.num_pages)
+    message_map = {}
+    message_map['record_list'] = record_list
+    return render(request, 'Users/notification.html', message_map)
 
 def notification_count(request):
     user_id = request.session['userid']
     noti_list = list(Notification.objects.filter(userId=user_id))
     return HttpResponse(str(len(noti_list)))
+
+def notes(request, note_id):
+    d = {}
+    d['note'] = Notification.objects.filter(id=note_id)
+    return render(request, 'Users/note.html', d)
 
 @receiver(post_save, sender=Notification)
 def my_callback(sender, **kwargs):
