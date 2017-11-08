@@ -91,6 +91,12 @@
             </fieldset>
 
     </div>
+    {% if request.session.auth > 0 %}		  
+    <div style="text-align: center;">
+		<button class="btn btn-success" type="submit"
+                                  onclick="location.href='/send_message/{{userid}}'" style="center">发送站内信</button>
+    </div>
+    {% endif %}
   </div>
 </div>
 

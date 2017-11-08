@@ -135,4 +135,3 @@ class Signs(models.Model):
         print u'    ' + u'score = ' + unicode(self.score)
         print u'    ' + u'prize = ' + unicode(self.prize)
         print u'}'
-

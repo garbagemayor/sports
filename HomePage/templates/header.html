@@ -29,7 +29,10 @@
 				<li><a 
                     href="https://accounts.net9.org/api/authorize?client_id=0eHhovG3K1NYkhbnYuYmej1h9wY&redirect_uri=http://{{request.get_host}}/authorized">登录</a></li>
             {% else %}
-				<li><a href="/user/">{{request.session.username}}</a></li>
+				<li><a href="/notification">
+                    <div class="notification" id="noti">{{request.session.notification}}</div>
+                </a></li>
+				<li><a href="/user">{{request.session.username}}</a></li>
 				<li><a href="/logout/">登出</a></li>	
 			{% endif %}
 			
@@ -38,7 +41,10 @@
       </div>
     </nav>
 </header> 
-
-<br><br><br>
-	
-
+<script>
+    $(document).ready(function(){
+        $.get("{% url 'notification_count' %}", function(ret){
+            $('#noti').html(ret);
+        })
+    });
+</script>

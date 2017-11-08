@@ -4,15 +4,25 @@ from __future__ import unicode_literals
 import json
 
 import requests
+from Users.models import Notification as Notification
+from Users.models import NotificationController as NotificationController
+from django.core.paginator import Paginator
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.views.decorators.csrf import csrf_exempt,csrf_protect
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, render_to_response
 from django.views.decorators.csrf import csrf_exempt
+from RegistrationRecord.forms import EmailForm
 
 from HomePage.models import Events
 from HomePage.models import Signs as Sign
 from HomePage.models import Users as User
+
+from django.db.models.signals import post_save, post_delete
+from django.dispatch import receiver
+import django.utils.timezone as timezone
 
 
 def auth(request):
@@ -29,6 +39,8 @@ def auth(request):
     request.session['username'] = j['user']['name']
     request.session['userid'] = user[0].id
     request.session['auth'] = user[0].authority
+    #  unReadCount = NotificationController.objects.filter(userId=user[0].id).get(unReadCount)
+    request.session['notification'] = 0
     messages.add_message(request, messages.INFO, '登陆成功! ' + request.session['username'] + ' 欢迎来到体育赛事报名平台！')
     return HttpResponseRedirect("/events/")
 
@@ -159,6 +171,7 @@ def others(request, Id):
     if user:
         user=user[0]
         my_infos = User.objects.get(id=Id)
+        info_list['userid'] = Id
         info_list['id'] = my_infos.name
         info_list['name'] = my_infos.fullname
         info_list['mobile'] = my_infos.mobile
@@ -230,3 +243,29 @@ def getauth(i):
         return "管理员"
     elif i >= 2:
         return "超级管理员"
+
+def send_message(request, user_id):
+    if request.method == 'POST':
+        form = EmailForm(request.POST)
+        if form.is_valid():
+            t = form.cleaned_data['title']
+            c = form.cleaned_data['content']
+            Notification.objects.create(userId=user_id,title=t,content=c)
+            return HttpResponseRedirect('/user/' + str(user_id))
+        return render(request, 'RegistrationRecord/edit_email.html', {'form': form})
+    else:
+        form = EmailForm()
+        return render(request, 'RegistrationRecord/edit_email.html', {'form': form})
+
+def notification(request):
+    return HttpResponse('TODO')
+
+def notification_count(request):
+    user_id = request.session['userid']
+    noti_list = list(Notification.objects.filter(userId=user_id))
+    return HttpResponse(str(len(noti_list)))
+
+@receiver(post_save, sender=Notification)
+def my_callback(sender, **kwargs):
+    #  request.session['notification'] = request.session['notification'] + 1;
+    print("new notification")
