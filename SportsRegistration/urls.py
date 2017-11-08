@@ -36,11 +36,16 @@ urlpatterns = [
 
                   #赛事
                   url(r'^events/$', Events_view.index, name='eventslist'),                          #所有赛事页
-                  url(r'^events/(\d+)/$', Events_view.page, name='eventspage'),                     #赛事详情页            
+                  url(r'^events/(\d+)/$', Events_view.page, name='eventspage'),                     #赛事详情页
+                  url(r'^events/(\d+)/maketeam/$',
+                      Events_view.page_maketeam, name='eventspage_m'),                              #赛事详情页，并显示团队报名模块
+                  url(r'^events/(\d+)/maketeam/fn=([^;]*);sn=([^;]*);se=((\d+,)*)/$',
+                      Events_view.page_maketeam_search_selected, name='eventspage_mss'),            #赛事详情页，并显示团队报名模块，带有搜索内容，以及已选队友
                   url(r'^events/delete/(\d+)/$', Events_view.delete_events, name='deletepage'),     #删除赛事                                  
                   url(r'^events/next/(\d+)/$', Events_view.nextphase, name='nextphase'),            #改变阶段                              
                   url(r'^events/sign/(\d+)/$', Events_view.sign, name='signpage'),                  #报名
-                  url(r'^events/teamsign/(\d+)/((\d+)*)$', Events_view.teamsign, name='teamsignpage'),      #团队报名
+                  url(r'^events/teamsign/(\d+)/se=((\d+,)*)/$',
+                      Events_view.teamsign, name='teamsignpage'),                                   #团队报名
                   url(r'^events/design/(\d+)/$', Events_view.design, name='designpage'),            #取消报名
                   url(r'^events/addevents$', Events_view.addevents, name='addevents'),              #添加赛事
                   url(r'^events/setprizes/(\d+)/$', Events_view.setprizes, name='setprize'),                  
