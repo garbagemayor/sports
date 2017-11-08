@@ -60,22 +60,22 @@
                         {% for record in record_list %}
                         <tr class="{{record.statusToClass}}" ondblclick="location.href='/user/{{record.record.userId}}'">
                             <td>
-                                {{record.timeRegStr}}
+                                {{ record.timeRegStr }}
                             </td>
                             <td>
-                                <a href="/user/{{record.user.id}}">{{record.user.name}}</a>
+                                <a href="/user/{{record.user.id}}">{{ record.name | linebreaksbr }}</a>
                             </td>
                             <td>
-                                {{record.user.fullname}}
+                                {{ record.fullname | linebreaksbr }}
                             </td>
                             <td>
-                                {{record.user.mobile}}
+                                {{ record.mobile | linebreaksbr}}
                             </td>
                             <td>
-                                {{record.user.email}}
+                                {{ record.email | linebreaksbr}}
                             </td>
                             <td>
-                                {{record.statusStr}}
+                                {{ record.statusStr | linebreaksbr}}
                             </td>
                             <td>
                                 {% if record.status == 1 %}

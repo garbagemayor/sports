@@ -6,6 +6,7 @@ from HomePage.models import Signs as MSign
 from HomePage.models import Users as MUser
 
 import os,sys
+import re
 
 import pandas as pd
 import xlwt, xlsxwriter
@@ -23,15 +24,27 @@ from .forms import EmailForm
 
 from django.views.decorators.csrf import csrf_exempt,csrf_protect
 
+def toUtf8WithNone(x):
+    if x == None:
+        return u"--"
+    else:
+        return unicode(x)
+
+
 class RecordItem:
     '''
     用来记录一堆信息，给registration_record.html使用
     '''
     def __init__(self, record):
-        self.record = record
-        self.user = MUser.objects.get(id=record.userId)
-        self.status = record.exmStatus
+        user = MUser.objects.get(id=record.userId)
+        userIdSet = set([record.userId])
+
         self.timeRegStr = record.timeReg.strftime("%Y-%m-%d %H:%M:%S")
+        self.name = toUtf8WithNone(user.name)
+        self.fullname = toUtf8WithNone(user.fullname)
+        self.mobile = toUtf8WithNone(user.mobile)
+        self.email = toUtf8WithNone(user.email)
+        self.status = record.exmStatus
         if record.exmStatus == 1:
             self.statusStr = "等待审核"
             self.statusToClass = "info"
@@ -41,15 +54,20 @@ class RecordItem:
         elif record.exmStatus == 3:
             self.statusStr = "审核未通过"
             self.statusToClass = "error"
-
-def toUtf8WithNone(x):
-    if x == None:
-        return u"--"
-    else:
-        return unicode(x)
+        if record.teamSize > 1:
+            teamMateList = re.findall(r'\d+', record.teamMate)
+            for teamMateUserId in teamMateList:
+                if int(teamMateUserId) in userIdSet:
+                    continue
+                userIdSet.add(int(teamMateUserId))
+                user = MUser.objects.get(id=int(teamMateUserId))
+                self.name = self.name + "\n" + toUtf8WithNone(user.name)
+                self.fullname = self.fullname + "\n" + toUtf8WithNone(user.fullname)
+                self.mobile = self.mobile + "\n" + toUtf8WithNone(user.mobile)
+                self.email = self.email + "\n" + toUtf8WithNone(user.email)
 
 @csrf_exempt
-def recordPage(request, event_id):
+def recordPageIndividual(request, event_id):
     if request.method=="POST":
         checkbox_list=request.POST.getlist("checked")
         for i in checkbox_list:
@@ -78,6 +96,45 @@ def recordPage(request, event_id):
     message_map['record_list'] = record_list
     return render(request, 'RegistrationRecord/registration_record.html', message_map)
 
+
+@csrf_exempt
+def recordPageTeam(request, event_id):
+    print "recordPageTeam"
+    if request.method=="POST":
+        checkbox_list=request.POST.getlist("checked")
+        for i in checkbox_list:
+            MSign.objects.filter(eventId=event_id,userId=i).update(exmStatus=2)
+        return HttpResponseRedirect('/edit_email/'+str(event_id))
+    event_id = int(event_id)
+    message_map = {}
+    # 当前赛事的信息
+    event = MEvents.objects.get(id=event_id)
+    message_map['event'] = event
+    # 当前赛事的所有报名记录
+    record_db_list = list(MSign.objects.filter(eventId=event_id))
+    record_list = []
+    for record_db in record_db_list:
+        ri = RecordItem(record_db)
+        record_list.append(ri)
+    # 分页模块
+    paginator=Paginator(record_list, 10)
+    page = request.GET.get('page')
+    try:
+        record_list = paginator.page(page)
+    except PageNotAnInteger:
+        record_list = paginator.page(1)
+    except EmptyPage:
+        record_list = paginator.page(paginator.num_pages)
+    message_map['record_list'] = record_list
+    return render(request, 'RegistrationRecord/registration_record.html', message_map)
+
+@csrf_exempt
+def recordPage(request, event_id):
+    event = MEvents.objects.get(id=int(event_id))
+    if event.teamMode == 0:
+        return recordPageIndividual(request, event_id)
+    elif event.teamMode == 1:
+        return recordPageTeam(request, event_id)
 
 def recordDownloadCSV(request, event_id):
     event_id = int(event_id)

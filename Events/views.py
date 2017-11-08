@@ -200,12 +200,14 @@ def teamsign(request, eventId, selectedStr="", other=""):
                 if len(userId) > 0 and int(userId) not in teammateId:
                     teammateId.append(int(userId))
             # 向数据库中添加
-            s = Sign.objects.create(userId=request.session['userid'], eventId=eventId)
+            Sign.objects.create(userId=request.session['userid'], eventId=eventId)
+            s = Sign.objects.get(userId=request.session['userid'], eventId=eventId)
             s.teamSize = len(teammateId)
             s.teamMate = teammateId
             s.timeReg = timezone.now()
             s.exmStatus = 1
             s.printAll()
+            s.save()
             messages.add_message(request, messages.INFO, '向数据库添加团队报名信息成功！')
     else:
         messages.add_message(request, messages.INFO, '请登录！')
