@@ -1,9 +1,11 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div style="text-align: center;">
-        <h1>{{note.title}}</h1>
-        <p>{{note.content}}</p>
-    </div>
+<h1>{{note.title}}</h1>
+<p>{{note.content}}</p>
+<script>
+    $.get("{% url 'mark_as_read' %}", function(ret){
+         $('#noti').html(ret);
+    })
+</script>
 {% endblock %}
-

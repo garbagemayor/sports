@@ -59,6 +59,7 @@ urlpatterns = [
                   url(r'^user/myevents/$', Users_view.my_events, name='my_events'),
                   url(r'^notification/$', Users_view.notification, name='notification'),
                   url(r'^notes/(\d+)$', Users_view.notes, name='notes'),
+                  url(r'^mark_as_read/$', Users_view.mark_as_read, name='mark_as_read'),
                   url(r'^notification_count/$', Users_view.notification_count,
                       name='notification_count'),
 

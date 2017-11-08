@@ -53,11 +53,12 @@ def toUtf8WithNone(x):
 def recordPage(request, event_id):
     if request.method=="POST":
         checkbox_list=request.POST.getlist("checked")
-        title = str(event_id)
+        title = Events.objects.get(id=event_id).name
         content = "已审核"
         for i in checkbox_list:
             Sign.objects.filter(eventId=event_id,userId=i).update(exmStatus=2)
-            Notification.objects.create(userId=i,title=t,content=c)
+            Notification.objects.create(sender=request.session['userid'],
+                    target=i, title=title, content=content, createTime=timezone.now())
         return HttpResponseRedirect('/edit_email/'+str(event_id))
     event_id = int(event_id)
     message_map = {}

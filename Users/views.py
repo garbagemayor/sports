@@ -4,8 +4,8 @@ from __future__ import unicode_literals
 import json
 
 import requests
-from Users.models import Notification as Notification
-from Users.models import NotificationController as NotificationController
+from Users.models import Notification
+from Users.models import NotificationController
 from django.core.paginator import Paginator
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.decorators.csrf import csrf_exempt,csrf_protect
@@ -248,7 +248,8 @@ def send_message(request, user_id):
         if form.is_valid():
             t = form.cleaned_data['title']
             c = form.cleaned_data['content']
-            Notification.objects.create(userId=user_id,title=t,content=c)
+            Notification.objects.create(sender=request.session['userid'],
+                    target=user_id, title=t, content=c, createTime=timezone.now())
             return HttpResponseRedirect('/user/' + str(user_id))
         return render(request, 'RegistrationRecord/edit_email.html', {'form': form})
     else:
@@ -256,10 +257,28 @@ def send_message(request, user_id):
         return render(request, 'RegistrationRecord/edit_email.html', {'form': form})
 
 def notification(request):
+    if request.method == 'POST':
+        checkbox_list=request.POST.getlist("checked")
+        for i in checkbox_list:
+            Notification.objects.filter(id=i).delete()
+        user_id = request.session['userid']
+        record_list = list(Notification.objects.filter(target=user_id))
+        # 分页模块
+        paginator=Paginator(record_list, 10)
+        page = request.GET.get('page')
+        try:
+            record_list = paginator.page(page)
+        except PageNotAnInteger:
+            record_list = paginator.page(1)
+        except EmptyPage:
+            record_list = paginator.page(paginator.num_pages)
+        message_map = {}
+        message_map['record_list'] = record_list
+        return render(request, 'Users/notification.html', message_map)
     user_id = request.session['userid']
-    record_list = list(Notification.objects.filter(userId=user_id))
+    record_list = list(Notification.objects.filter(target=user_id))
     # 分页模块
-    paginator=Paginator(record_list, 3)
+    paginator=Paginator(record_list, 10)
     page = request.GET.get('page')
     try:
         record_list = paginator.page(page)
@@ -273,15 +292,40 @@ def notification(request):
 
 def notification_count(request):
     user_id = request.session['userid']
-    noti_list = list(Notification.objects.filter(userId=user_id))
-    return HttpResponse(str(len(noti_list)))
+    obj = NotificationController.objects.get_or_create(userId=user_id)
+    return HttpResponse(obj[0].unReadCount)
 
 def notes(request, note_id):
-    d = {}
-    d['note'] = Notification.objects.filter(id=note_id)
-    return render(request, 'Users/note.html', d)
+    message_map = {}
+    message_map['note'] = Notification.objects.get(id=note_id)
+    request.session['noteid'] = note_id
+    return render(request, 'Users/note.html', message_map)
+
+def mark_as_read(request):
+    note_id = request.session['noteid']
+    user_id = request.session['userid']
+    if not Notification.objects.get(id=note_id).isRead:
+        Notification.objects.filter(id=note_id).update(isRead=True)
+        obj = NotificationController.objects.get(userId=user_id)
+        obj.unReadCount = obj.unReadCount - 1
+        obj.save()
+        return HttpResponse(obj.unReadCount)
+    count = NotificationController.objects.get(userId=user_id).unReadCount
+    return HttpResponse(count)
 
 @receiver(post_save, sender=Notification)
-def my_callback(sender, **kwargs):
-    #  request.session['notification'] = request.session['notification'] + 1;
-    print("new notification")
+def incr_notifications_counter(sender, instance, created, **kwargs):
+    # 调用 update_unread_count 方法来更新计数器 +1
+    obj = NotificationController.objects.get_or_create(userId=instance.target)
+    if not obj[1]:
+        obj[0].unReadCount = obj[0].unReadCount + 1
+        obj[0].save()
+
+@receiver(post_delete, sender=Notification)
+def decr_notifications_counter(sender, instance, **kwargs):
+    # 当删除的消息还没有被读过时，计数器 -1
+    if not instance.isRead:
+        obj = NotificationController.objects.get_or_create(userId=instance.target)
+        if not obj[1]:
+            obj[0].unReadCount = obj[0].unReadCount - 1
+            obj[0].save()

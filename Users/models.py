@@ -8,22 +8,12 @@ import django.utils.timezone as timezone
 # Create your models here.
 class Notification(models.Model):
     id = models.IntegerField(primary_key=True)                  # 数据库中的编号
-    userId = models.IntegerField()                     # 用户的数据库编号
+    sender = models.IntegerField() # 发信用户id
+    target = models.IntegerField()                     # 用户的数据库编号
     title = models.CharField(max_length=256)         # 站内信标题
     content = models.TextField(default=u"暂无简介")             # 信息
     isRead = models.BooleanField(default=False)             # 是否已读
-    #  createTime = models.DateTimeField(default=timezone.now)      # 发信时间
-
-    #  def incr_notifications_counter(sender, instance, created, **kwargs):
-    #    # 只有当这个instance是新创建，而且has_readed是默认的false才更新
-    #    if not (created and not instance.has_readed):
-    #      return
-
-    #    # 调用 update_unread_count 方法来更新计数器 +1
-    #    NotificationController(instance.user_id).update_unread_count(1)
-
-    #  # 监听Notification Model的post_save信号
-    #  post_save.connect(incr_notifications_counter, sender=Notification)
+    createTime = models.DateTimeField(default=timezone.now)      # 发信时间
 
     #  def decr_notifications_counter(sender, instance, **kwargs):
     #    # 当删除的消息还没有被读过时，计数器 -1
@@ -33,12 +23,13 @@ class Notification(models.Model):
     #  post_delete.connect(decr_notifications_counter, sender=Notification)
 
     def __str__(self):
-        return '<Notifications %s: %s %s %s %s>' % (self.userId, self.title,
-                #  self.content, self.isRead, self.createTime)
-                self.content, self.isRead)
+        return '<Notification %s: %s %s %s %s %s %s>' % (self.id,
+                self.sender, self.target, self.title,
+                self.content, self.isRead, self.createTime)
 
 class NotificationController(models.Model):
-    userId = models.IntegerField(db_index=True)                     # 用户的数据库编号
+    id = models.IntegerField(primary_key=True)                  # 数据库中的编号
+    userId = models.IntegerField()                     # 用户的数据库编号
     unReadCount = models.IntegerField(default=0) # 未读条数
 
     #  def mark_as_readed(self, notification_id):
@@ -48,4 +39,4 @@ class NotificationController(models.Model):
     #      self.update_unread_count(affected_rows)
 
     def __str__(self):
-        return '<Notifications %s: %s>' % (self.userId, self.unReadCount)
+        return '<NotificationController %s: %s %s>' % (self.id, self.userId, self.unReadCount)
