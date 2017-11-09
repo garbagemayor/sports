@@ -2,11 +2,19 @@
 from __future__ import unicode_literals
 
 from django.shortcuts import render
-from HomePage.models import Events
+from HomePage.models import Events, IMG
 
 # Create your views here.
 
 def index(request):
+    team = IMG.objects.filter(id=1)
+    team = team[0]
+    celebrity = IMG.objects.filter(imgtype=1)
+    celebrity = celebrity[-1]
+    photos = IMG.objects.filter(imgtype=2)
+    print team.name
+    print team.img.url
+    print team.detail
     events_list=Events.objects.all()[::-1]
     events1=[]
     events2=[]
@@ -27,5 +35,5 @@ def index(request):
 
 
     
-    return render(request, "HomePage/newhomepage.html", {'events1':events1, 'events2':events2, 'events3':events3})
+    return render(request, "HomePage/newhomepage.html", {'events1':events1, 'events2':events2, 'events3':events3, 'team':team, 'celebrity':celebrity, 'photos':photos})
 

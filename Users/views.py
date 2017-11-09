@@ -220,34 +220,40 @@ def backend(request):
 @csrf_exempt
 def team(request):
     if request.method == 'POST':
-        
-        name=request.POST['name'],
-        img=request.FILES.get('img'),
-        detail=request.POST['detail']
-
-        print (img.name)
-        print (img.size)
-        
-        f=open(img.name,'wb')                       
-        for line in img.chunks():                  #img.chunks（）为可迭代对象
-            f.write(line)　　　　　　　　
-        f.close()
-            
-        new_img = IMG(
-            name,
-            img=,
-            detail
-            
-        )
+        new_img = IMG.objects.get(id=1)
+        if len(request.POST['name'])>1:
+            new_img.name=request.POST['name']
+        if request.FILES.get('img'):
+            new_img.img=request.FILES.get('img')
+        if len(request.POST['name'])>1:
+            new_img.detail=request.POST['detail']        
         new_img.save()
+        return render(request, 'HomePage/newHomePage.html')
     return render(request, 'Users/team.html')
 
 @csrf_exempt
 def celebrity(request):
-    return render(request, 'Users/team.html')
+    if request.method == 'POST':
+        new_img = IMG(
+            name=request.POST['name'],
+            img=request.FILES.get('img'),
+            detail=request.POST['detail'],
+            imgtype=1
+        )
+        new_img.save()
+        return render(request, 'HomePage/newHomePage.html')
+    return render(request, 'Users/celebrity.html')
 
 @csrf_exempt
 def photos(request):
+    if request.method == 'POST':
+        new_img = IMG(
+            name=request.POST['name'],
+            img=request.FILES.get('img'),
+            detail=request.POST['detail'],
+            imgtype=2
+        )     
+        new_img.save()
     return render(request, 'Users/team.html')
 
 def gets2(i):

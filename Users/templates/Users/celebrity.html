@@ -1,14 +1,14 @@
 {% extends 'base.html' %}
 
 {% block title %}
-<title>系队展示管理页面</title>
+<title>名人堂管理页面</title>
 {% endblock %}
 
 {% block content %}
 
 <div class="page-header">
         <h1 style="text-align: center">
-          系队展示管理 <small></small>
+          名人堂管理 <small></small>
         </h1>
 </div>
 <br><br>
@@ -16,14 +16,14 @@
 <form class="form-horizontal" role="form" method="post" enctype="multipart/form-data">
 {% csrf_token %}
 	<div class="form-group">
-		<label class="col-sm-2 control-label">队名</label>
+		<label class="col-sm-2 control-label">姓名</label>
 		<div class="col-sm-5">
-			<input class="form-control" name="name" type="text"  placeholder="系队名称">
+			<input class="form-control" name="name" type="text"  placeholder="">
 		</div>
 	</div>
 	<br>
 	<div class="form-group">
-		<label class="col-sm-2 control-label">选择图片</label>
+		<label class="col-sm-2 control-label">选择照片</label>
 		<div class="col-sm-5">
 			<label class="sr-only" for="inputfile">文件输入</label>
 			<input type="file" name="img">
@@ -31,7 +31,7 @@
 	</div>
 	<br>
 	<div class="form-group">
-		<label for="name" class="col-sm-2 control-label">详细资料</label>
+		<label for="name" class="col-sm-2 control-label">人物简介</label>
 		<div class="col-sm-7">
 			<textarea class="form-control" name="detail" rows="5"></textarea>
 		</div>
