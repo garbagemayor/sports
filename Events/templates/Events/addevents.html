@@ -10,6 +10,10 @@
         <h1 style="text-align: center">
           添加新赛事 <small></small>
         </h1>
+		</div>
+
+	<br>
+	<br>
 
 <form class="form-horizontal" role="form" method="post" >
 {% csrf_token %}
@@ -19,8 +23,9 @@
 			<input class="form-control" name="name" type="text"  placeholder="赛事名">
 		</div>
 	</div>
+	<br>
 	<div class="form-group">
-        <label for="dtp_input1" class="col-sm-2 control-label">比赛时间</label>
+        <label for="dtp_input1" class="col-sm-2 control-label">报名开始时间</label>
 		<div class="col-sm-5">
         <div class="input-group date form_datetime" data-date="" data-date-format="dd MM yyyy - HH:ii p" data-link-field="dtp_input1">
             <input class="form-control" size="16" type="text" value="" readonly>
@@ -30,12 +35,50 @@
 		<input type="hidden" id="dtp_input1" value="" /><br/>
 		</div>
     </div>
+	<br>
+	<div class="form-group">
+        <label for="dtp_input1" class="col-sm-2 control-label">报名截止时间</label>
+		<div class="col-sm-5">
+        <div class="input-group date form_datetime" data-date="" data-date-format="dd MM yyyy - HH:ii p" data-link-field="dtp_input1">
+            <input class="form-control" size="16" type="text" value="" readonly>
+            <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+			<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+        </div>
+		<input type="hidden" id="dtp_input1" value="" /><br/>
+		</div>
+    </div>
+	<br>
+	<div class="form-group">
+        <label for="dtp_input1" class="col-sm-2 control-label">比赛开始时间</label>
+		<div class="col-sm-5">
+        <div class="input-group date form_datetime" data-date="" data-date-format="dd MM yyyy - HH:ii p" data-link-field="dtp_input1">
+            <input class="form-control" size="16" type="text" value="" readonly>
+            <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+			<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+        </div>
+		<input type="hidden" id="dtp_input1" value="" /><br/>
+		</div>
+    </div>
+	<br>
+	<div class="form-group">
+        <label for="dtp_input1" class="col-sm-2 control-label">比赛截止时间</label>
+		<div class="col-sm-5">
+        <div class="input-group date form_datetime" data-date="" data-date-format="dd MM yyyy - HH:ii p" data-link-field="dtp_input1">
+            <input class="form-control" size="16" type="text" value="" readonly>
+            <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+			<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+        </div>
+		<input type="hidden" id="dtp_input1" value="" /><br/>
+		</div>
+    </div>
+	<br>
 	<div class="form-group">
 		<label for="name" class="col-sm-2 control-label">赛事详情</label>
 		<div class="col-sm-7">
 			<textarea class="form-control" name="detail" rows="5"></textarea>
 		</div>
 	</div>
+	<br>
 	<div class="form-group">
 		<div class="col-sm-2">
 		</div>

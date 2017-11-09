@@ -15,7 +15,7 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url
+from django.conf.urls import url, include
 from . import view
 from django.conf.urls.static import static
 from django.views.generic import RedirectView
@@ -26,10 +26,9 @@ from Users import views as  Users_view
 from django.contrib import admin
 from RegistrationRecord import views as Record_view
 
-
 urlpatterns = [
                   url(r'^admin/', admin.site.urls),
-
+    
                   # 主页
                   url(r'^$',  RedirectView.as_view(url='/main/')),
                   url(r'^main/$', HomePage_view.index, name='homepage'),
@@ -62,8 +61,12 @@ urlpatterns = [
                   url(r'^user/myevents/$', Users_view.my_events, name='my_events'),
 
                   # 管理员
-                  url(r'^managers/$', Users_view.manager, name='manager'),
+                  url(r'^managers/$', Users_view.backend, name='backend'),
+                  url(r'^managers/managers/$', Users_view.manager, name='manager'),
                   url(r'^managers/(\d+)/$', Users_view.demanager, name='demanager'),        # 删除管理员
+                  url(r'^managers/team/$', Users_view.team, name='team'),
+                  url(r'^managers/celebrity/$', Users_view.celebrity, name='celebrity'),
+                  url(r'^managers/photos/$', Users_view.photos, name='photos'), 
 
                   # 记录
                   url(r'^record/(\d+)/$', Record_view.recordPage, name='recordpage'),       # 某赛事报名情况

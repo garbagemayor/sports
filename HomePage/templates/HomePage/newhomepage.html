@@ -98,22 +98,23 @@
 					<div class="col-md-12">
 						<div class="section-title st-center">
 							<h3>系队展示</h3>
-							<p>计算机系女篮</p>
+							<p>{{team.name}}</p>
 						</div>
 						<div class="row mb90">
 							<div class="col-md-6">
 							</br>
-							<p>队伍简介：</p>
+							<p>{{team.detail}}</p>
+							<!--<p>队伍简介：</p>
 							<p>2015年建队，队伍成员不仅有充满活力的本科生，还有球场经验老道的研究生学姐。虽然队史不长，但贵系女篮在马杯赛事上敢打敢拼，已经成为了一支不容小觑的新生力量。</p>
 							<p>队伍成员：</p>    
 							<p>教练：贾佳欣  </p>   
 							<p>队长：张子薇   </p>  
-							<p>队员：王苜子 范佳悦	徐玥 张一铭	童皓玥 林敏	孟昕悦 吴玥仪 张晨 王焱 周素平</p> 
+							<p>队员：王苜子 范佳悦	徐玥 张一铭	童皓玥 林敏	孟昕悦 吴玥仪 张晨 王焱 周素平</p> -->
 
 
 							</div>
 							<div class="col-md-6">
-								<img src="/static/img/team.jpg" alt="" class="img-responsive">
+								<img src="{{team.img.url}}" alt="" class="img-responsive">
 							</div>
 						</div>					
 							
@@ -147,47 +148,63 @@
 
 						<div class="grid">
 							<figure class="portfolio-item" data-groups='["2017"]'>
-								<img src="/static/img/show1.jpg" alt="" style="width:460px;height:300px;"/>
+								<img src="/static/img/show1.jpg" alt="" style="width:100%; height:300px;"/>
 								<figcaption>
 									<h2>2017 <span>拔河</span></h2>
 									<p>2017年新生拔河比赛</p>
-									<a href="#" class="btn btn-main"><i class="fa fa-link"></i>   详情</a>
+									<a href="/static/img/show1.jpg" class="btn btn-main"><i class="fa fa-link"></i>   详情</a>
 								</figcaption>
 							</figure>
 							<figure class="portfolio-item" data-groups='["2016"]'>
-								<img src="/static/img/show3.jpg" alt="" style="width:460px;height:300px;"/>
+								<img src="/static/img/show3.jpg" alt="" style="width:100%; height:300px;"/>
 								<figcaption>
 									<h2>贵系 <span>男篮</span></h2>
 									<p>贵系男篮训练</p>
-									<a href="#" class="btn btn-main"><i class="fa fa-link"></i>   详情</a>
+									<a href="/static/img/show3.jpg" class="btn btn-main"><i class="fa fa-link"></i>   详情</a>
 								</figcaption>
 							</figure>
 							<figure class="portfolio-item" data-groups='["2017"]'>
-								<img src="/static/img/show2.jpg" alt="" style="width:460px;height:300px;"/>
+								<img src="/static/img/show2.jpg" alt="" style="width:100%; height:300px;"/>
 								<figcaption>
 									<h2>2017 <span>赤足运动会</span></h2>
 									<p>2017年新生赤足运动会</p>
-									<a href="#" class="btn btn-main"><i class="fa fa-link"></i>   详情</a>
+									<a href="/static/img/show2.jpg" class="btn btn-main"><i class="fa fa-link"></i>   详情</a>
 								</figcaption>
 							</figure>
 							<figure class="portfolio-item" data-groups='["2017"]'>
-								<img src="/static/img/show4.jpg" alt="" style="width:460px;height:300px;"/>
+								<img src="/static/img/show4.jpg" alt="" style="width:100%; height:300px;"/>
 								<figcaption>
 									<h2><span>跆拳道</span></h2>
 									<p>跆拳道总冠军</p>
-									<a href="#" class="btn btn-main"><i class="fa fa-link"></i>   详情</a>
+									<a href="/static/img/show4.jpg" class="btn btn-main"><i class="fa fa-link"></i>   详情</a>
 								</figcaption>
 							</figure>
 							<figure class="portfolio-item" data-groups='["2016"]'>
-								<img src="/static/img/show5.jpg" alt="" style="width:460px;height:300px;"/>
+								<img src="/static/img/show5.jpg" alt="" style="width:100%; height:300px;"/>
 								<figcaption>
 									<h2><span>男足</span></h2>
 									<p>男足赛后合影</p>
-									<a href="#" class="btn btn-main"><i class="fa fa-link"></i>   详情</a>
+									<a class="btn btn-main" data-toggle="modal" data-target="#myModal"><i class="fa fa-link"></i>   详情</a>
 								</figcaption>
 							</figure>
 							
 						</div>
+						<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h4>男足赛后合影</h4>
+								</div>
+								<div class="modal-body">
+									<img src="/static/img/show5.jpg" alt="" style="width:100%; height:100%;"/>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-primary" data-dismiss="modal">关闭
+									</button>
+								</div>
+							</div><!-- /.modal-content -->
+						</div><!-- /.modal -->
+					</div>
 
 					</div>
 				</div>
@@ -206,12 +223,12 @@
 						</div>
 					<div class="col-md-12">
 					<div class="col-md-5">
-						<img src="/static/img/celebrity.jpg" alt="" class="img-responsive" style="padding-left:100px;">
+						<img src="{{celebrity.img.url}}" alt="" class="img-responsive" style="padding-left:100px;">
 					</div>
 					<div class="col-md-7">
 						<h3 class="bottom-line">个人简介</h3>
-						<p> 李晨曦，清华大学计算机系2013级博士生，马拉松国家二级运动员，曾创下北京国际马拉松赛全程2小时51分18秒完赛的个人最佳成绩，42.195千米的赛道，平均每千米用时约4分4秒，被称为“清华马拉松第一人”，原虎扑翻译团版主、虎扑新声编辑。</p>
-						<a href="#" class="btn btn-main btn-lg">详情</a>
+						<p> {{celebrity.detail}}</p>
+						<a href="#" disabled="disabled" class="btn btn-main btn-lg">详情</a>
 					</div>
 					</div>
 				</div>

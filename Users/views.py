@@ -14,6 +14,7 @@ from django.views.decorators.csrf import csrf_exempt
 from HomePage.models import Events
 from HomePage.models import Signs as Sign
 from HomePage.models import Users as User
+from HomePage.models import IMG
 
 
 def auth(request):
@@ -196,6 +197,8 @@ def others(request, Id):
 @csrf_exempt
 def manager(request):
     user = User.objects.filter().exclude(authority=0)
+    for u in user:
+        u.auth=getauth(u.authority)
     status = 0
     if request.method == "POST":
         if len(user) < 7:
@@ -226,6 +229,48 @@ def demanager(request, Id):
         messages.add_message(request, messages.INFO, '无此操作权限！')
     return HttpResponseRedirect("/managers/")
 
+def backend(request):
+    return render(request, 'Users/backend.html')
+
+@csrf_exempt
+def team(request):
+    if request.method == 'POST':
+        new_img = IMG.objects.get(id=1)
+        if len(request.POST['name'])>1:
+            new_img.name=request.POST['name']
+        if request.FILES.get('img'):
+            new_img.img=request.FILES.get('img')
+        if len(request.POST['name'])>1:
+            new_img.detail=request.POST['detail']        
+        new_img.save()
+        return HttpResponseRedirect("/main/")
+    return render(request, 'Users/team.html')
+
+@csrf_exempt
+def celebrity(request):
+    if request.method == 'POST':
+        new_img = IMG(
+            name=request.POST['name'],
+            img=request.FILES.get('img'),
+            detail=request.POST['detail'],
+            imgtype=1
+        )
+        new_img.save()
+        return HttpResponseRedirect("/main/")
+    return render(request, 'Users/celebrity.html')
+
+@csrf_exempt
+def photos(request):
+    if request.method == 'POST':
+        new_img = IMG(
+            name=request.POST['name'],
+            img=request.FILES.get('img'),
+            detail=request.POST['detail'],
+            imgtype=2
+        )     
+        new_img.save()
+        return HttpResponseRedirect("/main/")
+    return render(request, 'Users/team.html')
 
 def gets2(i):
     if i == 1:
