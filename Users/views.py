@@ -150,7 +150,7 @@ def my_events(request):
         events_list = []
         elist = Sign.objects.filter(userId=request.session['userid'])
         for e in elist:
-            tmp = Events.objects.filter(id=e.eventsid)
+            tmp = Events.objects.filter(id=e.eventId)
             if tmp:
                 tmp = tmp[0]
                 tmp.s2 = gets2(tmp.getStatus())
@@ -167,7 +167,7 @@ def my_events(request):
         return render(request, 'Events/myevents.html', {'events_list': events_list})
     else:
         messages.add_message(request, messages.INFO, '请登录！')
-        return HttpResponseRedirect("/authorized/")
+        return HttpResponseRedirect("https://accounts.net9.org/api/authorize?client_id=0eHhovG3K1NYkhbnYuYmej1h9wY&redirect_uri=http://"+request.get_host()+"/authorized")
 
 
 def others(request, Id):

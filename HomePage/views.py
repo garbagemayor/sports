@@ -12,9 +12,7 @@ def index(request):
     celebrity = list(IMG.objects.filter(imgtype=1))
     celebrity = celebrity[-1]
     photos = IMG.objects.filter(imgtype=2)
-    print team.name
-    print team.img.url
-    print team.detail
+    print request.get_host()
     events_list=Events.objects.all()[::-1]
     events1=[]
     events2=[]
