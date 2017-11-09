@@ -14,13 +14,20 @@
                 {% csrf_token %}
                 <fieldset>
                     <legend contenteditable="false">修改个人资料</legend>
-                    <span style="height: 50px">{{ rlt }}</span>
+                    <div id="alert" class="alert alert-warning hide">
+                        <a href="#" class="close" data-dismiss="alert">&times;</a>
+                        <p id="alert_message">test</p>
+                    </div>
+                    <script>
+                        $("#alert_message").html("{{ rlt }}");
+                        if($("#alert_message").text()!==""){$("#alert").attr("class", "alert alert-warning")}
+                    </script>
                     <br/>
                     <label contenteditable="false" style="width: 10%; height: 50px">用户名</label>
                     <label contenteditable="false" style="width: 10%; height: 50px">{{ id }}</label>
                     <br/>
                     <label contenteditable="false" style="width: 10%; height: 50px">姓名</label>
-                    <input type="text" value="{{ name }}" name="name" style="color: gray;" onfocus="this.style='color: black'"/><span style="color: red; ">*</span>
+                    <label contenteditable="false" style="width: 10%; height: 50px">{{ name }}</label>
                     <br/>
                     <label contenteditable="false" style="width: 10%; height: 50px">性别</label>
                     <select name="gender" id="parent" class="gender">
@@ -35,10 +42,16 @@
                     <span style="color: red; ">*</span>
                     <br/>
                     <label contenteditable="false" style="width: 10%; height: 50px">所在班级</label>
-                    <input type="text" value="{{ classnumber }}" name="classnumber" style="color: gray;" onfocus="this.style='color: black'"/><span style="color: red; ">*</span>
+                    <label contenteditable="false" style="width: 10%; height: 50px">{{ classnumber }}</label>
                     <br/>
                     <label contenteditable="false" style="width: 10%; height: 50px">用户类型</label>
-                    <label contenteditable="false" style="width: 10%; height: 50px">{{ authority }}</label>
+                    <label contenteditable="false" style="width: 10%; height: 50px" id="authority">{{ authority }}</label>
+                    <script>
+                        var authority = '{{ authority }}';
+                        if (authority === '0') {$("#authority").html("普通用户");}
+                        else if (authority === '1') {$("#authority").html("管理员");}
+                        else {$('#authority').html("超级管理员");}
+                    </script>
                     <br/>
                     <label contenteditable="false" style="width: 10%; height: 50px">手机号</label>
                     <input type="text" value="{{ mobile }}" name="mobile" style="color: gray;" onfocus="this.style='color: black'"/><span style="color: red; ">*</span>
@@ -79,7 +92,7 @@
                     </script>
                     <span style="color: red; ">*</span>
                     <br/>
-                    <label contenteditable="false" style="width: 10%; height: 50px">衣服尺寸</label>
+                    <label contenteditable="false" style="width: 10%; height: 50px" for="parent">衣服尺寸</label>
                     <select name="cloth_size" id="parent" class="size">
                         <option value=null>请选择</option>
                         <option value="S">S(男生165/女生160)</option>
@@ -93,9 +106,13 @@
                     <span style="color: red; ">*</span>
                     <br/>
                     <label contenteditable="false" style="width: 10%; height: 50px">所在宿舍</label>
-                    <input type="text" value="{{ room_address }}" name="room_address" style="color: gray;" onfocus="this.style='color: black'"/><span style="color: red; ">*</span>
+                    <input type="text" value="{{ room_address }}" name="room_address" style="color: gray;" onfocus="this.style='color: black'"/>
+                    <script>
+                        $("input[value='None']").val("尚未登记");
+                    </script>
+
                 </fieldset>
-                <button class="btn btn-primary" type="submit">确认</button>
+                <button class="btn btn-primary" type="submit">提交</button>
             </form>
         </div>
     </div>

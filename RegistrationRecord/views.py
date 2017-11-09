@@ -9,20 +9,19 @@ import os,sys
 import re
 
 import pandas as pd
-import xlwt, xlsxwriter
-
-from django.shortcuts import render
-from django.http import StreamingHttpResponse
-from django.http import HttpResponse, HttpResponseRedirect
-
-import django.utils.timezone as timezone
-
-from django.core.paginator import Paginator
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+import xlsxwriter
 from django.core.mail import send_mail
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.http import HttpResponseRedirect
+from django.http import StreamingHttpResponse
+from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
+
+from HomePage.models import Events as MEvents
+from HomePage.models import Signs as MSign
+from HomePage.models import Users as MUser
 from .forms import EmailForm
 
-from django.views.decorators.csrf import csrf_exempt,csrf_protect
 
 def toUtf8WithNone(x):
     if x == None:
@@ -32,9 +31,10 @@ def toUtf8WithNone(x):
 
 
 class RecordItem:
-    '''
+    """
     用来记录一堆信息，给registration_record.html使用
-    '''
+    """
+
     def __init__(self, record):
         user = MUser.objects.get(id=record.userId)
         userIdSet = set([record.userId])
@@ -103,8 +103,8 @@ def recordPageTeam(request, event_id):
     if request.method=="POST":
         checkbox_list=request.POST.getlist("checked")
         for i in checkbox_list:
-            MSign.objects.filter(eventId=event_id,userId=i).update(exmStatus=2)
-        return HttpResponseRedirect('/edit_email/'+str(event_id))
+            MSign.objects.filter(eventId=event_id, userId=i).update(exmStatus=2)
+        return HttpResponseRedirect('/edit_email/' + str(event_id))
     event_id = int(event_id)
     message_map = {}
     # 当前赛事的信息
@@ -117,7 +117,7 @@ def recordPageTeam(request, event_id):
         ri = RecordItem(record_db)
         record_list.append(ri)
     # 分页模块
-    paginator=Paginator(record_list, 10)
+    paginator = Paginator(record_list, 10)
     page = request.GET.get('page')
     try:
         record_list = paginator.page(page)
@@ -142,21 +142,21 @@ def recordDownloadCSV(request, event_id):
     sign_list = list(MSign.objects.filter(eventId=event_id, exmStatus=2))
     abspath = os.path.abspath('.')
     relpath = str("/RegistrationRecord/templates/Temp/")
-    print "abspath = ", abspath
     if abspath.find("\\"):
         relpath = relpath.replace("/", "\\")
-    os.mkdir(abspath + relpath)
+    if not os.path.exists(abspath + relpath):
+        os.mkdir(abspath + relpath)
     file_name = str(abspath + relpath + "RecordList.csv")
     table_header = unicode(MEvents.objects.get(id=event_id).name) + u"的报名表"
     table_map = {
-        u"姓名":[],
-        u"性别":[],
-        u"学号":[],
-        u"身份证号":[],
-        u"班级":[],
-        u"手机号":[],
-        u"邮箱":[],
-        u"衣服尺码":[],
+        u"姓名": [],
+        u"性别": [],
+        u"学号": [],
+        u"身份证号": [],
+        u"班级": [],
+        u"手机号": [],
+        u"邮箱": [],
+        u"衣服尺码": [],
     }
     for sign in sign_list:
         user = MUser.objects.get(id=sign.userId)
@@ -170,6 +170,7 @@ def recordDownloadCSV(request, event_id):
         table_map[u"衣服尺码"].append(toUtf8WithNone(user.cloth_size))
     dataFrame = pd.DataFrame(table_map)
     dataFrame.to_csv(file_name, encoding="utf-8", header=table_header, index=True, index_label=u'编号')
+
     # 文件传输迭代器
     def file_iterator(file_name, chunk_size=512):
         with open(file_name) as f:
@@ -179,11 +180,13 @@ def recordDownloadCSV(request, event_id):
                     yield c
                 else:
                     break
+
     # 传输下载
     response = StreamingHttpResponse(file_iterator(file_name))
     response['Content-Type'] = 'application/octet-stream'
     response['Content-Disposition'] = 'attachment;filename="{0}"'.format(file_name)
     return response
+
 
 '''
 def getHeaderStyle():
@@ -244,6 +247,7 @@ def getContentStyle():
     return style
 '''
 
+
 def writeExcelFile(table_header, table_map, file_name):
     # 打开一个Excel工作簿，新建一个sheet，如果对一个单元格重复操作，会引发异常，所以加上参数cell_overwrite_ok=True
     workbook = xlsxwriter.Workbook(file_name)
@@ -286,24 +290,29 @@ def writeExcelFile(table_header, table_map, file_name):
     # 保存文件
     workbook.close()
 
+
 def recordDownloadXLSX(request, event_id):
     event_id = int(event_id)
     # 生成文件
     abspath = os.path.abspath('.')
-    os.mkdir(abspath + "/RegistrationRecord/templates/Temp/")
-    file_name = abspath + "/RegistrationRecord/templates/Temp/RecordList.xlsx"
+    relpath = str("/RegistrationRecord/templates/Temp/")
+    if abspath.find("\\"):
+        relpath = relpath.replace("/", "\\")
+    if not os.path.exists(abspath + relpath):
+        os.mkdir(abspath + relpath)
+    file_name = abspath + relpath + "RecordList.xlsx"
     table_header = unicode(MEvents.objects.get(id=event_id).name) + u"的报名表"
     table_map = {
-        u"姓名":[],
-        u"性别":[],
-        u"学号":[],
-        u"身份证号":[],
-        u"班级":[],
-        u"手机号":[],
-        u"邮箱":[],
-        u"衣服尺码":[],
+        u"姓名": [],
+        u"性别": [],
+        u"学号": [],
+        u"身份证号": [],
+        u"班级": [],
+        u"手机号": [],
+        u"邮箱": [],
+        u"衣服尺码": [],
     }
-    for sign in MSign.objects.filter(eventId=event_id):
+    for sign in MSign.objects.filter(eventId=event_id, exmStatus=2):
         user = MUser.objects.get(id=sign.userId)
         table_map[u"姓名"].append(toUtf8WithNone(user.fullname))
         table_map[u"性别"].append(toUtf8WithNone(user.gender))
@@ -314,20 +323,23 @@ def recordDownloadXLSX(request, event_id):
         table_map[u"邮箱"].append(toUtf8WithNone(user.email))
         table_map[u"衣服尺码"].append(toUtf8WithNone(user.cloth_size))
     writeExcelFile(table_header, table_map, file_name)
+
     # 文件传输迭代器
     def file_iterator(file_name, chunk_size=512):
-        with open(file_name) as f:
+        with open(file_name, "rb") as f:
             while True:
                 c = f.read(chunk_size)
                 if c:
                     yield c
                 else:
                     break
+
     # 传输下载
     response = StreamingHttpResponse(file_iterator(file_name))
     response['Content-Type'] = 'application/octet-stream'
     response['Content-Disposition'] = 'attachment;filename="{0}"'.format(file_name)
     return response
+
 
 def edit_email(request, event_id):
     if request.method == 'POST':
@@ -337,11 +349,11 @@ def edit_email(request, event_id):
             email_content = form.cleaned_data['content']
             EMAIL_FROM = '924486024@qq.com'
             email_list = []
-            for obj in MSign.objects.filter(eventId=event_id,exmStatus=2):
+            for obj in MSign.objects.filter(eventId=event_id, exmStatus=2):
                 email_list.append(MUser.objects.get(id=obj.userId).email)
             print email_list
             send_status = send_mail(email_title, email_content, EMAIL_FROM,
-                    email_list)
+                                    email_list)
             if send_status:
                 return HttpResponseRedirect('/record/' + str(event_id))
             return render(request, 'RegistrationRecord/edit_email.html', {'form': form})
