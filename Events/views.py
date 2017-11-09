@@ -95,7 +95,7 @@ def page_maketeam_search_selected(request, eventId, searchFullName='', searchStu
 def delete_events(request, Id):
     events = Events.objects.get(id=Id)
     if request.method == "GET":
-        if request.session['userid']:
+        if request.session.get('userid'):
             if request.session['auth'] > 0:
                 Events.objects.filter(id=Id).delete()
                 Sign.objects.filter(eventsid=Id).delete()
@@ -103,8 +103,8 @@ def delete_events(request, Id):
             else:
                 messages.add_message(request, messages.INFO, '当前用户无此操作权限！')
         else:
-            messages.add_message(request, messages.INFO, '请登录！')
-            return HttpResponseRedirect('/authorized/')
+            #messages.add_message(request, messages.INFO, '请登录！')
+            return HttpResponseRedirect('https://accounts.net9.org/api/authorize?client_id=0eHhovG3K1NYkhbnYuYmej1h9wY&redirect_uri=http://"+request.get_host+"/authorized')
 
         return HttpResponseRedirect('/events/')
     else:
@@ -164,8 +164,8 @@ def nextphase(request, Id):
             else:
                 messages.add_message(request, messages.INFO, '当前用户无此操作权限！')
         else:
-            messages.add_message(request, messages.INFO, '请登录！')
-            return HttpResponseRedirect('/authorized/')
+            #messages.add_message(request, messages.INFO, '请登录！')
+            return HttpResponseRedirect('https://accounts.net9.org/api/authorize?client_id=0eHhovG3K1NYkhbnYuYmej1h9wY&redirect_uri=http://"+request.get_host+"/authorized')
         return HttpResponseRedirect('/events/' + Id)
     else:
         return HttpResponseRedirect('/events/' + Id)
@@ -173,7 +173,7 @@ def nextphase(request, Id):
 
 def sign(request, Id):
     events = Events.objects.get(id=Id)
-    if request.session['userid']:
+    if request.session.get('userid'):
         sf = Sign.objects.filter(userId=request.session['userid'], eventId=Id)
         if len(sf) >= 1:
             messages.add_message(request, messages.INFO, '请勿重复报名！')
@@ -184,14 +184,14 @@ def sign(request, Id):
             s.exmStatus = 1
             messages.add_message(request, messages.INFO, '报名成功！')
     else:
-        messages.add_message(request, messages.INFO, '请登录！')
-        return HttpResponseRedirect('/authorized/')
+        #messages.add_message(request, messages.INFO, '请登录！')
+        return HttpResponseRedirect('https://accounts.net9.org/api/authorize?client_id=0eHhovG3K1NYkhbnYuYmej1h9wY&redirect_uri=http://"+request.get_host+"/authorized')
 
     return HttpResponseRedirect('/events/' + Id + '/');
 
 def teamsign(request, eventId, selectedStr="", other=""):
     event = Events.objects.get(id=eventId)
-    if request.session['userid']:
+    if request.session.get('userid'):
         sf = Sign.objects.filter(userId=request.session['userid'], eventId=eventId)
         if len(sf) >= 1:
             messages.add_message(request, messages.INFO, '请勿重复报名！')
@@ -212,8 +212,8 @@ def teamsign(request, eventId, selectedStr="", other=""):
             s.save()
             messages.add_message(request, messages.INFO, '向数据库添加团队报名信息成功！')
     else:
-        messages.add_message(request, messages.INFO, '请登录！')
-        return HttpResponseRedirect('/authorized/')
+        #messages.add_message(request, messages.INFO, '请登录！')
+        return HttpResponseRedirect('https://accounts.net9.org/api/authorize?client_id=0eHhovG3K1NYkhbnYuYmej1h9wY&redirect_uri=http://"+request.get_host+"/authorized')
     return HttpResponseRedirect('/events/' + eventId + '/');
 
 def design(request, Id):
@@ -232,8 +232,8 @@ def design(request, Id):
                 elif s.exmStatus == 2:
                     messages.add_message(request, messages.INFO, '报名已审核通过，若要取消报名请联系管理员！')
     else:
-        messages.add_message(request, messages.INFO, '请登录！')
-        return HttpResponseRedirect('/authorized/')
+        #messages.add_message(request, messages.INFO, '请登录！')
+        return HttpResponseRedirect('https://accounts.net9.org/api/authorize?client_id=0eHhovG3K1NYkhbnYuYmej1h9wY&redirect_uri=http://"+request.get_host+"/authorized')
 
     return HttpResponseRedirect('/events/' + Id + '/');
 
