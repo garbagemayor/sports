@@ -9,7 +9,7 @@ from HomePage.models import Events, IMG
 def index(request):
     team = IMG.objects.filter(id=1)
     team = team[0]
-    celebrity = IMG.objects.filter(imgtype=1)
+    celebrity = list(IMG.objects.filter(imgtype=1))
     celebrity = celebrity[-1]
     photos = IMG.objects.filter(imgtype=2)
     print team.name

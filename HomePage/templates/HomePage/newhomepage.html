@@ -193,21 +193,13 @@
 						<div class="modal-dialog">
 							<div class="modal-content">
 								<div class="modal-header">
-									<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-										&times;
-									</button>
-									<h4 class="modal-title" id="myModalLabel">
-										模态框（Modal）标题
-									</h4>
+									<h4>男足赛后合影</h4>
 								</div>
 								<div class="modal-body">
-									在这里添加一些文本
+									<img src="/static/img/show5.jpg" alt="" style="width:100%; height:100%;"/>
 								</div>
 								<div class="modal-footer">
-									<button type="button" class="btn btn-default" data-dismiss="modal">关闭
-									</button>
-									<button type="button" class="btn btn-primary">
-										提交更改
+									<button type="button" class="btn btn-primary" data-dismiss="modal">关闭
 									</button>
 								</div>
 							</div><!-- /.modal-content -->
@@ -231,12 +223,12 @@
 						</div>
 					<div class="col-md-12">
 					<div class="col-md-5">
-						<img src="/static/img/celebrity.jpg" alt="" class="img-responsive" style="padding-left:100px;">
+						<img src="{{celebrity.img.url}}" alt="" class="img-responsive" style="padding-left:100px;">
 					</div>
 					<div class="col-md-7">
 						<h3 class="bottom-line">个人简介</h3>
-						<p> 李晨曦，清华大学计算机系2013级博士生，马拉松国家二级运动员，曾创下北京国际马拉松赛全程2小时51分18秒完赛的个人最佳成绩，42.195千米的赛道，平均每千米用时约4分4秒，被称为“清华马拉松第一人”，原虎扑翻译团版主、虎扑新声编辑。</p>
-						<a href="#" class="btn btn-main btn-lg">详情</a>
+						<p> {{celebrity.detail}}</p>
+						<a href="#" disabled="disabled" class="btn btn-main btn-lg">详情</a>
 					</div>
 					</div>
 				</div>

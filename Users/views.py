@@ -228,7 +228,7 @@ def team(request):
         if len(request.POST['name'])>1:
             new_img.detail=request.POST['detail']        
         new_img.save()
-        return render(request, 'HomePage/newHomePage.html')
+        return HttpResponseRedirect("/main/")
     return render(request, 'Users/team.html')
 
 @csrf_exempt
@@ -241,7 +241,7 @@ def celebrity(request):
             imgtype=1
         )
         new_img.save()
-        return render(request, 'HomePage/newHomePage.html')
+        return HttpResponseRedirect("/main/")
     return render(request, 'Users/celebrity.html')
 
 @csrf_exempt
@@ -254,6 +254,7 @@ def photos(request):
             imgtype=2
         )     
         new_img.save()
+        return HttpResponseRedirect("/main/")
     return render(request, 'Users/team.html')
 
 def gets2(i):
