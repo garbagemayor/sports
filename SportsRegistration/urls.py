@@ -59,9 +59,9 @@ urlpatterns = [
                   url(r'^managers/$', Users_view.backend, name='backend'),
                   url(r'^managers/managers/$', Users_view.manager, name='manager'),
                   url(r'^managers/(\d+)/$', Users_view.demanager, name='demanager'),        # 删除管理员
-                  url(r'^managers/team/$', Users_view.demanager, name='team'),
-                  url(r'^managers/celebrity/$', Users_view.demanager, name='celebrity'),
-                  url(r'^managers/photos/$', Users_view.demanager, name='photos'), 
+                  url(r'^managers/team/$', Users_view.team, name='team'),
+                  url(r'^managers/celebrity/$', Users_view.celebrity, name='celebrity'),
+                  url(r'^managers/photos/$', Users_view.photos, name='photos'), 
 
                   # 记录
                   url(r'^record/(\d+)/$', Record_view.recordPage, name='recordpage'),       # 某赛事报名情况

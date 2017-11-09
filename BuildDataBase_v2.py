@@ -1,10 +1,10 @@
-﻿# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 import os
 import django
 from subprocess import Popen
 
-os.remove('db.sqlite3')
+#os.remove('db.sqlite3')
 Popen('py -2 manage.py makemigrations', shell=True).wait()
 Popen('py -2 manage.py migrate --run-syncdb', shell=True).wait()
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "SportsRegistration.settings")

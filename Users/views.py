@@ -13,6 +13,7 @@ from django.views.decorators.csrf import csrf_exempt
 from HomePage.models import Events
 from HomePage.models import Signs as Sign
 from HomePage.models import Users as User
+from HomePage.models import IMG
 
 
 def auth(request):
@@ -181,6 +182,8 @@ def others(request, Id):
 @csrf_exempt
 def manager(request):
     user = User.objects.filter().exclude(authority=0)
+    for u in user:
+        u.auth=getauth(u.authority)
     status = 0
     if request.method == "POST":
         if len(user) < 7:
@@ -211,9 +214,41 @@ def demanager(request, Id):
         messages.add_message(request, messages.INFO, '无此操作权限！')
     return HttpResponseRedirect("/managers/")
 
-def backend(reqeust):
-    return render(request, 'User/backend.html')
+def backend(request):
+    return render(request, 'Users/backend.html')
 
+@csrf_exempt
+def team(request):
+    if request.method == 'POST':
+        
+        name=request.POST['name'],
+        img=request.FILES.get('img'),
+        detail=request.POST['detail']
+
+        print (img.name)
+        print (img.size)
+        
+        f=open(img.name,'wb')                       
+        for line in img.chunks():                  #img.chunks（）为可迭代对象
+            f.write(line)　　　　　　　　
+        f.close()
+            
+        new_img = IMG(
+            name,
+            img=,
+            detail
+            
+        )
+        new_img.save()
+    return render(request, 'Users/team.html')
+
+@csrf_exempt
+def celebrity(request):
+    return render(request, 'Users/team.html')
+
+@csrf_exempt
+def photos(request):
+    return render(request, 'Users/team.html')
 
 def gets2(i):
     if i == 1:
