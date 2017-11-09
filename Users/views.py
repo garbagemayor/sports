@@ -5,16 +5,26 @@ import json
 
 import re
 import requests
+from Users.models import Notification
+from Users.models import NotificationController
+from django.core.paginator import Paginator
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.views.decorators.csrf import csrf_exempt,csrf_protect
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, render_to_response
 from django.views.decorators.csrf import csrf_exempt
+from RegistrationRecord.forms import EmailForm
 
 from HomePage.models import Events
 from HomePage.models import Signs as Sign
 from HomePage.models import Users as User
 from HomePage.models import IMG
+
+from django.db.models.signals import post_save, post_delete
+from django.dispatch import receiver
+import django.utils.timezone as timezone
 
 
 def auth(request):
@@ -24,8 +34,8 @@ def auth(request):
     rr = requests.get('https://accounts.net9.org/api/userinfo?access_token=' + r.json()['access_token'])
     j = rr.json()
     user = User.objects.get_or_create(name=j['user']['name'])
-    if user[1]:
-        User.objects.filter(name=j['user']['name']).update(email=j['user']['email'], mobile=j['user']['mobile'],
+    #  if user[1]:
+    User.objects.filter(name=j['user']['name']).update(email=j['user']['email'], mobile=j['user']['mobile'],
                                                            fullname=j['user']['fullname'],
                                                            classnumber=j['user']['groups'][0])
     request.session['username'] = j['user']['name']
@@ -175,6 +185,7 @@ def others(request, Id):
     info_list = {}
     if user:
         my_infos = User.objects.get(id=Id)
+        info_list['userid'] = Id
         info_list['id'] = my_infos.name
         info_list['name'] = my_infos.fullname
         info_list['mobile'] = my_infos.mobile
@@ -291,7 +302,6 @@ def getauth(i):
     elif i >= 2:
         return "超级管理员"
 
-
 def keep_info(request):
     info_list = {'gender': request.POST['gender'], 'mobile': request.POST['mobile'], 'email': request.POST['email'],
                  'student_number': request.POST['student_number'],
@@ -324,3 +334,89 @@ def legal_certification_id(certification_id):
 def legal_birthday(birthday):
     pattern = "^(199[0-9]|20[0-9]{2})-[0-9]{2}-[0-9]{2}$"
     return re.match(pattern, birthday)
+
+def send_message(request, user_id):
+    if request.method == 'POST':
+        form = EmailForm(request.POST)
+        if form.is_valid():
+            t = form.cleaned_data['title']
+            c = form.cleaned_data['content']
+            Notification.objects.create(sender=request.session['userid'],
+                    target=user_id, title=t, content=c, createTime=timezone.now())
+            return HttpResponseRedirect('/user/' + str(user_id))
+        return render(request, 'RegistrationRecord/edit_email.html', {'form': form})
+    else:
+        form = EmailForm()
+        return render(request, 'RegistrationRecord/edit_email.html', {'form': form})
+
+def notification(request):
+    if request.method == 'POST':
+        checkbox_list=request.POST.getlist("checked")
+        for i in checkbox_list:
+            Notification.objects.filter(id=i).delete()
+        user_id = request.session['userid']
+        record_list = list(Notification.objects.filter(target=user_id))
+        # 分页模块
+        paginator=Paginator(record_list, 10)
+        page = request.GET.get('page')
+        try:
+            record_list = paginator.page(page)
+        except PageNotAnInteger:
+            record_list = paginator.page(1)
+        except EmptyPage:
+            record_list = paginator.page(paginator.num_pages)
+        message_map = {}
+        message_map['record_list'] = record_list
+        return render(request, 'Users/notification.html', message_map)
+    user_id = request.session['userid']
+    record_list = list(Notification.objects.filter(target=user_id))
+    # 分页模块
+    paginator=Paginator(record_list, 10)
+    page = request.GET.get('page')
+    try:
+        record_list = paginator.page(page)
+    except PageNotAnInteger:
+        record_list = paginator.page(1)
+    except EmptyPage:
+        record_list = paginator.page(paginator.num_pages)
+    message_map = {}
+    message_map['record_list'] = record_list
+    return render(request, 'Users/notification.html', message_map)
+
+def notification_count(request):
+    user_id = request.session['userid']
+    obj = NotificationController.objects.get_or_create(userId=user_id)
+    return HttpResponse(obj[0].unReadCount)
+
+def notes(request, note_id):
+    message_map = {}
+    message_map['note'] = Notification.objects.get(id=note_id)
+    request.session['noteid'] = note_id
+    return render(request, 'Users/note.html', message_map)
+
+def mark_as_read(request):
+    note_id = request.session['noteid']
+    user_id = request.session['userid']
+    if not Notification.objects.get(id=note_id).isRead:
+        Notification.objects.filter(id=note_id).update(isRead=True)
+        obj = NotificationController.objects.get(userId=user_id)
+        obj.unReadCount = obj.unReadCount - 1
+        obj.save()
+        return HttpResponse(obj.unReadCount)
+    count = NotificationController.objects.get(userId=user_id).unReadCount
+    return HttpResponse(count)
+
+@receiver(post_save, sender=Notification)
+def incr_notifications_counter(sender, instance, created, **kwargs):
+    obj = NotificationController.objects.get_or_create(userId=instance.target)
+    if not obj[1]:
+        obj[0].unReadCount = obj[0].unReadCount + 1
+        obj[0].save()
+
+@receiver(post_delete, sender=Notification)
+def decr_notifications_counter(sender, instance, **kwargs):
+    if not instance.isRead:
+        obj = NotificationController.objects.get_or_create(userId=instance.target)
+        if not obj[1]:
+            obj[0].unReadCount = obj[0].unReadCount - 1
+            obj[0].save()

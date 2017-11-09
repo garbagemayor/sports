@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from HomePage.models import Events as MEvents
-from HomePage.models import Signs as MSign
-from HomePage.models import Users as MUser
+from HomePage.models import Events
+from HomePage.models import Signs as Sign
+from HomePage.models import Users as User
+from Users.models import Notification
+import django.utils.timezone as timezone
 
 import os,sys
 import re
@@ -21,6 +23,7 @@ from HomePage.models import Events as MEvents
 from HomePage.models import Signs as MSign
 from HomePage.models import Users as MUser
 from .forms import EmailForm
+from django.contrib import messages
 
 
 def toUtf8WithNone(x):
@@ -38,7 +41,9 @@ class RecordItem:
     def __init__(self, record):
         user = MUser.objects.get(id=record.userId)
         userIdSet = set([record.userId])
-
+        self.record = record
+        self.user = User.objects.get(id=record.userId)
+        self.status = record.exmStatus
         self.timeRegStr = record.timeReg.strftime("%Y-%m-%d %H:%M:%S")
         self.name = toUtf8WithNone(user.name)
         self.fullname = toUtf8WithNone(user.fullname)
@@ -70,16 +75,50 @@ class RecordItem:
 def recordPageIndividual(request, event_id):
     if request.method=="POST":
         checkbox_list=request.POST.getlist("checked")
-        for i in checkbox_list:
-            MSign.objects.filter(eventId=event_id,userId=i).update(exmStatus=2)
-        return HttpResponseRedirect('/edit_email/'+str(event_id))
+        form = EmailForm(request.POST)
+        if form.is_valid():
+            t = form.cleaned_data['title']
+            c = form.cleaned_data['content']
+            r = form.cleaned_data['result']
+            for i in checkbox_list:
+                if r:
+                    Sign.objects.filter(eventId=event_id,userId=i).update(exmStatus=2)
+                else:
+                    Sign.objects.filter(eventId=event_id,userId=i).update(exmStatus=3)
+                Notification.objects.create(sender=request.session['userid'],
+                    target=i, title=t, content=c, createTime=timezone.now())
+        messages.add_message(request, messages.INFO, '审核成功')
+        event_id = int(event_id)
+        message_map = {}
+        # 当前赛事的信息
+        event = Events.objects.get(id=event_id)
+        message_map['event'] = event
+        # 当前赛事的所有报名记录
+        record_db_list = list(Sign.objects.filter(eventId=event_id))
+        record_list = []
+        for record_db in record_db_list:
+            ri = RecordItem(record_db)
+            record_list.append(ri)
+        # 分页模块
+        paginator=Paginator(record_list, 10)
+        page = request.GET.get('page')
+        try:
+            record_list = paginator.page(page)
+        except PageNotAnInteger:
+            record_list = paginator.page(1)
+        except EmptyPage:
+            record_list = paginator.page(paginator.num_pages)
+        message_map['record_list'] = record_list
+        form = EmailForm()
+        message_map['form'] = form
+        return render(request, 'RegistrationRecord/registration_record.html', message_map)
     event_id = int(event_id)
     message_map = {}
     # 当前赛事的信息
-    event = MEvents.objects.get(id=event_id)
+    event = Events.objects.get(id=event_id)
     message_map['event'] = event
     # 当前赛事的所有报名记录
-    record_db_list = list(MSign.objects.filter(eventId=event_id))
+    record_db_list = list(Sign.objects.filter(eventId=event_id))
     record_list = []
     for record_db in record_db_list:
         ri = RecordItem(record_db)
@@ -94,6 +133,8 @@ def recordPageIndividual(request, event_id):
     except EmptyPage:
         record_list = paginator.page(paginator.num_pages)
     message_map['record_list'] = record_list
+    form = EmailForm()
+    message_map['form'] = form
     return render(request, 'RegistrationRecord/registration_record.html', message_map)
 
 
@@ -139,7 +180,7 @@ def recordPage(request, event_id):
 def recordDownloadCSV(request, event_id):
     event_id = int(event_id)
     # 生成文件
-    sign_list = list(MSign.objects.filter(eventId=event_id, exmStatus=2))
+    sign_list = list(Sign.objects.filter(eventId=event_id, exmStatus=2))
     abspath = os.path.abspath('.')
     relpath = str("/RegistrationRecord/templates/Temp/")
     if abspath.find("\\"):
@@ -147,7 +188,7 @@ def recordDownloadCSV(request, event_id):
     if not os.path.exists(abspath + relpath):
         os.mkdir(abspath + relpath)
     file_name = str(abspath + relpath + "RecordList.csv")
-    table_header = unicode(MEvents.objects.get(id=event_id).name) + u"的报名表"
+    table_header = unicode(Events.objects.get(id=event_id).name) + u"的报名表"
     table_map = {
         u"姓名": [],
         u"性别": [],
@@ -159,7 +200,7 @@ def recordDownloadCSV(request, event_id):
         u"衣服尺码": [],
     }
     for sign in sign_list:
-        user = MUser.objects.get(id=sign.userId)
+        user = User.objects.get(id=sign.userId)
         table_map[u"姓名"].append(toUtf8WithNone(user.fullname))
         table_map[u"性别"].append(toUtf8WithNone(user.gender))
         table_map[u"学号"].append(toUtf8WithNone(user.student_number))
@@ -351,13 +392,19 @@ def edit_email(request, event_id):
             email_list = []
             for obj in MSign.objects.filter(eventId=event_id, exmStatus=2):
                 email_list.append(MUser.objects.get(id=obj.userId).email)
-            print email_list
             send_status = send_mail(email_title, email_content, EMAIL_FROM,
                                     email_list)
             if send_status:
+                messages.add_message(request, messages.INFO, '发送成功')
                 return HttpResponseRedirect('/record/' + str(event_id))
+            messages.add_message(request, messages.INFO,
+                    '发送失败,请检查目标邮箱是否正确')
             return render(request, 'RegistrationRecord/edit_email.html', {'form': form})
+        messages.add_message(request, messages.INFO, '发送失败,请检查发送内容')
         return render(request, 'RegistrationRecord/edit_email.html', {'form': form})
     else:
+        email_list = []
+        for obj in Sign.objects.filter(eventId=event_id,exmStatus=2):
+            email_list.append(User.objects.get(id=obj.userId).email)
         form = EmailForm()
         return render(request, 'RegistrationRecord/edit_email.html', {'form': form})
