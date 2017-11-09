@@ -211,6 +211,9 @@ def demanager(request, Id):
         messages.add_message(request, messages.INFO, '无此操作权限！')
     return HttpResponseRedirect("/managers/")
 
+def backend(reqeust):
+    return render(request, 'User/backend.html')
+
 
 def gets2(i):
     if i == 1:

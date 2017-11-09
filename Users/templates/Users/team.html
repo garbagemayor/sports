@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}
+<title>系队展示管理页面</title>
+{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+        <h1 style="text-align: center">
+          系队展示管理 <small></small>
+        </h1>
+
+<form class="form-horizontal" role="form" method="post" >
+{% csrf_token %}
+	<div class="form-group">
+		<label class="col-sm-2 control-label">队名</label>
+		<div class="col-sm-5">
+			<input class="form-control" name="name" type="text"  placeholder="赛事名">
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="sr-only" for="inputfile">文件输入</label>
+		<input type="file" id="inputfile">
+	</div>
+	<div class="form-group">
+		<label for="name" class="col-sm-2 control-label">详细资料</label>
+		<div class="col-sm-7">
+			<textarea class="form-control" name="detail" rows="5"></textarea>
+		</div>
+	</div>
+	<div class="form-group">
+		<div class="col-sm-2">
+		</div>
+		<div class="col-sm-10">
+			<button class="btn btn-primary" {% if not request.session.auth %} disabled="disabled"{% endif %} type="submit" >确认添加</button>
+		</div>
+	</div>
+</form>
+
+
+
+{% endblock %}

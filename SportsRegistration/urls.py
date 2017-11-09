@@ -56,7 +56,8 @@ urlpatterns = [
                   url(r'^user/myevents/$', Users_view.my_events, name='my_events'),
 
                   # 管理员
-                  url(r'^managers/$', Users_view.manager, name='manager'),
+                  url(r'^managers/$', Users_view.backend, name='backend'),
+                  url(r'^managers/managers/$', Users_view.manager, name='manager'),
                   url(r'^managers/(\d+)/$', Users_view.demanager, name='demanager'),        # 删除管理员
                   url(r'^managers/team/$', Users_view.demanager, name='team'),
                   url(r'^managers/celebrity/$', Users_view.demanager, name='celebrity'),

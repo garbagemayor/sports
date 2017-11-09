@@ -138,6 +138,8 @@ class Signs(models.Model):
 
 
 class IMG(models.Model):
+    id = models.IntegerField(primary_key=True) 
     img = models.ImageField(upload_to='img')
     name = models.CharField(max_length=20)
     detail = models.TextField(default='暂无')
+    imgtype = models.IntegerField(default=0)
