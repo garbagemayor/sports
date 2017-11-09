@@ -52,6 +52,45 @@ def toUtf8WithNone(x):
 
 @csrf_exempt
 def recordPage(request, event_id):
+    if request.method=="POST":
+        checkbox_list=request.POST.getlist("checked")
+        form = EmailForm(request.POST)
+        if form.is_valid():
+            t = form.cleaned_data['title']
+            c = form.cleaned_data['content']
+            r = form.cleaned_data['result']
+            for i in checkbox_list:
+                if r:
+                    Sign.objects.filter(eventId=event_id,userId=i).update(exmStatus=2)
+                else:
+                    Sign.objects.filter(eventId=event_id,userId=i).update(exmStatus=3)
+                Notification.objects.create(sender=request.session['userid'],
+                    target=i, title=t, content=c, createTime=timezone.now())
+        messages.add_message(request, messages.INFO, '审核成功')
+        event_id = int(event_id)
+        message_map = {}
+        # 当前赛事的信息
+        event = Events.objects.get(id=event_id)
+        message_map['event'] = event
+        # 当前赛事的所有报名记录
+        record_db_list = list(Sign.objects.filter(eventId=event_id))
+        record_list = []
+        for record_db in record_db_list:
+            ri = RecordItem(record_db)
+            record_list.append(ri)
+        # 分页模块
+        paginator=Paginator(record_list, 10)
+        page = request.GET.get('page')
+        try:
+            record_list = paginator.page(page)
+        except PageNotAnInteger:
+            record_list = paginator.page(1)
+        except EmptyPage:
+            record_list = paginator.page(paginator.num_pages)
+        message_map['record_list'] = record_list
+        form = EmailForm()
+        message_map['form'] = form
+        return render(request, 'RegistrationRecord/registration_record.html', message_map)
     event_id = int(event_id)
     message_map = {}
     # 当前赛事的信息
@@ -73,15 +112,8 @@ def recordPage(request, event_id):
     except EmptyPage:
         record_list = paginator.page(paginator.num_pages)
     message_map['record_list'] = record_list
-    if request.method=="POST":
-        checkbox_list=request.POST.getlist("checked")
-        title = Events.objects.get(id=event_id).name
-        content = "已审核"
-        for i in checkbox_list:
-            Sign.objects.filter(eventId=event_id,userId=i).update(exmStatus=2)
-            Notification.objects.create(sender=request.session['userid'],
-                    target=i, title=title, content=content, createTime=timezone.now())
-        return render(request, 'RegistrationRecord/registration_record.html', message_map)
+    form = EmailForm()
+    message_map['form'] = form
     return render(request, 'RegistrationRecord/registration_record.html', message_map)
 
 

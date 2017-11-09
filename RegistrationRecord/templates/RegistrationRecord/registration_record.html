@@ -5,6 +5,8 @@
 {% endblock %}
 
 {% block content %}
+<form action="" method="POST">
+{% csrf_token %}
 <div class="container-fluid">
     <div class="row-fluid">
         <div class="span12">
@@ -16,24 +18,15 @@
                     </small>
                 </h1>
             </div>
-		    <form action="" method="POST">
-		        {% csrf_token %}
                 <button class="btn btn-default" type="button" onclick="location.href='/record_download_csv/{{event.id}}'">
                     下载报名表(.csv)
                 </button>
                 <button class="btn btn-default" type="button" onclick="location.href='/record_download_xlsx/{{event.id}}'">
                     下载报名表(.xlsx)
                 </button>
-        		<button class="btn btn-success" type="submit" style="float:right">
-                    审核通过
+                <button class="btn btn-success" type="button" data-toggle="modal"
+                    data-target="#confirm" style="float:right">审核
                 </button>
-        		<button class="btn btn-success" type="submit" style="float:right">
-                    审核不通过
-                </button>
-                <!-- <button class="btn btn-success" type="submit" -->
-                <!--     onclick="location.href='/edit_email/{{event.id}}'" style="float:right"> -->
-                <!--     发送邮件 -->
-                <!-- </button> -->
                 <button class="btn btn-success" type="button" onclick="location.href='/events/{{event.id}}'" style="float:right">
                     返回比赛页面
                 </button>
@@ -85,13 +78,14 @@
                                 {{record.statusStr}}
                             </td>
                             <td>
+                                {% if record.status == 1 %}
                                 <input type="checkbox" name="checked" value="{{record.record.userId}}"/>
+                                {% endif %}
                             </td>
                         </tr>
                         {% endfor %}
                     </tbody>
                 </table>
-            </form>
         </div>
     </div>
 </div>
@@ -119,4 +113,34 @@
     {% endif %}
 </ul>
 </nav>
+
+<div class="modal fade" id="confirm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" 
+						aria-hidden="true">&times;
+				</button>
+                <h4 class="modal-title" id="myModalLabel" style="text-align:center">
+                    发送审核信息
+                </h4>
+			</div>
+            <div class="modal-body">
+                {% csrf_token %}
+                <div style="text-align: center;">
+                    {{ form.as_p }}
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="form-group">
+                    <div style="text-align: center;">
+                        <button class="btn btn-primary" type="submit">发送</button>
+                    </div>
+                </div>
+            </div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div>
+</form>
+
 {% endblock %}
