@@ -38,6 +38,7 @@ def page(request, Id):
     events.status = events.getStatus()
     events.s2 = gets2(events.getStatus())
     events.s3 = gets3(events.getStatus())
+    request.session['eventsid'] = Id
     return render(request, 'Events/page.html', {'events':events, "maketeam":False})
 
 @csrf_exempt
