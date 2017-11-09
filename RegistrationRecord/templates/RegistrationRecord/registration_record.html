@@ -24,9 +24,16 @@
                 <button class="btn btn-default" type="button" onclick="location.href='/record_download_xlsx/{{event.id}}'">
                     下载报名表(.xlsx)
                 </button>
-        		<button class="btn btn-success" type="submit" onclick="location.href='/edit_email/{{event.id}}'" style="float:right">
-                    审核并发送邮件
+        		<button class="btn btn-success" type="submit" style="float:right">
+                    审核通过
                 </button>
+        		<button class="btn btn-success" type="submit" style="float:right">
+                    审核不通过
+                </button>
+                <!-- <button class="btn btn-success" type="submit" -->
+                <!--     onclick="location.href='/edit_email/{{event.id}}'" style="float:right"> -->
+                <!--     发送邮件 -->
+                <!-- </button> -->
                 <button class="btn btn-success" type="button" onclick="location.href='/events/{{event.id}}'" style="float:right">
                     返回比赛页面
                 </button>
@@ -78,9 +85,7 @@
                                 {{record.statusStr}}
                             </td>
                             <td>
-                                {% if record.status == 1 %}
                                 <input type="checkbox" name="checked" value="{{record.record.userId}}"/>
-                                {% endif %}
                             </td>
                         </tr>
                         {% endfor %}

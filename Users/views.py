@@ -32,8 +32,8 @@ def auth(request):
     rr = requests.get('https://accounts.net9.org/api/userinfo?access_token=' + r.json()['access_token'])
     j = rr.json()
     user = User.objects.get_or_create(name=j['user']['name'])
-    if user[1]:
-        User.objects.filter(name=j['user']['name']).update(email=j['user']['email'], mobile=j['user']['mobile'],
+    #  if user[1]:
+    User.objects.filter(name=j['user']['name']).update(email=j['user']['email'], mobile=j['user']['mobile'],
                                                            fullname=j['user']['fullname'],
                                                            classnumber=j['user']['groups'][0])
     request.session['username'] = j['user']['name']
@@ -315,7 +315,6 @@ def mark_as_read(request):
 
 @receiver(post_save, sender=Notification)
 def incr_notifications_counter(sender, instance, created, **kwargs):
-    # 调用 update_unread_count 方法来更新计数器 +1
     obj = NotificationController.objects.get_or_create(userId=instance.target)
     if not obj[1]:
         obj[0].unReadCount = obj[0].unReadCount + 1
@@ -323,7 +322,6 @@ def incr_notifications_counter(sender, instance, created, **kwargs):
 
 @receiver(post_delete, sender=Notification)
 def decr_notifications_counter(sender, instance, **kwargs):
-    # 当删除的消息还没有被读过时，计数器 -1
     if not instance.isRead:
         obj = NotificationController.objects.get_or_create(userId=instance.target)
         if not obj[1]:

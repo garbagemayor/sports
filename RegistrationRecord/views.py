@@ -21,6 +21,7 @@ from django.core.paginator import Paginator
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.mail import send_mail
 from .forms import EmailForm
+from django.contrib import messages
 
 from django.views.decorators.csrf import csrf_exempt,csrf_protect
 
@@ -51,15 +52,6 @@ def toUtf8WithNone(x):
 
 @csrf_exempt
 def recordPage(request, event_id):
-    if request.method=="POST":
-        checkbox_list=request.POST.getlist("checked")
-        title = Events.objects.get(id=event_id).name
-        content = "已审核"
-        for i in checkbox_list:
-            Sign.objects.filter(eventId=event_id,userId=i).update(exmStatus=2)
-            Notification.objects.create(sender=request.session['userid'],
-                    target=i, title=title, content=content, createTime=timezone.now())
-        return HttpResponseRedirect('/edit_email/'+str(event_id))
     event_id = int(event_id)
     message_map = {}
     # 当前赛事的信息
@@ -81,6 +73,15 @@ def recordPage(request, event_id):
     except EmptyPage:
         record_list = paginator.page(paginator.num_pages)
     message_map['record_list'] = record_list
+    if request.method=="POST":
+        checkbox_list=request.POST.getlist("checked")
+        title = Events.objects.get(id=event_id).name
+        content = "已审核"
+        for i in checkbox_list:
+            Sign.objects.filter(eventId=event_id,userId=i).update(exmStatus=2)
+            Notification.objects.create(sender=request.session['userid'],
+                    target=i, title=title, content=content, createTime=timezone.now())
+        return render(request, 'RegistrationRecord/registration_record.html', message_map)
     return render(request, 'RegistrationRecord/registration_record.html', message_map)
 
 
@@ -287,13 +288,19 @@ def edit_email(request, event_id):
             email_list = []
             for obj in Sign.objects.filter(eventId=event_id,exmStatus=2):
                 email_list.append(User.objects.get(id=obj.userId).email)
-            print email_list
             send_status = send_mail(email_title, email_content, EMAIL_FROM,
                     email_list)
             if send_status:
+                messages.add_message(request, messages.INFO, '发送成功')
                 return HttpResponseRedirect('/record/' + str(event_id))
+            messages.add_message(request, messages.INFO,
+                    '发送失败,请检查目标邮箱是否正确')
             return render(request, 'RegistrationRecord/edit_email.html', {'form': form})
+        messages.add_message(request, messages.INFO, '发送失败,请检查发送内容')
         return render(request, 'RegistrationRecord/edit_email.html', {'form': form})
     else:
+        email_list = []
+        for obj in Sign.objects.filter(eventId=event_id,exmStatus=2):
+            email_list.append(User.objects.get(id=obj.userId).email)
         form = EmailForm()
         return render(request, 'RegistrationRecord/edit_email.html', {'form': form})

@@ -37,6 +37,7 @@ def page(request, Id):
     events.status=events.getStatus()
     events.s2 = gets2(events.getStatus())
     events.s3 = gets3(events.getStatus())
+    request.session['eventsid']=Id
     return render(request, 'Events/page.html', {'events':events})
 
 
@@ -208,9 +209,9 @@ def gets3(i):
         return ""
 
 
-def qrcode(request, Id):
+def qrcode(request):
+    Id = request.session['eventsid']
     url = 'http://' + str(request.get_host()) + '/events/' + Id;
-    print(url)
     code = pyqrcode.create(url)
     code.png('code.png', scale=8)
     image_data = open("code.png", "rb").read()
