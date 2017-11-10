@@ -4,5 +4,7 @@
 Coverage_Python/
 *.sqlite3
 *.png
+*.jpg
 RegistrationRecord/templates/Temp/*
 HomePage/migrations/*
+Users/migrations/*
