@@ -156,6 +156,27 @@ e.teamMin = 2
 e.teamMax = 4
 e.save()
 
+print u'在IMG表中添加对象'
+
+i = 0
+i += 1
+IMG.objects.get_or_create(id=i)
+g = IMG.objects.get(id=i)
+g.img = u'img/team.jpg'
+g.name = u'计算机系女篮'
+g.detail = u'2015年建队，队伍成员不仅有充满活力的本科生，还有球场经验老道的研究生学姐。虽然队史不长，但贵系女篮在马杯赛 事上敢打敢拼，已经成为了一支不容小觑的新生力量。'
+g.imgtype = 0
+g.save()
+
+i += 1
+IMG.objects.get_or_create(id=i)
+g = IMG.objects.get(id=i)
+g.img = u'img/celebrity.jpg'
+g.name = u'李晨曦'
+g.detail = u'李晨曦，清华大学计算机系2013级博士生，马拉松国家二级运动员，曾创下北京国际马拉松赛全程2小时51分18秒完赛的个人最佳成绩，42.195千米的赛道，平均每千米用时约4分4秒，被称为“清华马拉松第一人”，原虎扑翻译团版主、虎扑新声编辑。'
+g.imgtype = 1
+g.save()
+
 print u'添加完成'
 
 del Users, Events, Signs
