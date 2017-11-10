@@ -26,7 +26,7 @@ from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 import django.utils.timezone as timezone
 
-
+"""
 def auth(request):
     r = requests.post(
         'https://accounts.net9.org/api/access_token?client_id=0eHhovG3K1NYkhbnYuYmej1h9wY&client_secret=moK3EkYsQvossfoMwmCd&code='
@@ -40,10 +40,91 @@ def auth(request):
                                                            classnumber=j['user']['groups'][0])
     request.session['username'] = j['user']['name']
     request.session['userid'] = user[0].id
+    print "user = ", user
+    print "session.userid = ", request.session['userid']
     request.session['auth'] = user[0].authority
     messages.add_message(request, messages.INFO, '登陆成功! ' + request.session['username'] + ' 欢迎来到体育赛事报名平台！')
     return HttpResponseRedirect("/events/")
+"""
 
+def auth(request):
+    r = requests.post(
+        'https://accounts.net9.org/api/access_token?client_id=0eHhovG3K1NYkhbnYuYmej1h9wY&client_secret=moK3EkYsQvossfoMwmCd&code='
+        + request.GET['code'])
+    rr = requests.get('https://accounts.net9.org/api/userinfo?access_token=' + r.json()['access_token'])
+    j = rr.json()
+    user = User.objects.filter(name=j['user']['name'])
+    isNewUser = len(user) == 0
+    if isNewUser:
+        User.objects.create(name=j['user']['name'])
+    user = User.objects.get(name=j['user']['name'])
+
+
+    # 先获取一堆信息出来再说
+    user_name = j['user']['name']
+    user_fullname = j['user']['fullname']
+    user_mobile = j['user']['mobile']
+    user_email = j['user']['email']
+    user_birthday = j['user']['birthdate']
+    user_birthday = user_birthday[0:4] + '-' + user_birthday[4:6] + '-' + user_birthday[6:8]
+    user_classnumber = None
+    user_degree = None
+    if j['user']['bachelor']['year'] != None:
+        user_classnumber = u'计算机系' + unicode(str(j['user']['bachelor']['year'])) + u'级' + unicode(str(j['user']['bachelor']['classNumber'])) + u'班'
+        user_degree = 0
+    if j['user']['master']['year'] != None:
+        user_classnumber = u'计算机系研究生' + j['user']['master']['year'] + u'级' + j['user']['master']['classNumber'] + u'班'
+        user_degree = 1
+    if j['user']['doctor']['year'] != None:
+        user_classnumber = u'计算机系博士' + j['user']['doctor']['year'] + u'级' + j['user']['doctor']['classNumber'] + u'班'
+        user_degree = 2
+
+    if isNewUser:
+        # 如果是新用户，把信息填写到数据库
+        user.authority = 0
+        user.name = user_name
+        user.fullname = user_fullname
+        user.mobile = user_mobile
+        user.email = user_email
+        user.birthday = user_birthday
+        user.classnumber = user_classnumber
+        user.degree = user_degree
+        user.save()
+
+    # 然后把信息弄到reqest里面去
+    request.session['username'] = user.name
+    request.session['userid'] = user.id
+    request.session['auth'] = user.authority
+
+    # 如果是老用户，检测信息是否一致
+    isDifferent = False
+    if not isNewUser:
+        if user.name != user_name                       \
+            or user.fullname != user_fullname           \
+            or user.mobile != user_mobile               \
+            or user.email != user_email                 \
+            or user.birthday != user_birthday           \
+            or user.classnumber != user_classnumber     \
+            or user.degree != user_degree:
+            isDifferent = True
+
+    # 弹出各种情况下的消息窗口
+    if isNewUser:
+        messages.add_message(request, messages.INFO,
+                             '登陆成功! ' + request.session['username'] + ' 欢迎来到体育赛事报名平台！')
+        messages.add_message(request, messages.INFO,
+                             '检测到您是首次登录这个系统，请立即补充个人信息否则封号！')
+        return HttpResponseRedirect("/user/profile/")
+    elif isDifferent:
+        messages.add_message(request, messages.INFO,
+                             '登陆成功! ' + request.session['username'] + ' 欢迎来到体育赛事报名平台！')
+        messages.add_message(request, messages.INFO,
+                             '检测到你的个人信息与account9上的信息存在差异，请立即修改否则封号！')
+        return HttpResponseRedirect("/user/profile/")
+    else:
+        messages.add_message(request, messages.INFO,
+                             '登陆成功! ' + request.session['username'] + ' 欢迎来到体育赛事报名平台！')
+        return HttpResponseRedirect("/events/")
 
 def logout(request):
     if request.session['username']:
@@ -61,6 +142,7 @@ def my_information(request):
     info_list = {}
     if user_id:
         my_infos = User.objects.get(id=user_id)
+        print "my_information: user_id = ", user_id
         info_list['id'] = my_infos.name
         info_list['name'] = my_infos.fullname
         info_list['mobile'] = my_infos.mobile
@@ -385,6 +467,7 @@ def notification(request):
 
 def notification_count(request):
     user_id = request.session['userid']
+    print "notification_count: user_id = ", user_id
     obj = NotificationController.objects.get_or_create(userId=user_id)
     return HttpResponse(obj[0].unReadCount)
 
