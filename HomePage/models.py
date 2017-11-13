@@ -136,6 +136,7 @@ class Signs(models.Model):
         print u'    ' + u'prize = ' + unicode(self.prize)
         print u'}'
 
+
 class IMG(models.Model):
     id = models.IntegerField(primary_key=True) 
     img = models.ImageField(upload_to='img')

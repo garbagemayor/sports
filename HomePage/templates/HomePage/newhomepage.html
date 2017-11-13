@@ -340,6 +340,12 @@
 		<script src="/static/js/owl.carousel.js"></script>
 		<script src="/static/js/jquery.ajaxchimp.min.js"></script>
 		<script src="/static/js/script.js"></script>
-		<script 
+		<script src="/static/js/device.min.js"></script>
+        <script>
+            if (device.mobile())
+            {
+                window.location.href = "/m/main";
+            }
+        </script>
 	</body>
 </html>

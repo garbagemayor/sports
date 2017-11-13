@@ -28,10 +28,11 @@ from RegistrationRecord import views as Record_view
 
 urlpatterns = [
                   url(r'^admin/', admin.site.urls),
-    
+
                   # 主页
                   url(r'^$',  RedirectView.as_view(url='/main/')),
                   url(r'^main/$', HomePage_view.index, name='homepage'),
+                  url(r'^m/main/$', HomePage_view.m_index, name='m_homepage'),
 
                   #赛事
                   url(r'^events/$', Events_view.index, name='eventslist'),                          #所有赛事页

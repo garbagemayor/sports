@@ -9,7 +9,7 @@ from Users.models import Notification
 from Users.models import NotificationController
 from django.core.paginator import Paginator
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.views.decorators.csrf import csrf_exempt,csrf_protect
+from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponse, HttpResponseRedirect
@@ -36,8 +36,8 @@ def auth(request):
     user = User.objects.get_or_create(name=j['user']['name'])
     #  if user[1]:
     User.objects.filter(name=j['user']['name']).update(email=j['user']['email'], mobile=j['user']['mobile'],
-                                                           fullname=j['user']['fullname'],
-                                                           classnumber=j['user']['groups'][0])
+                                                       fullname=j['user']['fullname'],
+                                                       classnumber=j['user']['groups'][0])
     request.session['username'] = j['user']['name']
     request.session['userid'] = user[0].id
     request.session['auth'] = user[0].authority
@@ -177,7 +177,8 @@ def my_events(request):
         return render(request, 'Events/myevents.html', {'events_list': events_list})
     else:
         messages.add_message(request, messages.INFO, '请登录！')
-        return HttpResponseRedirect("https://accounts.net9.org/api/authorize?client_id=0eHhovG3K1NYkhbnYuYmej1h9wY&redirect_uri=http://"+request.get_host()+"/authorized")
+        return HttpResponseRedirect(
+            "https://accounts.net9.org/api/authorize?client_id=0eHhovG3K1NYkhbnYuYmej1h9wY&redirect_uri=http://" + request.get_host() + "/authorized")
 
 
 def others(request, Id):
@@ -209,7 +210,7 @@ def others(request, Id):
 def manager(request):
     user = User.objects.filter().exclude(authority=0)
     for u in user:
-        u.auth=getauth(u.authority)
+        u.auth = getauth(u.authority)
     status = 0
     if request.method == "POST":
         if len(user) < 7:
@@ -240,22 +241,25 @@ def demanager(request, Id):
         messages.add_message(request, messages.INFO, '无此操作权限！')
     return HttpResponseRedirect("/managers/")
 
+
 def backend(request):
     return render(request, 'Users/backend.html')
+
 
 @csrf_exempt
 def team(request):
     if request.method == 'POST':
         new_img = IMG.objects.get(id=1)
-        if len(request.POST['name'])>1:
-            new_img.name=request.POST['name']
+        if len(request.POST['name']) > 1:
+            new_img.name = request.POST['name']
         if request.FILES.get('img'):
-            new_img.img=request.FILES.get('img')
-        if len(request.POST['name'])>1:
-            new_img.detail=request.POST['detail']        
+            new_img.img = request.FILES.get('img')
+        if len(request.POST['name']) > 1:
+            new_img.detail = request.POST['detail']
         new_img.save()
         return HttpResponseRedirect("/main/")
     return render(request, 'Users/team.html')
+
 
 @csrf_exempt
 def celebrity(request):
@@ -270,6 +274,7 @@ def celebrity(request):
         return HttpResponseRedirect("/main/")
     return render(request, 'Users/celebrity.html')
 
+
 @csrf_exempt
 def photos(request):
     if request.method == 'POST':
@@ -278,10 +283,11 @@ def photos(request):
             img=request.FILES.get('img'),
             detail=request.POST['detail'],
             imgtype=2
-        )     
+        )
         new_img.save()
         return HttpResponseRedirect("/main/")
     return render(request, 'Users/team.html')
+
 
 def gets2(i):
     if i == 1:
@@ -301,6 +307,7 @@ def getauth(i):
         return "管理员"
     elif i >= 2:
         return "超级管理员"
+
 
 def keep_info(request):
     info_list = {'gender': request.POST['gender'], 'mobile': request.POST['mobile'], 'email': request.POST['email'],
@@ -335,6 +342,7 @@ def legal_birthday(birthday):
     pattern = "^(199[0-9]|20[0-9]{2})-[0-9]{2}-[0-9]{2}$"
     return re.match(pattern, birthday)
 
+
 def send_message(request, user_id):
     if request.method == 'POST':
         form = EmailForm(request.POST)
@@ -342,22 +350,23 @@ def send_message(request, user_id):
             t = form.cleaned_data['title']
             c = form.cleaned_data['content']
             Notification.objects.create(sender=request.session['userid'],
-                    target=user_id, title=t, content=c, createTime=timezone.now())
+                                        target=user_id, title=t, content=c, createTime=timezone.now())
             return HttpResponseRedirect('/user/' + str(user_id))
         return render(request, 'RegistrationRecord/edit_email.html', {'form': form})
     else:
         form = EmailForm()
         return render(request, 'RegistrationRecord/edit_email.html', {'form': form})
 
+
 def notification(request):
     if request.method == 'POST':
-        checkbox_list=request.POST.getlist("checked")
+        checkbox_list = request.POST.getlist("checked")
         for i in checkbox_list:
             Notification.objects.filter(id=i).delete()
         user_id = request.session['userid']
         record_list = list(Notification.objects.filter(target=user_id))
         # 分页模块
-        paginator=Paginator(record_list, 10)
+        paginator = Paginator(record_list, 10)
         page = request.GET.get('page')
         try:
             record_list = paginator.page(page)
@@ -371,7 +380,7 @@ def notification(request):
     user_id = request.session['userid']
     record_list = list(Notification.objects.filter(target=user_id))
     # 分页模块
-    paginator=Paginator(record_list, 10)
+    paginator = Paginator(record_list, 10)
     page = request.GET.get('page')
     try:
         record_list = paginator.page(page)
@@ -383,16 +392,19 @@ def notification(request):
     message_map['record_list'] = record_list
     return render(request, 'Users/notification.html', message_map)
 
+
 def notification_count(request):
     user_id = request.session['userid']
     obj = NotificationController.objects.get_or_create(userId=user_id)
     return HttpResponse(obj[0].unReadCount)
+
 
 def notes(request, note_id):
     message_map = {}
     message_map['note'] = Notification.objects.get(id=note_id)
     request.session['noteid'] = note_id
     return render(request, 'Users/note.html', message_map)
+
 
 def mark_as_read(request):
     note_id = request.session['noteid']
@@ -406,12 +418,14 @@ def mark_as_read(request):
     count = NotificationController.objects.get(userId=user_id).unReadCount
     return HttpResponse(count)
 
+
 @receiver(post_save, sender=Notification)
 def incr_notifications_counter(sender, instance, created, **kwargs):
     obj = NotificationController.objects.get_or_create(userId=instance.target)
     if not obj[1]:
         obj[0].unReadCount = obj[0].unReadCount + 1
         obj[0].save()
+
 
 @receiver(post_delete, sender=Notification)
 def decr_notifications_counter(sender, instance, **kwargs):
