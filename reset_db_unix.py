@@ -174,7 +174,7 @@ e.timeEvnEn = t2
 e.teamMode = 1
 e.teamMin = 2
 e.teamMax = 4
-t.maxRegCnt = 5
+e.maxRegCnt = 5
 e.save()
 
 print u'在IMG表中添加对象'
