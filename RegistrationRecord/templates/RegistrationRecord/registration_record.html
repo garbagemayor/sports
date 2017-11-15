@@ -34,8 +34,13 @@
                     <thead>
                        <tr>
                             <th>
-                                时间
+                                报名时间
                             </th>
+                           {% if event.teamMode == 1 %}
+                           <th>
+                               队长
+                           </th>
+                           {% endif %}
                             <th>
                                 用户名
                             </th>
@@ -62,6 +67,11 @@
                             <td>
                                 {{ record.timeRegStr }}
                             </td>
+                            {% if event.teamMode == 1 %}
+                            <th>
+                                {{ record.captainFullname }}
+                            </th>
+                            {% endif %}
                             <td>
                                 <a href="/user/{{record.user.id}}">{{ record.name | linebreaksbr }}</a>
                             </td>
@@ -79,7 +89,7 @@
                             </td>
                             <td>
                                 {% if record.status == 1 %}
-                                <input type="checkbox" name="checked" value="{{record.record.userId}}"/>
+                                <input type="checkbox" name="checked" value="{{record.userIdSet}}"/>
                                 {% endif %}
                             </td>
                         </tr>
