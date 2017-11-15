@@ -108,17 +108,6 @@ e.save()
 i += 1
 Events.objects.get_or_create(id=i)
 e = Events.objects.get(id=i)
-e.name = u'正在报名的个人比赛'
-e.timeRegSt = t1
-e.timeRegEn = t2
-e.timeEvnSt = t2
-e.timeEvnEn = t2
-e.teamMode = 0
-e.save()
-
-i += 1
-Events.objects.get_or_create(id=i)
-e = Events.objects.get(id=i)
 e.name = u'报名截止的个人比赛'
 e.timeRegSt = t1
 e.timeRegEn = t1
@@ -152,6 +141,30 @@ e.save()
 i += 1
 Events.objects.get_or_create(id=i)
 e = Events.objects.get(id=i)
+e.name = u'正在报名的个人比赛(1)'
+e.timeRegSt = t1
+e.timeRegEn = t2
+e.timeEvnSt = t2
+e.timeEvnEn = t2
+e.teamMode = 0
+e.maxRegCnt = 30
+e.save()
+
+i += 1
+Events.objects.get_or_create(id=i)
+e = Events.objects.get(id=i)
+e.name = u'正在报名的个人比赛(2)'
+e.timeRegSt = t1
+e.timeRegEn = t2
+e.timeEvnSt = t2
+e.timeEvnEn = t2
+e.teamMode = 0
+e.maxRegCnt = 1
+e.save()
+
+i += 1
+Events.objects.get_or_create(id=i)
+e = Events.objects.get(id=i)
 e.name = u'正在报名的团队比赛，2~4人'
 e.timeRegSt = t1
 e.timeRegEn = t2
@@ -160,6 +173,7 @@ e.timeEvnEn = t2
 e.teamMode = 1
 e.teamMin = 2
 e.teamMax = 4
+e.maxRegCnt = 5
 e.save()
 
 print u'在IMG表中添加对象'

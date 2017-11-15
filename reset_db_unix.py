@@ -14,6 +14,7 @@ from HomePage.models import Users, Events, Signs
 import django.utils.timezone as timezone
 import datetime
 
+
 print u'在Users表中添加对象'
 
 i = 0
@@ -22,6 +23,7 @@ Users.objects.get_or_create(id=i)
 u = Users.objects.get(id=i)
 u.name = u'nodgd'
 u.fullname = u'董又铭'
+u.student_number = u'2015011294'
 u.authority = 2
 u.save()
 
@@ -30,6 +32,7 @@ Users.objects.get_or_create(id=i)
 u = Users.objects.get(id=i)
 u.name = u'tyt123'
 u.fullname = u'谭懿峻'
+u.student_number = u'2015011292'
 u.authority = 2
 u.save()
 
@@ -38,6 +41,7 @@ Users.objects.get_or_create(id=i)
 u = Users.objects.get(id=i)
 u.name = u'luoy15'
 u.fullname = u'罗华一'
+u.student_number = u'2015011305'
 u.authority = 2
 u.save()
 
@@ -46,6 +50,7 @@ Users.objects.get_or_create(id=i)
 u = Users.objects.get(id=i)
 u.name = u'yangjy15'
 u.fullname = u'杨跻云'
+u.student_number = u'2015011298'
 u.authority = 2
 u.save()
 
@@ -54,6 +59,7 @@ Users.objects.get_or_create(id=i)
 u = Users.objects.get(id=i)
 u.name = u'userA'
 u.fullname = u'用户A'
+u.student_number = u'123'
 u.authority = 1
 u.save()
 
@@ -62,6 +68,7 @@ Users.objects.get_or_create(id=i)
 u = Users.objects.get(id=i)
 u.name = u'userB'
 u.fullname = u'用户B'
+u.student_number = u'233'
 u.authority = 1
 u.save()
 
@@ -93,17 +100,6 @@ Events.objects.get_or_create(id=i)
 e = Events.objects.get(id=i)
 e.name = u'等待报名的个人比赛'
 e.timeRegSt = t2
-e.timeRegEn = t2
-e.timeEvnSt = t2
-e.timeEvnEn = t2
-e.teamMode = 0
-e.save()
-
-i += 1
-Events.objects.get_or_create(id=i)
-e = Events.objects.get(id=i)
-e.name = u'正在报名的个人比赛'
-e.timeRegSt = t1
 e.timeRegEn = t2
 e.timeEvnSt = t2
 e.timeEvnEn = t2
@@ -146,6 +142,30 @@ e.save()
 i += 1
 Events.objects.get_or_create(id=i)
 e = Events.objects.get(id=i)
+e.name = u'正在报名的个人比赛(1)'
+e.timeRegSt = t1
+e.timeRegEn = t2
+e.timeEvnSt = t2
+e.timeEvnEn = t2
+e.teamMode = 0
+e.maxRegCnt = 30
+e.save()
+
+i += 1
+Events.objects.get_or_create(id=i)
+e = Events.objects.get(id=i)
+e.name = u'正在报名的个人比赛(2)'
+e.timeRegSt = t1
+e.timeRegEn = t2
+e.timeEvnSt = t2
+e.timeEvnEn = t2
+e.teamMode = 0
+e.maxRegCnt = 1
+e.save()
+
+i += 1
+Events.objects.get_or_create(id=i)
+e = Events.objects.get(id=i)
 e.name = u'正在报名的团队比赛，2~4人'
 e.timeRegSt = t1
 e.timeRegEn = t2
@@ -154,6 +174,7 @@ e.timeEvnEn = t2
 e.teamMode = 1
 e.teamMin = 2
 e.teamMax = 4
+t.maxRegCnt = 5
 e.save()
 
 print u'在IMG表中添加对象'
