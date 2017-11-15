@@ -138,8 +138,17 @@ class Signs(models.Model):
 
 
 class IMG(models.Model):
-    id = models.IntegerField(primary_key=True) 
-    img = models.ImageField(upload_to='img')
-    name = models.CharField(max_length=20)
-    detail = models.TextField(default='暂无')
-    imgtype = models.IntegerField(default=0)
+    id = models.IntegerField(primary_key=True)                  # 数据库中的编号
+    img = models.ImageField(upload_to='img')                    # 图片本身，本质上是图片文件在HomePage/static/media/下的相对路径
+    name = models.CharField(max_length=20)                      # 一坨用来显示在首页上的文字
+    detail = models.TextField(default='暂无')                    # 另一坨用来显示在首页上的文字
+    imgtype = models.IntegerField(default=0)                    # 不知道这是什么
+
+    def printAll(self):
+        print u'<class HomePage.models.IMG> {'
+        print u'    ' + u'id = ' + unicode(self.id)
+        print u'    ' + u'img = ' + unicode(self.img)
+        print u'    ' + u'name = ' + unicode(self.name)
+        print u'    ' + u'detail = ' + unicode(self.detail)
+        print u'    ' + u'imgtype = ' + unicode(self.imgtype)
+        print u'}'
