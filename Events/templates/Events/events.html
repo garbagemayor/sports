@@ -28,6 +28,9 @@
                         项目
                     </th>
                     <th>
+                        报名截止时间
+                    </th>
+                    <th>
                         比赛时间
                     </th>
                     <th>
@@ -45,10 +48,16 @@
                         {{line.name}}
                     </td>
                     <td>
-                        {{line.date}}
+                        {{line.timeRegEnStr}}
+                    </td>
+                    <td>
+                        {{line.timeEvnStStr}}
                     </td>
                     <td>
                         {{line.s2}}
+                        {% if line.maxRegCnt == line.nowRegCnt %}
+                        <font color="red">（报名已满）</font>
+                        {% endif %}
                     </td>
                 </tr>
                 {% endfor %}
