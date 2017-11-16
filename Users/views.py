@@ -15,7 +15,6 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, render_to_response
 from django.views.decorators.csrf import csrf_exempt
-from RegistrationRecord.forms import EmailForm
 
 from HomePage.models import Events
 from HomePage.models import Signs as Sign
@@ -25,6 +24,7 @@ from HomePage.models import IMG
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 import django.utils.timezone as timezone
+from Users.forms import EditForm
 
 """
 def auth(request):
@@ -142,7 +142,6 @@ def my_information(request):
     info_list = {}
     if user_id:
         my_infos = User.objects.get(id=user_id)
-        print "my_information: user_id = ", user_id
         info_list['id'] = my_infos.name
         info_list['name'] = my_infos.fullname
         info_list['mobile'] = my_infos.mobile
@@ -263,9 +262,20 @@ def my_events(request):
 
 
 def others(request, Id):
+    # POST的时候就发出
+    if request.method == "POST":
+        form = EditForm(request.POST)
+        if form.is_valid():
+            t = form.cleaned_data['title']
+            c = form.cleaned_data['content']
+            Notification.objects.create(sender=request.session['username'], senderId=request.session['userid'],
+                                        target=Id, title=t, content=c, createTime=timezone.now())
     user = User.objects.filter(id=Id)
-    info_list = {}
     if user:
+        # 没有POST就搞一个新的form
+        form = EditForm()
+        info_list = {}
+        info_list['form'] = form
         my_infos = User.objects.get(id=Id)
         info_list['userid'] = Id
         info_list['id'] = my_infos.name
@@ -417,20 +427,6 @@ def legal_birthday(birthday):
     pattern = "^(199[0-9]|20[0-9]{2})-[0-9]{2}-[0-9]{2}$"
     return re.match(pattern, birthday)
 
-def send_message(request, user_id):
-    if request.method == 'POST':
-        form = EmailForm(request.POST)
-        if form.is_valid():
-            t = form.cleaned_data['title']
-            c = form.cleaned_data['content']
-            Notification.objects.create(sender=request.session['userid'],
-                    target=user_id, title=t, content=c, createTime=timezone.now())
-            return HttpResponseRedirect('/user/' + str(user_id))
-        return render(request, 'RegistrationRecord/edit_email.html', {'form': form})
-    else:
-        form = EmailForm()
-        return render(request, 'RegistrationRecord/edit_email.html', {'form': form})
-
 def notification(request):
     if request.method == 'POST':
         checkbox_list=request.POST.getlist("checked")
@@ -467,7 +463,6 @@ def notification(request):
 
 def notification_count(request):
     user_id = request.session['userid']
-    print "notification_count: user_id = ", user_id
     obj = NotificationController.objects.get_or_create(userId=user_id)
     return HttpResponse(obj[0].unReadCount)
 

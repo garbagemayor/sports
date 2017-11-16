@@ -5,6 +5,9 @@
 {% endblock %}
 
 {% block content %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+<script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+<form method="post" novalidate>
 <div class="container-fluid">
   <div class="row-fluid">
     <div class="span12">
@@ -93,13 +96,47 @@
     </div>
     {% if request.session.auth > 0 %}		  
     <div style="text-align: center;">
-		<button class="btn btn-success" type="submit"
-                                  onclick="location.href='/send_message/{{userid}}'" style="center">发送站内信</button>
+        <button class="btn btn-success" type="button" data-toggle="modal"
+                data-target="#edit_email" style="center">发站内信
+        </button>
     </div>
     {% endif %}
   </div>
 </div>
 
 
+<div class="modal fade" id="edit_email" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">&times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel" style="text-align:center">
+                    发站内信
+                </h4>
+            </div>
+            <div class="modal-body">
+                {% csrf_token %}
+                {{ form.as_p }}
+            </div>
+            <div class="modal-footer">
+                <div class="form-group">
+                    <div style="text-align: center;">
+                        <button class="btn btn-primary" type="submit">发送</button>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+</form>
+<!-- Start simple MDE -->
+<script>
+    var simplemde = new SimpleMDE({
+        element: document.getElementById("editor"),
+        autofocus: true
+    });
+</script>
 
 {% endblock %}
