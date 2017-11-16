@@ -134,7 +134,7 @@ def recordPage(request, event_id):
 
 # 文件传输迭代器
 def file_iterator(file_name, chunk_size=512):
-    with open(file_name) as f:
+    with open(file_name, "rb") as f:
         while True:
             c = f.read(chunk_size)
             if c:
@@ -185,7 +185,7 @@ def recordDownloadCSV(request, event_id):
         if event.teamMode == 0:
             table_map[u"姓名"].append(toUtf8WithNone(record.fullname.replace("\n", "|")))
         else:
-            table_map[u"队长"].append(toUtf8WithNone(record.captainFullName))
+            table_map[u"队长"].append(toUtf8WithNone(record.captainFullname))
             table_map[u"队员"].append(toUtf8WithNone(record.fullname.replace("\n", "|")))
         table_map[u"性别"].append(toUtf8WithNone(record.gender.replace("\n", "|")))
         table_map[u"学号"].append(toUtf8WithNone(record.student_number.replace("\n", "|")))
@@ -202,6 +202,17 @@ def recordDownloadCSV(request, event_id):
     response['Content-Type'] = 'application/octet-stream'
     response['Content-Disposition'] = 'attachment;filename="{0}"'.format(file_name)
     return response
+
+
+def getUnicodeLength(str):
+    len = 0
+    for ch in str:
+        try:
+            ch.decode('ascii')
+            len += 1
+        except (UnicodeDecodeError, UnicodeEncodeError), e:
+            len += 2
+    return len
 
 def writeExcelFile(teamMode ,table_header, record_list, file_name):
     # 打开一个Excel工作簿，新建一个sheet，如果对一个单元格重复操作，会引发异常，所以加上参数cell_overwrite_ok=True
@@ -237,40 +248,45 @@ def writeExcelFile(teamMode ,table_header, record_list, file_name):
     # 写表格标题，单元格合并的信息
     # sheet.write_merge(x, x + m, y, w + n, string, sytle)
     # x表示行，y表示列，m表示跨行个数，n表示跨列个数，string表示要写入的单元格内容，style表示单元格样式。其中，x，y，w，h，都是以0开始计算的。
-    sheet.merge_range(0, 0, 0, len(fields), data=table_header)
+    sheet.merge_range(0, 0, 0, len(fields) - 1, data=table_header)
     # sheet.write(0, 0 + 1, 0, 0 + 9, table_header)
 
+    # 统计列宽
+    column_width = []
+    for j in range(len(fields)):
+        column_width.append(len(fields[j]))
 
     # 写入数据
     n = len(record_list)
     for i in range(n):
-        j = 0           # 编号
-        sheet.write(i + 2, j, toUtf8WithNone(i))
-        if teamMode == 0:
-            j += 1      # 姓名
-            sheet.write(i + 2, j, record_list[i].fullname)
-        else:
-            j += 1      # 队长
-            sheet.write(i + 2, j, record_list[i].captainFullName)
-            j += 1      # 队员
-            sheet.write(i + 2, j, record_list[i].fullname)
-        j += 1          # 性别
-        sheet.write(i + 2, j, record_list[i].gender)
-        j += 1          # 学号
-        sheet.write(i + 2, j, record_list[i].student_number)
-        j += 1          # 身份证号
-        sheet.write(i + 2, j, record_list[i].certification_id)
-        j += 1          # 班级
-        sheet.write(i + 2, j, record_list[i].classnumber)
-        j += 1          # 手机号
-        sheet.write(i + 2, j, record_list[i].mobile)
-        j += 1          # 邮箱
-        sheet.write(i + 2, j, record_list[i].email)
-        j += 1          # 衣服尺码
-        sheet.write(i + 2, j, record_list[i].cloth_size)
+        row_data = [
+            toUtf8WithNone(i),
+            record_list[i].fullname.replace("\n", ","),
+            record_list[i].gender.replace("\n", ","),
+            record_list[i].student_number.replace("\n", ","),
+            record_list[i].certification_id.replace("\n", ","),
+            record_list[i].classnumber.replace("\n", ","),
+            record_list[i].mobile.replace("\n", ","),
+            record_list[i].email.replace("\n", ","),
+            record_list[i].cloth_size.replace("\n", ","),
+        ]
+        if teamMode == 1:
+            row_data.insert(1, record_list[i].captainFullname)
+        for j in range(len(fields)):
+            sheet.write(i + 2, j, row_data[j])
+            if column_width[j] < getUnicodeLength(row_data[j]):
+                column_width[j] = getUnicodeLength(row_data[j])
+
+    # 调整列宽
+    for j in range(len(fields)):
+        sheet.set_column(firstcol=j, lastcol=j, width=column_width[j] + 2)
 
     # 保存文件
-    workbook.close()
+    try:
+        workbook.close()
+        return True
+    except IOError, e:
+        return False
 
 def recordDownloadXLSX(request, event_id):
     event_id = int(event_id)
@@ -292,7 +308,10 @@ def recordDownloadXLSX(request, event_id):
     file_name = abspath + relpath + "RecordList.xlsx"
     # 生成文件
     table_header = unicode(Events.objects.get(id=event_id).name) + u"的报名表"
-    writeExcelFile(event.teamMode ,table_header, record_list, file_name)
+    r = writeExcelFile(event.teamMode ,table_header, record_list, file_name)
+    if not r:   # 生成文件失败了
+        messages.add_message(request, messages.INFO,
+                             '生成报名表文件失败，可能是有个逗比在服务器上瞎搞')
     # 传输下载
     response = StreamingHttpResponse(file_iterator(file_name))
     response['Content-Type'] = 'application/octet-stream'
