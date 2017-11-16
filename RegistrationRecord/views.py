@@ -19,7 +19,7 @@ from django.views.decorators.csrf import csrf_exempt
 from HomePage.models import Events
 from HomePage.models import Signs
 from HomePage.models import Users
-from .forms import EmailForm
+from RegistrationRecord.forms import EditForm
 from django.contrib import messages
 
 
@@ -90,22 +90,20 @@ def recordPage(request, event_id):
     event_id = int(event_id)
     if request.method=="POST":
         checkbox_list=request.POST.getlist("checked")
-        form = EmailForm(request.POST)
+        form = EditForm(request.POST)
         if form.is_valid():
             t = form.cleaned_data['title']
             c = form.cleaned_data['content']
             r = form.cleaned_data['result']
             for ii in checkbox_list:
-                print ii, type(ii)
                 for iii in re.findall(r'\d+', ii):
                     i = int(iii)
-                    print i, type(i)
                     if r:
                         Signs.objects.filter(eventId=event_id,userId=i).update(exmStatus=2)
                     else:
                         Signs.objects.filter(eventId=event_id,userId=i).update(exmStatus=3)
-                    Notification.objects.create(sender=request.session['userid'],
-                        target=i, title=t, content=c, createTime=timezone.now())
+                    Notification.objects.create(sender=request.session['username'], senderId=request.session['userid'],
+                                                target=i, title=t, content=c, createTime=timezone.now())
         messages.add_message(request, messages.INFO, '审核成功')
     # 当前赛事的信息
     event = Events.objects.get(id=event_id)
@@ -124,7 +122,7 @@ def recordPage(request, event_id):
         record_list = paginator.page(1)
     except EmptyPage:
         record_list = paginator.page(paginator.num_pages)
-    form = EmailForm()
+    form = EditForm()
     # 信息柔和在一起
     message_map = {}
     message_map['event'] = event
@@ -318,30 +316,3 @@ def recordDownloadXLSX(request, event_id):
     response['Content-Disposition'] = 'attachment;filename="{0}"'.format(file_name)
     return response
 
-
-def edit_email(request, event_id):
-    if request.method == 'POST':
-        form = EmailForm(request.POST)
-        if form.is_valid():
-            email_title = form.cleaned_data['title']
-            email_content = form.cleaned_data['content']
-            EMAIL_FROM = '924486024@qq.com'
-            email_list = []
-            for obj in Signs.objects.filter(eventId=event_id, exmStatus=2):
-                email_list.append(Users.objects.get(id=obj.userId).email)
-            send_status = send_mail(email_title, email_content, EMAIL_FROM,
-                                    email_list)
-            if send_status:
-                messages.add_message(request, messages.INFO, '发送成功')
-                return HttpResponseRedirect('/record/' + str(event_id))
-            messages.add_message(request, messages.INFO,
-                    '发送失败,请检查目标邮箱是否正确')
-            return render(request, 'RegistrationRecord/edit_email.html', {'form': form})
-        messages.add_message(request, messages.INFO, '发送失败,请检查发送内容')
-        return render(request, 'RegistrationRecord/edit_email.html', {'form': form})
-    else:
-        email_list = []
-        for obj in Signs.objects.filter(eventId=event_id,exmStatus=2):
-            email_list.append(Users.objects.get(id=obj.userId).email)
-        form = EmailForm()
-        return render(request, 'RegistrationRecord/edit_email.html', {'form': form})

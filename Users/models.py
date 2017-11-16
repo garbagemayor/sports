@@ -8,7 +8,8 @@ import django.utils.timezone as timezone
 # Create your models here.
 class Notification(models.Model):
     id = models.IntegerField(primary_key=True)                  # 数据库中的编号
-    sender = models.IntegerField() # 发信用户id
+    sender = models.CharField(max_length=256)
+    senderId = models.IntegerField() # 发信用户id
     target = models.IntegerField()                     # 用户的数据库编号
     title = models.CharField(max_length=256)         # 站内信标题
     content = models.TextField(default=u"暂无简介")             # 信息

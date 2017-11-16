@@ -5,8 +5,12 @@
 {% endblock %}
 
 {% block content %}
-<form action="" method="POST">
-{% csrf_token %}
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-markdown/2.10.0/js/bootstrap-markdown.js"></script>-->
+<!--<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-markdown/2.10.0/css/bootstrap-markdown.min.css" rel="stylesheet" />-->
+<!-- Include the required files -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+<script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+<form method="POST" novalidate>
 <div class="container-fluid">
     <div class="row-fluid">
         <div class="span12">
@@ -152,5 +156,12 @@
 	</div><!-- /.modal-dialog -->
 </div>
 </form>
+
+<!-- Start simple MDE -->
+<script>
+    var simplemde = new SimpleMDE({
+        element: document.getElementById("editor")
+    });
+</script>
 
 {% endblock %}
