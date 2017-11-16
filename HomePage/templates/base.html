@@ -9,7 +9,7 @@
     <meta name="author" content="">
     <link rel="icon" href="">
 
-      {% block title %}
+      {% block Title %}
       <title>Base Index</title>
       {% endblock %}
 
@@ -34,8 +34,6 @@
 	<link href="/static/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
     {% load staticfiles %}
 
-    <link href="/static/css/mix/reset.css" rel="stylesheet"/>
-    <link href="/static/css/mix/style.css" rel="stylesheet"/>
 	{% block extracss %}{% endblock %}
     {% load staticfiles %}
 
@@ -46,6 +44,19 @@
 		
 		{% include 'header.html' %}
 		
+	<!--<div class="page-header">
+        <h1 style="text-align: center">
+          <h1>
+		  {% block title %}
+		  
+			{% endblock %}
+			</h1> <small>
+			{% block vicetitle %}
+		  
+			{% endblock %}
+			</small>
+        </h1>
+	</div>	-->
         <div class="container" style="padding:0px;width:90%">
 			<div class="row">
                     <div class="col-md-3" style="padding-top:50px">
@@ -212,38 +223,7 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-	<script src="/static/js/mixitup.min.js"></script>
-
-        <script>
-            var containerEl = document.querySelector('.container');
-
-            var mixer = mixitup(containerEl, {
-                animation: {
-                    effects: 'fade scale stagger(50ms)' // Set a 'stagger' effect for the loading animation
-                },
-                load: {
-                    filter: 'none' // Ensure all targets start from hidden (i.e. display: none;)
-                }
-            });
-
-            // Add a class to the container to remove 'visibility: hidden;' from targets. This
-            // prevents any flickr of content before the page's JavaScript has loaded.
-
-            containerEl.classList.add('mixitup-ready');
-
-            // Show all targets in the container
-
-            mixer.show()
-                .then(function() {
-                    // Remove the stagger effect for any subsequent operations
-
-                    mixer.configure({
-                        animation: {
-                            effects: 'fade scale'
-                        }
-                    });
-                });
-        </script>
+	
 	<script src="/static/js/jquery.min.js"></script>
 	<script src="/static/js/jquery.easing.min.js"></script>
 	<script src="/static/js/jquery.stellar.js"></script>

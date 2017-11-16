@@ -1,7 +1,6 @@
 html,
 body {
     height: 100%;
-    background: #f2f2f2;
 }
 
 *,
@@ -15,7 +14,7 @@ body {
 
 .controls {
     padding: 1rem;
-    background: #333;
+    background: #fff;
     font-size: 0.1px;
 }
 
@@ -24,7 +23,7 @@ body {
     display: inline-block;
     width: 2.7rem;
     height: 2.7rem;
-    background: #444;
+    background: #ddd;
     cursor: pointer;
     font-size: 0.1px;
     color: white;
@@ -32,7 +31,7 @@ body {
 }
 
 .control:hover {
-    background: #3f3f3f;
+    background: #4ecdc4;
 }
 
 .control[data-filter]:after {
@@ -65,7 +64,7 @@ body {
 }
 
 .mixitup-control-active {
-    background: #393939;
+    background: #ffffff;
 }
 
 .mixitup-control-active[data-filter]:after {
@@ -81,7 +80,11 @@ body {
 }
 
 .control[data-filter] + .control[data-sort] {
-    margin-left: .75rem;
+    margin-left: 1rem;
+}
+
+.control[data-filter="all"] {
+    color: #2894ff;
 }
 
 .control[data-filter=".green"] {
@@ -98,6 +101,14 @@ body {
 
 .control[data-filter="none"] {
     color: #2f2f2f;
+}
+
+.control[data-sort="default:asc"] {
+    color: #2894ff;
+}
+
+.control[data-sort="default:desc"] {
+    color: #2894ff;
 }
 
 /* Container
