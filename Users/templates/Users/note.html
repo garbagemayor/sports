@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{{note.title}}</h1>
+<p>{{note.content}}</p>
+<script>
+    $.get("{% url 'mark_as_read' %}", function(ret){
+         $('#noti').html(ret);
+    })
+</script>
+{% endblock %}

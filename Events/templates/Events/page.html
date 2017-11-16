@@ -20,7 +20,7 @@
           <button class="btn btn-default"
               onclick="location.href='/events/setprizes/{{events.id}}'">设置奖项</button>
         {% endif %}
-          <button class="btn btn-default" onclick="location.href='/events/qrcode/{{events.id}}'">生成报名二维码</button>
+		  <button class="btn btn-default" data-toggle="modal" data-target="#qrCode">生成二维码</button>
           <button class="btn btn-success" onclick="location.href='/record/{{events.id}}'" style="float:right">查看报名</button>
           <button class="btn btn-success" onclick="location.href='/events/viewprizes/{{events.id}}'" style="float:right">查看获奖</button>
       <br><br><br>
@@ -30,18 +30,54 @@
         {{events.s2}}
       </div>
       <dl class="dl-horizontal">
-        <dt>
-          比赛时间
-        </dt>
-        <dd>
-          {{events.date}}
-        </dd>
-        <dt>
-          详细信息
-        </dt>
-        <dd>
-          {{events.content}}
-        </dd>
+		  <dt>
+			  报名截止时间
+		  </dt>
+		  <dd>
+			  {{ events.timeRegEnStr }}
+		  </dd>
+		  <dt>
+			  比赛时间
+		  </dt>
+		  <dd>
+			  {{ events.timeEvnStStr }}
+		  </dd>
+		  <dt>
+			  详细信息
+		  </dt>
+		  <dd>
+			  {{events.desc}}
+		  </dd>
+		  {% if events.teamMode == 0 %}
+		  <dt>
+			  人数限制
+		  </dt>
+		  <dd>
+			  {% if events.maxRegCnt != -1 %} {{ events.maxRegCnt }} {% else %} 无限制 {% endif %}
+		  </dd>
+		  {% else %}
+		  <dt>
+			  团队数限制
+		  </dt>
+		  <dd>
+			  {% if events.maxRegCnt != -1 %} {{ events.maxRegCnt }} {% else %} 无限制 {% endif %}
+		  </dd>
+		  {% endif %}
+		  <dt>
+			  每个团队人数限制
+		  </dt>
+		  <dd>
+			  {{ events.teamMin }} - {{ events.teamMax }} 人
+		  </dd>
+		  <dt>
+			  已报名人数/团队数
+		  </dt>
+		  <dd>
+			  {{ events.nowRegCnt }}
+			  {% if events.maxRegCnt == events.nowRegCnt %}
+			  <font color="red">（报名已满）</font>
+			  {% endif %}
+		  </dd>
       </dl>
 	  <br><br>
 	  <!-- 这一坨屎就是用来组建团队的 -->
@@ -140,7 +176,9 @@
 	  </div>
 		<nav style="text-align: center; margin-bottom:20px">
 			<button class="btn btn-primary" id="signBtn"
-					{% if not events.status == 2 %} name="sign" disabled="disabled" {% endif %}
+					{% if events.status != 2 or events.maxRegCnt == events.nowRegCnt %}
+						name="sign" disabled="disabled"
+					{% endif %}
 					{% if events.teamMode == 0 %}
 					    onclick="location.href='/events/sign/{{events.id}}/'"
 					{% elif maketeam == False %}
@@ -225,6 +263,23 @@
         location.href='/events/{{events.id}}/maketeam/';
     }
 </script>
+<div class="modal fade" id="qrCode" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" 
+						aria-hidden="true">×
+				</button>
+			</div>
+			<div class="modal-body" style="text-align: center;">
+                <img src="{% url 'qrcode' %}">
+			</div>
+			<div class="modal-footer">
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div>
+
 <script type="text/javascript">
     function hiddenMakeTeamPart() {
         document.getElementById("makeTeanPart").hidden="hidden";

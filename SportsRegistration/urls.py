@@ -49,7 +49,7 @@ urlpatterns = [
                   url(r'^events/addevents$', Events_view.addevents, name='addevents'),              #添加赛事
                   url(r'^events/setprizes/(\d+)/$', Events_view.setprizes, name='setprize'),                  
                   url(r'^events/viewprizes/(\d+)/$', Events_view.viewprizes, name='prize'), 
-                  url(r'^events/qrcode/(\d+)/$', Events_view.qrcode, name='qrcode'),
+                  url(r'^events/qrcode/$', Events_view.qrcode, name='qrcode'),
 
                   #用户
                   url(r'^user/$', Users_view.my_information, name='user'),           #个人页
@@ -58,7 +58,14 @@ urlpatterns = [
                   url(r'^authorized/$', Users_view.auth, name='login'),                     #登录完成
                   url(r'^logout/$', Users_view.logout, name='logout'),                      #登出
                   url(r'^edit_email/(\d+)$', Record_view.edit_email, name='edit_email'),    #修改邮件
+                  url(r'^send_message/(\d+)$', Users_view.send_message,
+                      name='send_message'),    #修改邮件
                   url(r'^user/myevents/$', Users_view.my_events, name='my_events'),
+                  url(r'^notification/$', Users_view.notification, name='notification'),
+                  url(r'^notes/(\d+)$', Users_view.notes, name='notes'),
+                  url(r'^mark_as_read/$', Users_view.mark_as_read, name='mark_as_read'),
+                  url(r'^notification_count/$', Users_view.notification_count,
+                      name='notification_count'),
 
                   # 管理员
                   url(r'^managers/$', Users_view.backend, name='backend'),

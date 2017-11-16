@@ -20,6 +20,9 @@ def index(request):
     for l in events_list:
         l.s2 = gets2(l.getStatus())
         l.s3 = gets3(l.getStatus())
+        l.timeRegStStr = l.timeRegSt.strftime("%Y-%m-%d %H:%M:%S")
+        l.timeRegEnStr = l.timeRegEn.strftime("%Y-%m-%d %H:%M:%S")
+        l.timeEvnStStr = l.timeEvnSt.strftime("%Y-%m-%d %H:%M:%S")
     paginator = Paginator(events_list, 3)
     page = request.GET.get('page')
     try:
@@ -38,6 +41,10 @@ def page(request, Id):
     events.status = events.getStatus()
     events.s2 = gets2(events.getStatus())
     events.s3 = gets3(events.getStatus())
+    events.timeRegStStr = events.timeRegSt.strftime("%Y-%m-%d %H:%M:%S")
+    events.timeRegEnStr = events.timeRegEn.strftime("%Y-%m-%d %H:%M:%S")
+    events.timeEvnStStr = events.timeEvnSt.strftime("%Y-%m-%d %H:%M:%S")
+    request.session['eventsid'] = Id
     return render(request, 'Events/page.html', {'events':events, "maketeam":False})
 
 @csrf_exempt
@@ -46,6 +53,7 @@ def page_maketeam(request, Id):
     events.status=events.getStatus()
     events.s2 = gets2(events.getStatus())
     events.s3 = gets3(events.getStatus())
+    request.session['eventsid']=Id
     return render(request, 'Events/page.html', {'events':events, "maketeam":True})
 
 @csrf_exempt
@@ -178,11 +186,19 @@ def sign(request, Id):
         if len(sf) >= 1:
             messages.add_message(request, messages.INFO, '请勿重复报名！')
         else:
-            s = Sign.objects.create(userId=request.session['userid'], eventId=Id)
-            s.teamSize = 1
-            s.timeReg = timezone.now()
-            s.exmStatus = 1
-            messages.add_message(request, messages.INFO, '报名成功！')
+            e = Events.objects.get(id=Id)
+            if e.maxRegCnt != -1 and e.maxRegCnt <= e.nowRegCnt:
+                messages.add_message(request, messages.INFO, '报名已经满了，你是怎么点到报名按钮的？')
+            else:
+                e.nowRegCnt += 1;
+                e.save()
+                Sign.objects.create(userId=request.session['userid'], eventId=Id)
+                s = Sign.objects.get(userId=request.session['userid'], eventId=Id)
+                s.teamSize = 1
+                s.timeReg = timezone.now()
+                s.exmStatus = 1
+                s.save()
+                messages.add_message(request, messages.INFO, '报名成功！')
     else:
         #messages.add_message(request, messages.INFO, '请登录！')
         return HttpResponseRedirect('https://accounts.net9.org/api/authorize?client_id=0eHhovG3K1NYkhbnYuYmej1h9wY&redirect_uri=http://"+request.get_host+"/authorized')
@@ -201,16 +217,22 @@ def teamsign(request, eventId, selectedStr="", other=""):
             for userId in selectedStr.split(","):
                 if len(userId) > 0 and int(userId) not in teammateId:
                     teammateId.append(int(userId))
-            # 向数据库中添加
-            Sign.objects.create(userId=request.session['userid'], eventId=eventId)
-            s = Sign.objects.get(userId=request.session['userid'], eventId=eventId)
-            s.teamSize = len(teammateId)
-            s.teamMate = teammateId
-            s.timeReg = timezone.now()
-            s.exmStatus = 1
-            s.printAll()
-            s.save()
-            messages.add_message(request, messages.INFO, '向数据库添加团队报名信息成功！')
+            e = Events.objects.get(id=eventId)
+            if e.maxRegCnt != -1 and e.maxRegCnt <= e.nowRegCnt:
+                messages.add_message(request, messages.INFO, '报名已经满了，你是怎么点到报名按钮的？')
+            else:
+                e.nowRegCnt += 1;
+                e.save()
+                # 向数据库中添加
+                Sign.objects.create(userId=request.session['userid'], eventId=eventId)
+                s = Sign.objects.get(userId=request.session['userid'], eventId=eventId)
+                s.teamSize = len(teammateId)
+                s.teamMate = teammateId
+                s.timeReg = timezone.now()
+                s.exmStatus = 1
+                s.printAll()
+                s.save()
+                messages.add_message(request, messages.INFO, '向数据库添加团队报名信息成功！')
     else:
         #messages.add_message(request, messages.INFO, '请登录！')
         return HttpResponseRedirect('https://accounts.net9.org/api/authorize?client_id=0eHhovG3K1NYkhbnYuYmej1h9wY&redirect_uri=http://"+request.get_host+"/authorized')
@@ -225,12 +247,16 @@ def design(request, Id):
         else:
             if len(sf) >= 2:
                 messages.add_message(request, messages.INFO, '您怎么这么强啊，居然在这一个比赛里面报次%d个名！您这么强，您爸妈知道吗？' % (len(sf)))
+            e = Events.objects.get(id=Id)
             for s in sf:
                 if s.exmStatus == 1 or s.exmStatus == 3:
+                    if e.nowRegCnt > 0:
+                        e.nowRegCnt -= 1
                     Sign.objects.filter(id=s.id).delete()
                     messages.add_message(request, messages.INFO, '取消成功！')
                 elif s.exmStatus == 2:
                     messages.add_message(request, messages.INFO, '报名已审核通过，若要取消报名请联系管理员！')
+            e.save()
     else:
         #messages.add_message(request, messages.INFO, '请登录！')
         return HttpResponseRedirect('https://accounts.net9.org/api/authorize?client_id=0eHhovG3K1NYkhbnYuYmej1h9wY&redirect_uri=http://"+request.get_host+"/authorized')
@@ -273,9 +299,9 @@ def gets3(i):
         return ""
 
 
-def qrcode(request, Id):
+def qrcode(request):
+    Id = request.session['eventsid']
     url = 'http://' + str(request.get_host()) + '/events/' + Id;
-    print(url)
     code = pyqrcode.create(url)
     code.png('code.png', scale=8)
     image_data = open("code.png", "rb").read()
