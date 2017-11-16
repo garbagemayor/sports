@@ -13,7 +13,7 @@
       <title>Base Index</title>
       {% endblock %}
 
-    {% block extracss %}{% endblock %}
+    
 
 	<!-- Bootstrap -->
 	<link href="/static/css/bootstrap.min.css" rel="stylesheet">
@@ -32,6 +32,7 @@
 	
 	<link  href="/static/css/ystep.css" rel="stylesheet">		  
 	<link href="/static/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
+	{% block extracss %}{% endblock %}
     {% load staticfiles %}
 
   </head>
@@ -41,10 +42,10 @@
 		
 		{% include 'header.html' %}
 		
-        <div class="container">
+        <div class="container" style="padding:0px;width:90%">
 			<div class="row">
                     <div class="col-md-3" style="padding-top:50px">
-						<div class="panel panel-default">
+						<div class="panel panel-info">
 							<div class="panel-heading">
 								<h3 class="panel-title">
 									菜单
@@ -55,29 +56,29 @@
 						<div id="acordeon">
             
 							<div class="panel-group" id="accordion">
-							<div class="panel panel-default">
+							<div class="panel panel-link">
 								<div class="panel-heading">
 									<h4 class="panel-title">
 									<a data-target="#collapseOne" href="#collapseOne" data-toggle="gsdk-collapse">
-									主页
+									主页<b class="caret"></b>
 									</a>
 								</h4>
 								</div>
 								<div id="collapseOne" class="panel-collapse collapse">
 									<div class="panel-body">
 								
-                                        <button class="btn btn-block btn-sm btn-info" onclick="location.href='/main/'">
+                                        <button class="btn btn-block btn-sm btn-link" onclick="location.href='/main/'">
                                             <i class="fa fa-fw fa-home"></i> 回到主页
                                         </button>
 										////////// 
 									</div>
 								</div>
 							</div>
-							<div class="panel panel-default">
+							<div class="panel panel-default panel-info">
 								<div class="panel-heading">
 									<h4 class="panel-title">
 									<a data-target="#collapseTwo" href="#collapseTwo" data-toggle="gsdk-collapse">
-									赛事
+									赛事<b class="caret"></b>
 									</a>
 								</h4>
 								</div>
@@ -96,11 +97,11 @@
 									</div>
 								</div>
 							</div>
-							<div class="panel panel-default">
+							<div class="panel panel-default panel-info">
 								<div class="panel-heading">
 									<h4 class="panel-title">
 									<a data-target="#collapseThree" href="#collapseThree" data-toggle="gsdk-collapse">
-									用户
+									用户<b class="caret"></b>
 									</a>
 								</h4>
 								</div>
@@ -127,11 +128,11 @@
 								</div>
 							</div>
 							{% if request.session.auth > 0 %}
-							<div class="panel panel-default">
+							<div class="panel panel-default panel-info">
 								<div class="panel-heading">
 									<h4 class="panel-title">
 									<a data-target="#collapseFour" href="#collapseFour" data-toggle="gsdk-collapse">
-									管理
+									管理<b class="caret"></b>
 									</a>
 								</h4>
 								</div>
@@ -261,10 +262,10 @@
                         </div>-->
 						
                     </div>
-                    <div class="col-md-8" style="padding-top:50px">
-					<div class="panel panel-default" ">
+                    <div class="col-md-9" style="padding-top:50px">
+					<div class="panel panel-primary">
 						<div class="panel-heading">
-							<h3 class="panel-title">
+							<h3 class="panel-title" style="text-color:'#aaaaaa'">
 								赛事
 							</h3>
 						</div>
@@ -277,7 +278,7 @@
 					   
                     </div>
 					
-			</div
+			</div>
 					
 				
 					
@@ -295,7 +296,7 @@
   
   
   </body>
-
+	
     {% include 'footer.html' %}<!---->
 
     <!-- Bootstrap core JavaScript

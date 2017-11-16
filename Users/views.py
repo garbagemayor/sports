@@ -233,8 +233,8 @@ def edit_information(request):
 
         messages.add_message(request, messages.INFO, '修改成功！')
         return HttpResponseRedirect('/user/')
-    # return render(request, "Users/users.html", info_list)
-    return render_to_response("Users/users.html", info_list)
+    return render(request, "Users/users.html", info_list)
+    # return render_to_response("Users/users.html", info_list)
 
 
 def my_events(request):

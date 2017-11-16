@@ -1,94 +1,171 @@
-﻿{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="">
 
-{% block title %}
-<title>赛事</title>
-{% endblock %}
 
-{% block content %}
-<div class="container-fluid">
-    <div class="row-fluid">
-        <div class="span12">
-	<div class="page-header">
-        <h1 style="text-align: center">
-          所有赛事 <small>共{{events_list.paginator.num_pages}}页</small>
-        </h1>
-	</div>		
-		<br><br>
-		{% if request.session.auth > 0 %}
-		  <button class="btn btn-default" onclick="location.href='/events/addevents'">添加赛事</button>
-		{% endif %}
-      </div>
-            <table class="table table-hover">
-                <thead>
-                <tr>
-                    <th>
-                        编号
-                    </th>
-                    <th>
-                        项目
-                    </th>
-                    <th>
-                        报名截止时间
-                    </th>
-                    <th>
-                        比赛时间
-                    </th>
-                    <th>
-                        状态
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for line in events_list %}
-                <tr class="{{line.s3}}" ondblclick="location.href='/events/{{line.id}}'">
-                    <td>
-                        {{line.id}}
-                    </td>
-                    <td onclick="location.href='/events/{{line.id}}'">
-                        {{line.name}}
-                    </td>
-                    <td>
-                        {{line.timeRegEnStr}}
-                    </td>
-                    <td>
-                        {{line.timeEvnStStr}}
-                    </td>
-                    <td>
-                        {{line.s2}}
-                        {% if line.maxRegCnt == line.nowRegCnt %}
-                        <font color="red">（报名已满）</font>
-                        {% endif %}
-                    </td>
-                </tr>
-                {% endfor %}
-                
-            </table>
+	<!-- Bootstrap -->
+	<link href="/static/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/static/css/font-awesome.min.css" rel="stylesheet">
+	
+	<!----><link href="/static/css/owl.carousel.css" rel="stylesheet">
+	<link href="/static/css/owl.theme.css" rel="stylesheet">
+	<link href="/static/css/owl.transitions.css" rel="stylesheet">
+    <script src="/static/css/bootstrap-theme.min.css"></script>
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+	<link href="/static/css/gsdk.css" rel="stylesheet" />  
+    <link href="/static/css/demo.css" rel="stylesheet" /> 	
+    
+    <link href="/static/style.css" rel="stylesheet"><!---->
+	
+	<link  href="/static/css/ystep.css" rel="stylesheet">		  
+	<link href="/static/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
+    {% load staticfiles %}
+
+    <link href="/static/css/mix/reset.css" rel="stylesheet"/>
+    <link href="/static/css/mix/style.css" rel="stylesheet"/>
+
+    </head>
+    <body>
+	
+	
+	<div class="container" style="padding:0px;width:90%">
+			<div class="row">
+                    <div class="col-md-3" style="padding-top:50px">
+						
+				
+					
+						
+						
+						
+                    </div>
+                    <div class="col-md-9" style="padding-top:50px">
+					<div class="panel panel-primary">
+						<div class="panel-heading">
+							<h3 class="panel-title" style="text-color:'#aaaaaa'">
+								赛事
+							</h3>
+						</div>
+						<div class="panel-body">
+						<div class="container-fluid">
+	<div class="row-fluid">
+		<div class="span12">
+			<div class="tabbable" id="tabs-30026">
+				<ul class="nav nav-tabs">
+					<li class="active">
+						<a href="#panel-146781" data-toggle="tab">第一部分</a>
+					</li>
+					<li>
+						<a href="#panel-363798" data-toggle="tab">第二部分</a>
+					</li>
+				</ul>
+				<div class="tab-content">
+					<div class="tab-pane active" id="panel-146781">
+						
+<div class="container">
+	<div class="row">
+		<div class="span12">
+        <div class="controls">
+            <button type="button" class="control" data-filter="all">All</button>
+            <button type="button" class="control" data-filter=".green">Green</button>
+            <button type="button" class="control" data-filter=".blue">Blue</button>
+            <button type="button" class="control" data-filter=".pink">Pink</button>
+            <button type="button" class="control" data-filter="none">None</button>
+
+            <button type="button" class="control" data-sort="default:asc">Asc</button>
+            <button type="button" class="control" data-sort="default:desc">Desc</button>
         </div>
-    </div>
+
+        <div class="container">
+            <div class="mix green"></div>
+            <div class="mix green"></div>
+            <div class="mix blue"></div>
+            <div class="mix pink"></div>
+            <div class="mix green"></div>
+            <div class="mix blue"></div>
+            <div class="mix pink"></div>
+            <div class="mix blue"></div>
+
+            <div class="gap"></div>
+            <div class="gap"></div>
+            <div class="gap"></div>
+        </div>
+
+</div></div></div>
+					</div>
+					<div class="tab-pane" id="panel-363798">
+						<p>
+							第二部分内容.
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
+						</div>
+					</div>
+					   
+                    </div>
+					
+			</div>
+	
 
-<nav style="text-align: center">
-<ul class="pagination">
-    {% if events_list.has_previous %}
-        <li><a href="?page={{ events_list.previous_page_number }}">&laquo;</a></li>
-    {% endif %}
-    {% if events_list.number > 2 %}
-        <li><a href="?page={{ events_list.number|add:"-2"}}">{{events_list.number|add:"-2"}}</a></li>
-    {% endif %}
-    {% if events_list.number > 1 %}
-        <li><a href="?page={{ events_list.previous_page_number }}">{{events_list.number|add:"-1"}}</a></li>
-    {% endif %}
-        <li class="active"><a>{{events_list.number}}<span class="sr-only">(current)</span></a></li>
-    {% if events_list.number < events_list.paginator.num_pages %}
-        <li><a href="?page={{ events_list.next_page_number }}">{{events_list.number|add:"1"}}</a></li>
-    {% endif %}
-    {% if events_list.number < events_list.paginator.num_pages|add:"-1" %}
-        <li><a href="?page={{ events_list.number|add:"2"}}">{{events_list.number|add:"2"}}</a></li>
-    {% endif %}
-    {% if events_list.has_next %}
-        <li><a href="?page={{ events_list.next_page_number }}">&raquo;</a></li>
-    {% endif %}
-</ul>
-</nav>
+        <script src="/static/js/mixitup.min.js"></script>
 
-{% endblock %}
+        <script>
+            var containerEl = document.querySelector('.container');
+
+            var mixer = mixitup(containerEl, {
+                animation: {
+                    effects: 'fade scale stagger(50ms)' // Set a 'stagger' effect for the loading animation
+                },
+                load: {
+                    filter: 'none' // Ensure all targets start from hidden (i.e. display: none;)
+                }
+            });
+
+            // Add a class to the container to remove 'visibility: hidden;' from targets. This
+            // prevents any flickr of content before the page's JavaScript has loaded.
+
+            containerEl.classList.add('mixitup-ready');
+
+            // Show all targets in the container
+
+            mixer.show()
+                .then(function() {
+                    // Remove the stagger effect for any subsequent operations
+
+                    mixer.configure({
+                        animation: {
+                            effects: 'fade scale'
+                        }
+                    });
+                });
+        </script>
+		<script src="/static/js/jquery.min.js"></script>
+	<script src="/static/js/jquery.easing.min.js"></script>
+	<script src="/static/js/jquery.stellar.js"></script>
+	<script src="/static/js/jquery.appear.js"></script>
+	<script src="/static/js/jquery.nicescroll.min.js"></script>
+	<script src="/static/js/jquery.countTo.js"></script>
+	<script src="/static/js/jquery.shuffle.modernizr.js"></script>
+	<script src="/static/js/jquery.shuffle.js"></script>
+	<script src="/static/js/owl.carousel.js"></script>
+	<script src="/static/js/jquery.ajaxchimp.min.js"></script>	
+    <script src="/static/js/jquery-ui-1.10.1.custom.min.js" type="text/javascript"></script>
+	<!--<script src="/static/js/script.js"></script>-->
+	<script src="/static/js/gsdk-checkbox.js"></script>
+	<script src="/static/js/gsdk-radio.js"></script>
+	<script src="/static/js/gsdk-bootstrapswitch.js"></script>
+	<script src="/static/js/get-shit-done.js"></script>
+    <script src="/static/js/custom.js"></script>
+    </body>
+</html>

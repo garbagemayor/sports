@@ -105,7 +105,7 @@
 .txt-gray{
     color: #ddd !important;
 }
-.footer{
+.foter{
     background-color: #DDDDDD;
     background-image: url('../img/cover_4_blur.jpg');
     background-attachment: fixed;
@@ -114,17 +114,17 @@
 .heart{
     color: #FF3B30;
 }
-.footer .overlayer{
+.foter .overlayer{
     background-color: rgba(27, 27, 27, 0.7);
     position: relative;
 }
-.footer .credits {
+.foter .credits {
     margin-top: 25px;
     padding: 20px 0 15px;
     text-align: center;
     color: #EEE;
 }
-.footer .credits a{
+.foter .credits a{
     color: #FFFFFF;
 }
 .social-share{
@@ -274,7 +274,7 @@
     margin-right: 0px;
     margin-top: 10px;
 }
-.footer h4{
+.foter h4{
     margin: 0px 0 20px;
 }
 .space-30{

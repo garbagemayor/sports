@@ -1,106 +1,94 @@
-{% extends 'base.html' %}
+﻿{% extends 'base.html' %}
 
 {% block title %}
-<title>添加新赛事</title>
+<title>赛事</title>
 {% endblock %}
 
 {% block content %}
-
-<div class="page-header">
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span12">
+	<div class="page-header">
         <h1 style="text-align: center">
-          添加新赛事 <small></small>
+          所有赛事 <small>共{{events_list.paginator.num_pages}}页</small>
         </h1>
-		</div>
+	</div>		
+		<br><br>
+		{% if request.session.auth > 0 %}
+		  <button class="btn btn-default" onclick="location.href='/events/addevents'">添加赛事</button>
+		{% endif %}
+      </div>
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>
+                        编号
+                    </th>
+                    <th>
+                        项目
+                    </th>
+                    <th>
+                        报名截止时间
+                    </th>
+                    <th>
+                        比赛时间
+                    </th>
+                    <th>
+                        状态
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for line in events_list %}
+                <tr class="{{line.s3}}" ondblclick="location.href='/events/{{line.id}}'">
+                    <td>
+                        {{line.id}}
+                    </td>
+                    <td onclick="location.href='/events/{{line.id}}'">
+                        {{line.name}}
+                    </td>
+                    <td>
+                        {{line.timeRegEnStr}}
+                    </td>
+                    <td>
+                        {{line.timeEvnStStr}}
+                    </td>
+                    <td>
+                        {{line.s2}}
+                        {% if line.maxRegCnt == line.nowRegCnt %}
+                        <font color="red">（报名已满）</font>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+                
+            </table>
+        </div>
+    </div>
+</div>
 
-	<br>
-	<br>
-
-<form class="form-horizontal" role="form" method="post" >
-{% csrf_token %}
-	<div class="form-group">
-		<label class="col-sm-2 control-label">赛名</label>
-		<div class="col-sm-5">
-			<input class="form-control" name="name" type="text"  placeholder="赛事名">
-		</div>
-	</div>
-	<br>
-	<div class="form-group">
-        <label for="dtp_input1" class="col-sm-2 control-label">报名开始时间</label>
-		<div class="col-sm-5">
-        <div class="input-group date form_datetime" data-date="" data-date-format="dd MM yyyy - HH:ii p" data-link-field="dtp_input1">
-            <input class="form-control" size="16" type="text" value="" readonly>
-            <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-			<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
-        </div>
-		<input type="hidden" id="dtp_input1" value="" /><br/>
-		</div>
-    </div>
-	<br>
-	<div class="form-group">
-        <label for="dtp_input1" class="col-sm-2 control-label">报名截止时间</label>
-		<div class="col-sm-5">
-        <div class="input-group date form_datetime" data-date="" data-date-format="dd MM yyyy - HH:ii p" data-link-field="dtp_input1">
-            <input class="form-control" size="16" type="text" value="" readonly>
-            <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-			<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
-        </div>
-		<input type="hidden" id="dtp_input1" value="" /><br/>
-		</div>
-    </div>
-	<br>
-	<div class="form-group">
-        <label for="dtp_input1" class="col-sm-2 control-label">比赛开始时间</label>
-		<div class="col-sm-5">
-        <div class="input-group date form_datetime" data-date="" data-date-format="dd MM yyyy - HH:ii p" data-link-field="dtp_input1">
-            <input class="form-control" size="16" type="text" value="" readonly>
-            <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-			<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
-        </div>
-		<input type="hidden" id="dtp_input1" value="" /><br/>
-		</div>
-    </div>
-	<br>
-	<div class="form-group">
-        <label for="dtp_input1" class="col-sm-2 control-label">比赛截止时间</label>
-		<div class="col-sm-5">
-        <div class="input-group date form_datetime" data-date="" data-date-format="dd MM yyyy - HH:ii p" data-link-field="dtp_input1">
-            <input class="form-control" size="16" type="text" value="" readonly>
-            <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-			<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
-        </div>
-		<input type="hidden" id="dtp_input1" value="" /><br/>
-		</div>
-    </div>
-	<br>
-	<div class="form-group">
-		<label for="name" class="col-sm-2 control-label">赛事详情</label>
-		<div class="col-sm-7">
-			<textarea class="form-control" name="detail" rows="5"></textarea>
-		</div>
-	</div>
-	<br>
-	<div class="form-group">
-		<div class="col-sm-2">
-		</div>
-		<div class="col-sm-10">
-			<button class="btn btn-primary" {% if not request.session.auth %} disabled="disabled"{% endif %} type="submit" >确认添加</button>
-		</div>
-	</div>
-</form>
-
-<script type="text/javascript" src="/static/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
-<script type="text/javascript" src="/static/js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
-<script type="text/javascript">
-    $('.form_datetime').datetimepicker({
-        //language:  'fr',
-        weekStart: 1,
-        todayBtn:  1,
-		autoclose: 1,
-		todayHighlight: 1,
-		startView: 2,
-		forceParse: 0,
-        showMeridian: 1
-    });
-</script>
+<nav style="text-align: center">
+<ul class="pagination">
+    {% if events_list.has_previous %}
+        <li><a href="?page={{ events_list.previous_page_number }}">&laquo;</a></li>
+    {% endif %}
+    {% if events_list.number > 2 %}
+        <li><a href="?page={{ events_list.number|add:"-2"}}">{{events_list.number|add:"-2"}}</a></li>
+    {% endif %}
+    {% if events_list.number > 1 %}
+        <li><a href="?page={{ events_list.previous_page_number }}">{{events_list.number|add:"-1"}}</a></li>
+    {% endif %}
+        <li class="active"><a>{{events_list.number}}<span class="sr-only">(current)</span></a></li>
+    {% if events_list.number < events_list.paginator.num_pages %}
+        <li><a href="?page={{ events_list.next_page_number }}">{{events_list.number|add:"1"}}</a></li>
+    {% endif %}
+    {% if events_list.number < events_list.paginator.num_pages|add:"-1" %}
+        <li><a href="?page={{ events_list.number|add:"2"}}">{{events_list.number|add:"2"}}</a></li>
+    {% endif %}
+    {% if events_list.has_next %}
+        <li><a href="?page={{ events_list.next_page_number }}">&raquo;</a></li>
+    {% endif %}
+</ul>
+</nav>
 
 {% endblock %}
