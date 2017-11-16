@@ -3,17 +3,27 @@
 import os
 import django
 from subprocess import Popen
+from sys import platform
 
 os.remove('db.sqlite3')
-Popen('python2 manage.py makemigrations', shell=True).wait()
-Popen('python2 manage.py migrate --run-syncdb', shell=True).wait()
+if platform == "linux" or platform == "linux2":
+    # linux
+    Popen('python2 manage.py makemigrations', shell=True).wait()
+    Popen('python2 manage.py migrate --run-syncdb', shell=True).wait()
+elif platform == "darwin":
+    # OS X
+    Popen('python2 manage.py makemigrations', shell=True).wait()
+    Popen('python2 manage.py migrate --run-syncdb', shell=True).wait()
+elif platform == "win32":
+    # Windows...
+    Popen('py -2 manage.py makemigrations', shell=True).wait()
+    Popen('py -2 manage.py migrate --run-syncdb', shell=True).wait()
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "SportsRegistration.settings")
 django.setup()
 
-from HomePage.models import Users, Events, Signs
+from HomePage.models import Users, Events, Signs, IMG
 import django.utils.timezone as timezone
 import datetime
-
 
 print u'在Users表中添加对象'
 
@@ -204,3 +214,6 @@ del Users, Events, Signs
 del timezone
 del datetime
 del django
+
+if platform == "win32":
+    Popen('pause', shell=True).wait()

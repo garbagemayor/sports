@@ -7,3 +7,4 @@ xlsxwriter
 pyqrcode
 pypng
 django-markdownify
+Pillow
