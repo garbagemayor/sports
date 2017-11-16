@@ -125,8 +125,10 @@
                     </td>
                     <td>
                         {{line.s2}}
+						{% if line.s2 == 2 %}
                         {% if line.maxRegCnt <= line.nowRegCnt %}
                         <font color="red">（报名已满）</font>
+                        {% endif %}
                         {% endif %}
                     </td>
                 </tr>

@@ -58,8 +58,7 @@ urlpatterns = [
                   url(r'^authorized/$', Users_view.auth, name='login'),                     #登录完成
                   url(r'^logout/$', Users_view.logout, name='logout'),                      #登出
                   url(r'^edit_email/(\d+)$', Record_view.edit_email, name='edit_email'),    #修改邮件
-                  url(r'^send_message/(\d+)$', Users_view.send_message,
-                      name='send_message'),    #修改邮件
+                  #url(r'^send_message/(\d+)$', Users_view.send_message,                      name='send_message'),    #修改邮件
                   url(r'^user/myevents/$', Users_view.my_events, name='my_events'),
                   url(r'^notification/$', Users_view.notification, name='notification'),
                   url(r'^notes/(\d+)$', Users_view.notes, name='notes'),
