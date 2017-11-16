@@ -31,7 +31,8 @@
     <link href="/static/style.css" rel="stylesheet"><!---->
 	
 	<link  href="/static/css/ystep.css" rel="stylesheet">		  
-	<link href="/static/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
+	<link href="/static/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">	
+	<link href="/static/css/radialindicator/base.css"  rel="stylesheet" type="text/css" />
     {% load staticfiles %}
 
 	{% block extracss %}{% endblock %}
@@ -104,7 +105,7 @@
                                             <i class="fa fa-fw fa-home"></i> 查看赛事
                                         </button>										
 										{% if request.session.auth > 0 %}
-										<button class="btn btn-block btn-sm btn-warning" onclick="location.href='/addevents/'">
+										<button class="btn btn-block btn-sm btn-warning" onclick="location.href='/events/addevents/'">
                                             <i class="fa fa-fw fa-home"></i> 添加赛事
                                         </button>
 										{% endif %}
@@ -132,10 +133,10 @@
 										<button class="btn btn-block btn-sm btn-info" onclick="location.href='/user/myevents/'">
                                             <i class="fa fa-fw fa-home"></i> 查看报名
                                         </button>
-										<button class="btn btn-block btn-sm btn-info" onclick="location.href='/user/myevents/'">
+										<button class="btn btn-block btn-sm btn-success" onclick="location.href='/user/myevents/'">
                                             <i class="fa fa-fw fa-home"></i> 查看参赛
                                         </button>
-										<button class="btn btn-block btn-sm btn-info" onclick="location.href='/user/myevents/'">
+										<button class="btn btn-block btn-sm btn-success" onclick="location.href='/user/myevents/'">
                                             <i class="fa fa-fw fa-home"></i> 查看获奖
                                         </button>
 										////////// 

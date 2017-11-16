@@ -20,10 +20,11 @@ def index(request):
     for l in events_list:
         l.s2 = gets2(l.getStatus())
         l.s3 = gets3(l.getStatus())
+        l.s4 = gets4(l.getStatus())
         l.timeRegStStr = l.timeRegSt.strftime("%Y-%m-%d %H:%M:%S")
         l.timeRegEnStr = l.timeRegEn.strftime("%Y-%m-%d %H:%M:%S")
         l.timeEvnStStr = l.timeEvnSt.strftime("%Y-%m-%d %H:%M:%S")
-    paginator = Paginator(events_list, 3)
+    paginator = Paginator(events_list, 10)
     page = request.GET.get('page')
     try:
         events_list = paginator.page(page)
@@ -297,6 +298,19 @@ def gets3(i):
         return "warning"
     else:
         return ""
+
+
+def gets4(i):
+    if i == 1:
+        return "blue"
+    elif i == 2:
+        return "green"
+    elif i == 3:
+        return "red"
+    elif i == 4:
+        return "yellow"
+    else:
+        return "grey"
 
 
 def qrcode(request):

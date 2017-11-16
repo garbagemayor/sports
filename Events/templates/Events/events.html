@@ -10,6 +10,11 @@
 {% block extracss %}
 	<link href="/static/css/mix/reset.css" rel="stylesheet"/>
     <link href="/static/css/mix/style.css" rel="stylesheet"/>
+	<!--<link rel="stylesheet" type="text/css" href="/static/css/radialindicator/normalize.css" />
+	<link rel="stylesheet" type="text/css" href="/static/css/radialindicator/default.css">
+	<link href="/static/css/radialindicator/project_base.css"  rel="stylesheet" type="text/css" />
+    <link href="/static/css/radialindicator/radialindicator.css"  rel="stylesheet" type="text/css" />-->
+	<link href="/static/css/radialindicator/base.css"  rel="stylesheet" type="text/css" />
 {% endblock %}
 
 <div class="container-fluid">
@@ -25,6 +30,7 @@
 		{% if request.session.auth > 0 %}
 		  <button class="btn btn-default" onclick="location.href='/events/addevents'">添加赛事</button>
 		{% endif %}
+		<br><br>
       </div>
 			<div class="tabbable" id="tabs-30026">
 				<ul class="nav nav-tabs">
@@ -36,43 +42,42 @@
 					</li>
 				</ul>
 				<div class="tab-content">
-					<div class="tab-pane active" id="panel-146781">		
+					<div class="tab-pane active" id="panel-146781">		<br>
         <div class="controls">
-            <button type="button" class="control" data-filter="all">All</button>
-            <button type="button" class="control" data-filter=".green">Greenasdfasdfasdfasdf</button>
-            <button type="button" class="control" data-filter=".blue">Blue</button>
-            <button type="button" class="control" data-filter=".pink">Pink</button>
-            <button type="button" class="control" data-filter="none">None</button>
-			<div class="checkbox-group-mix">
-                <div class="checkbox">
-                    <label class="checkbox-label">Green</label>
-                    <input type="checkbox" value=".green"/>
-                </div>
-
-                <div class="checkbox">
-                    <label class="checkbox-label">Blue</label>
-                    <input type="checkbox" value=".blue"/>
-                </div>
-
-                <div class="checkbox">
-                    <label class="checkbox-label">Pink</label>
-                    <input type="checkbox" value=".pink"/>
-                </div>
-            </div>
+            <button type="button" class="control" data-filter="all">All</button><label >全部</label>
+            <button type="button" class="control" data-filter=".blue">Green</button><label >即将开始</label>
+            <button type="button" class="control" data-filter=".green">Blue</button><label >正在报名</label>
+            <button type="button" class="control" data-filter=".yellow">yellow</button><label >正在进行</label>
+            <button type="button" class="control" data-filter=".red">red</button><label >已结束</label>
+            <button type="button" class="control" data-filter="none">None</button><label >空    </label>
 
             <button type="button" class="control" data-sort="default:asc">Asc</button>
             <button type="button" class="control" data-sort="default:desc">Desc</button>
         </div>
 
         <div class="container-mix">
-            <div class="mix green"></div>
-            <div class="mix green"></div>
-            <div class="mix blue"></div>
-            <div class="mix pink"></div>
-            <div class="mix green"></div>
-            <div class="mix blue"></div>
-            <div class="mix pink"></div>
-            <div class="mix blue"></div>
+			
+            {% for line in events_list %}
+            <div onclick="location.href='/events/{{line.id}}'" class="mix {{line.s4}} btn-{{line.s3}}" style="background-color='#4ecdc4'">
+				
+				<p style="font-size: 20px;"><strong>{{line.name}}</strong></p><br>
+				<div class="container" style="width:100%">
+					<div class="row">
+						<div class="col-md-8">
+							<div style="background:light{{line.s4}};">
+								<p>报名截止：{{line.timeEvnStStr}}
+								<br>比赛时间：{{line.timeEvnStStr}}</p>
+					
+							</div>
+						</div>
+						<div class="col-md-4">
+							<br>
+							<div class="prg-cont rad-prg" id="indicatorContainer_{{line.id}}" style="width:100%"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			{% endfor %}
 
             <div class="gap"></div>
             <div class="gap"></div>
@@ -81,6 +86,7 @@
 					</div>
 					<div class="tab-pane" id="panel-363798">
 						<div class="container-fluid">
+						<br>
     <div class="row-fluid">
             <table class="table table-hover">
                 <thead>
@@ -119,7 +125,7 @@
                     </td>
                     <td>
                         {{line.s2}}
-                        {% if line.maxRegCnt == line.nowRegCnt %}
+                        {% if line.maxRegCnt <= line.nowRegCnt %}
                         <font color="red">（报名已满）</font>
                         {% endif %}
                     </td>
@@ -161,39 +167,62 @@
 	</div>
 </div>
 
+
+
+
+
 <script src="/static/js/mixitup.min.js"></script>
 
         <script>
-		var containerEl = document.querySelector('.container-mix');
-		alert('asd');
-            var checkboxGroup = document.querySelector('.checkbox-group-mix');
-            var checkboxes = checkboxGroup.querySelectorAll('input[type="checkbox"]');
+            var containerEl = document.querySelector('.container-mix');
 
-            var mixer = mixitup(containerEl);
-
-            checkboxGroup.addEventListener('change', function() {
-                var selectors = [];
-
-                // Iterate through all checkboxes, pushing the
-                // values of those that are checked into an array
-
-                for (var i = 0; i < checkboxes.length; i++) {
-                    var checkbox = checkboxes[i];
-
-                    if (checkbox.checked) selectors.push(checkbox.value);
+            var mixer = mixitup(containerEl, {
+                animation: {
+                    effects: 'fade scale stagger(50ms)' // Set a 'stagger' effect for the loading animation
+                },
+                load: {
+                    filter: 'none' // Ensure all targets start from hidden (i.e. display: none;)
                 }
+            });
 
-                // If there are values in the array, join it into a string
-                // using your desired logic, and send to the mixer's .filter()
-                // method, otherwise filter by 'all'
+            // Add a class to the container to remove 'visibility: hidden;' from targets. This
+            // prevents any flickr of content before the page's JavaScript has loaded.
 
-                var selectorString = selectors.length > 0 ?
-                    selectors.join(',') : // or '.' for AND logic
-                    'all';
-				alert(selectorString);
-                mixer.filter(selectorString);
-			});
+            containerEl.classList.add('mixitup-ready');
+
+            // Show all targets in the container
+
+            mixer.show()
+                .then(function() {
+                    // Remove the stagger effect for any subsequent operations
+
+                    mixer.configure({
+                        animation: {
+                            effects: 'fade scale'
+                        }
+                    });
+                });
         </script>
+		<script type="text/javascript"  src="/static/js/base.js"></script>
+	<script type="text/javascript"  src="/static/js/project_base.js"></script>	
+    <script src="/static/js/radialindicator.js"></script>
+    <script src="/static/js/demo.js"></script>
+	{% for line in events_list %}
+	<script type="text/javascript" >
+$('#indicatorContainer_{{line.id}}').radialIndicator({
+    barColor: {
+        0: '#FF0000',
+        33: '#eecc00',
+        66: '#0066FF',
+        100: '#33CC33'
+    },
+	radius: 30,
+    minValue: 0,
+    maxValue: {%if line.maxRegCnt == -1 %} 100, {% else %} {{line.maxRegCnt}} {% endif %}
+	initValue: {{line.nowRegCnt}}
+});
+	</script>
+	{% endfor %}
 
 
 

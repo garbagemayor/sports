@@ -15,15 +15,16 @@ body {
 .controls {
     padding: 1rem;
     background: #fff;
-    font-size: 0.1px;
+	font-color: #222;
+    font-size: 18px;
 }
 
 .control {
     position: relative;
     display: inline-block;
-    width: 2.7rem;
-    height: 2.7rem;
-    background: #ddd;
+    width: 2.3rem;
+    height: 2.3rem;
+    background: #fff;
     cursor: pointer;
     font-size: 0.1px;
     color: white;
@@ -31,7 +32,7 @@ body {
 }
 
 .control:hover {
-    background: #4ecdc4;
+    background: #fff;
 }
 
 .control[data-filter]:after {
@@ -80,7 +81,6 @@ body {
 }
 
 .control[data-filter] + .control[data-sort] {
-    margin-left: 1rem;
 }
 
 .control[data-filter="all"] {
@@ -88,15 +88,23 @@ body {
 }
 
 .control[data-filter=".green"] {
-    color: #91e6c7;
+    color: #d6e9c6;
 }
 
 .control[data-filter=".blue"] {
-    color: #5ecdde;
+    color: #5bc0de;
 }
 
 .control[data-filter=".pink"] {
     color: #d595aa;
+}
+
+.control[data-filter=".red"] {
+    color: #d9534f;
+}
+
+.control[data-filter=".yellow"] {
+    color: #f0ad4e;
 }
 
 .control[data-filter="none"] {
@@ -105,6 +113,7 @@ body {
 
 .control[data-sort="default:asc"] {
     color: #2894ff;
+    margin-left: 2rem;
 }
 
 .control[data-sort="default:desc"] {
@@ -146,20 +155,25 @@ body {
 .mix:before {
     content: '';
     display: inline-block;
-    padding-top: 56.25%;
+    padding-top: 0;
 }
 
 .mix.green {
-    color: #91e6c7;
-}
-
-.mix.pink {
-    color: #d595aa;
+    color: #32CD32;
 }
 
 .mix.blue {
-    color: #5ecdde;
+    color: #5bc0de;
 }
+
+.mix.red {
+    color: #db7532f;
+}
+
+.mix.yellow {
+    color: #f0ad4e;
+}
+
 
 .mix {
     visibility: visible;
@@ -181,7 +195,7 @@ body {
 
 /* 3 Columns */
 
-@media screen and (min-width: 541px) {
+@media screen and (min-width: 800px) {
     .mix,
     .gap {
         width: calc(100%/3 - (((3 - 1) * 1rem) / 3));
@@ -190,7 +204,7 @@ body {
 
 /* 4 Columns */
 
-@media screen and (min-width: 961px) {
+@media screen and (min-width: 1500px) {
     .mix,
     .gap {
         width: calc(100%/4 - (((4 - 1) * 1rem) / 4));
@@ -199,7 +213,7 @@ body {
 
 /* 5 Columns */
 
-@media screen and (min-width: 1281px) {
+@media screen and (min-width: 2000px) {
     .mix,
     .gap {
         width: calc(100%/5 - (((5 - 1) * 1rem) / 5));
