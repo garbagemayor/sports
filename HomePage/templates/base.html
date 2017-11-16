@@ -80,9 +80,14 @@
 								<div id="collapseTwo" class="panel-collapse collapse">
 									<div class="panel-body">
 								
-                                        <button class="btn btn-block btn-sm btn-info" onclick="location.href='/main/'">
-                                            <i class="fa fa-fw fa-home"></i> 回到主页
+                                        <button class="btn btn-block btn-sm btn-info" onclick="location.href='/events/'">
+                                            <i class="fa fa-fw fa-home"></i> 查看赛事
+                                        </button>										
+										{% if request.session.auth > 0 %}
+										<button class="btn btn-block btn-sm btn-warning" onclick="location.href='/addevents/'">
+                                            <i class="fa fa-fw fa-home"></i> 添加赛事
                                         </button>
+										{% endif %}
 										////////// 
 									</div>
 								</div>
@@ -98,13 +103,54 @@
 								<div id="collapseThree" class="panel-collapse collapse">
 									<div class="panel-body">
 								
-                                        <button class="btn btn-block btn-sm btn-info" onclick="location.href='/main/'">
-                                            <i class="fa fa-fw fa-home"></i> 回到主页
+                                        <button class="btn btn-block btn-sm btn-info" onclick="location.href='/user/'">
+                                            <i class="fa fa-fw fa-home"></i> 个人信息
+                                        </button>
+										<button class="btn btn-block btn-sm btn-info" onclick="location.href='/user/profile/'">
+                                            <i class="fa fa-fw fa-home"></i> 修改信息
+                                        </button>
+										<button class="btn btn-block btn-sm btn-info" onclick="location.href='/user/myevents/'">
+                                            <i class="fa fa-fw fa-home"></i> 查看报名
+                                        </button>
+										<button class="btn btn-block btn-sm btn-info" onclick="location.href='/user/myevents/'">
+                                            <i class="fa fa-fw fa-home"></i> 查看参赛
+                                        </button>
+										<button class="btn btn-block btn-sm btn-info" onclick="location.href='/user/myevents/'">
+                                            <i class="fa fa-fw fa-home"></i> 查看获奖
                                         </button>
 										////////// 
 									</div>
 								</div>
 							</div>
+							{% if request.session.auth > 0 %}
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h4 class="panel-title">
+									<a data-target="#collapseFour" href="#collapseFour" data-toggle="gsdk-collapse">
+									管理
+									</a>
+								</h4>
+								</div>
+								<div id="collapseFour" class="panel-collapse collapse">
+									<div class="panel-body">
+								
+                                        <button class="btn btn-block btn-sm btn-danger" onclick="location.href='/managers/managers/'">
+                                            <i class="fa fa-fw fa-home"></i> 查看管理员
+                                        </button>
+										<button class="btn btn-block btn-sm btn-warning" onclick="location.href='/managers/celebrity/'">
+                                            <i class="fa fa-fw fa-home"></i> 管理名人堂
+                                        </button>
+										<button class="btn btn-block btn-sm btn-warning" onclick="location.href='/managers/team/'">
+                                            <i class="fa fa-fw fa-home"></i> 系队展示
+                                        </button>
+										<button class="btn btn-block btn-sm btn-warning" onclick="location.href='/managers/photos/'">
+                                            <i class="fa fa-fw fa-home"></i> 风采展示
+                                        </button>
+										////////// 
+									</div>
+								</div>
+							</div>
+							{% endif %}
 							</div>
 						</div>
 				

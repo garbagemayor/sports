@@ -166,7 +166,7 @@ h6 {
   color: #4c4c4c;
   text-decoration: none;
 }
-/*
+
 .navbar-default {
   background-color: rgba(40, 40, 170, 0.95);
   height: 60px;
@@ -204,4 +204,4 @@ h6 {
 .navbar-default .navbar-nav > li > a:hover,
 .navbar-default .navbar-nav > li > a:focus {
   color: #2894ff;
-}*/
+}
