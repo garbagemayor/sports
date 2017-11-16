@@ -6,3 +6,4 @@ xlwt
 xlsxwriter
 pyqrcode
 pypng
+django-markdownify
