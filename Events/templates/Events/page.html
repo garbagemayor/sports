@@ -50,19 +50,21 @@
 		  </dd>
 		  {% if events.teamMode == 0 %}
 		  <dt>
-			  人数限制
+			  总人数限制
 		  </dt>
 		  <dd>
 			  {% if events.maxRegCnt != -1 %} {{ events.maxRegCnt }} {% else %} 无限制 {% endif %}
 		  </dd>
+		  <dt>
+			  已报名人数
+		  </dt>
 		  {% else %}
 		  <dt>
-			  团队数限制
+			  总团队数限制
 		  </dt>
 		  <dd>
 			  {% if events.maxRegCnt != -1 %} {{ events.maxRegCnt }} {% else %} 无限制 {% endif %}
 		  </dd>
-		  {% endif %}
 		  <dt>
 			  每个团队人数限制
 		  </dt>
@@ -70,8 +72,9 @@
 			  {{ events.teamMin }} - {{ events.teamMax }} 人
 		  </dd>
 		  <dt>
-			  已报名人数/团队数
+			  已报名团队数
 		  </dt>
+		  {% endif %}
 		  <dd>
 			  {{ events.nowRegCnt }}
 			  {% if events.maxRegCnt == events.nowRegCnt %}
