@@ -1,6 +1,5 @@
-﻿<!-- Fixed navbar -->
-<header class="st-navbar">
-    <nav class="navbar navbar-default navbar-fixed-top clearfix" role="navigation">
+﻿<header class="st-navbar">
+	<nav class="navbar navbar-default navbar-fixed-top clearfix" role="navigation">
       <div class="container">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -8,11 +7,11 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
-          </button>		  
+          </button>
 			<a class="navbar-brand" href="#"><img src="/static/img/new3.png" alt="" class="img-responsive"></a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
-          <ul class="nav navbar-nav">
+          <!--<ul class="nav navbar-nav">
             <li {% if request.path|slice:"4" == "/mai" %}class="active"{% endif %}><a href="/">主页</a></li>
             <li {% if request.path|slice:"3" == "/ev" %}class="active"{% endif %}><a href="/events">赛事</a></li>
             
@@ -23,7 +22,7 @@
 				{% endif %}
 			{% endif %}
 			
-          </ul>
+          </ul>-->
           <ul class="nav navbar-nav navbar-right">
 			{% if not request.session.username %}
 				<li><a 
@@ -51,3 +50,7 @@
 <br>
 <br>
 <br>
+<<<<<<< HEAD
+=======
+
+>>>>>>> tyt3
