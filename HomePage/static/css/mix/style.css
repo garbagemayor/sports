@@ -102,19 +102,19 @@ body {
 
 /* Container
 ---------------------------------------------------------------------- */
-/*
-.container {
+
+.container-mix {
     padding: 1rem;
     text-align: justify;
     font-size: 0.1px;
 }
 
-.container:after {
+.container-mix:after {
     content: '';
     display: inline-block;
     width: 100%;
 }
-*/
+
 /* Target Elements
 ---------------------------------------------------------------------- */
 
@@ -151,7 +151,7 @@ body {
 }
 
 .mix {
-    visibility: hidden;
+    visibility: visible;
 }
 
 .mixitup-ready .mix {

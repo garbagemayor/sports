@@ -5,90 +5,37 @@
 {% endblock %}
 
 {% block content %}
-<div class="container-fluid">
-    <div class="row-fluid">
-        <div class="span12">
-	<div class="page-header">
-        <h1 style="text-align: center">
-          所有赛事 <small>共{{events_list.paginator.num_pages}}页</small>
-        </h1>
-	</div>		
-		<br><br>
-		{% if request.session.auth > 0 %}
-		  <button class="btn btn-default" onclick="location.href='/events/addevents'">添加赛事</button>
-		{% endif %}
-      </div>
-            <table class="table table-hover">
-                <thead>
-                <tr>
-                    <th>
-                        编号
-                    </th>
-                    <th>
-                        项目
-                    </th>
-                    <th>
-                        报名截止时间
-                    </th>
-                    <th>
-                        比赛时间
-                    </th>
-                    <th>
-                        状态
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for line in events_list %}
-                <tr class="{{line.s3}}" ondblclick="location.href='/events/{{line.id}}'">
-                    <td>
-                        {{line.id}}
-                    </td>
-                    <td onclick="location.href='/events/{{line.id}}'">
-                        {{line.name}}
-                    </td>
-                    <td>
-                        {{line.timeRegEnStr}}
-                    </td>
-                    <td>
-                        {{line.timeEvnStStr}}
-                    </td>
-                    <td>
-                        {{line.s2}}
-                        {% if line.maxRegCnt == line.nowRegCnt %}
-                        <font color="red">（报名已满）</font>
-                        {% endif %}
-                    </td>
-                </tr>
-                {% endfor %}
-                
-            </table>
-        </div>
-    </div>
-</div>
+<div class="container">
+	<div class="row">
+		<div class="span12">
+        <div class="controls">
+            <button type="button" class="control" data-filter="all">All</button>
+            <button type="button" class="control" data-filter=".green">Green</button>
+            <button type="button" class="control" data-filter=".blue">Blue</button>
+            <button type="button" class="control" data-filter=".pink">Pink</button>
+            <button type="button" class="control" data-filter="none">None</button>
 
-<nav style="text-align: center">
-<ul class="pagination">
-    {% if events_list.has_previous %}
-        <li><a href="?page={{ events_list.previous_page_number }}">&laquo;</a></li>
-    {% endif %}
-    {% if events_list.number > 2 %}
-        <li><a href="?page={{ events_list.number|add:"-2"}}">{{events_list.number|add:"-2"}}</a></li>
-    {% endif %}
-    {% if events_list.number > 1 %}
-        <li><a href="?page={{ events_list.previous_page_number }}">{{events_list.number|add:"-1"}}</a></li>
-    {% endif %}
-        <li class="active"><a>{{events_list.number}}<span class="sr-only">(current)</span></a></li>
-    {% if events_list.number < events_list.paginator.num_pages %}
-        <li><a href="?page={{ events_list.next_page_number }}">{{events_list.number|add:"1"}}</a></li>
-    {% endif %}
-    {% if events_list.number < events_list.paginator.num_pages|add:"-1" %}
-        <li><a href="?page={{ events_list.number|add:"2"}}">{{events_list.number|add:"2"}}</a></li>
-    {% endif %}
-    {% if events_list.has_next %}
-        <li><a href="?page={{ events_list.next_page_number }}">&raquo;</a></li>
-    {% endif %}
-</ul>
-</nav>
+            <button type="button" class="control" data-sort="default:asc">Asc</button>
+            <button type="button" class="control" data-sort="default:desc">Desc</button>
+        </div>
+
+        <div class="container">
+            <div class="mix green"></div>
+            <div class="mix green"></div>
+            <div class="mix blue"></div>
+            <div class="mix pink"></div>
+            <div class="mix green"></div>
+            <div class="mix blue"></div>
+            <div class="mix pink"></div>
+            <div class="mix blue"></div>
+
+            <div class="gap"></div>
+            <div class="gap"></div>
+            <div class="gap"></div>
+        </div>
+
+		</div>
+	</div>
+</div>
 
 {% endblock %}
