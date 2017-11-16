@@ -5,7 +5,10 @@ import django
 from subprocess import Popen
 from sys import platform
 
-os.remove('db.sqlite3')
+try:
+	os.remove('db.sqlite3')
+except:
+	''
 if platform == "linux" or platform == "linux2":
     # linux
     Popen('python2 manage.py makemigrations', shell=True).wait()
