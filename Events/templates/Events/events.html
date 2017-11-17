@@ -178,10 +178,10 @@
         <script>
             var containerEl = document.querySelector('.container-mix');
 
-            var mixer = mixitup(containerEl, {
+            var mixer = mixitup(containerEl, {			
 				selectors: {
 					control: '[data-mixitup-control]'
-				}
+				},
                 animation: {
                     effects: 'fade scale stagger(50ms)' // Set a 'stagger' effect for the loading animation
                 },
@@ -232,4 +232,5 @@ $('#indicatorContainer_{{line.id}}').radialIndicator({
 
 
 {% endblock %}
+
 
