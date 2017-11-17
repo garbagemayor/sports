@@ -44,15 +44,15 @@
 				<div class="tab-content">
 					<div class="tab-pane active" id="panel-146781">		<br>
         <div class="controls">
-            <button type="button" class="control" data-filter="all">All</button><label >全部</label>
-            <button type="button" class="control" data-filter=".blue">Green</button><label >即将开始</label>
-            <button type="button" class="control" data-filter=".green">Blue</button><label >正在报名</label>
-            <button type="button" class="control" data-filter=".yellow">yellow</button><label >正在进行</label>
-            <button type="button" class="control" data-filter=".red">red</button><label >已结束</label>
-            <button type="button" class="control" data-filter="none">None</button><label >空    </label>
+            <button type="button" data-mixitup-control class="control" data-filter="all">All</button><label >全部</label>
+            <button type="button" data-mixitup-control class="control" data-filter=".blue">Green</button><label >即将开始</label>
+            <button type="button" data-mixitup-control class="control" data-filter=".green">Blue</button><label >正在报名</label>
+            <button type="button" data-mixitup-control class="control" data-filter=".yellow">yellow</button><label >正在进行</label>
+            <button type="button" data-mixitup-control class="control" data-filter=".red">red</button><label >已结束</label>
+            <button type="button" data-mixitup-control class="control" data-filter="none">None</button><label >空    </label>
 
-            <button type="button" class="control" data-sort="default:asc">Asc</button>
-            <button type="button" class="control" data-sort="default:desc">Desc</button>
+            <button type="button" data-mixitup-control class="control" data-sort="default:asc">Asc</button>
+            <button type="button" data-mixitup-control class="control" data-sort="default:desc">Desc</button>
         </div>
 
         <div class="container-mix">
@@ -179,6 +179,9 @@
             var containerEl = document.querySelector('.container-mix');
 
             var mixer = mixitup(containerEl, {
+				selectors: {
+					control: '[data-mixitup-control]'
+				}
                 animation: {
                     effects: 'fade scale stagger(50ms)' // Set a 'stagger' effect for the loading animation
                 },
