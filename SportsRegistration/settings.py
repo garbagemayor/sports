@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'HomePage',
     'Events',
     'RegistrationRecord',
-    'markdownify',
+    #  'markdownify',
 ]
 
 MIDDLEWARE = [
