@@ -1,13 +1,12 @@
 {% extends 'base.html' %}
 
 {% block content %}
-{% load markdownify %}
 <div class="page-header">
     <h1 style="text-align: center">
         {{note.title}}
     </h1>
 </div>
-{{note.content | markdownify}}
+{{note.content}}
 <script>
     $.get("{% url 'mark_as_read' %}", function(ret){
          $('#noti').html(ret);

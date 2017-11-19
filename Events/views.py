@@ -11,7 +11,7 @@ import django.utils.timezone as timezone
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
 import json
 from django.contrib import messages
-import pyqrcode
+import pyqrcode, io
 
 
 # Create your views here.
@@ -317,6 +317,7 @@ def qrcode(request):
     Id = request.session['eventsid']
     url = 'http://' + str(request.get_host()) + '/events/' + Id;
     code = pyqrcode.create(url)
-    code.png('code.png', scale=8)
-    image_data = open("code.png", "rb").read()
+    buff = io.BytesIO()
+    code.png(buff, scale=8)
+    image_data = buff.getvalue()
     return HttpResponse(image_data, content_type="image/png")
