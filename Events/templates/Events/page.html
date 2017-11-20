@@ -6,227 +6,178 @@
 
 {% block content %}
 <div class="container-fluid">
-  <div class="row-fluid">
-    <div class="span12">
-      <div class="page-header">
-        <h1 style="text-align: center">
-          {{events.name}} <small>{{events.name}}</small>        
-        </h1>
-      </div>
-        <br><br>
-        {% if request.session.auth > 0 %}          
-          <button class="btn btn-default" type='button' disabled="disabled" onclick="location.href='/events/next/{{events.id}}'">下一阶段</button>
-          <button class="btn btn-default" data-toggle="modal" data-target="#myModal">删除该赛事</button>
-          <button class="btn btn-default"
-              onclick="location.href='/events/setprizes/{{events.id}}'">设置奖项</button>
-        {% endif %}
-		  <button class="btn btn-default" data-toggle="modal" data-target="#qrCode">生成二维码</button>
-          <button class="btn btn-success" onclick="location.href='/record/{{events.id}}'" style="float:right">查看报名</button>
-          <button class="btn btn-success" onclick="location.href='/events/viewprizes/{{events.id}}'" style="float:right">查看获奖</button>
-      <br><br><br>
-      <div class="ystep1"></div>      
-      <br><br><br>
-      <div id="status" class="alert alert-{{events.s3}}">
-        {{events.s2}}
-      </div>
-      <dl class="dl-horizontal">
-		  <dt>
-			  报名截止时间
-		  </dt>
-		  <dd>
-			  {{ events.timeRegEnStr }}
-		  </dd>
-		  <dt>
-			  比赛时间
-		  </dt>
-		  <dd>
-			  {{ events.timeEvnStStr }}
-		  </dd>
-		  <dt>
-			  详细信息
-		  </dt>
-		  <dd>
-			  {{events.desc}}
-		  </dd>
-		  {% if events.teamMode == 0 %}
-		  <dt>
-			  总人数限制
-		  </dt>
-		  <dd>
-			  {% if events.maxRegCnt != -1 %} {{ events.maxRegCnt }} {% else %} 无限制 {% endif %}
-		  </dd>
-		  <dt>
-			  已报名人数
-		  </dt>
-		  {% else %}
-		  <dt>
-			  总团队数限制
-		  </dt>
-		  <dd>
-			  {% if events.maxRegCnt != -1 %} {{ events.maxRegCnt }} {% else %} 无限制 {% endif %}
-		  </dd>
-		  <dt>
-			  每个团队人数限制
-		  </dt>
-		  <dd>
-			  {{ events.teamMin }} - {{ events.teamMax }} 人
-		  </dd>
-		  <dt>
-			  已报名团队数
-		  </dt>
-		  {% endif %}
-		  <dd>
-			  {{ events.nowRegCnt }}
-			  {% if events.maxRegCnt == events.nowRegCnt %}
-			  <font color="red">（报名已满）</font>
-			  {% endif %}
-		  </dd>
-      </dl>
-	  <br><br>
-	  <!-- 这一坨屎就是用来组建团队的 -->
-	  <div id="makeTeanPart" {% if maketeam == False %} hidden="hidden" {% endif %}>
-		<table class="table table-hover">
-		  <tbody>
-		    <td style="width=45%;">
-		      <div style="width=100%;">
-			    <div class="page-header">
-				  <h1 style="text-align: center">
-					  <small>查找队友</small>
-				  </h1>
-			    </div>
-				<div name="searchForm">
-				  <div class="form-group">
-					<label for="fullName">姓名：</label>
-					<input type="text" class="form-control" id="fullName" name="fullname" placeholder="请输入姓名"
-					    {% if fullName != ""  %} value="{{fullName}}" {% endif %}>
-				  </div>
-				  <div class="form-group">
-					<label for="studentNumber">学号：</label>
-					<input type="text" class="form-control" id="studentNumber" name="name" placeholder="请输入学号"
-						   {% if studentNumber != ""  %} value="{{studentNumber}}" {% endif %}>
-				  </div>
-				  <button type="submit" class="btn btn-default" onclick="searchTeammate()">查找</button>
-				</div>
-			    <table class="table table-hover">
-				  <thead>
-				    <tr>
-					  <th>昵称</th>
-					  <th>姓名</th>
-					  <th>学号</th>
-					  <th>操作</th>
-				    </tr>
-				  </thead>
-				  <tbody>
-				  {% for user in searchUserList %}
-				  <tr class="info" ondblclick="location.href='/user/{{user.id}}'">
-					  <td>
-						  {{user.name}}
-					  </td>
-					  <td>
-						  {{user.fullname}}
-					  </td>
-					  <td>
-						  {{user.student_number}}
-					  </td>
-					  <td>
-						  <a onclick="addTeammate('{{user.id}}')">添加</a>
-					  </td>
-				  </tr>
-				  {% endfor %}
-			  </table>
-		      </div>
-			</td>
-			<td style="width=10%;">
-			</td>
-			<td style="width=45%;">
-	  	      <div style="width=100%;">
-		  	    <div class="page-header">
-			  	  <h1 style="text-align: center">
-					  <small>已选队友</small>
-			      </h1>
-		      </div>
-			    <table class="table table-hover">
-			      <thead>
-			        <tr>
-				      <th>昵称</th>
-				  	  <th>姓名</th>
-				      <th>学号</th>
-					  <th>操作</th>
-			        </tr>
-			      </thead>
-			  <tbody>
-			  {% for user in selectedUserList %}
-			  <tr class="info" ondblclick="location.href='/user/{{user.id}}'">
-				  <td>
-					  {{user.name}}
-				  </td>
-				  <td>
-					  {{user.fullname}}
-				  </td>
-				  <td>
-					  {{user.student_number}}
-				  </td>
-				  <td>
-					  <a onclick="removeTeammate('{{user.id}}')">移除</a>
-				  </td>
-			  </tr>
-			  {% endfor %}
-		    </table>
-      	      </div>
-			</td>
-		  </tbody>
-		</table>
-	  </div>
-		<nav style="text-align: center; margin-bottom:20px">
-			<button class="btn btn-primary" id="signBtn"
-					{% if events.status != 2 or events.maxRegCnt == events.nowRegCnt %}
-						name="sign" disabled="disabled"
-					{% endif %}
-					{% if events.teamMode == 0 %}
-					    onclick="location.href='/events/sign/{{events.id}}/'"
-					{% elif maketeam == False %}
-						onclick="showMakeTeamPart()"
-					{% else %}
-						onclick="teamsign()"
-					{% endif %}>
-				{% if events.teamMode == 0 %}
-					立即报名
-				{% elif maketeam == False %}
-					组建队伍
-				{% else %}
-					提交队伍
-				{% endif %}
-			</button>
-			<button class="btn btn-link"
-					{% if not events.status == 2 %} name="sign" disabled="disabled"{% endif %}
-					{% if events.teamMode == 0 %}
-						onclick="location.href='/events/design/{{events.id}}/'"
-					{% elif maketeam == False %}
-						onclick="location.href='/events/design/{{events.id}}/'"
-					{% else %}
-						onclick="location.href='/events/{{events.id}}/'"
-					{% endif %}>
-				{% if events.teamMode == 0 %}
-				取消报名
-				{% elif maketeam == False %}
-				取消报名
-				{% else %}
-				取消组队
-				{% endif %}
-			</button>
-			</form>
-		</nav>
-	  <br><br><br>
-      <!--{% if request.session.username %}
-      <nav style="text-align: center; margin-bottom:20px"> 
-        <button id="register" class="btn btn-primary" type="button"
-        {% if signed %} disabled="disabled"{% endif %} onclick="register()">立即报名</button>
-      </nav>
-      {% endif %}-->
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="page-header">
+                <h1 style="text-align: center">
+                    {{events.name}}
+                    <small>{{events.name}}</small>
+                </h1>
+            </div>
+            <br><br>
+            {% if request.session.auth > 0 %}
+            <button class="btn btn-default" type='button' disabled="disabled" onclick="location.href='/events/next/{{events.id}}'">下一阶段</button>
+            <button class="btn btn-default" data-toggle="modal" data-target="#myModal">删除该赛事</button>
+            <button class="btn btn-default"
+                    onclick="location.href='/events/setprizes/{{events.id}}'">设置奖项</button>
+            {% endif %}
+            <button class="btn btn-default" data-toggle="modal" data-target="#qrCode">生成二维码</button>
+            <button class="btn btn-success" onclick="location.href='/record/{{events.id}}'" style="float:right">查看报名</button>
+            <button class="btn btn-success" onclick="location.href='/events/viewprizes/{{events.id}}'" style="float:right">查看获奖</button>
+            <br><br><br>
+            <div class="ystep1"></div>
+            <br><br><br>
+            <div id="status" class="alert alert-{{events.s3}}">
+                {{events.s2}}
+            </div>
+            <!-- 比赛的详细信息 -->
+            <dl class="dl-horizontal">
+                <dt>
+                    报名截止时间
+                </dt>
+                <dd>
+                    {{ events.timeRegEnStr }}
+                </dd>
+                <dt>
+                    比赛时间
+                </dt>
+                <dd>
+                    {{ events.timeEvnStStr }}
+                </dd>
+                <dt>
+                    详细信息
+                </dt>
+                <dd>
+                    {{events.desc}}
+                </dd>
+                {% if events.teamMode == 0 %}
+                <dt>
+                    总人数限制
+                </dt>
+                <dd>
+                    {% if events.maxRegCnt != -1 %} {{ events.maxRegCnt }} {% else %} 无限制 {% endif %}
+                </dd>
+                <dt>
+                    已报名人数
+                </dt>
+                {% else %}
+                <dt>
+                    总团队数限制
+                </dt>
+                <dd>
+                    {% if events.maxRegCnt != -1 %} {{ events.maxRegCnt }} {% else %} 无限制 {% endif %}
+                </dd>
+                <dt>
+                    每个团队人数限制
+                </dt>
+                <dd>
+                    {{ events.teamMin }} - {{ events.teamMax }} 人
+                </dd>
+                <dt>
+                    已报名团队数
+                </dt>
+                {% endif %}
+                <dd>
+                    {{ events.nowRegCnt }}
+                    {% if events.maxRegCnt == events.nowRegCnt %}
+                    <font color="red">（报名已满）</font>
+                    {% endif %}
+                </dd>
+            </dl>
+            <br><br>
+            <!-- 这一坨屎就是用来组建团队的 -->
+            <div id="makeTeamPart" hidden="hidden">
+                <table class="table table-hover">
+                    <tbody>
+                    <td style="width=45%;">
+                        <!-- 左边查找队友 -->
+                        <div style="width=100%;">
+                            <div class="page-header">
+                                <h1 style="text-align: center">
+                                    <small>查找队友</small>
+                                </h1>
+                            </div>
+                            <div name="searchForm">
+                                <div class="form-group">
+                                    <label for="fullName">姓名：</label>
+                                    <input type="text" class="form-control" id="fullName" name="fullname" placeholder="请输入姓名"
+                                           {% if fullName != ""  %} value="{{fullName}}" {% endif %}>
+                                </div>
+                                <div class="form-group">
+                                    <label for="studentNumber">学号：</label>
+                                    <input type="text" class="form-control" id="studentNumber" name="studentnumber" placeholder="请输入学号"
+                                           {% if studentNumber != ""  %} value="{{studentNumber}}" {% endif %}>
+                                </div>
+                                <button type="submit" class="btn btn-default" onclick="searchTeammate()">查找</button>
+                            </div>
+                            <table class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <th>昵称</th>
+                                    <th>姓名</th>
+                                    <th>学号</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody id="searchUserTbody">
+                                </tbody>
+                            </table>
+                        </div>
+                    </td>
+                    <td style="width=10%;">
+                    </td>
+                    <td style="width=45%;">
+                        <!-- 右边显示队友 -->
+                        <div style="width=100%;">
+                            <div class="page-header">
+                                <h1 style="text-align: center">
+                                    <small>已选队友</small>
+                                </h1>
+                            </div>
+                            <!-- 这个标签的innerHTML用来存储已经添加的所有userId，类似全局变量，避免重复添加 -->
+                            <div id="selectedListDiv" hidden="hidden">,</div>
+                            <table class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <th>昵称</th>
+                                    <th>姓名</th>
+                                    <th>学号</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody id="selectedUserTbody">
+                                </tbody>
+                            </table>
+                        </div>
+                    </td>
+                    </tbody>
+                </table>
+            </div>
+            <!-- 两个按钮 -->
+            <nav style="text-align: center; margin-bottom:20px">
+                <button class="btn btn-primary" id="signBtn"
+                        {% if events.status != 2 or events.maxRegCnt == events.nowRegCnt %} name="sign" disabled="disabled" {% endif %}
+                        {% if events.teamMode == 0 %} onclick="location.href='/events/sign/{{events.id}}/'" {% else %} onclick="makeTeam()" {% endif %}>
+                    {% if events.teamMode == 0 %} 立即报名 {% else %} 组建队伍 {% endif %}
+                </button>
+                <button class="btn btn-link" id="designBtn" onclick="location.href='/events/design/{{events.id}}/'"
+                        {% if not events.status == 2 %} name="sign" disabled="disabled"{% endif %}>
+                    取消报名
+                </button>
+                </form>
+            </nav>
+            <br><br><br>
+            <!--{% if request.session.username %}
+            <nav style="text-align: center; margin-bottom:20px">
+            <button id="register" class="btn btn-primary" type="button"
+            {% if signed %} disabled="disabled"{% endif %} onclick="register()">立即报名</button>
+            </nav>
+            {% endif %}-->
+        </div>
     </div>
-  </div>
 </div>
 
+<!-- 删除赛事弹窗 -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
     <div class="modal-dialog">
         <div class="modal-content">
@@ -253,109 +204,179 @@
     </div><!-- /.modal-dialog -->
 </div>
 <script type="text/javascript">
-    function delevents()
-    {
-        alert("删除该赛事！");
-        location.href="/events/delete/{{events.id}}/";
-    }
-</script>
+        function delevents()
+        {
+            alert("删除该赛事！");
+            location.href="/events/delete/{{events.id}}/";
+        }
+    </script>
 
-<!-- 团队报名的时候要选队友 -->
-<script type="text/javascript">
-    function showMakeTeamPart() {
-        location.href='/events/{{events.id}}/maketeam/';
-    }
-</script>
 <div class="modal fade" id="qrCode" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" 
-						aria-hidden="true">×
-				</button>
-			</div>
-			<div class="modal-body" style="text-align: center;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">×
+                </button>
+            </div>
+            <div class="modal-body" style="text-align: center;">
                 <img src="{% url 'qrcode' %}">
-			</div>
-			<div class="modal-footer">
-			</div>
-		</div><!-- /.modal-content -->
-	</div><!-- /.modal-dialog -->
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
 </div>
 
+<!-- 点击“组建队伍” -->
 <script type="text/javascript">
-    function hiddenMakeTeamPart() {
-        document.getElementById("makeTeanPart").hidden="hidden";
+    function makeTeam() {
+        var makeTeamPart = document.getElementById("makeTeamPart");
+        var signBtn = document.getElementById("signBtn");
+        var designBtn = document.getElementById("designBtn");
+        makeTeamPart.hidden = "";
+        signBtn.innerHTML = "提交队伍";
+        signBtn.onclick = function() { teamsign() };
+        designBtn.innerHTML = "取消组队";
+        designBtn.onclick = function() { giveUpMakeTeam() };
     }
 </script>
+<!-- 点击“取消组队” -->
 <script type="text/javascript">
+    function giveUpMakeTeam() {
+        var makeTeamPart = document.getElementById("makeTeamPart");
+        var signBtn = document.getElementById("signBtn");
+        var designBtn = document.getElementById("designBtn");
+        makeTeamPart.hidden = "hidden";
+        signBtn.innerHTML = "组建队伍";
+        signBtn.onclick = function() { makeTeam() };
+        designBtn.innerHTML = "取消报名";
+        designBtn.onclick = "location.href='/events/design/{{events.id}}/'";
+    }
+</script>
+<!-- 搜索队友 -->
+<script type="text/javascript" language="javascript">
     function searchTeammate() {
-    	var fn = document.getElementById("fullName").value;
-    	var sn = document.getElementById("studentNumber").value;
-    	var se = "{{ selectedStr }}";
-    	location.href = "/events/{{events.id}}/maketeam/"
-    	              + "fn=" + fn + ";"
-    	              + "sn=" + sn + ";"
-    	              + "se=" + se + "/";
+        // 浏览器适配
+        var xmlhttp;
+        if (window.XMLHttpRequest) {
+            xmlhttp = new XMLHttpRequest();                         // code for IE7+, Firefox, Chrome, Opera, Safari
+        } else {
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");       // code for IE6, IE5
+        }
+        // 接收到信息后进行的操作
+        xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                var searchUserTbody = document.getElementById("searchUserTbody");
+                searchUserTbody.innerHTML = xmlhttp.responseText;
+            }
+        }
+        var fn = document.getElementById("fullName").value;
+        var sn = document.getElementById("studentNumber").value;
+        var urlGET = "/events/static_refresh/"
+                   + "fn=" + fn + ";"
+                   + "sn=" + sn + "/"
+        xmlhttp.open("GET", urlGET, true);
+        xmlhttp.send();
     }
 </script>
+<!-- 添加一个队友 -->
 <script type="text/javascript">
-    function addTeammate(userId) {
-    	var fn = "{{ fullName }}"
-    	var sn = "{{ studentNumber }}"
-    	var se = "{{ selectedStr }}";
-		if (("," + se).match("," + userId + ",") == null) {
-			se = se + userId + ","
-		}
-    	location.href = "/events/{{events.id}}/maketeam/"
-    	              + "fn=" + fn + ";"
-    	              + "sn=" + sn + ";"
-    	              + "se=" + se + "/";
+    function addTeammate(user_id) {
+        // 先判断是否已经添加过
+        var selectedListDiv = document.getElementById("selectedListDiv");
+        var selectedList = selectedListDiv.innerHTML;
+        if (selectedList.match("," + user_id + ",") != null) {
+            alert("请勿重复添加！");
+            return;
+        } else {
+            selectedListDiv.innerHTML = selectedList + user_id + ",";
+        }
+        // 浏览器适配
+        var xmlhttp;
+        if (window.XMLHttpRequest) {
+            xmlhttp = new XMLHttpRequest();                         // code for IE7+, Firefox, Chrome, Opera, Safari
+        } else {
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");       // code for IE6, IE5
+        }
+        // 接收到信息后进行的操作
+        xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                var selectedUserTbody = document.getElementById("selectedUserTbody");
+                selectedUserTbody.innerHTML = selectedUserTbody.innerHTML + xmlhttp.responseText;
+            }
+        }
+        var urlGET = "/events/static_refresh/"
+                   + "uid=" + user_id + "/";
+        xmlhttp.open("GET", urlGET, true);
+        xmlhttp.send();
     }
 </script>
+<!-- 移除一个队友 -->
 <script type="text/javascript">
-    function removeTeammate(userId) {
-    	var fn = "{{ fullName }}"
-    	var sn = "{{ studentNumber }}"
-    	var se = "{{ selectedStr }}";
-		while (("," + se).match("," + userId + ",") != null) {
-			se = ("," + se).replace("," + userId + ",", ",").substring(1);
-		}
-    	location.href = "/events/{{events.id}}/maketeam/"
-    	              + "fn=" + fn + ";"
-    	              + "sn=" + sn + ";"
-    	              + "se=" + se + "/";
+    function removeTeammate(user_id) {
+        // 先判断是否存在
+        var selectedListDiv = document.getElementById("selectedListDiv");
+        var selectedList = selectedListDiv.innerHTML;
+        if (selectedList.match("," + user_id + ",") == null) {
+            alert("您居然想要移除一个从来没有添加过的用户，居心何在？！");
+            return;
+        } else {
+            selectedListDiv.innerHTML = selectedList.replace("," + user_id + ",", ",");
+        }
+        // 浏览器适配
+        var xmlhttp;
+        if (window.XMLHttpRequest) {
+            xmlhttp = new XMLHttpRequest();                         // code for IE7+, Firefox, Chrome, Opera, Safari
+        } else {
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");       // code for IE6, IE5
+        }
+        // 接收到信息后进行的操作
+        xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                var html_code = xmlhttp.responseTextl;
+                var selectedUserTbody = document.getElementById("selectedUserTbody");
+                selectedUserTbody.innerHTML = selectedUserTbody.innerHTML.replace(xmlhttp.responseText, "");
+            }
+        }
+        var urlGET = "/events/static_refresh/"
+                   + "uid=" + user_id + "/";
+        xmlhttp.open("GET", urlGET, true);
+        xmlhttp.send();
     }
 </script>
+<!-- 提交团队报名信息 -->
 <script type="text/javascript">
     function teamsign() {
-        alert("团队报名！");
-    	var se = "{{ selectedStr }}";
-    	location.href = "/events/teamsign/{{events.id}}/"
-    	              + "se=" + se + "/";
+        alert("提交团队报名！");
+        var selectedListDiv = document.getElementById("selectedListDiv");
+        var selectedList = selectedListDiv.innerHTML;
+        selectedList = selectedList.substring(1);
+        location.href = "/events/teamsign/{{events.id}}/"
+                      + "se=" + selectedList + "/";
     }
 </script>
 
 <script src="/static/js/ystep.js"></script>
 <script type="text/javascript">
-$(".ystep1").loadStep({
-      size: "large",
-      color: "blue",
-      steps: [{
-        title: "即将开始",
-        content: "报名即将开始"
-      },{
-        title: "正在报名",
-        content: "报名后等待审核"
-      },{
-        title: "等待比赛",
-        content: "报名已截止，请等待比赛。"
-      },{
-        title: "比赛结束",
-        content: "比赛已结束，请查看成绩"
-      }]
+    $(".ystep1").loadStep({
+        size: "large",
+        color: "blue",
+        steps: [{
+            title: "即将开始",
+            content: "报名即将开始"
+        },{
+            title: "正在报名",
+            content: "报名后等待审核"
+        },{
+            title: "等待比赛",
+            content: "报名已截止，请等待比赛。"
+        },{
+            title: "比赛结束",
+            content: "比赛已结束，请查看成绩"
+        }]
     });
-$(".ystep1").setStep({{events.status}});
+    $(".ystep1").setStep({{events.status}});
 </script>
 
 {% endblock %}
