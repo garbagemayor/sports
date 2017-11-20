@@ -36,10 +36,14 @@ urlpatterns = [
                   #赛事
                   url(r'^events/$', Events_view.index, name='eventslist'),                          #所有赛事页
                   url(r'^events/(\d+)/$', Events_view.page, name='eventspage'),                     #赛事详情页
-                  url(r'^events/(\d+)/maketeam/$',
-                      Events_view.page_maketeam, name='eventspage_m'),                              #赛事详情页，并显示团队报名模块
-                  url(r'^events/(\d+)/maketeam/fn=([^;]*);sn=([^;]*);se=((\d+,)*)/$',
-                      Events_view.page_maketeam_search_selected, name='eventspage_mss'),            #赛事详情页，并显示团队报名模块，带有搜索内容，以及已选队友
+                  # url(r'^events/(\d+)/maketeam/$',
+                  #     Events_view.page_maketeam, name='eventspage_m'),                              #赛事详情页，并显示团队报名模块
+                  # url(r'^events/(\d+)/maketeam/fn=([^;]*);sn=([^;]*);se=((\d+,)*)/$',
+                  #     Events_view.page_maketeam_search_selected, name='eventspage_mss'),            #赛事详情页，并显示团队报名模块，带有搜索内容，以及已选队友
+                  url(r'^events/static_refresh/fn=([^;]*);sn=([^;]*)/$',
+                      Events_view.page_static_refresh_search, name='eventspage_ms'),                     #赛事详情页，带有搜索内容，只返回刷新部分html内容
+                  url(r'^events/static_refresh/uid=(\d+)/$',
+                      Events_view.page_static_refresh_selected, name='eventspage_ms'),                   #赛事详情页，带有选择对象，只返回刷新部分html内容
                   url(r'^events/delete/(\d+)/$', Events_view.delete_events, name='deletepage'),     #删除赛事                                  
                   url(r'^events/next/(\d+)/$', Events_view.nextphase, name='nextphase'),            #改变阶段                              
                   url(r'^events/sign/(\d+)/$', Events_view.sign, name='signpage'),                  #报名
