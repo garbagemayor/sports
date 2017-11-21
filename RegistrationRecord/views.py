@@ -11,7 +11,7 @@ import pandas as pd
 import xlsxwriter
 from django.core.mail import send_mail
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.http import StreamingHttpResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
@@ -19,7 +19,7 @@ from django.views.decorators.csrf import csrf_exempt
 from HomePage.models import Events
 from HomePage.models import Signs
 from HomePage.models import Users
-from RegistrationRecord.forms import EditForm
+from RegistrationRecord.forms import EditForm, OptionForm
 from django.contrib import messages
 
 
@@ -107,6 +107,7 @@ def recordPage(request, event_id):
         messages.add_message(request, messages.INFO, '审核成功')
     # 当前赛事的信息
     event = Events.objects.get(id=event_id)
+    request.session['eventname'] = event.name
     # 当前赛事的所有报名记录
     record_db_list = list(Signs.objects.filter(eventId=event_id))
     record_list = []
@@ -122,12 +123,14 @@ def recordPage(request, event_id):
         record_list = paginator.page(1)
     except EmptyPage:
         record_list = paginator.page(paginator.num_pages)
-    form = EditForm()
+    form1 = OptionForm()
+    form2 = EditForm()
     # 信息柔和在一起
     message_map = {}
     message_map['event'] = event
     message_map['record_list'] = record_list
-    message_map['form'] = form
+    message_map['form1'] = form1
+    message_map['form2'] = form2
     return render(request, 'RegistrationRecord/registration_record.html', message_map)
 
 # 文件传输迭代器
@@ -316,3 +319,11 @@ def recordDownloadXLSX(request, event_id):
     response['Content-Disposition'] = 'attachment;filename="{0}"'.format(file_name)
     return response
 
+@csrf_exempt
+def confirm(request):
+    result = request.session['username'] + "你好!\n    您报名参加的" + request.session['eventname']
+    if request.POST['result'] == "True":
+        result = result + "已通过审核!"
+    else:
+        result = result + "审核失败!"
+    return HttpResponse(result)
