@@ -82,6 +82,32 @@
 		</div>
 	</div>
 	
+	<div class="form-group" id="teammin" >
+		<label class="col-sm-3 control-label">团队人数下限</label>
+		<div class="col-sm-4">
+          <div class="input-group spinner" data-trigger="spinner">
+            <input type="text" class="form-control text-center" value="2" name="teammin" data-rule="quantity">
+            <div class="input-group-addon">
+              <a href="javascript:;" class="spin-up" data-spin="up"><i class="fa fa-caret-up"></i></a>
+              <a href="javascript:;" class="spin-down" data-spin="down"><i class="fa fa-caret-down"></i></a>
+            </div>
+          </div>
+        </div>
+	</div>
+	
+	<div class="form-group" id="teammax">
+		<label class="col-sm-3 control-label">团队人数上限</label>
+		<div class="col-sm-4">
+          <div class="input-group spinner" data-trigger="spinner">
+            <input type="text" class="form-control text-center" value="4" name="teammax" data-rule="quantity">
+            <div class="input-group-addon">
+              <a href="javascript:;" class="spin-up" data-spin="up"><i class="fa fa-caret-up"></i></a>
+              <a href="javascript:;" class="spin-down" data-spin="down"><i class="fa fa-caret-down"></i></a>
+            </div>
+          </div>
+        </div>
+	</div>
+	
 	<div class="form-group">
 		<label class="col-sm-3 control-label">参赛人数上限</label>
 		<div class="col-sm-4">
@@ -98,7 +124,7 @@
 	<div class="form-group">
         <label  class="col-sm-3 control-label">报名开始时间</label>
 		<div class="col-sm-4">
-        <div class="input-group date form_datetime" data-date="" data-date-format="dd MM yyyy - HH:ii p" data-link-field="dtp_input1">
+        <div class="input-group date form_datetime" data-date="" data-date-format="yyyy-mm-dd hh:ii" data-link-field="dtp_input1">
             <input class="form-control" size="16" type="text" value="" name="time1" readonly>
             <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
 			<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
@@ -109,7 +135,7 @@
 	<div class="form-group">
         <label  class="col-sm-3 control-label">报名截止时间</label>
 		<div class="col-sm-4">
-        <div class="input-group date form_datetime" data-date="" data-date-format="dd MM yyyy - HH:ii p" data-link-field="dtp_input1">
+        <div class="input-group date form_datetime" data-date="" data-date-format="yyyy-mm-dd hh:ii" data-link-field="dtp_input1">
             <input class="form-control" size="16" type="text" value="" name="time2" readonly>
             <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
 			<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
@@ -120,7 +146,7 @@
 	<div class="form-group">
         <label for="dtp_input1" class="col-sm-3 control-label">比赛时间</label>
 		<div class="col-sm-4">
-        <div class="input-group date form_datetime" data-date="" data-date-format="dd MM yyyy - HH:ii p" data-link-field="dtp_input1">
+        <div class="input-group date form_datetime" data-date="" data-date-format="yyyy-mm-dd hh:ii" data-link-field="dtp_input1">
             <input class="form-control" size="16" type="text" value="" name="time3" readonly>
             <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
 			<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
@@ -147,6 +173,10 @@
 <script type="text/javascript" src="/static/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 <script type="text/javascript" src="/static/js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
 <script type="text/javascript">
+	$(document).ready(function(){
+        document.getElementById("teammax").style.visibility="hidden";
+        document.getElementById("teammin").hidden="hidden";
+    });
     $('.form_datetime').datetimepicker({
         //language:  'fr',
         weekStart: 1,

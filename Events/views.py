@@ -288,11 +288,8 @@ def addevents(request):
             messages.add_message(request, messages.INFO, "请填写全部时间！")
             return render(request, "Events/addevents.html")
         
-        if not request.POST['time4']:
-            messages.add_message(request, messages.INFO, "请填写全部时间！")
-            return render(request, "Events/addevents.html")
 
-        if Events.objects.get_or_create(name=request.POST['name'], desc=request.POST['detail']):
+        if Events.objects.create(name=request.POST['name'], desc=request.POST['detail'], teamMode=request.POST['type'], maxRegCnt=request.POST['num'], timeRegSt=request.POST['time1'], timeRegEn=request.POST['time2'], timeEvnSt=request.POST['time3']):
             messages.add_message(request, messages.INFO, '成功添加赛事' + request.POST['name'] + '！')
             return HttpResponseRedirect('/events/')
     return render(request, "Events/addevents.html")
