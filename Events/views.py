@@ -46,16 +46,37 @@ def page(request, Id):
     events.timeRegEnStr = events.timeRegEn.strftime("%Y-%m-%d %H:%M:%S")
     events.timeEvnStStr = events.timeEvnSt.strftime("%Y-%m-%d %H:%M:%S")
     request.session['eventsid'] = Id
-    return render(request, 'Events/page.html', {'events':events, "maketeam":False})
+    return render(request, 'Events/page.html', {'events':events})
 
 @csrf_exempt
-def page_maketeam(request, Id):
-    events = Events.objects.get(id=Id)
-    events.status=events.getStatus()
-    events.s2 = gets2(events.getStatus())
-    events.s3 = gets3(events.getStatus())
-    request.session['eventsid']=Id
-    return render(request, 'Events/page.html', {'events':events, "maketeam":True})
+def page_static_refresh_search(request, searchFullName='', searchStudentNumber=''):
+    # 从数据库中找出搜索到的结果
+    print "searchFullName = ", searchFullName
+    print "searchStudentNumber = ", searchStudentNumber
+    if searchFullName == "":
+        if searchStudentNumber == "":
+            searchUserList = []
+        else:
+            searchUserList = list(Users.objects.filter(student_number=searchStudentNumber))
+    else:
+        if searchStudentNumber == "":
+            searchUserList = list(Users.objects.filter(fullname=searchFullName))
+        else:
+            searchUserList = list(Users.objects.filter(fullname=searchFullName, student_number=searchStudentNumber))
+    print "searchUserList = ", searchUserList
+    return render(request, 'Events/page_static_refresh.html',
+                  {"searchUserList": searchUserList,
+                   "refresh_mode": "search"})
+
+@csrf_exempt
+def page_static_refresh_selected(request, searchUserId=''):
+    # 从数据库中找出搜索到的结果
+    print "searchUserId = ", searchUserId
+    searchUserList = list(Users.objects.filter(id=int(searchUserId)))
+    print "searchUserList = ", searchUserList
+    return render(request, 'Events/page_static_refresh.html',
+                  {"searchUserList": searchUserList,
+                   "refresh_mode": "selected"})
 
 @csrf_exempt
 def page_maketeam_search_selected(request, eventId, searchFullName='', searchStudentNumber='', selectedStr='', other=""):
