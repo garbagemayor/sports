@@ -6,7 +6,9 @@
         {{note.title}}
     </h1>
 </div>
-{{note.content}}
+<div id="content">
+    {{note.content}}
+</div>
 <script>
     $.get("{% url 'mark_as_read' %}", function(ret){
          $('#noti').html(ret);
