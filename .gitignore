@@ -7,3 +7,5 @@ RegistrationRecord/templates/Temp/*
 HomePage/migrations/*
 Users/migrations/*
 code.png
+*.DS_store
+venv/

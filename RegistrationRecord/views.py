@@ -19,7 +19,7 @@ from django.views.decorators.csrf import csrf_exempt
 from HomePage.models import Events
 from HomePage.models import Signs
 from HomePage.models import Users
-from RegistrationRecord.forms import EditForm, OptionForm
+from RegistrationRecord.forms import EditForm
 from django.contrib import messages
 
 
@@ -88,26 +88,43 @@ class RecordItem:
 @csrf_exempt
 def recordPage(request, event_id):
     event_id = int(event_id)
-    if request.method=="POST":
-        checkbox_list=request.POST.getlist("checked")
-        form = EditForm(request.POST)
-        if form.is_valid():
-            t = form.cleaned_data['title']
-            c = form.cleaned_data['content']
-            r = form.cleaned_data['result']
-            for ii in checkbox_list:
-                for iii in re.findall(r'\d+', ii):
-                    i = int(iii)
-                    if r:
-                        Signs.objects.filter(eventId=event_id,userId=i).update(exmStatus=2)
-                    else:
-                        Signs.objects.filter(eventId=event_id,userId=i).update(exmStatus=3)
-                    Notification.objects.create(sender=request.session['username'], senderId=request.session['userid'],
-                                                target=i, title=t, content=c, createTime=timezone.now())
-        messages.add_message(request, messages.INFO, '审核成功')
     # 当前赛事的信息
     event = Events.objects.get(id=event_id)
     request.session['eventname'] = event.name
+    if request.method=="POST":
+        checkbox_list=request.POST.getlist("checked")
+        form = EditForm(request.POST)
+        EMAIL_FROM = '924486024@qq.com'
+        if form.is_valid():
+            title = ""
+            body = form.cleaned_data['content']
+            result = form.cleaned_data['result']
+            leaderOnly = form.cleaned_data['leaderOnly']
+            if result:
+                title = event.name + "审核通过"
+            else:
+                title = event.name + "审核不通过"
+            for checked_item in checkbox_list:
+                leaderId = int(checked_item.split('|')[0]);
+                if leaderOnly:
+                    send_mail(title, body, EMAIL_FROM, [Users.objects.get(id=leaderId).email])
+
+                for iii in re.findall(r'\d+', checked_item.split('|')[1]):
+                    i = int(iii)
+                    if result:
+                        Signs.objects.filter(eventId=event_id,userId=i).update(exmStatus=2)
+                    else:
+                        Signs.objects.filter(eventId=event_id,userId=i).update(exmStatus=3)
+                    user = Users.objects.get(id=i)
+                    content = user.name + body
+                    Notification.objects.create(sender=request.session['username'], senderId=request.session['userid'],
+                                                target=i, title=title, content=content, createTime=timezone.now())
+                    if not leaderOnly:
+                        e = user.email
+                        if e:
+                            send_mail(title, content, EMAIL_FROM, [e])
+                     
+            messages.add_message(request, messages.INFO, '审核成功')
     # 当前赛事的所有报名记录
     record_db_list = list(Signs.objects.filter(eventId=event_id))
     record_list = []
@@ -123,14 +140,12 @@ def recordPage(request, event_id):
         record_list = paginator.page(1)
     except EmptyPage:
         record_list = paginator.page(paginator.num_pages)
-    form1 = OptionForm()
-    form2 = EditForm()
-    # 信息柔和在一起
+    form = EditForm()
+    # 信息放在一起
     message_map = {}
     message_map['event'] = event
     message_map['record_list'] = record_list
-    message_map['form1'] = form1
-    message_map['form2'] = form2
+    message_map['form'] = form
     return render(request, 'RegistrationRecord/registration_record.html', message_map)
 
 # 文件传输迭代器
@@ -320,7 +335,7 @@ def recordDownloadXLSX(request, event_id):
     return response
 
 def confirm(request):
-    result = request.session['username'] + "你好!\n    您报名参加的" + request.session['eventname']
+    result = "你好!\n    您报名参加的" + request.session['eventname']
     if request.POST['result'] == "True":
         result = result + "已通过审核!"
     else:

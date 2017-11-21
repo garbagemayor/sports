@@ -107,7 +107,7 @@
                             </td>
                             <td>
                                 {% if record.status == 1 %}
-                                <input type="checkbox" name="checked" value="{{record.userIdSet}}"/>
+                                <input type="checkbox" name="checked" value="{{record.userId}}|{{record.userIdSet}}"/>
                                 {% endif %}
                             </td>
                         </tr>
@@ -155,7 +155,7 @@
 			</div>
             <div class="modal-body">
                 <div style="text-align: center;">
-                    {{ form1.as_p }}
+                    {{ form.result }}
                 </div>
             </div>
             <div class="modal-footer">
@@ -173,7 +173,6 @@
 		</div><!-- /.modal-content -->
 	</div><!-- /.modal-dialog -->
 </div>
-</form>
 
 <div class="modal fade" id="confirm2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
 	<div class="modal-dialog">
@@ -187,7 +186,13 @@
                 </h4>
 			</div>
             <div class="modal-body" id="editor_container">
-                {{ form2.as_p }}
+                {{ form.content }}
+                {% if event.teamMode == 1 %}
+                <div style="text-align: center;">
+                    <label for="{{ form.teamMode.id_for_label }}">只发送给队长</label>
+                    {{ form.leaderOnly }}
+                </div>
+                {% endif %}
             </div>
             <div class="modal-footer">
                 <div class="form-group">
@@ -204,7 +209,6 @@
 <!-- Start simple MDE -->
 <script>
     var simplemde = new SimpleMDE({
-        autofocus: true,
         element: document.getElementById("editor"),
         status: false,
         spellChecker: false,

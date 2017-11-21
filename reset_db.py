@@ -36,6 +36,7 @@ Users.objects.get_or_create(id=i)
 u = Users.objects.get(id=i)
 u.name = u'nodgd'
 u.fullname = u'董又铭'
+u.email = u'dongym15@mails.tsinghua.edu.cn'
 u.student_number = u'2015011294'
 u.authority = 2
 u.save()
@@ -54,6 +55,7 @@ Users.objects.get_or_create(id=i)
 u = Users.objects.get(id=i)
 u.name = u'luoy15'
 u.fullname = u'罗华一'
+u.email = u'luohy15@mails.tsinghua.edu.cn'
 u.student_number = u'2015011305'
 u.authority = 2
 u.save()
