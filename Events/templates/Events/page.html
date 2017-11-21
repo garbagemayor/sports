@@ -1,4 +1,4 @@
-﻿{% extends 'base.html' %}
+﻿{% extends 'base2.html' %}
 
 {% block title %}
 {{events.title}}
@@ -14,16 +14,6 @@
         </h1>
       </div>
         <br><br>
-        {% if request.session.auth > 0 %}          
-          <button class="btn btn-default" type='button' disabled="disabled" onclick="location.href='/events/next/{{events.id}}'">下一阶段</button>
-          <button class="btn btn-default" data-toggle="modal" data-target="#myModal">删除该赛事</button>
-          <button class="btn btn-default"
-              onclick="location.href='/events/setprizes/{{events.id}}'">设置奖项</button>
-        {% endif %}
-		  <button class="btn btn-default" data-toggle="modal" data-target="#qrCode">生成二维码</button>
-          <button class="btn btn-success" onclick="location.href='/record/{{events.id}}'" style="float:right">查看报名</button>
-          <button class="btn btn-success" onclick="location.href='/events/viewprizes/{{events.id}}'" style="float:right">查看获奖</button>
-      <br><br><br>
       <div class="ystep1"></div>      
       <br><br><br>
       <div id="status" class="alert alert-{{events.s3}}">
@@ -356,3 +346,33 @@ $(".ystep1").setStep({{events.status}});
 </script>
 
 {% endblock %}
+
+
+{% block extra %}
+	      
+      <br>
+        {% if request.session.auth > 0 %}   
+		<div style="text-align: center">
+			<button class="btn btn-block btn-sm btn-warning" type='button' disabled="disabled" onclick="location.href='/events/next/{{events.id}}'">下一阶段</button>
+        </div>       
+		<div style="text-align: center">
+			<button class="btn btn-block btn-sm btn-danger" data-toggle="modal" data-target="#myModal">删除该赛事</button>
+        </div>       
+		<div style="text-align: center">       
+          <button class="btn btn-block btn-sm btn-warning"
+              onclick="location.href='/events/setprizes/{{events.id}}'">设置奖项</button>
+		</div>
+        {% endif %}
+		<div style="text-align: center">
+		  <button class="btn btn-block btn-sm btn-primary" data-toggle="modal" data-target="#qrCode">分享</button>
+		</div>       
+		<div style="text-align: center">
+          <button class="btn btn-block btn-sm btn-success" onclick="location.href='/record/{{events.id}}'">查看报名</button>
+		</div>   
+		{% if events.status >= 4 %}
+		<div style="text-align: center">
+          <button class="btn btn-block btn-sm btn-success" onclick="location.href='/events/viewprizes/{{events.id}}'">查看获奖</button>
+		</div> 
+		{% endif %}		
+      <br><br><br>
+{% endblock %}	
