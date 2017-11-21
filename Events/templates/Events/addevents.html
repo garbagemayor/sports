@@ -23,6 +23,8 @@
     <script src="/static/css/bootstrap-theme.min.css"></script>
     <script src="/static/js/jquery.min.js"></script>
     <script src="/static/js/bootstrap.min.js"></script>
+	
+	<!----><link href="/static/css/gsdk.css" rel="stylesheet" /> 
     
     <link href="/static/style.css" rel="stylesheet">
 	
@@ -68,6 +70,19 @@
 		<label class="col-sm-3 control-label">赛名</label>
 		<div class="col-sm-4">
 			<input class="form-control" name="name" type="text"  placeholder="赛事名">
+		</div>
+	</div>
+	
+	
+	<div class="form-group">
+		<label class="col-sm-3 control-label">赛事类型</label>
+		<div class="col-sm-7">
+			<label class="checkbox" for="checkbox1" onclick=Check1() id="Check1">
+				<input type="checkbox" value="" id="checkbox1" data-toggle="checkbox">个人赛事
+			</label>
+			<label class="checkbox" for="checkbox2">
+				<input type="checkbox" value="" id="checkbox2" data-toggle="checkbox">团队赛事
+			</label>
 		</div>
 	</div>
 	
@@ -174,9 +189,17 @@
 <script type="text/javascript" src="/static/js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
 <script type="text/javascript">
 	$(document).ready(function(){
-        document.getElementById("teammax").style.visibility="hidden";
+        document.getElementById("teammax").hidden="hidden";
         document.getElementById("teammin").hidden="hidden";
+		document.getElementsById("checkbox1").checked=false;
     });
+	function Check1()
+	{
+		alert('checked');
+		var obj1 = document.getElementsById("checkbox1");
+		var obj2 = document.getElementsById("checkbox2");
+		obj2.checked = false;
+	}
     $('.form_datetime').datetimepicker({
         //language:  'fr',
         weekStart: 1,
