@@ -7,7 +7,6 @@ CONFIRM_CHOICES = (
 )
 class EditForm(forms.Form):
     content = forms.CharField(widget=forms.Textarea(attrs={'id': 'editor'}), label='')
-
-class OptionForm(forms.Form):
     result = forms.ChoiceField(widget=forms.Select,
             choices=CONFIRM_CHOICES, label='审核意见')
+    leaderOnly = forms.BooleanField()
