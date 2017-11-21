@@ -77,12 +77,14 @@
 	<div class="form-group">
 		<label class="col-sm-3 control-label">赛事类型</label>
 		<div class="col-sm-7">
-			<label class="checkbox" for="checkbox1" onclick=Check1() id="Check1">
+			<input type="checkbox" id="checkbox1" checked=true>个人赛事
+			<input type="checkbox" id="checkbox2">团队赛事
+			<!--<label class="checkbox" for="checkbox1" >
 				<input type="checkbox" value="" id="checkbox1" data-toggle="checkbox">个人赛事
 			</label>
 			<label class="checkbox" for="checkbox2">
 				<input type="checkbox" value="" id="checkbox2" data-toggle="checkbox">团队赛事
-			</label>
+			</label>-->
 		</div>
 	</div>
 	
@@ -189,16 +191,41 @@
 <script type="text/javascript" src="/static/js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
 <script type="text/javascript">
 	$(document).ready(function(){
-        document.getElementById("teammax").hidden="hidden";
-        document.getElementById("teammin").hidden="hidden";
-		document.getElementsById("checkbox1").checked=false;
+        document.getElementById("teammax").hidden=true;
+        document.getElementById("teammin").hidden=true;		
+		var obj1 = document.getElementById("checkbox1");
+		obj1.onchange = function(){
+			document.getElementById("checkbox2").checked=false;
+			var b=document.getElementById("checkbox2").checked;
+			//alert(b);
+			if (b == false ) {
+				document.getElementById("teammax").hidden=true;
+				document.getElementById("teammin").hidden=true;	
+			}
+		}
+		var obj2 = document.getElementById("checkbox2");
+		obj2.onchange = function(){
+			document.getElementById("checkbox1").checked=false;
+			var b=document.getElementById("checkbox2").checked;
+			//alert(b);
+			if (b == true ) {
+				document.getElementById("teammax").hidden=false;
+				document.getElementById("teammin").hidden=false;	
+			}
+		}
     });
 	function Check1()
 	{
-		alert('checked');
-		var obj1 = document.getElementsById("checkbox1");
-		var obj2 = document.getElementsById("checkbox2");
-		obj2.checked = false;
+	
+		/*var obj1 = document.getElementById("checkbox1");
+		var obj2 = document.getElementById("checkbox2");
+		document.getElementById("checkbox2").checked=false;
+		var b = document.getElementById("checkbox2").checked;
+			alert(b);
+		if (b == true){
+			alert('checked');
+			document.getElementById("checkbox2").checked =  false;
+		}*/
 	}
     $('.form_datetime').datetimepicker({
         //language:  'fr',
