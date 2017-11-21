@@ -99,6 +99,29 @@ def auth(request):
     # 如果是老用户，检测信息是否一致
     isDifferent = False
     if not isNewUser:
+        # 如果这个老用户，居然还能从account9上获取到新信息，也就忍了
+        if user.name == None:
+            user.name = user_name
+            user.save()
+        if user.fullname == None:
+            user.fullname = user_fullname
+            user.save()
+        if user.mobile == None:
+            user.mobile = user_mobile
+            user.save()
+        if user.email == None:
+            user.email = user_email
+            user.save()
+        if user.birthday == None:
+            user.birthday = user_birthday
+            user.save()
+        if user.classnumber == None:
+            user.classnumber = user_classnumber
+            user.save()
+        if user.degree == None:
+            user.degree = user_degree
+            user.save()
+        # 检查老用户信息是否一致，如果不一致，封号哭哭哟
         if user.name != user_name                       \
             or user.fullname != user_fullname           \
             or user.mobile != user_mobile               \
@@ -108,23 +131,26 @@ def auth(request):
             or user.degree != user_degree:
             isDifferent = True
 
+    # 检测其他一些，从account9上获取不到的信息
+    needMore = False
+    if user.certification_id == None        \
+        or user.student_number == None      \
+        or user.cloth_size == None          \
+        or user.gender == None:
+        needMore = True
+
+
     # 弹出各种情况下的消息窗口
+    messages.add_message(request, messages.INFO, '登陆成功! ' + request.session['username'] + ' 欢迎来到体育赛事报名平台！')
     if isNewUser:
-        messages.add_message(request, messages.INFO,
-                             '登陆成功! ' + request.session['username'] + ' 欢迎来到体育赛事报名平台！')
-        messages.add_message(request, messages.INFO,
-                             '检测到您是首次登录这个系统，请立即补充个人信息否则封号！')
-        return HttpResponseRedirect("/user/profile/")
+        messages.add_message(request, messages.INFO, '检测到您是首次登录这个系统，请立即补充个人信息否则封号！')
     elif isDifferent:
-        messages.add_message(request, messages.INFO,
-                             '登陆成功! ' + request.session['username'] + ' 欢迎来到体育赛事报名平台！')
-        messages.add_message(request, messages.INFO,
-                             '检测到你的个人信息与account9上的信息存在差异，请立即修改否则封号！')
-        return HttpResponseRedirect("/user/profile/")
+        messages.add_message(request, messages.INFO, '检测到你的个人信息与account9上的信息存在差异，请立即修改否则封号！')
+    elif needMore:
+        messages.add_message(request, messages.INFO, '检测到您还需要填写更多信息，请立即填写否则封号！')
     else:
-        messages.add_message(request, messages.INFO,
-                             '登陆成功! ' + request.session['username'] + ' 欢迎来到体育赛事报名平台！')
         return HttpResponseRedirect("/events/")
+    return HttpResponseRedirect("/user/profile/")
 
 def logout(request):
     if request.session['username']:
