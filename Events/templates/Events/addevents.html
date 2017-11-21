@@ -24,7 +24,6 @@
     <script src="/static/js/jquery.min.js"></script>
     <script src="/static/js/bootstrap.min.js"></script>
 	
-	<!----><link href="/static/css/gsdk.css" rel="stylesheet" /> 
     
     <link href="/static/style.css" rel="stylesheet">
 	
@@ -77,8 +76,8 @@
 	<div class="form-group">
 		<label class="col-sm-3 control-label">赛事类型</label>
 		<div class="col-sm-7">
-			<input type="checkbox" id="checkbox1" checked=true>个人赛事
-			<input type="checkbox" id="checkbox2">团队赛事
+			<input type="checkbox" id="checkbox1" name="checkbox" checked=true value=1>个人赛事
+			<input type="checkbox" id="checkbox2" name="checkbox" value=2>团队赛事
 			<!--<label class="checkbox" for="checkbox1" >
 				<input type="checkbox" value="" id="checkbox1" data-toggle="checkbox">个人赛事
 			</label>
@@ -87,17 +86,7 @@
 			</label>-->
 		</div>
 	</div>
-	
-	<div class="form-group">
-		<label class="col-sm-3 control-label">赛事类型</label>
-		<div class="col-sm-4">
-        <select name="type" id="parent" class="certification_type">
-            <option value="null">请选择</option>
-            <option value="0">个人赛事</option>
-            <option value="1">团队赛事</option>
-        </select>
-		</div>
-	</div>
+
 	
 	<div class="form-group" id="teammin" >
 		<label class="col-sm-3 control-label">团队人数下限</label>
@@ -195,23 +184,31 @@
         document.getElementById("teammin").hidden=true;		
 		var obj1 = document.getElementById("checkbox1");
 		obj1.onchange = function(){
-			document.getElementById("checkbox2").checked=false;
 			var b=document.getElementById("checkbox2").checked;
 			//alert(b);
-			if (b == false ) {
+			if (b == true ) {
 				document.getElementById("teammax").hidden=true;
 				document.getElementById("teammin").hidden=true;	
 			}
+			else {
+				document.getElementById("teammax").hidden=false;
+				document.getElementById("teammin").hidden=false;			
+			}
+			document.getElementById("checkbox2").checked=!b;
 		}
 		var obj2 = document.getElementById("checkbox2");
 		obj2.onchange = function(){
-			document.getElementById("checkbox1").checked=false;
 			var b=document.getElementById("checkbox2").checked;
 			//alert(b);
 			if (b == true ) {
 				document.getElementById("teammax").hidden=false;
 				document.getElementById("teammin").hidden=false;	
 			}
+			else {
+				document.getElementById("teammax").hidden=true;
+				document.getElementById("teammin").hidden=true;				
+			}
+			document.getElementById("checkbox1").checked=!b;
 		}
     });
 	function Check1()
