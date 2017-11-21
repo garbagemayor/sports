@@ -26,12 +26,19 @@
         </h1>
 	</div>	
 	
-        <div class="span12">	
+		  <div class="dropdown">
+			<button class="btn dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" style="float:right">添加赛事
+				<span class="caret"></span>
+			</button>
+			<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+			<li role="presentation"><a role="menuitem" tabindex="-1" href="#">个人赛事</a></li>
+			<li role="presentation"><a role="menuitem" tabindex="-1" href="#">团队赛事</li>
+			</ul>
+		  </div>
+        	
 		{% if request.session.auth > 0 %}
-		  <button class="btn btn-default" onclick="location.href='/events/addevents'">添加赛事</button>
-		{% endif %}
 		<br><br>
-      </div>
+		{% endif %}
 			<div class="tabbable" id="tabs-30026">
 				<ul class="nav nav-tabs">
 					<li class="active" >
@@ -41,8 +48,8 @@
 						<a href="#panel-363798" data-toggle="tab">列表</a>
 					</li>
 				</ul>
-				<div class="tab-content">
-					<div class="tab-pane active" id="panel-146781">		<br>
+			<div class="tab-content">
+			<div class="tab-pane active" id="panel-146781">		
         <div class="controls">
             <!--<button type="button" data-mixitup-control class="control" data-filter="all">All</button><label >全部</label>
             <button type="button" data-mixitup-control class="control" data-filter=".blue">Green</button><label >即将开始</label>
@@ -139,7 +146,7 @@
                     </td>
                 </tr>
                 {% endfor %}
-                
+                </tbody>
             </table>
         </div>
     </div>
