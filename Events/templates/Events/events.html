@@ -105,9 +105,6 @@
                 <thead>
                 <tr>
                     <th>
-                        编号
-                    </th>
-                    <th>
                         项目
                     </th>
                     <th>
@@ -124,9 +121,6 @@
                 <tbody>
                 {% for line in events_list %}
                 <tr class="{{line.s3}}" ondblclick="location.href='/events/{{line.id}}'">
-                    <td>
-                        {{line.id}}
-                    </td>
                     <td onclick="location.href='/events/{{line.id}}'">
                         {{line.name}}
                     </td>

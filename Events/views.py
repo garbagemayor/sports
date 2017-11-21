@@ -107,7 +107,7 @@ def delete_events(request, Id):
         if request.session.get('userid'):
             if request.session['auth'] > 0:
                 Events.objects.filter(id=Id).delete()
-                Sign.objects.filter(eventsid=Id).delete()
+                Sign.objects.filter(eventId=Id).delete()
                 messages.add_message(request, messages.INFO, '删除成功！')
             else:
                 messages.add_message(request, messages.INFO, '当前用户无此操作权限！')
@@ -268,6 +268,30 @@ def design(request, Id):
 @csrf_exempt
 def addevents(request):
     if request.method == "POST":
+        if not request.POST['name']:
+            messages.add_message(request, messages.INFO, "赛事名不能为空！")
+            return render(request, "Events/addevents.html")
+        
+        if not request.POST['type']:
+            messages.add_message(request, messages.INFO, "请选择赛事类型！")
+            return render(request, "Events/addevents.html")
+        
+        if not request.POST['time1']:
+            messages.add_message(request, messages.INFO, "请填写全部时间！")
+            return render(request, "Events/addevents.html")
+        
+        if not request.POST['time2']:
+            messages.add_message(request, messages.INFO, "请填写全部时间！")
+            return render(request, "Events/addevents.html")
+        
+        if not request.POST['time3']:
+            messages.add_message(request, messages.INFO, "请填写全部时间！")
+            return render(request, "Events/addevents.html")
+        
+        if not request.POST['time4']:
+            messages.add_message(request, messages.INFO, "请填写全部时间！")
+            return render(request, "Events/addevents.html")
+
         if Events.objects.get_or_create(name=request.POST['name'], desc=request.POST['detail']):
             messages.add_message(request, messages.INFO, '成功添加赛事' + request.POST['name'] + '！')
             return HttpResponseRedirect('/events/')
