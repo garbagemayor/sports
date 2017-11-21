@@ -30,10 +30,8 @@
         <div class="span12">
 	        <div class="page-header">
                 <h1 style="text-align: center">
-                    {{event.name}} 的报名记录
-                    <small>
-                        {{event.name}} 的报名记录
-                    </small>
+                    {{event.name}}
+                    <small>报名记录</small>
                 </h1>
             </div>
                 <button class="btn btn-default" type="button" onclick="location.href='/record_download_csv/{{event.id}}'">
@@ -86,9 +84,9 @@
                                 {{ record.timeRegStr }}
                             </td>
                             {% if event.teamMode == 1 %}
-                            <th>
+                            <td>
                                 {{ record.captainFullname }}
-                            </th>
+                            </td>
                             {% endif %}
                             <td>
                                 <a href="/user/{{record.user.id}}">{{ record.name | linebreaksbr }}</a>

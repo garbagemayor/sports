@@ -214,9 +214,10 @@ def recordDownloadCSV(request, event_id):
     dataFrame.to_csv(file_name, encoding="utf-8", header=table_header, index=True, index_label=u'编号')
 
     # 传输下载
+    import random
     response = StreamingHttpResponse(file_iterator(file_name))
     response['Content-Type'] = 'application/octet-stream'
-    response['Content-Disposition'] = 'attachment;filename="{0}"'.format(file_name)
+    response['Content-Disposition'] = u'attachment;filename="table_%d.csv"' % (random.randint(0, 0x7fffffff))
     return response
 
 
@@ -329,9 +330,10 @@ def recordDownloadXLSX(request, event_id):
         messages.add_message(request, messages.INFO,
                              '生成报名表文件失败，可能是有个逗比在服务器上瞎搞')
     # 传输下载
+    import random
     response = StreamingHttpResponse(file_iterator(file_name))
     response['Content-Type'] = 'application/octet-stream'
-    response['Content-Disposition'] = 'attachment;filename="{0}"'.format(file_name)
+    response['Content-Disposition'] = u'attachment;filename="table_%d.xlsx"' % (random.randint(0, 0x7fffffff))
     return response
 
 def confirm(request):
