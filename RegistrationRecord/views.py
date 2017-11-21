@@ -319,11 +319,10 @@ def recordDownloadXLSX(request, event_id):
     response['Content-Disposition'] = 'attachment;filename="{0}"'.format(file_name)
     return response
 
-@csrf_exempt
 def confirm(request):
     result = request.session['username'] + "你好!\n    您报名参加的" + request.session['eventname']
     if request.POST['result'] == "True":
         result = result + "已通过审核!"
     else:
-        result = result + "审核失败!"
+        result = result + "审核没有通过!"
     return HttpResponse(result)
