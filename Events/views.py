@@ -239,6 +239,8 @@ def teamsign(request, eventId, selectedStr="", other=""):
             for userId in selectedStr.split(","):
                 if len(userId) > 0 and int(userId) not in teammateId:
                     teammateId.append(int(userId))
+            if request.session['userid'] not in teammateId:
+                teammateId.append(request.session['userid'])
             e = Events.objects.get(id=eventId)
             if e.maxRegCnt != -1 and e.maxRegCnt <= e.nowRegCnt:
                 messages.add_message(request, messages.INFO, '报名已经满了，你是怎么点到报名按钮的？')
@@ -252,7 +254,6 @@ def teamsign(request, eventId, selectedStr="", other=""):
                 s.teamMate = teammateId
                 s.timeReg = timezone.now()
                 s.exmStatus = 1
-                s.printAll()
                 s.save()
                 messages.add_message(request, messages.INFO, '向数据库添加团队报名信息成功！')
     else:

@@ -10,7 +10,7 @@
     <link rel="icon" href="">
 
       {% block Title %}
-      <title>Base Index</title>
+      <title id="baseIndexTitle">Base Index</title>
       {% endblock %}
 
     
@@ -39,7 +39,7 @@
 
   </head>
 
-	<body onload="openwin()" data-spy="scroll" data-target=".main-nav">
+	<body onload="onloadBaseHTML()" data-spy="scroll" data-target=".main-nav">
 
 		
 		{% include 'header.html' %}
@@ -187,7 +187,7 @@
                     <div class="col-md-9" style="padding-top:50px">
 					<div class="panel panel-primary">
 						<div class="panel-heading">
-							<h3 class="panel-title" style="text-color:'#aaaaaa'">
+							<h3 id="mainViewHeader" class="panel-title" style="text-color:'#aaaaaa'">
 								赛事
 							</h3>
 						</div>
@@ -216,9 +216,9 @@
 		{% endif %}
   
   
-  
+
   </body>
-	
+
     {% include 'footer.html' %}<!---->
 
     <!-- Bootstrap core JavaScript
@@ -243,5 +243,12 @@
 	<script src="/static/js/gsdk-bootstrapswitch.js"></script>
 	<script src="/static/js/get-shit-done.js"></script>
     <script src="/static/js/custom.js"></script>
-  </body>
+	<script>
+		function onloadBaseHTML() {
+			var baseIndexTitle = document.getElementById("baseIndexTitle");
+			var mainViewHeader = document.getElementById("mainViewHeader");
+			mainViewHeader.innerHTML = baseIndexTitle.innerHTML.split(" - ")[0];
+			openwin();
+		}
+	</script>
 </html>

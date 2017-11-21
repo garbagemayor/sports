@@ -85,6 +85,32 @@ class RecordItem:
                 self.degree = self.degree + "\n" + toUtf8WithNone(user.degree)
         self.userIdSet = list(self.userIdSet)
 
+    def printAll(self):
+        print u'<class RegistrationRecord.views.RecordItem> {'
+        print u'    ' + u'userIdSet = ' + unicode(self.userIdSet)
+        print u'    ' + u'userId = ' + unicode(self.userId)
+        print u'    ' + u'eventId = ' + unicode(self.eventId)
+        print u'    ' + u'teamSize = ' + unicode(self.teamSize)
+        print u'    ' + u'timeRegStr = ' + unicode(self.timeRegStr)
+        print u'    ' + u'status = ' + unicode(self.status)
+        print u'    ' + u'statusStr = ' + unicode(self.statusStr)
+        print u'    ' + u'statusToClass = ' + unicode(self.statusToClass)
+        print u'    ' + u'captainName = ' + unicode(self.captainName)
+        print u'    ' + u'captainFullname = ' + unicode(self.captainFullname)
+        print u'    ' + u'name = ' + unicode(self.name)
+        print u'    ' + u'fullname = ' + unicode(self.fullname)
+        print u'    ' + u'certification_type = ' + unicode(self.certification_type)
+        print u'    ' + u'certification_id = ' + unicode(self.certification_id)
+        print u'    ' + u'mobile = ' + unicode(self.mobile)
+        print u'    ' + u'classnumber = ' + unicode(self.classnumber)
+        print u'    ' + u'email = ' + unicode(self.email)
+        print u'    ' + u'student_number = ' + unicode(self.student_number)
+        print u'    ' + u'room_address = ' + unicode(self.room_address)
+        print u'    ' + u'cloth_size = ' + unicode(self.cloth_size)
+        print u'    ' + u'gender = ' + unicode(self.gender)
+        print u'    ' + u'degree = ' + unicode(self.degree)
+        print u'}'
+
 @csrf_exempt
 def recordPage(request, event_id):
     event_id = int(event_id)
@@ -214,9 +240,10 @@ def recordDownloadCSV(request, event_id):
     dataFrame.to_csv(file_name, encoding="utf-8", header=table_header, index=True, index_label=u'编号')
 
     # 传输下载
+    import random
     response = StreamingHttpResponse(file_iterator(file_name))
     response['Content-Type'] = 'application/octet-stream'
-    response['Content-Disposition'] = 'attachment;filename="{0}"'.format(file_name)
+    response['Content-Disposition'] = u'attachment;filename="table_%d.csv"' % (random.randint(0, 0x7fffffff))
     return response
 
 
@@ -329,9 +356,10 @@ def recordDownloadXLSX(request, event_id):
         messages.add_message(request, messages.INFO,
                              '生成报名表文件失败，可能是有个逗比在服务器上瞎搞')
     # 传输下载
+    import random
     response = StreamingHttpResponse(file_iterator(file_name))
     response['Content-Type'] = 'application/octet-stream'
-    response['Content-Disposition'] = 'attachment;filename="{0}"'.format(file_name)
+    response['Content-Disposition'] = u'attachment;filename="table_%d.xlsx"' % (random.randint(0, 0x7fffffff))
     return response
 
 def confirm(request):
