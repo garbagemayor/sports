@@ -44,13 +44,19 @@
 				<div class="tab-content">
 					<div class="tab-pane active" id="panel-146781">		<br>
         <div class="controls">
-            <button type="button" data-mixitup-control class="control" data-filter="all">All</button><label >全部</label>
+            <!--<button type="button" data-mixitup-control class="control" data-filter="all">All</button><label >全部</label>
             <button type="button" data-mixitup-control class="control" data-filter=".blue">Green</button><label >即将开始</label>
             <button type="button" data-mixitup-control class="control" data-filter=".green">Blue</button><label >正在报名</label>
-            <button type="button" data-mixitup-control class="control" data-filter=".yellow">yellow</button><label >正在进行</label>
+            <button type="button" data-mixitup-control class="control" data-filter=".yellow">yellow</button><label >正在报名</label>
             <button type="button" data-mixitup-control class="control" data-filter=".red">red</button><label >已结束</label>
-            <button type="button" data-mixitup-control class="control" data-filter="none">None</button><label >空    </label>
-
+            <button type="button" data-mixitup-control class="control" data-filter="none">None</button><label >空    </label>-->
+			
+			<button class="btn btn-default" data-mixitup-control data-filter="all">全部</button>
+			<button class="btn btn-success" data-mixitup-control data-filter=".blue">即将开始</button>
+			<button class="btn btn-info" data-mixitup-control data-filter=".green">正在报名</button>
+			<button class="btn btn-warning" data-mixitup-control data-filter=".yellow">等待比赛</button>
+			<button class="btn btn-danger" data-mixitup-control data-filter=".red">已结束</button>
+			
             <button type="button" data-mixitup-control class="control" data-sort="default:asc">Asc</button>
             <button type="button" data-mixitup-control class="control" data-sort="default:desc">Desc</button>
         </div>
@@ -223,7 +229,7 @@ $('#indicatorContainer_{{line.id}}').radialIndicator({
     },
 	radius: 30,
     minValue: 0,
-    maxValue: {%if line.maxRegCnt == -1 %} 100, {% else %} {{line.maxRegCnt}} {% endif %}
+    maxValue: {%if line.maxRegCnt == -1 %} 100, {% else %} {{line.maxRegCnt}}, {% endif %}
 	initValue: {{line.nowRegCnt}}
 });
 	</script>
