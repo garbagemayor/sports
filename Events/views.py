@@ -128,7 +128,7 @@ def delete_events(request, Id):
         if request.session.get('userid'):
             if request.session['auth'] > 0:
                 Events.objects.filter(id=Id).delete()
-                Sign.objects.filter(eventsid=Id).delete()
+                Sign.objects.filter(eventId=Id).delete()
                 messages.add_message(request, messages.INFO, '删除成功！')
             else:
                 messages.add_message(request, messages.INFO, '当前用户无此操作权限！')
@@ -289,7 +289,36 @@ def design(request, Id):
 @csrf_exempt
 def addevents(request):
     if request.method == "POST":
-        if Events.objects.get_or_create(name=request.POST['name'], desc=request.POST['detail']):
+        if not request.POST['name']:
+            messages.add_message(request, messages.INFO, "赛事名不能为空！")
+            return render(request, "Events/addevents.html")
+        checkbox=request.POST.getlist("checkbox")
+        if len(checkbox) == 0:            
+            messages.add_message(request, messages.INFO, "请选择赛事类型！")
+            return render(request, "Events/addevents.html")
+        
+        #if not request.POST['type']:
+            #messages.add_message(request, messages.INFO, "请选择赛事类型！")
+            #return render(request, "Events/addevents.html")
+
+        if int(request.POST['teammax'])<int(request.POST['teammin']):
+            messages.add_message(request, messages.INFO, "团队人数有误！")
+            return render(request, "Events/addevents.html")
+        
+        if not request.POST['time1']:
+            messages.add_message(request, messages.INFO, "请填写全部时间！")
+            return render(request, "Events/addevents.html")
+        
+        if not request.POST['time2']:
+            messages.add_message(request, messages.INFO, "请填写全部时间！")
+            return render(request, "Events/addevents.html")
+        
+        if not request.POST['time3']:
+            messages.add_message(request, messages.INFO, "请填写全部时间！")
+            return render(request, "Events/addevents.html")
+        
+
+        if Events.objects.create(name=request.POST['name'], desc=request.POST['detail'], teamMode=checkbox[0], teamMin=request.POST['teammin'], teamMax=request.POST['teammax'], maxRegCnt=request.POST['num'], timeRegSt=request.POST['time1'], timeRegEn=request.POST['time2'], timeEvnSt=request.POST['time3']):
             messages.add_message(request, messages.INFO, '成功添加赛事' + request.POST['name'] + '！')
             return HttpResponseRedirect('/events/')
     return render(request, "Events/addevents.html")

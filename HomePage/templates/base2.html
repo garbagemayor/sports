@@ -30,7 +30,8 @@
     
     <link href="/static/style.css" rel="stylesheet">
 	
-	<link  href="/static/css/ystep.css" rel="stylesheet">
+	<link  href="/static/css/ystep.css" rel="stylesheet">		  
+	<link href="/static/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">	
 	<!----><link href="/static/css/radialindicator/base.css"  rel="stylesheet" type="text/css" />
     {% load staticfiles %}
 
@@ -178,16 +179,16 @@
 						</div>
 					</div>
 				</div>
-				
-					
-						
-						
-						
+
+
+
+
+
                     </div>
-                    <div class="col-md-9" style="padding-top:50px">
+                    <div class="col-md-6" style="padding-top:50px">
 					<div class="panel panel-primary">
 						<div class="panel-heading">
-							<h3 class="panel-title" style="text-color:'#aaaaaa'">
+							<h3 class="panel-title">
 								赛事
 							</h3>
 						</div>
@@ -198,6 +199,22 @@
 						</div>
 					</div>
 					   
+                    </div>
+
+                    <div class="col-md-3" style="padding-top:50px">
+					<div class="panel panel-success">
+						<div class="panel-heading">
+							<h3 class="panel-title">
+								更多
+							</h3>
+						</div>
+						<div class="panel-body">
+						{% block extra %}
+							<div>加载中</div>
+						{% endblock %}
+						</div>
+					</div>
+
                     </div>
 					
 			</div>
