@@ -76,4 +76,5 @@ urlpatterns = [
                   url(r'^record/(\d+)/$', Record_view.recordPage, name='recordpage'),       # 某赛事报名情况
                   url(r'^record_download_csv/(\d+)/$', Record_view.recordDownloadCSV, name='recorddownload'),
                   url(r'^record_download_xlsx/(\d+)/$', Record_view.recordDownloadXLSX, name='recorddownload'),
+                  url(r'^record/confirm/$', Record_view.confirm, name='confirm'),       # 审核内容回复
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
