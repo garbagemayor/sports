@@ -214,6 +214,7 @@
         console.log(x);
         $.post("{% url 'confirm' %}",
         {
+            csrfmiddlewaretoken: "{{ csrf_token }}",
             result: x,
         },
         function(ret){
