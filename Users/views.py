@@ -8,10 +8,11 @@ import django.utils.timezone as timezone
 import requests
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
-from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.shortcuts import render, render_to_response
 from django.views.decorators.csrf import csrf_exempt
 
 from HomePage.models import Events
@@ -22,6 +23,7 @@ from HomePage.models import utcToLocal
 from Users.forms import EditForm
 from Users.models import Notification
 from Users.models import NotificationController
+from qiniu import Auth
 
 
 def auth(request):
@@ -529,3 +531,27 @@ def decr_notifications_counter(sender, instance, **kwargs):
         if not obj[1]:
             obj[0].unReadCount = obj[0].unReadCount - 1
             obj[0].save()
+
+def qiniu_uptoken(request):
+    #需要填写你的 Access Key 和 Secret Key
+    access_key = 'iuFSDhrkjCI_bYpSCzZumRBlYNZ48oVC6UZN9b4R'
+    secret_key = 'IwYY8y0rNGhueVayu2k2e-o1m6jDQ4KOmHEkPmet'
+    #构建鉴权对象
+    q = Auth(access_key, secret_key)
+    #要上传的空间
+    bucket_name = 'lroot'
+    #上传到七牛后保存的文件名
+    # key = ''
+    #生成上传 Token，可以指定过期时间等
+    # 上传策略示例
+    # https://developer.qiniu.com/kodo/manual/1206/put-policy
+    policy = {
+     # 'callbackUrl':'https://requestb.in/1c7q2d31',
+     # 'callbackBody':'filename=$(fname)&filesize=$(fsize)'
+     # 'persistentOps':'imageView2/1/w/200/h/200'
+     }
+    #3600为token过期时间，秒为单位。3600等于一小时
+    token = q.upload_token(bucket_name)
+    token_dict = {'uptoken': token}
+    return JsonResponse(token_dict)
+
