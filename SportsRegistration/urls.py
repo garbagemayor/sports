@@ -78,6 +78,7 @@ urlpatterns = [
                   url(r'^managers/celebrity/$', Users_view.celebrity, name='celebrity'),
                   url(r'^managers/photos/$', Users_view.photos, name='photos'),
                   url(r'^qiniu/$', Users_view.qiniu_uptoken, name='qiniu'),
+                  url(r'^newimg/$', Users_view.store_img, name='newimg'),
 
                   # 记录
                   url(r'^record/(\d+)/$', Record_view.recordPage, name='recordpage'),  # 某赛事报名情况

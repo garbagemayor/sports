@@ -20,7 +20,6 @@ from HomePage.models import IMG
 from HomePage.models import Signs as Sign
 from HomePage.models import Users as User
 from HomePage.models import utcToLocal
-from Users.forms import EditForm
 from Users.models import Notification
 from Users.models import NotificationController
 from qiniu import Auth
@@ -341,20 +340,9 @@ def demanager(request, Id):
 def backend(request):
     return render(request, 'Users/backend.html')
 
-
-@csrf_exempt
-def team(request):
-    if request.method == 'POST':
-        new_img = IMG.objects.get(id=1)
-        if len(request.POST['name']) > 1:
-            new_img.name = request.POST['name']
-        if request.FILES.get('img'):
-            new_img.img = request.FILES.get('img')
-        if len(request.POST['name']) > 1:
-            new_img.detail = request.POST['detail']
-        new_img.save()
-        return HttpResponseRedirect("/main/")
-    return render(request, 'Users/team.html')
+def team(request): 
+    img_list = IMG.objects.filter(imgtype=1)
+    return render(request, 'Users/team.html', {'img_list': img_list})
 
 
 @csrf_exempt
@@ -554,4 +542,13 @@ def qiniu_uptoken(request):
     token = q.upload_token(bucket_name)
     token_dict = {'uptoken': token}
     return JsonResponse(token_dict)
+
+def store_img(request):
+    new_img = IMG(
+            url=request.POST['url'],
+            detail=request.POST['detail'],
+            imgtype=1,
+        )
+    new_img.save()
+    return HttpResponse('ok')
 
