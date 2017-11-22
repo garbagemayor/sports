@@ -26,6 +26,7 @@ def index(request):
         l.timeRegStStr = utcToLocal(l.timeRegSt).strftime("%Y-%m-%d %H:%M:%S")
         l.timeRegEnStr = utcToLocal(l.timeRegEn).strftime("%Y-%m-%d %H:%M:%S")
         l.timeEvnStStr = utcToLocal(l.timeEvnSt).strftime("%Y-%m-%d %H:%M:%S")
+    events_list_len = len(events_list)
     paginator = Paginator(events_list, 10)
     page = request.GET.get('page')
     try:
@@ -35,7 +36,9 @@ def index(request):
     except EmptyPage:
         events_list = paginator.page(paginator.num_pages)
 
-    return render(request, 'Events/events.html', {'events_list': events_list})
+    return render(request, 'Events/events.html',
+                  {'events_list': events_list,
+                   'events_list_len': events_list_len})
 
 
 @csrf_exempt

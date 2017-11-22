@@ -27,21 +27,34 @@
                            <th>
                                发信人
                            </th>
-                            <th>
-                                标题
-                            </th>
-                            <th>
-                                时间
-                            </th>
-                            <th>
-                                状态
-                            </th>
-                            <th>
-                                选择
-                            </th>
+                           <th>
+                               标题
+                           </th>
+                           <th>
+                               时间
+                           </th>
+                           <th>
+                               状态
+                           </th>
+                           <th>
+                               <font face="黑体" color="#ACCBE8">
+                                   <div style="display:inline;" onclick="selectAll()">
+                                       全选
+                                   </div>
+                                   /
+                                   <div style="display:inline;" onclick="selectInv()">
+                                       反选
+                                   </div>
+                               </font>
+                           </th>
                         </tr>
                     </thead>
                     <tbody>
+                        {% if record_list_len == 0 %}
+                        <tr class="danger">
+                            <td colspan="5" style="text-align: center;">暂无记录</td>
+                        </tr>
+                        {% endif %}
                         {% for record in record_list %}
                         <tr ondblclick="location.href='/notes/{{record.id}}'"
                             {% if not record.isRead %} class="success" {% else %} class="info" {% endif %}>
@@ -68,6 +81,22 @@
         </div>
     </div>
 </div>
+<script>
+        function selectAll() {
+            var clist = document.getElementsByName("checked");
+            for (var i = 0; i < clist.length; i ++) {
+                clist[i].checked = true;
+            }
+        }
+    </script>
+<script>
+        function selectInv() {
+            var clist = document.getElementsByName("checked");
+            for (var i = 0; i < clist.length; i ++) {
+                clist[i].checked = ! clist[i].checked;
+            }
+        }
+    </script>
 
 <nav style="text-align: center">
 <ul class="pagination">

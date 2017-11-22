@@ -251,6 +251,8 @@ def my_events(request):
                 tmp = tmp[0]
                 tmp.s2 = gets2(tmp.getStatus())
                 events_list.append(tmp)
+        events_list_len = len(events_list)
+        print "events_list_len", events_list_len
         paginator = Paginator(events_list, 3)
         page = request.GET.get('page')
         try:
@@ -260,7 +262,9 @@ def my_events(request):
         except EmptyPage:
             events_list = paginator.page(paginator.num_pages)
 
-        return render(request, 'Events/myevents.html', {'events_list': events_list})
+        return render(request, 'Events/myevents.html',
+                      {'events_list': events_list,
+                       'events_list_len': events_list_len})
     else:
         messages.add_message(request, messages.INFO, '请登录！')
         return HttpResponseRedirect(
@@ -461,23 +465,12 @@ def notification(request):
         checkbox_list = request.POST.getlist("checked")
         for i in checkbox_list:
             Notification.objects.filter(id=i).delete()
-        user_id = request.session['userid']
-        record_list = list(Notification.objects.filter(target=user_id))
-        # 分页模块
-        paginator = Paginator(record_list, 10)
-        page = request.GET.get('page')
-        try:
-            record_list = paginator.page(page)
-        except PageNotAnInteger:
-            record_list = paginator.page(1)
-        except EmptyPage:
-            record_list = paginator.page(paginator.num_pages)
-        message_map = {'record_list': record_list}
-        return render(request, 'Users/notification.html', message_map)
     user_id = request.session['userid']
     record_list = list(Notification.objects.filter(target=user_id))
+    record_list = record_list[::-1]
     for record in record_list:
         record.createTimeStr = utcToLocal(record.createTime).strftime("%Y-%m-%d %H:%M:%S")
+    record_list_len = len(record_list)
     # 分页模块
     paginator = Paginator(record_list, 10)
     page = request.GET.get('page')
@@ -487,7 +480,10 @@ def notification(request):
         record_list = paginator.page(1)
     except EmptyPage:
         record_list = paginator.page(paginator.num_pages)
-    message_map = {'record_list': record_list}
+    message_map = {
+        'record_list': record_list,
+        'record_list_len': record_list_len
+    }
     return render(request, 'Users/notification.html', message_map)
 
 
