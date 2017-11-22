@@ -461,19 +461,6 @@ def notification(request):
         checkbox_list = request.POST.getlist("checked")
         for i in checkbox_list:
             Notification.objects.filter(id=i).delete()
-        user_id = request.session['userid']
-        record_list = list(Notification.objects.filter(target=user_id))
-        # 分页模块
-        paginator = Paginator(record_list, 10)
-        page = request.GET.get('page')
-        try:
-            record_list = paginator.page(page)
-        except PageNotAnInteger:
-            record_list = paginator.page(1)
-        except EmptyPage:
-            record_list = paginator.page(paginator.num_pages)
-        message_map = {'record_list': record_list}
-        return render(request, 'Users/notification.html', message_map)
     user_id = request.session['userid']
     record_list = list(Notification.objects.filter(target=user_id))
     for record in record_list:

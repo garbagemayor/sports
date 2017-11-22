@@ -46,7 +46,7 @@ class RecordItem:
         self.timeRegStr = utcToLocal(record.timeReg).strftime("%Y-%m-%d %H:%M:%S")
         self.status = record.exmStatus
         self.statusStr = [u"", u"等待审核", u"审核通过", u"审核未通过"][self.status]
-        self.statusToClass = [u"", u"info", u"success", u"error"][self.status]
+        self.statusToClass = [u"", u"info", u"success", u"danger", u"warning"][self.status]
         # 队长的信息
         if self.teamSize > 1:
             self.captainName = toUtf8WithNone(user.name)
@@ -96,8 +96,9 @@ class RecordItem:
         print u'    ' + u'status = ' + unicode(self.status)
         print u'    ' + u'statusStr = ' + unicode(self.statusStr)
         print u'    ' + u'statusToClass = ' + unicode(self.statusToClass)
-        print u'    ' + u'captainName = ' + unicode(self.captainName)
-        print u'    ' + u'captainFullname = ' + unicode(self.captainFullname)
+        if self.teamSize > 1:
+            print u'    ' + u'captainName = ' + unicode(self.captainName)
+            print u'    ' + u'captainFullname = ' + unicode(self.captainFullname)
         print u'    ' + u'name = ' + unicode(self.name)
         print u'    ' + u'fullname = ' + unicode(self.fullname)
         print u'    ' + u'certification_type = ' + unicode(self.certification_type)
@@ -119,37 +120,35 @@ def recordPage(request, event_id):
     event = Events.objects.get(id=event_id)
     request.session['eventname'] = event.name
     if request.method=="POST":
-        checkbox_list=request.POST.getlist("checked")
+        checkbox_list = request.POST.getlist("checked")
         EMAIL_FROM = '924486024@qq.com'
         title = ""
         body = request.POST['content']
-        result = request.POST['result']
+        result = request.POST.getlist('result')
+        result = True if result == "True" else False
         leaderOnly = False
         if event.teamMode == 1:
-            leaderOnly = request.POST['leaderOnly']
-        if result:
-            title = event.name + "审核通过"
-        else:
-            title = event.name + "审核不通过"
+            leaderOnly = request.POST.getlist('leaderOnly')
+            leaderOnly = True if leaderOnly == "True" else False
+        title = "审核通过" if result else "审核不通过"
+        title = event.name + title
         for checked_item in checkbox_list:
             leaderId = int(checked_item.split('|')[0]);
             if leaderOnly:
                 send_mail(title, body, EMAIL_FROM, [Users.objects.get(id=leaderId).email])
-
-            for iii in re.findall(r'\d+', checked_item.split('|')[1]):
-                i = int(iii)
-                if result:
-                    Signs.objects.filter(eventId=event_id,userId=i).update(exmStatus=2)
-                else:
-                    Signs.objects.filter(eventId=event_id,userId=i).update(exmStatus=3)
-                user = Users.objects.get(id=i)
+            teammateIdStrList = re.findall(r'\d+', checked_item.split('|')[1])
+            Signs.objects.filter(eventId=event_id,userId=leaderId).update(exmStatus=2 if result else 3)
+            for teammateIdStr in teammateIdStrList:
+                teammateId = int(teammateIdStr)
+                user = Users.objects.get(id=teammateId)
                 content = user.name + body
-                Notification.objects.create(sender=request.session['username'], senderId=request.session['userid'],
-                                            target=i, title=title, content=content, createTime=timezone.now())
-                if not leaderOnly:
-                    e = user.email
-                    if e:
-                        send_mail(title, content, EMAIL_FROM, [e])
+                Notification.objects.create(sender=request.session['username'],
+                                            senderId=request.session['userid'],
+                                            target=teammateId,
+                                            title=title,
+                                            content=content)
+                if not leaderOnly and user.email:
+                    send_mail(title, content, EMAIL_FROM, [user.email])
                  
         messages.add_message(request, messages.INFO, '审核成功')
     # 当前赛事的所有报名记录
