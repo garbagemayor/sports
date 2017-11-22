@@ -33,6 +33,13 @@ def index(request):
         events3 = events3[:5]
 
     return render(request, "HomePage/newhomepage.html",
-                  {'events1': events1, 'events2': events2, 'events3': events3, 'team': team, 'celebrity': celebrity,
+                  {'events1': events1,
+                   'events1_len' : len(events1),
+                   'events2': events2,
+                   'events2_len' : len(events2),
+                   'events3': events3,
+                   'events3_len' : len(events3),
+                   'team': team,
+                   'celebrity': celebrity,
                    'photos': photos})
 

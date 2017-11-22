@@ -183,9 +183,7 @@ def recordPage(request, event_id):
     for record_db in record_db_list:
         ri = RecordItem(record_db)
         record_list.append(ri)
-    message_map = {}
-    message_map['event'] = event
-    message_map['record_list_len'] = len(record_list)
+    record_list_len = len(record_list)
     # 分页模块
     paginator=Paginator(record_list, 10)
     page = request.GET.get('page')
@@ -197,6 +195,9 @@ def recordPage(request, event_id):
         record_list = paginator.page(paginator.num_pages)
     form = EditForm()
     # 信息放在一起
+    message_map = {}
+    message_map['event'] = event
+    message_map['record_list_len'] = record_list_len
     message_map['record_list'] = record_list
     message_map['form'] = form
     return render(request, 'RegistrationRecord/registration_record.html', message_map)

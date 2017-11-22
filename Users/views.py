@@ -466,6 +466,7 @@ def notification(request):
     record_list = record_list[::-1]
     for record in record_list:
         record.createTimeStr = utcToLocal(record.createTime).strftime("%Y-%m-%d %H:%M:%S")
+    record_list_len = len(record_list)
     # 分页模块
     paginator = Paginator(record_list, 10)
     page = request.GET.get('page')
@@ -477,7 +478,7 @@ def notification(request):
         record_list = paginator.page(paginator.num_pages)
     message_map = {
         'record_list': record_list,
-        'record_list_len': len(record_list)
+        'record_list_len': record_list_len
     }
     return render(request, 'Users/notification.html', message_map)
 

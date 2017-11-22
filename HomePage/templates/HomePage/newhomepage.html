@@ -292,9 +292,12 @@
 							</div>
 							<div class="events-body">
 								<ul>
-								{% for line in events1 %}
+									{% if events1_len == 0 %}
+									<li> 暂无记录</li>
+									{% endif %}
+									{% for line in events1 %}
 									<li> <a href="/events/{{line.id}}">{{line.name}} </a></li>
-								{% endfor %}
+									{% endfor %}
 								</ul>
 							</div>
 							<div class="events-footer">
@@ -311,9 +314,12 @@
 							</div>
 							<div class="events-body">
 								<ul>
-								{% for line in events2 %}
+									{% if events2_len == 0 %}
+									<li> 暂无记录</li>
+									{% endif %}
+									{% for line in events2 %}
 									<li> <a href="/events/{{line.id}}">{{line.name}} </a></li>
-								{% endfor %}
+									{% endfor %}
 								</ul>
 							</div>
 							<div class="events-footer">
@@ -329,9 +335,12 @@
 							</div>
 							<div class="events-body">
 								<ul>
-								{% for line in events3 %}
+									{% if events3_len == 0 %}
+									<li> 暂无记录</li>
+									{% endif %}
+									{% for line in events3 %}
 									<li> <a href="/events/{{line.id}}">{{line.name}} </a></li>
-								{% endfor %}
+									{% endfor %}
 								</ul>								
 							</div>
 							<div class="events-footer">
