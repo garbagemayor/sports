@@ -35,3 +35,15 @@ def index(request):
     
     return render(request, "HomePage/newhomepage.html", {'events1':events1, 'events2':events2, 'events3':events3, 'team':team, 'celebrity':celebrity, 'photos':photos})
 
+def broadcast(request):
+    broadcast_list = list(Events.objects.all()[::-1])
+    paginator = Paginator(broadcast_list, 10)
+    page = request.GET.get('page')
+    try:
+        broadcast_list = paginator.page(page)
+    except PageNotAnInteger:
+        broadcast_list = paginator.page(1)
+    except EmptyPage:
+        broadcast_list = paginator.page(paginator.num_pages)
+
+    return render(request, 'Events/events.html', {'broadcast': broadcast_list})
