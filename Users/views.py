@@ -463,6 +463,7 @@ def notification(request):
             Notification.objects.filter(id=i).delete()
     user_id = request.session['userid']
     record_list = list(Notification.objects.filter(target=user_id))
+    record_list = record_list[::-1]
     for record in record_list:
         record.createTimeStr = utcToLocal(record.createTime).strftime("%Y-%m-%d %H:%M:%S")
     # 分页模块
