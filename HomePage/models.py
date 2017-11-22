@@ -157,8 +157,9 @@ class IMG(models.Model):
         print u'    ' + u'imgtype = ' + unicode(self.imgtype)
         print u'}'
 
-class broadcast(models.Model):
-    id = models.IntegerField(primary_key=True)                    # 赛事的数据库编号
+class Broadcast(models.Model):
+    id = models.IntegerField(primary_key=True)
+    title = models.CharField(default="", max_length=256)
     detail = models.TextField(default='暂无')
     time = models.DateTimeField(default=timezone.now)
     publisher = models.IntegerField(default=0) 
