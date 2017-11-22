@@ -6,8 +6,8 @@ from HomePage.models import Signs as Sign
 from HomePage.models import Events, Users
 from HomePage.models import utcToLocal
 from django.core.paginator import Paginator
-from django.http import HttpResponse, HttpResponseRedirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.http import HttpResponse, HttpResponseRedirect
 import django.utils.timezone as timezone
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
 import json

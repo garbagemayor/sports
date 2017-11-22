@@ -38,9 +38,9 @@ class Users(models.Model):
     cloth_size = models.CharField(max_length=1, null=True, choices=CLOTH_SIZE_CHOICES)
     # 衣服尺码
     gender = models.CharField(max_length=1, null=True, choices=GENDER_CHOICES)
-    # 性别
-    degree = models.IntegerField(null=True)  # 攻读学位 0为本科 1为研究生
-
+                                                                # 性别
+    degree = models.IntegerField(null=True)                     # 攻读学位 0为本科 1为研究生
+    broadcast = models.IntegerField(default=0)
     # fullAddress = models.CharField(max_length=256, null=True)   # 详细地址
     # desc = models.TextField(default=u"暂无简介")                 # 个人简介
     # portrait = models.ImageField(null=True)                     # 头像
@@ -158,4 +158,18 @@ class IMG(models.Model):
         print u'    ' + u'name = ' + unicode(self.name)
         print u'    ' + u'detail = ' + unicode(self.detail)
         print u'    ' + u'imgtype = ' + unicode(self.imgtype)
+        print u'}'
+
+class Broadcast(models.Model):
+    id = models.IntegerField(primary_key=True)
+    title = models.CharField(default="", max_length=256)
+    detail = models.TextField(default='暂无')
+    time = models.DateTimeField(default=timezone.now)
+    publisher = models.IntegerField(default=0) 
+
+    def printAll(self):
+        print u'<class HomePage.models.broadcast> {'
+        print u'    ' + u'id = ' + unicode(self.id)
+        print u'    ' + u'detail = ' + unicode(self.detail)
+        print u'    ' + u'time = ' + unicode(self.time)
         print u'}'

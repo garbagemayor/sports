@@ -24,7 +24,7 @@ elif platform == "win32":
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "SportsRegistration.settings")
 django.setup()
 
-from HomePage.models import Users, Events, Signs, IMG
+from HomePage.models import Users, Events, Signs, IMG, Broadcast
 import django.utils.timezone as timezone
 import datetime
 
@@ -192,6 +192,29 @@ e.teamMax = 4
 e.maxRegCnt = 5
 e.save()
 
+print u'在Broadcast表中添加信息'
+
+Broadcast.objects.get_or_create(id=1)
+b = Broadcast.objects.get(id=1)
+b.title = u'哈哈哈'
+b.detail = u'什么都没有'
+b.publisher = 2
+b.save()
+
+Broadcast.objects.get_or_create(id=2)
+b = Broadcast.objects.get(id=2)
+b.title = u'哈哈哈'
+b.detail = u'什么都没有'
+b.publisher = 2
+b.save()
+
+Broadcast.objects.get_or_create(id=3)
+b = Broadcast.objects.get(id=3)
+b.title = u'哈哈哈'
+b.detail = u'什么都没有'
+b.publisher = 2
+b.save()
+
 print u'在IMG表中添加对象'
 
 i = 0
@@ -215,7 +238,7 @@ g.save()
 
 print u'添加完成'
 
-del Users, Events, Signs
+del Users, Events, Signs, IMG, Broadcast
 del timezone
 del datetime
 del django

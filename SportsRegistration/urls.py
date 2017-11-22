@@ -32,10 +32,11 @@ urlpatterns = [
                   # 主页
                   url(r'^$', RedirectView.as_view(url='/main/')),
                   url(r'^main/$', HomePage_view.index, name='homepage'),
-
-                  # 赛事
-                  url(r'^events/$', Events_view.index, name='eventslist'),  # 所有赛事页
-                  url(r'^events/(\d+)/$', Events_view.page, name='eventspage'),  # 赛事详情页
+                  url(r'^broadcast/$', HomePage_view.broadcast, name='broadcast'),
+                  url(r'^broadcast/(\d+)/$', HomePage_view.broadcastpage, name='broadcastpage'),
+                  #赛事
+                  url(r'^events/$', Events_view.index, name='eventslist'),                          #所有赛事页
+                  url(r'^events/(\d+)/$', Events_view.page, name='eventspage'),                     #赛事详情页
                   # url(r'^events/(\d+)/maketeam/$',
                   #     Events_view.page_maketeam, name='eventspage_m'),                              #赛事详情页，并显示团队报名模块
                   # url(r'^events/(\d+)/maketeam/fn=([^;]*);sn=([^;]*);se=((\d+,)*)/$',

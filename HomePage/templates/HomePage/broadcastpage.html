@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block Title %}
+<title id="baseIndexTitle">{{broadcast.title}} - 清华大学计算机系体育赛事平台</title>
+{% endblock %}
+{% block bread %}
+<ol class="breadcrumb">
+    <li><a href="/main/">平台</a></li>
+    <li><a href="/events/">公告</a></li>
+    <li><a class="active">详情</a></li>
+</ol>
+{% endblock %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="page-header">
+                <h1 style="text-align: center">
+                    {{broadcast.title}}
+                    <!--<small>{{events.name}}</small>-->
+                </h1>
+            </div>
+            <br><br><br>
+            <dl class="dl-horizontal">
+                <dt>
+                    时间
+                </dt>
+                <dd>
+                    {{broadcast.time}}
+                </dd>
+				<br>
+                <dt>
+                    发布人
+                </dt>
+                <dd>
+                    <a href="/user/{{broadcast.publisher}}">{{broadcast.publishername}}</a>
+                </dd>
+				<br>
+                <dt>
+                    详细信息
+                </dt>
+                <dd>
+                    {{broadcast.detail}}
+                </dd>
+            </dl>
+            <br><br>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+
+
