@@ -455,7 +455,7 @@ h6 {
   }
 }
 .home {
-  background-image: url(/static/img/new1.jpg);
+  background-image: url(/static/img/new2.jpg);
   background-position: top center;
   background-attachment: fixed;
   background-repeat: no-repeat;
@@ -535,7 +535,7 @@ h6 {
           transition: background-color 0.3s, height 0.3s;
 }
 .st-navbar-mini .navbar-default {
-  background-color: rgba(40, 40, 170, 0.95);
+  background-color: rgba(52, 172, 220, 0.98);
   height: 60px;
 }
 .st-navbar-mini .navbar-default .navbar-brand {

@@ -1,7 +1,15 @@
 {% extends 'base.html' %}
 
-{% block title %}
-<title xmlns:color="http://www.w3.org/1999/xhtml">用户</title>
+{% block Title %}
+<title id="baseIndexTitle">修改个人资料 - 清华大学计算机系体育赛事平台</title>
+{% endblock %}
+
+{% block bread %}
+<ol class="breadcrumb">
+    <li><a href="/main/">平台</a></li>
+    <li><a href="/users/">用户</a></li>
+    <li><a class="active">修改资料</a></li>
+</ol>
 {% endblock %}
 
 {% block extracss %}<link href="/static/send_sheet.css" rel="stylesheet">{% endblock %}

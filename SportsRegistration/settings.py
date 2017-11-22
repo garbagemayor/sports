@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'HomePage',
     'Events',
     'RegistrationRecord',
+    #  'markdownify',
 ]
 
 MIDDLEWARE = [
@@ -134,3 +135,23 @@ EMAIL_HOST_USER = '924486024@qq.com'
 EMAIL_HOST_PASSWORD = 'jkwajyryghgnbaji'
 EMAIL_USE_TLS = True
 EMAIL_FROM = '924486024@qq.com'
+MARKDOWNIFY_WHITELIST_TAGS = [
+    'a',
+    'abbr',
+    'acronym',
+    'b',
+    'blockquote',
+    'em',
+    'i',
+    'li',
+    'ol',
+    'p',
+    'strong',
+    'ul',
+    'img',
+]
+MARKDOWNIFY_WHITELIST_ATTRS = [
+    'href',
+    'src',
+    'alt',
+]

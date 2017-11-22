@@ -37,17 +37,21 @@ urlpatterns = [
                   #赛事
                   url(r'^events/$', Events_view.index, name='eventslist'),                          #所有赛事页
                   url(r'^events/(\d+)/$', Events_view.page, name='eventspage'),                     #赛事详情页
-                  url(r'^events/(\d+)/maketeam/$',
-                      Events_view.page_maketeam, name='eventspage_m'),                              #赛事详情页，并显示团队报名模块
-                  url(r'^events/(\d+)/maketeam/fn=([^;]*);sn=([^;]*);se=((\d+,)*)/$',
-                      Events_view.page_maketeam_search_selected, name='eventspage_mss'),            #赛事详情页，并显示团队报名模块，带有搜索内容，以及已选队友
+                  # url(r'^events/(\d+)/maketeam/$',
+                  #     Events_view.page_maketeam, name='eventspage_m'),                              #赛事详情页，并显示团队报名模块
+                  # url(r'^events/(\d+)/maketeam/fn=([^;]*);sn=([^;]*);se=((\d+,)*)/$',
+                  #     Events_view.page_maketeam_search_selected, name='eventspage_mss'),            #赛事详情页，并显示团队报名模块，带有搜索内容，以及已选队友
+                  url(r'^events/static_refresh/fn=([^;]*);sn=([^;]*)/$',
+                      Events_view.page_static_refresh_search, name='eventspage_ms'),                     #赛事详情页，带有搜索内容，只返回刷新部分html内容
+                  url(r'^events/static_refresh/uid=(\d+)/$',
+                      Events_view.page_static_refresh_selected, name='eventspage_ms'),                   #赛事详情页，带有选择对象，只返回刷新部分html内容
                   url(r'^events/delete/(\d+)/$', Events_view.delete_events, name='deletepage'),     #删除赛事                                  
                   url(r'^events/next/(\d+)/$', Events_view.nextphase, name='nextphase'),            #改变阶段                              
                   url(r'^events/sign/(\d+)/$', Events_view.sign, name='signpage'),                  #报名
                   url(r'^events/teamsign/(\d+)/se=((\d+,)*)/$',
                       Events_view.teamsign, name='teamsignpage'),                                   #团队报名
                   url(r'^events/design/(\d+)/$', Events_view.design, name='designpage'),            #取消报名
-                  url(r'^events/addevents$', Events_view.addevents, name='addevents'),              #添加赛事
+                  url(r'^events/addevents/$', Events_view.addevents, name='addevents'),              #添加赛事
                   url(r'^events/setprizes/(\d+)/$', Events_view.setprizes, name='setprize'),                  
                   url(r'^events/viewprizes/(\d+)/$', Events_view.viewprizes, name='prize'), 
                   url(r'^events/qrcode/$', Events_view.qrcode, name='qrcode'),
@@ -58,9 +62,6 @@ urlpatterns = [
                   url(r'^user/(\d+)/$', Users_view.others, name='others'),                  #浏览其他用户信息
                   url(r'^authorized/$', Users_view.auth, name='login'),                     #登录完成
                   url(r'^logout/$', Users_view.logout, name='logout'),                      #登出
-                  url(r'^edit_email/(\d+)$', Record_view.edit_email, name='edit_email'),    #修改邮件
-                  url(r'^send_message/(\d+)$', Users_view.send_message,
-                      name='send_message'),    #修改邮件
                   url(r'^user/myevents/$', Users_view.my_events, name='my_events'),
                   url(r'^notification/$', Users_view.notification, name='notification'),
                   url(r'^notes/(\d+)$', Users_view.notes, name='notes'),
@@ -80,4 +81,5 @@ urlpatterns = [
                   url(r'^record/(\d+)/$', Record_view.recordPage, name='recordpage'),       # 某赛事报名情况
                   url(r'^record_download_csv/(\d+)/$', Record_view.recordDownloadCSV, name='recorddownload'),
                   url(r'^record_download_xlsx/(\d+)/$', Record_view.recordDownloadXLSX, name='recorddownload'),
+                  url(r'^record/confirm/$', Record_view.confirm, name='confirm'),       # 审核内容回复
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

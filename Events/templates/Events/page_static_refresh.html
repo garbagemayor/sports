@@ -1,0 +1,12 @@
+{% for user in searchUserList %}
+<tr class="info" ondblclick="location.href='/user/{{user.id}}'">
+    <td> {{user.name}} </td>
+    <td> {{user.fullname}} </td>
+    <td> {{user.student_number}} </td>
+    {% if refresh_mode == "search" %}
+    <td> <a onclick="addTeammate('{{user.id}}')">添加</a> </td>
+    {% elif refresh_mode == "selected" %}
+    <td> <a onclick="removeTeammate('{{user.id}}')">移除</a> </td>
+    {% endif %}
+</tr>
+{% endfor %}

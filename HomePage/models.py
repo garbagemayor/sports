@@ -90,7 +90,7 @@ class Events(models.Model):
         elif now < self.timeEvnEn:
             return 4
         else:
-            return 5
+            return 4
 
     def printAll(self):
         print u'<class HomePage.models.Events> {'

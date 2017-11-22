@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
-{% block title %}
-<title>管理员</title>
+{% block Title %}
+<title id="baseIndexTitle">管理员 - 清华大学计算机系体育赛事平台</title>
 {% endblock %}
 
 {% block content %}
@@ -60,7 +60,8 @@
                     <td>
                         {{user.auth}}
                     </td>
-					<a href="/managers/{{user.id}}">降级</a>
+					<td>
+						<a href="/managers/{{user.id}}">废黜</a>
                     </td>
                 </tr>
                 {% endfor %}
