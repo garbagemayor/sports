@@ -40,7 +40,9 @@
                 <button class="btn btn-default" type="button" onclick="location.href='/record_download_xlsx/{{event.id}}'">
                     下载报名表(.xlsx)
                 </button>
-                <button class="btn btn-success" type="button" data-toggle="modal" data-target="#confirm1" style="float:right">审核
+                <button class="btn btn-success" type="button" data-toggle="modal" data-target="#confirm1" style="float:right"
+                        onclick="onloadExaminePart()" id="loadExaminePartBtn">
+                    审核
                 </button>
                 <button class="btn btn-success" type="button" onclick="location.href='/events/{{event.id}}'" style="float:right">
                     返回比赛页面
@@ -131,7 +133,7 @@
             <li><a href="?page={{ record_list.next_page_number }}">{{record_list.number|add:"1"}}</a></li>
             {% endif %}
             {% if record_list.number < record_list.paginator.num_pages|add:"-1" %}
-            <li><a href="?page={{ record_list.number|add:"2"}}">{{record_list.number|add:"2"}}</a></li>
+            <li><a href="?page={{ record_list.number|add:'2'}}">{{record_list.number|add:'2'}}</a></li>
             {% endif %}
             {% if record_list.has_next %}
             <li><a href="?page={{ record_list.next_page_number }}">&raquo;</a></li>
@@ -139,7 +141,65 @@
         </ul>
     </nav>
 
-    <div class="modal fade" id="confirm1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" hidden="hidden">
+    <script>
+    function onloadExaminePart() {
+        var pes = document.getElementById("id_passExamineSelector");
+        pes.onchange = function() { onPesChangedListener(); };
+        var ens = document.getElementById("id_emailOrNoteSelector");
+        ens.onchange = function() { onEnsChangedListener(); };
+        var sms = document.getElementById("id_sendMessageSelector");
+        sms.onchange = function() { onSmsChangedListener(); };
+        onPesChangedListener();
+    }
+    </script>
+    <script>
+    function onPesChangedListener() {
+        var pes = document.getElementById("id_passExamineSelector");
+        var result = pes.options[pes.options.selectedIndex].value;
+        var result_content = result == 1 ? "已通过审核" : "未通过审核";
+        var content = "您在比赛“" + "{{event.name}}" + "”中的报名" + result_content
+        var form_view = document.getElementById("editor_container");
+        form_view = form_view.children[4];
+        form_view = form_view.children[5];
+        /*
+        alert(form_view.innerHTML);
+        content = '<div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: -17px; border-right-width: 13px; min-height: 144px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines"><div style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre>x</pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-cursors" style="visibility: hidden;"><div class="CodeMirror-cursor" style="left: 339.2px; top: 76px; height: 20px;">&nbsp;</div></div><div class="CodeMirror-code"><pre class=" CodeMirror-line "><span style="padding-right: 0.1px;">' + content + '</span></pre></div></div></div></div></div>';
+        form_view.innerHTML = content;
+        alert(123);
+        return;
+        */
+        form_view = form_view.children[0];
+        form_view.style = "margin-left: 0px; margin-bottom: -17px; border-right-width: 13px; min-height: 28px; padding-right: 0px; padding-bottom: 0px;"
+        form_view = form_view.children[0];
+        form_view.style = "position: relative; top: 0px;"
+        form_view = form_view.children[0];
+        form_view = form_view.children[0];
+        form_view = form_view.children[4];
+        content = "<pre class=\"CodeMirror-line\"><span style=\"padding-right: 0.1px;\">" + content + "</span></pre>";
+        form_view.innerHTML = content
+    }
+    </script>
+    <script>
+    function onEnsChangedListener() {
+        var ens = document.getElementById("id_emailOrNoteSelector");
+        var val = ens.options[ens.options.selectedIndex].value;
+        var sms = document.getElementById("id_sendMessageSelector");
+        var ok = document.getElementById("okAndSend");
+        if (val == 1 || val == 2 || val == 3) {
+            sms.hidden = "";
+            ok.innerHTML = "确认并发送";
+        } else if (val == 4) {
+            sms.hidden = "hidden";
+            ok.innerHTML = "确认";
+        }
+        onSltChangedListener();
+    }
+    </script>
+    <script>
+    function onSmsChangedListener() {
+    }
+    </script>
+    <div class="modal fade" id="confirm1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -151,7 +211,7 @@
                     </h2>
                 </div>
                 <!-- 审核的各个选项 -->
-                <div style="text-align: center;">
+                <div style="text-align: center;" hidden="hidden">
                     <div class="dropdown" style="display:inline;">
                         <button type="button" class="btn dropdown-toggle" id="passExamineBtn" data-toggle="dropdown">
                             通过审核 <span class="caret"></span>
@@ -202,13 +262,14 @@
                 </div>
                 <!-- 审核消息编辑器 -->
                 <div class="modal-body" id="editor_container">
-                    <div style="text-align: center;">
-                        {{ form.passExanimeSelector }}
+                    <div style="text-align: center;" onload="onloadSelector()">
+                        {{ form.passExamineSelector }}
                         {{ form.emailOrNoteSelector }}
                         {% if event.teamMode == 1 %}
                         {{ form.sendMessageSelector }}
                         {% endif %}
                     </div>
+                    <br>
                     {{ form.content }}
                 </div>
                 <div class="modal-footer">
@@ -222,7 +283,6 @@
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div>
-
     <script>
     function passExanimeListener(selection) {
         var btn = document.getElementById("passExamineBtn");
@@ -275,7 +335,7 @@
         status: false,
         spellChecker: false,
     });
-    $("#get-template").click(function(){
+    $("#loadExaminePartBtn123123").click(function(){
         var x = document.forms["EditForm"]["result"].value;
         console.log(x);
         $.post("{% url 'confirm' %}",
