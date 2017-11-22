@@ -15,16 +15,16 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url, include
-from . import view
-from django.conf.urls.static import static
-from django.views.generic import RedirectView
 from django.conf import settings
-from HomePage import views as  HomePage_view
-from Events import views as  Events_view
-from Users import views as  Users_view
+from django.conf.urls import url
+from django.conf.urls.static import static
 from django.contrib import admin
+from django.views.generic import RedirectView
+
+from Events import views as  Events_view
+from HomePage import views as  HomePage_view
 from RegistrationRecord import views as Record_view
+from Users import views as  Users_view
 
 urlpatterns = [
                   url(r'^admin/', admin.site.urls),
@@ -44,6 +44,7 @@ urlpatterns = [
                       Events_view.page_static_refresh_search, name='eventspage_ms'),  # 赛事详情页，带有搜索内容，只返回刷新部分html内容
                   url(r'^events/static_refresh/uid=(\d+)/$',
                       Events_view.page_static_refresh_selected, name='eventspage_ms'),  # 赛事详情页，带有选择对象，只返回刷新部分html内容
+                  url(r'^events/static_refresh/((,\d+)+)/$', Events_view.set_prizes_static_refresh, name='setprize'),  # 设置奖项，静态检测是否合法
                   url(r'^events/delete/(\d+)/$', Events_view.delete_events, name='deletepage'),
                   # 删除赛事
                   url(r'^events/next/(\d+)/$', Events_view.nextphase, name='nextphase'),
