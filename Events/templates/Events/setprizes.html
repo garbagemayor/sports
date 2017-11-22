@@ -59,14 +59,14 @@
                         {% endfor %}
                     </tbody>
                 </table>
-		<div style="text-align:center">
-			<button class="btn btn-info" type="submit" disabled="disabled" id="submit_btn">确认</button>
-
-		</div>
-		</form>
-            <div style="text-align: center;">
-                <button class="btn btn-info" type="button" onclick="commit()" >保存</button>
-            </div>
+                <div style="text-align:center;">
+                    <div style="display: inline;">
+                        <button class="btn btn-info" type="submit" disabled="disabled" id="submit_btn">确认</button>
+                    </div>
+                    <div style="display: inline;">
+                        <button class="btn btn-info" type="button" onclick="commit()" >保存</button>
+                    </div>
+                </div>
             <script>
                 function commit() {
                     var sn_list = new Array();
