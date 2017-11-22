@@ -39,7 +39,7 @@ class Users(models.Model):
     gender = models.CharField(max_length=1, null=True, choices=GENDER_CHOICES)
                                                                 # 性别
     degree = models.IntegerField(null=True)                     # 攻读学位 0为本科 1为研究生
-
+    broadcast = models.IntegerField(default=0)
     # fullAddress = models.CharField(max_length=256, null=True)   # 详细地址
     # desc = models.TextField(default=u"暂无简介")                 # 个人简介
     # portrait = models.ImageField(null=True)                     # 头像
