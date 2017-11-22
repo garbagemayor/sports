@@ -251,6 +251,8 @@ def my_events(request):
                 tmp = tmp[0]
                 tmp.s2 = gets2(tmp.getStatus())
                 events_list.append(tmp)
+        events_list_len = len(events_list)
+        print "events_list_len", events_list_len
         paginator = Paginator(events_list, 3)
         page = request.GET.get('page')
         try:
@@ -260,7 +262,9 @@ def my_events(request):
         except EmptyPage:
             events_list = paginator.page(paginator.num_pages)
 
-        return render(request, 'Events/myevents.html', {'events_list': events_list})
+        return render(request, 'Events/myevents.html',
+                      {'events_list': events_list,
+                       'events_list_len': events_list_len})
     else:
         messages.add_message(request, messages.INFO, '请登录！')
         return HttpResponseRedirect(
