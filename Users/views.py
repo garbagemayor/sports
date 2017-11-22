@@ -2,50 +2,25 @@
 from __future__ import unicode_literals
 
 import json
-
 import re
+
+import django.utils.timezone as timezone
 import requests
-from Users.models import Notification
-from Users.models import NotificationController
-from django.core.paginator import Paginator
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.db.models.signals import post_save, post_delete
+from django.dispatch import receiver
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, render_to_response
 from django.views.decorators.csrf import csrf_exempt
 
 from HomePage.models import Events
+from HomePage.models import IMG
 from HomePage.models import Signs as Sign
 from HomePage.models import Users as User
-from HomePage.models import IMG
-
-from django.db.models.signals import post_save, post_delete
-from django.dispatch import receiver
-import django.utils.timezone as timezone
 from Users.forms import EditForm
-
-"""
-def auth(request):
-    r = requests.post(
-        'https://accounts.net9.org/api/access_token?client_id=0eHhovG3K1NYkhbnYuYmej1h9wY&client_secret=moK3EkYsQvossfoMwmCd&code='
-        + request.GET['code'])
-    rr = requests.get('https://accounts.net9.org/api/userinfo?access_token=' + r.json()['access_token'])
-    j = rr.json()
-    user = User.objects.get_or_create(name=j['user']['name'])
-    #  if user[1]:
-    User.objects.filter(name=j['user']['name']).update(email=j['user']['email'], mobile=j['user']['mobile'],
-                                                       fullname=j['user']['fullname'],
-                                                       classnumber=j['user']['groups'][0])
-    request.session['username'] = j['user']['name']
-    request.session['userid'] = user[0].id
-    print "user = ", user
-    print "session.userid = ", request.session['userid']
-    request.session['auth'] = user[0].authority
-    messages.add_message(request, messages.INFO, '登陆成功! ' + request.session['username'] + ' 欢迎来到体育赛事报名平台！')
-    return HttpResponseRedirect("/events/")
-"""
+from Users.models import Notification
+from Users.models import NotificationController
 
 
 def auth(request):
@@ -259,8 +234,8 @@ def edit_information(request):
 
         messages.add_message(request, messages.INFO, '修改成功！')
         return HttpResponseRedirect('/user/')
-    # return render(request, "Users/users.html", info_list)
-    return render_to_response("Users/users.html", info_list)
+    return render(request, "Users/users.html", info_list)
+    # return render_to_response("Users/users.html", info_list)
 
 
 def my_events(request):

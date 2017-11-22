@@ -36,6 +36,3 @@ def index(request):
                   {'events1': events1, 'events2': events2, 'events3': events3, 'team': team, 'celebrity': celebrity,
                    'photos': photos})
 
-
-def m_index(request):
-    return render(request, "HomePage/mhomepage.html")

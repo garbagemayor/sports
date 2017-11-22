@@ -31,13 +31,13 @@
                         if($("#alert_message").text()!==""){$("#alert").attr("class", "alert alert-warning")}
                     </script>
                     <br/>
-                    <label contenteditable="false" style="width: 10%; height: 50px">用户名</label>
-                    <label contenteditable="false" style="width: 10%; height: 50px">{{ id }}</label>
+                    <label contenteditable="false" style="width: 30%; height: 50px">用户名</label>
+                    <label contenteditable="false" style="width: 30%; height: 50px">{{ id }}</label>
                     <br/>
-                    <label contenteditable="false" style="width: 10%; height: 50px">姓名</label>
-                    <label contenteditable="false" style="width: 10%; height: 50px">{{ name }}</label>
+                    <label contenteditable="false" style="width: 30%; height: 50px">姓名</label>
+                    <label contenteditable="false" style="width: 30%; height: 50px">{{ name }}</label>
                     <br/>
-                    <label contenteditable="false" style="width: 10%; height: 50px">性别</label>
+                    <label contenteditable="false" style="width: 30%; height: 50px">性别</label>
                     <select name="gender" id="parent" class="gender">
                         <option value=null>请选择</option>
                         <option value="M">男</option>
@@ -49,11 +49,11 @@
                     </script>
                     <span style="color: red; ">*</span>
                     <br/>
-                    <label contenteditable="false" style="width: 10%; height: 50px">所在班级</label>
-                    <label contenteditable="false" style="width: 10%; height: 50px">{{ classnumber }}</label>
+                    <label contenteditable="false" style="width: 30%; height: 50px">所在班级</label>
+                    <label contenteditable="false" style="width: 30%; height: 50px">{{ classnumber }}</label>
                     <br/>
-                    <label contenteditable="false" style="width: 10%; height: 50px">用户类型</label>
-                    <label contenteditable="false" style="width: 10%; height: 50px" id="authority">{{ authority }}</label>
+                    <label contenteditable="false" style="width: 30%; height: 50px">用户类型</label>
+                    <label contenteditable="false" style="width: 30%; height: 50px" id="authority">{{ authority }}</label>
                     <script>
                         var authority = '{{ authority }}';
                         if (authority === '0') {$("#authority").html("普通用户");}
@@ -61,16 +61,16 @@
                         else {$('#authority').html("超级管理员");}
                     </script>
                     <br/>
-                    <label contenteditable="false" style="width: 10%; height: 50px">手机号</label>
+                    <label contenteditable="false" style="width: 30%; height: 50px">手机号</label>
                     <input type="text" value="{{ mobile }}" name="mobile" style="color: gray;" onfocus="this.style='color: black'"/><span style="color: red; ">*</span>
                     <br/>
-                    <label contenteditable="false" style="width: 10%; height: 50px">电子邮箱</label>
+                    <label contenteditable="false" style="width: 30%; height: 50px">电子邮箱</label>
                     <input type="text" value="{{ email }}" name="email" style="color: gray;" onfocus="this.style='color: black'"/><span style="color: red; ">*</span>
                     <br/>
-                    <label contenteditable="false" style="width: 10%; height: 50px">学号</label>
+                    <label contenteditable="false" style="width: 30%; height: 50px">学号</label>
                     <input type="text" value="{{ student_number }}" name="student_number" style="color: gray;" onfocus="this.style='color: black'"/><span style="color: red; ">*</span>
                     <br/>
-                    <label contenteditable="false" style="width: 10%; height: 50px">证件类型</label>
+                    <label contenteditable="false" style="width: 30%; height: 50px">证件类型</label>
                     <select name="certification_type" id="parent" class="certification_type">
                         <option value="null">请选择</option>
                         <option value="0">身份证</option>
@@ -82,13 +82,13 @@
                     </script>
                     <span style="color: red; ">*</span>
                     <br/>
-                    <label contenteditable="false" style="width: 10%; height: 50px">证件号</label>
+                    <label contenteditable="false" style="width: 30%; height: 50px">证件号</label>
                     <input type="text" value="{{ certification_id }}" name="certification_id" style="color: gray;" onfocus="this.style='color: black'"/><span style=" color: red; ">*</span>
                     <br/>
-                    <label contenteditable="false" style="width: 10%; height: 50px">出生日期</label>
+                    <label contenteditable="false" style="width: 30%; height: 50px">出生日期</label>
                     <input type="text" value="{{ birthday }}" name="birthday" style="color: gray;"  onfocus="this.style='color: black'"/><span style="color: red; ">*</span> (请以1990-01-01的格式填写)
                     <br/>
-                    <label contenteditable="false" style="width: 10%; height: 50px">攻读学位</label>
+                    <label contenteditable="false" style="width: 30%; height: 50px">攻读学位</label>
                     <select name="degree" id="parent" class="degree">
                         <option value=null>请选择</option>
                         <option value="0">本科生</option>
@@ -100,7 +100,7 @@
                     </script>
                     <span style="color: red; ">*</span>
                     <br/>
-                    <label contenteditable="false" style="width: 10%; height: 50px" for="parent">衣服尺寸</label>
+                    <label contenteditable="false" style="width: 30%; height: 50px" for="parent">衣服尺寸</label>
                     <select name="cloth_size" id="parent" class="size">
                         <option value=null>请选择</option>
                         <option value="S">S(男生165/女生160)</option>
@@ -113,7 +113,7 @@
                     </script>
                     <span style="color: red; ">*</span>
                     <br/>
-                    <label contenteditable="false" style="width: 10%; height: 50px">所在宿舍</label>
+                    <label contenteditable="false" style="width: 30%; height: 50px">所在宿舍</label>
                     <input type="text" value="{{ room_address }}" name="room_address" style="color: gray;" onfocus="this.style='color: black'"/>
                     <script>
                         $("input[value='None']").val("尚未登记");
