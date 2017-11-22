@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 from django.shortcuts import render
 from HomePage.models import Signs as Sign
 from HomePage.models import Events, Users
+from HomePage.models import utcToLocal
 from django.core.paginator import Paginator
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -15,15 +16,16 @@ import pyqrcode, io
 
 
 # Create your views here.
+
 def index(request):
     events_list = list(Events.objects.all()[::-1])
     for l in events_list:
         l.s2 = gets2(l.getStatus())
         l.s3 = gets3(l.getStatus())
         l.s4 = gets4(l.getStatus())
-        l.timeRegStStr = l.timeRegSt.strftime("%Y-%m-%d %H:%M:%S")
-        l.timeRegEnStr = l.timeRegEn.strftime("%Y-%m-%d %H:%M:%S")
-        l.timeEvnStStr = l.timeEvnSt.strftime("%Y-%m-%d %H:%M:%S")
+        l.timeRegStStr = utcToLocal(l.timeRegSt).strftime("%Y-%m-%d %H:%M:%S")
+        l.timeRegEnStr = utcToLocal(l.timeRegEn).strftime("%Y-%m-%d %H:%M:%S")
+        l.timeEvnStStr = utcToLocal(l.timeEvnSt).strftime("%Y-%m-%d %H:%M:%S")
     paginator = Paginator(events_list, 10)
     page = request.GET.get('page')
     try:
@@ -42,9 +44,9 @@ def page(request, Id):
     events.status = events.getStatus()
     events.s2 = gets2(events.getStatus())
     events.s3 = gets3(events.getStatus())
-    events.timeRegStStr = events.timeRegSt.strftime("%Y-%m-%d %H:%M:%S")
-    events.timeRegEnStr = events.timeRegEn.strftime("%Y-%m-%d %H:%M:%S")
-    events.timeEvnStStr = events.timeEvnSt.strftime("%Y-%m-%d %H:%M:%S")
+    events.timeRegStStr = utcToLocal(events.timeRegSt).strftime("%Y-%m-%d %H:%M:%S")
+    events.timeRegEnStr = utcToLocal(events.timeRegEn).strftime("%Y-%m-%d %H:%M:%S")
+    events.timeEvnStStr = utcToLocal(events.timeEvnSt).strftime("%Y-%m-%d %H:%M:%S")
     request.session['eventsid'] = Id
     return render(request, 'Events/page.html', {'events':events})
 

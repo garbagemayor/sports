@@ -19,6 +19,7 @@ from django.views.decorators.csrf import csrf_exempt
 from HomePage.models import Events
 from HomePage.models import Signs
 from HomePage.models import Users
+from HomePage.models import utcToLocal
 from RegistrationRecord.forms import EditForm
 from django.contrib import messages
 
@@ -42,7 +43,7 @@ class RecordItem:
         self.userId = record.userId
         self.eventId = record.eventId
         self.teamSize = record.teamSize
-        self.timeRegStr = record.timeReg.strftime("%Y-%m-%d %H:%M:%S")
+        self.timeRegStr = utcToLocal(record.timeReg).strftime("%Y-%m-%d %H:%M:%S")
         self.status = record.exmStatus
         self.statusStr = [u"", u"等待审核", u"审核通过", u"审核未通过"][self.status]
         self.statusToClass = [u"", u"info", u"success", u"error"][self.status]

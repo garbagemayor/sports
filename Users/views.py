@@ -19,6 +19,7 @@ from django.views.decorators.csrf import csrf_exempt
 from HomePage.models import Events
 from HomePage.models import Signs as Sign
 from HomePage.models import Users as User
+from HomePage.models import utcToLocal
 from HomePage.models import IMG
 
 from django.db.models.signals import post_save, post_delete
@@ -474,6 +475,8 @@ def notification(request):
         return render(request, 'Users/notification.html', message_map)
     user_id = request.session['userid']
     record_list = list(Notification.objects.filter(target=user_id))
+    for record in record_list:
+        record.createTimeStr = utcToLocal(record.createTime).strftime("%Y-%m-%d %H:%M:%S")
     # 分页模块
     paginator=Paginator(record_list, 10)
     page = request.GET.get('page')
