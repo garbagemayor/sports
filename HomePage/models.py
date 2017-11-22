@@ -6,6 +6,11 @@ from django.db import models
 import django.utils.timezone as timezone
 
 
+def utcToLocal(utctime):
+    import time
+    from datetime import datetime
+    return utctime + (datetime.fromtimestamp(time.time()) - datetime.utcfromtimestamp(time.time()))
+
 class Users(models.Model):
     CLOTH_SIZE_CHOICES = (
         ('S', 'Small'),
