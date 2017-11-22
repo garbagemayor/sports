@@ -474,7 +474,10 @@ def notification(request):
         record_list = paginator.page(1)
     except EmptyPage:
         record_list = paginator.page(paginator.num_pages)
-    message_map = {'record_list': record_list}
+    message_map = {
+        'record_list': record_list,
+        'record_list_len': len(record_list)
+    }
     return render(request, 'Users/notification.html', message_map)
 
 

@@ -27,15 +27,15 @@
                            <th>
                                发信人
                            </th>
-                            <th>
-                                标题
-                            </th>
-                            <th>
-                                时间
-                            </th>
-                            <th>
-                                状态
-                            </th>
+                           <th>
+                               标题
+                           </th>
+                           <th>
+                               时间
+                           </th>
+                           <th>
+                               状态
+                           </th>
                            <th>
                                <font face="黑体" color="#ACCBE8">
                                    <div style="display:inline;" onclick="selectAll()">
@@ -50,6 +50,11 @@
                         </tr>
                     </thead>
                     <tbody>
+                        {% if record_list_len == 0 %}
+                        <tr class="danger">
+                            <td colspan="5" style="text-align: center;">暂无记录</td>
+                        </tr>
+                        {% endif %}
                         {% for record in record_list %}
                         <tr ondblclick="location.href='/notes/{{record.id}}'"
                             {% if not record.isRead %} class="success" {% else %} class="info" {% endif %}>
