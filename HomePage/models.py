@@ -161,6 +161,7 @@ class broadcast(models.Model):
     id = models.IntegerField(primary_key=True)                    # 赛事的数据库编号
     detail = models.TextField(default='暂无')
     time = models.DateTimeField(default=timezone.now)
+    publisher = models.IntegerField(default=0) 
 
     def printAll(self):
         print u'<class HomePage.models.broadcast> {'
