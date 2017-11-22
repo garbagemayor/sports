@@ -23,16 +23,7 @@
 			{% endif %}
 			
           </ul>-->
-<<<<<<< HEAD
           <ul class="nav navbar-nav navbar-right" style="background-color: #1a87b7">
-=======
-          <ul class="nav navbar-nav navbar-right">
-            <li>
-          <button id="get_debug" class="btn btn-success" type="button" data-toggle="modal"
-                    data-target="#debug_info" style="float:right">debug
-                </button>
-        </li>
->>>>>>> debug: debug info for ajax.
 			{% if not request.session.username %}
 				<li><a 
                     href="https://accounts.net9.org/api/authorize?client_id=0eHhovG3K1NYkhbnYuYmej1h9wY&redirect_uri=http://{{request.get_host}}/authorized">登录</a></li>
@@ -48,29 +39,12 @@
         </div>
       </div>
     </nav>
-    <div class="modal fade" id="debug_info" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-            <div class="modal-body">
-                <div style="text-align: center; word-wrap: break-word;" id="debug_output">
-                </div>
-            </div>
-            <div class="modal-footer">
-            </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div>
+    
 </header>
 <script>
     $(document).ready(function(){
         $.get("{% url 'notification_count' %}", function(ret){
             $('#noti').html(ret);
-        })
-    });
-    $("#get_debug").click(function(){
-        $.get("{% url 'qiniu' %}", function(ret){
-            $('#debug_output').html(ret.uptoken);
         })
     });
 </script>
