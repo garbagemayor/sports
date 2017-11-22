@@ -123,23 +123,23 @@ def recordPage(request, event_id):
         EMAIL_FROM = '924486024@qq.com'
         print request.POST
         checkbox_list = request.POST.getlist("checked")
-        passExanime = request.POST.getlist("passExanimeSelector")
+        passExamine = request.POST.getlist("passExamineSelector")
         emailOrNote = request.POST.getlist("emailOrNoteSelector")
         sendMessage = request.POST.getlist("sendMessageSelector")
         content = request.POST['content']
-        print checkbox_list
-        print passExanime
-        print emailOrNote
-        print sendMessage
-        print content
-        title = "已通过审核" if passExanime[0] == '1' else "未通过审核"
+        print "checkbox_list", checkbox_list
+        print "passExanime", passExamine
+        print "emailOrNote", emailOrNote
+        print "sendMessage", sendMessage
+        print "content", content
+        title = "已通过审核" if passExamine[0] == '1' else "未通过审核"
         title = event.name + "：" + title
         print title
         # 这个部分只操作数据库
         for checkbox_item in checkbox_list:
             captainId = int(checkbox_item.split('|')[0]);
             teammateIdStrList = re.findall(r'\d+', checkbox_item.split('|')[1])
-            Signs.objects.filter(eventId=event_id,userId=captainId).update(exmStatus=2 if passExanime[0] == '1' else 3)
+            Signs.objects.filter(eventId=event_id,userId=captainId).update(exmStatus=2 if passExamine[0] == '1' else 3)
         # 这个部分只操作站内信
         if emailOrNote[0] == '1' or emailOrNote[0] == '3':
             for checkbox_item in checkbox_list:
