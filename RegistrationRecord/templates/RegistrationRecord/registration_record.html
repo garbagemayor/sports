@@ -87,6 +87,11 @@
                     </tr>
                     </thead>
                     <tbody>
+                    {% if record_list_len == 0 %}
+                    <tr class="danger">
+                        <td colspan="{% if event.teamMode == 0 %} 7 {% else %} 8 {% endif %}" style="text-align: center;">暂无记录</td>
+                    </tr>
+                    {% endif %}
                     {% for record in record_list %}
                     <tr class="{{record.statusToClass}}" ondblclick="location.href='/user/{{record.record.userId}}'">
                         <td>

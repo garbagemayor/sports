@@ -46,7 +46,7 @@ class RecordItem:
         self.timeRegStr = utcToLocal(record.timeReg).strftime("%Y-%m-%d %H:%M:%S")
         self.status = record.exmStatus
         self.statusStr = [u"", u"等待审核", u"审核通过", u"审核未通过"][self.status]
-        self.statusToClass = [u"", u"info", u"success", u"danger", u"warning"][self.status]
+        self.statusToClass = [u"", u"info", u"success", u"warning", u"danger"][self.status]
         # 队长的信息
         if self.teamSize > 1:
             self.captainName = toUtf8WithNone(user.name)
@@ -145,7 +145,7 @@ def recordPage(request, event_id):
             for checkbox_item in checkbox_list:
                 captainId = int(checkbox_item.split('|')[0]);
                 teammateIdStrList = re.findall(r'\d+', checkbox_item.split('|')[1])
-                if sendMessage == None or sendMessage[0] == 1:
+                if sendMessage == None or len(sendMessage) == 0 or sendMessage[0] == 1:
                     Notification.objects.create(
                         sender=request.session['username'],
                         senderId=request.session['userid'],
@@ -183,6 +183,9 @@ def recordPage(request, event_id):
     for record_db in record_db_list:
         ri = RecordItem(record_db)
         record_list.append(ri)
+    message_map = {}
+    message_map['event'] = event
+    message_map['record_list_len'] = len(record_list)
     # 分页模块
     paginator=Paginator(record_list, 10)
     page = request.GET.get('page')
@@ -194,8 +197,6 @@ def recordPage(request, event_id):
         record_list = paginator.page(paginator.num_pages)
     form = EditForm()
     # 信息放在一起
-    message_map = {}
-    message_map['event'] = event
     message_map['record_list'] = record_list
     message_map['form'] = form
     return render(request, 'RegistrationRecord/registration_record.html', message_map)
