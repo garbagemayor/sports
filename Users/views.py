@@ -23,6 +23,7 @@ from HomePage.models import utcToLocal
 from Users.models import Notification
 from Users.models import NotificationController
 from qiniu import Auth
+from django.core import serializers
 
 
 def auth(request):
@@ -340,39 +341,6 @@ def demanager(request, Id):
 def backend(request):
     return render(request, 'Users/backend.html')
 
-def team(request): 
-    img_list = IMG.objects.filter(imgtype=1)
-    return render(request, 'Users/team.html', {'img_list': img_list})
-
-
-@csrf_exempt
-def celebrity(request):
-    if request.method == 'POST':
-        new_img = IMG(
-            name=request.POST['name'],
-            img=request.FILES.get('img'),
-            detail=request.POST['detail'],
-            imgtype=1
-        )
-        new_img.save()
-        return HttpResponseRedirect("/main/")
-    return render(request, 'Users/celebrity.html')
-
-
-@csrf_exempt
-def photos(request):
-    if request.method == 'POST':
-        new_img = IMG(
-            name=request.POST['name'],
-            img=request.FILES.get('img'),
-            detail=request.POST['detail'],
-            imgtype=2
-        )
-        new_img.save()
-        return HttpResponseRedirect("/main/")
-    return render(request, 'Users/team.html')
-
-
 def gets2(i):
     if i == 1:
         return "info"
@@ -543,12 +511,36 @@ def qiniu_uptoken(request):
     token_dict = {'uptoken': token}
     return JsonResponse(token_dict)
 
-def store_img(request):
+def new_img(request):
     new_img = IMG(
             url=request.POST['url'],
             detail=request.POST['detail'],
-            imgtype=1,
+            imgtype=request.POST['imgtype'],
         )
     new_img.save()
     return HttpResponse('ok')
+
+def set_headline(request):
+    checkbox_list=request.POST['idlist']
+    for checked_item in re.findall(r'\d+', checkbox_list):
+        IMG.objects.filter(id=int(checked_item)).update(headline=True)
+    return HttpResponse('ok')
+
+def deactive(request):
+    checkbox_list=request.POST['idlist']
+    for checked_item in re.findall(r'\d+', checkbox_list):
+        IMG.objects.filter(id=int(checked_item)).update(headline=False)
+    return HttpResponse('ok')
+
+def remove_item(request):
+    checkbox_list=request.POST['idlist']
+    for checked_item in re.findall(r'\d+', checkbox_list):
+        IMG.objects.get(id=checked_item).delete()
+    return HttpResponse('ok')
+
+def picture(request):
+    img_list = {}
+    for i in range(3):
+        img_list['l' + str(i)] = IMG.objects.filter(imgtype=i)
+    return render(request, 'Users/picture.html', img_list)
 

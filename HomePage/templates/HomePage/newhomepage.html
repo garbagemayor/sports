@@ -93,28 +93,21 @@
 		
 		
 		<section class="team" id="team">
+			{% for img in team %}
 			<div class="container">
 				<div class="row">
 					<div class="col-md-12">
 						<div class="section-title st-center">
 							<h3>系队展示</h3>
-							<p>{{team.name}}</p>
+							<p>{{img.name}}</p>
 						</div>
 						<div class="row mb90">
 							<div class="col-md-6">
 							</br>
-							<p>{{team.detail}}</p>
-							<!--<p>队伍简介：</p>
-							<p>2015年建队，队伍成员不仅有充满活力的本科生，还有球场经验老道的研究生学姐。虽然队史不长，但贵系女篮在马杯赛事上敢打敢拼，已经成为了一支不容小觑的新生力量。</p>
-							<p>队伍成员：</p>    
-							<p>教练：贾佳欣  </p>   
-							<p>队长：张子薇   </p>  
-							<p>队员：王苜子 范佳悦	徐玥 张一铭	童皓玥 林敏	孟昕悦 吴玥仪 张晨 王焱 周素平</p> -->
-
-
+							<p>{{img.detail}}</p>
 							</div>
 							<div class="col-md-6">
-								<img src="{{team.img.url}}" alt="" class="img-responsive">
+								<img src="{{img.url}}" alt="" class="img-responsive">
 							</div>
 						</div>					
 							
@@ -124,6 +117,7 @@
 					</div>
 				</div>
 			</div>
+			{% endfor %}
 		</section>
 		
 		</br></br></br></br></br>
@@ -141,111 +135,18 @@
 	<!-- 轮播（Carousel）项目 -->
 	<div class="carousel-inner">
 		<div class="item active">
-		<img src="/static/img/show2.jpg" style="width:100%" alt="First slide">
+		<img src="http://oblc5mnxs.bkt.clouddn.com/IMG_0128.jpg" style="width:100%">
 		</div>
+		{% for img in game %}
 		<div class="item">
-		<img src="/static/img/show2.jpg" style="width:100%" alt="Second slide">
+		<img src="{{img.url}}" style="width:100%">
 		</div>
-		<div class="item">
-		<img src="/static/img/show2.jpg" style="width:100%" alt="Third slide">
-		</div>
+		{% endfor %}
 	</div>
 	<!-- 轮播（Carousel）导航 -->
 	<a class="carousel-control left" href="#myCarousel" data-slide="prev">‹</a>
 	<a class="carousel-control right" href="#myCarousel" data-slide="next">›</a>
 </div>
-
-<!-- 控制按钮 
-
-<div style="text-align:center;">
-	<input type="button" class="btn start-slide" value="Start">
-	<input type="button" class="btn pause-slide" value="Pause">
-	<input type="button" class="btn prev-slide" value="Previous Slide">
-	<input type="button" class="btn next-slide" value="Next Slide">
-	<input type="button" class="btn slide-one" value="Slide 1">
-	<input type="button" class="btn slide-two" value="Slide 2">
-	<input type="button" class="btn slide-three" value="Slide 3">
-</div>-->
-			<!--<div class="container-fluid ">
-				<div class="row">
-					<div class="col-md-12 no-padding ">
-						<div class="section-title st-center">
-							<h3>风采展示</h3>
-							<p>生命因运动精彩  体育让梦想成真</p>
-						</div>
-						<div class="filter mb40">
-							<form id="filter">
-							<fieldset class="group">
-								<label class="btn btn-default btn-main"><input type="radio" name="filter" value="all" checked="checked">全部</label>
-								<label class="btn btn-default"><input type="radio" name="filter" value="2017">2017年</label>
-								<label class="btn btn-default"><input type="radio" name="filter" value="2016">2016年</label>
-							</fieldset>
-							</form>
-						</div>
-
-						<div class="grid">
-							<figure class="portfolio-item" data-groups='["2017"]'>
-								<img src="/static/img/show1.jpg" alt="" style="width:100%; height:300px;"/>
-								<figcaption>
-									<h2>2017 <span>拔河</span></h2>
-									<p>2017年新生拔河比赛</p>
-									<a href="/static/img/show1.jpg" class="btn btn-main"><i class="fa fa-link"></i>   详情</a>
-								</figcaption>
-							</figure>
-							<figure class="portfolio-item" data-groups='["2016"]'>
-								<img src="/static/img/show3.jpg" alt="" style="width:100%; height:300px;"/>
-								<figcaption>
-									<h2>贵系 <span>男篮</span></h2>
-									<p>贵系男篮训练</p>
-									<a href="/static/img/show3.jpg" class="btn btn-main"><i class="fa fa-link"></i>   详情</a>
-								</figcaption>
-							</figure>
-							<figure class="portfolio-item" data-groups='["2017"]'>
-								<img src="/static/img/show2.jpg" alt="" style="width:100%; height:300px;"/>
-								<figcaption>
-									<h2>2017 <span>赤足运动会</span></h2>
-									<p>2017年新生赤足运动会</p>
-									<a href="/static/img/show2.jpg" class="btn btn-main"><i class="fa fa-link"></i>   详情</a>
-								</figcaption>
-							</figure>
-							<figure class="portfolio-item" data-groups='["2017"]'>
-								<img src="/static/img/show4.jpg" alt="" style="width:100%; height:300px;"/>
-								<figcaption>
-									<h2><span>跆拳道</span></h2>
-									<p>跆拳道总冠军</p>
-									<a href="/static/img/show4.jpg" class="btn btn-main"><i class="fa fa-link"></i>   详情</a>
-								</figcaption>
-							</figure>
-							<figure class="portfolio-item" data-groups='["2016"]'>
-								<img src="/static/img/show5.jpg" alt="" style="width:100%; height:300px;"/>
-								<figcaption>
-									<h2><span>男足</span></h2>
-									<p>男足赛后合影</p>
-									<a class="btn btn-main" data-toggle="modal" data-target="#myModal"><i class="fa fa-link"></i>   详情</a>
-								</figcaption>
-							</figure>
-							
-						</div>
-						<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-						<div class="modal-dialog">
-							<div class="modal-content">
-								<div class="modal-header">
-									<h4>男足赛后合影</h4>
-								</div>
-								<div class="modal-body">
-									<img src="/static/img/show5.jpg" alt="" style="width:100%; height:100%;"/>
-								</div>
-								<div class="modal-footer">
-									<button type="button" class="btn btn-primary" data-dismiss="modal">关闭
-									</button>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					</div>
-				</div>
-			</div>-->
 		</section>
 		
 		
@@ -258,15 +159,16 @@
 							<h3>酒井名人堂</h3>
 							<p>生活就像海洋 只有意志坚强的人 才能到达彼岸</p>
 						</div>
-					<div class="col-md-12">
+					{% for img in celebrity %}
 					<div class="col-md-5">
-						<img src="{{celebrity.img.url}}" alt="" class="img-responsive" style="padding-left:100px;">
+						<img src="{{img.url}}" alt="" class="img-responsive" style="padding-left:100px;">
 					</div>
 					<div class="col-md-7">
 						<h3 class="bottom-line">个人简介</h3>
-						<p> {{celebrity.detail}}</p>
+						<p> {{img.detail}}</p>
 						<a href="#" disabled="disabled" class="btn btn-main btn-lg">详情</a>
 					</div>
+					{% endfor %}
 					</div>
 				</div>
 			</div>
