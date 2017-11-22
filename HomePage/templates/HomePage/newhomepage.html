@@ -17,8 +17,7 @@
 		<link href="/static/css/owl.transitions.css" rel="stylesheet">
 
 		<link href="/static/css/style.css" rel="stylesheet">
-
-
+        <script src="/static/js/device.min.js"></script>
 
 
 		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -60,8 +59,8 @@
 								<li><a href="/user/">{{request.session.username}}</a></li>
 								<li><a href="/logout/">登出</a></li>	
 							{% endif %}
-			
-          </ul>
+                        </ul>
+
 					</div><!-- /.navbar-collapse -->
 					
 				</div>
@@ -409,6 +408,11 @@
 		});*/
 	});
 </script>
+    <script>
+        if (device.mobile()===true) {
+            $("#sept-main-nav").attr("style", "background-color: #9A9A9A;");
+        }
+    </script>
 
 	</body>
 </html>

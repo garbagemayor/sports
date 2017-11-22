@@ -44,6 +44,11 @@
 
 		
 		{% include 'header.html' %}
+        <script>
+        if (device.mobile()===true) {
+            $("#navbar").attr("style", "background-color: #9A9A9A;");
+        }
+        </script>
 		
 	<!--<div class="page-header">
         <h1 style="text-align: center">

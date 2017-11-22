@@ -48,7 +48,8 @@ def page(request, Id):
     events.timeRegEnStr = utcToLocal(events.timeRegEn).strftime("%Y-%m-%d %H:%M:%S")
     events.timeEvnStStr = utcToLocal(events.timeEvnSt).strftime("%Y-%m-%d %H:%M:%S")
     request.session['eventsid'] = Id
-    return render(request, 'Events/page.html', {'events':events})
+    return render(request, 'Events/page.html', {'events': events})
+
 
 @csrf_exempt
 def page_static_refresh_search(request, searchFullName='', searchStudentNumber=''):
@@ -70,6 +71,7 @@ def page_static_refresh_search(request, searchFullName='', searchStudentNumber='
                   {"searchUserList": searchUserList,
                    "refresh_mode": "search"})
 
+
 @csrf_exempt
 def page_static_refresh_selected(request, searchUserId=''):
     # 从数据库中找出搜索到的结果
@@ -80,8 +82,22 @@ def page_static_refresh_selected(request, searchUserId=''):
                   {"searchUserList": searchUserList,
                    "refresh_mode": "selected"})
 
+
+def set_prizes_static_refresh(request, numberList='', others=''):
+    print "number = ", numberList, "others = ", others
+    text = 'succeeded'
+    n_list = numberList.split(',')
+    print "n_list = ", n_list
+    for i in range(1, 9):
+        u = Users.objects.filter(student_number=n_list[i])
+        if len(u) == 0:
+            text = n_list[i]
+    return HttpResponse(text)
+
+
 @csrf_exempt
-def page_maketeam_search_selected(request, eventId, searchFullName='', searchStudentNumber='', selectedStr='', other=""):
+def page_maketeam_search_selected(request, eventId, searchFullName='', searchStudentNumber='', selectedStr='',
+                                  other=""):
     event = Events.objects.get(id=eventId)
     event.status = event.getStatus()
     event.s2 = gets2(event.getStatus())
@@ -116,13 +132,14 @@ def page_maketeam_search_selected(request, eventId, searchFullName='', searchStu
 
     return render(request, 'Events/page.html',
                   {'events': event,
-                   "maketeam":True,
+                   "maketeam": True,
                    "fullName": searchFullName,
                    "studentNumber": searchStudentNumber,
                    "selectedStr": selectedStr,
                    "searchUserList": searchUserList,
                    "selectedUserList": selectedUserList,
                    })
+
 
 def delete_events(request, Id):
     events = Events.objects.get(id=Id)
@@ -135,8 +152,9 @@ def delete_events(request, Id):
             else:
                 messages.add_message(request, messages.INFO, '当前用户无此操作权限！')
         else:
-            #messages.add_message(request, messages.INFO, '请登录！')
-            return HttpResponseRedirect('https://accounts.net9.org/api/authorize?client_id=0eHhovG3K1NYkhbnYuYmej1h9wY&redirect_uri=http://"+request.get_host+"/authorized')
+            # messages.add_message(request, messages.INFO, '请登录！')
+            return HttpResponseRedirect(
+                'https://accounts.net9.org/api/authorize?client_id=0eHhovG3K1NYkhbnYuYmej1h9wY&redirect_uri=http://"+request.get_host+"/authorized')
 
         return HttpResponseRedirect('/events/')
     else:
@@ -146,25 +164,13 @@ def delete_events(request, Id):
 def setprizes(request, Id):
     events = Events.objects.get(id=Id)
     if request.method == "POST":
-        print request.POST['rank_1']
-        for i in range(1, 8):
-            if not (request.POST['rank_' + str(i)] and request.POST['score_' + str(i)] and request.POST[
-                    'number_' + str(i)]):
-                messages.add_message(request, messages.INFO, '请完整填上全部信息！')
-                return render(request, 'Events/setprizes.html', {'event': events, 'prize_number': range(1, 8)})
-
-        for i in range(1, 8):
-            u = Users.obejcts.filter(student_number=request.POST['number_' + i])
-            if not u[0]:
-                messages.add_message(request, messages.INFO, request.POST['number_' + i] + '不是有效学号！')
-                return render(request, 'Events/setprizes.html', {'event': events, 'prize_number': range(1, 8)})
-        for i in range(1, 8):
-            u = Users.obejcts.filter(student_number=request.POST['number_' + i])
+        for i in range(1, 9):
+            u = Users.objects.filter(student_number=request.POST['number_' + str(i)])
             u = u[0]
-            Sign.objects.filter(userId=u.id, eventId=Id).update(score=request.POST['score_' + i], prize=i)
+            Sign.objects.filter(userId=u.id, eventId=Id).update(score=request.POST['score_' + str(i)], prize=i)
         return HttpResponseRedirect('/events/viewprizes/' + Id + '/')
 
-    return render(request, 'Events/setprizes.html', {'event': events, 'prize_number': range(1, 8)})
+    return render(request, 'Events/setprizes.html', {'event': events, 'prize_number': range(1, 9)})
 
 
 def viewprizes(request, Id):
@@ -196,8 +202,9 @@ def nextphase(request, Id):
             else:
                 messages.add_message(request, messages.INFO, '当前用户无此操作权限！')
         else:
-            #messages.add_message(request, messages.INFO, '请登录！')
-            return HttpResponseRedirect('https://accounts.net9.org/api/authorize?client_id=0eHhovG3K1NYkhbnYuYmej1h9wY&redirect_uri=http://"+request.get_host+"/authorized')
+            # messages.add_message(request, messages.INFO, '请登录！')
+            return HttpResponseRedirect(
+                'https://accounts.net9.org/api/authorize?client_id=0eHhovG3K1NYkhbnYuYmej1h9wY&redirect_uri=http://"+request.get_host+"/authorized')
         return HttpResponseRedirect('/events/' + Id)
     else:
         return HttpResponseRedirect('/events/' + Id)
@@ -224,10 +231,12 @@ def sign(request, Id):
                 s.save()
                 messages.add_message(request, messages.INFO, '报名成功！')
     else:
-        #messages.add_message(request, messages.INFO, '请登录！')
-        return HttpResponseRedirect('https://accounts.net9.org/api/authorize?client_id=0eHhovG3K1NYkhbnYuYmej1h9wY&redirect_uri=http://"+request.get_host+"/authorized')
+        # messages.add_message(request, messages.INFO, '请登录！')
+        return HttpResponseRedirect(
+            'https://accounts.net9.org/api/authorize?client_id=0eHhovG3K1NYkhbnYuYmej1h9wY&redirect_uri=http://"+request.get_host+"/authorized')
 
     return HttpResponseRedirect('/events/' + Id + '/');
+
 
 def teamsign(request, eventId, selectedStr="", other=""):
     event = Events.objects.get(id=eventId)
@@ -259,9 +268,11 @@ def teamsign(request, eventId, selectedStr="", other=""):
                 s.save()
                 messages.add_message(request, messages.INFO, '向数据库添加团队报名信息成功！')
     else:
-        #messages.add_message(request, messages.INFO, '请登录！')
-        return HttpResponseRedirect('https://accounts.net9.org/api/authorize?client_id=0eHhovG3K1NYkhbnYuYmej1h9wY&redirect_uri=http://"+request.get_host+"/authorized')
+        # messages.add_message(request, messages.INFO, '请登录！')
+        return HttpResponseRedirect(
+            'https://accounts.net9.org/api/authorize?client_id=0eHhovG3K1NYkhbnYuYmej1h9wY&redirect_uri=http://"+request.get_host+"/authorized')
     return HttpResponseRedirect('/events/' + eventId + '/');
+
 
 def design(request, Id):
     events = Events.objects.get(id=Id)
@@ -283,8 +294,9 @@ def design(request, Id):
                     messages.add_message(request, messages.INFO, '报名已审核通过，若要取消报名请联系管理员！')
             e.save()
     else:
-        #messages.add_message(request, messages.INFO, '请登录！')
-        return HttpResponseRedirect('https://accounts.net9.org/api/authorize?client_id=0eHhovG3K1NYkhbnYuYmej1h9wY&redirect_uri=http://"+request.get_host+"/authorized')
+        # messages.add_message(request, messages.INFO, '请登录！')
+        return HttpResponseRedirect(
+            'https://accounts.net9.org/api/authorize?client_id=0eHhovG3K1NYkhbnYuYmej1h9wY&redirect_uri=http://"+request.get_host+"/authorized')
 
     return HttpResponseRedirect('/events/' + Id + '/');
 
@@ -295,33 +307,35 @@ def addevents(request):
         if not request.POST['name']:
             messages.add_message(request, messages.INFO, "赛事名不能为空！")
             return render(request, "Events/addevents.html")
-        checkbox=request.POST.getlist("checkbox")
-        if len(checkbox) == 0:            
+        checkbox = request.POST.getlist("checkbox")
+        if len(checkbox) == 0:
             messages.add_message(request, messages.INFO, "请选择赛事类型！")
             return render(request, "Events/addevents.html")
-        
-        #if not request.POST['type']:
-            #messages.add_message(request, messages.INFO, "请选择赛事类型！")
-            #return render(request, "Events/addevents.html")
 
-        if int(request.POST['teammax'])<int(request.POST['teammin']):
+            # if not request.POST['type']:
+            # messages.add_message(request, messages.INFO, "请选择赛事类型！")
+            # return render(request, "Events/addevents.html")
+
+        if int(request.POST['teammax']) < int(request.POST['teammin']):
             messages.add_message(request, messages.INFO, "团队人数有误！")
             return render(request, "Events/addevents.html")
-        
+
         if not request.POST['time1']:
             messages.add_message(request, messages.INFO, "请填写全部时间！")
             return render(request, "Events/addevents.html")
-        
+
         if not request.POST['time2']:
             messages.add_message(request, messages.INFO, "请填写全部时间！")
             return render(request, "Events/addevents.html")
-        
+
         if not request.POST['time3']:
             messages.add_message(request, messages.INFO, "请填写全部时间！")
             return render(request, "Events/addevents.html")
-        
 
-        if Events.objects.create(name=request.POST['name'], desc=request.POST['detail'], teamMode=checkbox[0], teamMin=request.POST['teammin'], teamMax=request.POST['teammax'], maxRegCnt=request.POST['num'], timeRegSt=request.POST['time1'], timeRegEn=request.POST['time2'], timeEvnSt=request.POST['time3']):
+        if Events.objects.create(name=request.POST['name'], desc=request.POST['detail'], teamMode=checkbox[0],
+                                 teamMin=request.POST['teammin'], teamMax=request.POST['teammax'],
+                                 maxRegCnt=request.POST['num'], timeRegSt=request.POST['time1'],
+                                 timeRegEn=request.POST['time2'], timeEvnSt=request.POST['time3']):
             messages.add_message(request, messages.INFO, '成功添加赛事' + request.POST['name'] + '！')
             return HttpResponseRedirect('/events/')
     return render(request, "Events/addevents.html")
@@ -374,3 +388,5 @@ def qrcode(request):
     code.png(buff, scale=8)
     image_data = buff.getvalue()
     return HttpResponse(image_data, content_type="image/png")
+
+

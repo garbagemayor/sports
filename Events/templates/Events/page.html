@@ -79,9 +79,9 @@
             <div id="makeTeamPart" hidden="hidden">
                 <table class="table table-hover">
                     <tbody>
-                    <td style="width=45%;">
+                    <td style="width: 45%;">
                         <!-- 左边查找队友 -->
-                        <div style="width=100%;">
+                        <div style="width: 100%;">
                             <div class="page-header">
                                 <h1 style="text-align: center">
                                     <small>查找队友</small>
@@ -114,11 +114,11 @@
                             </table>
                         </div>
                     </td>
-                    <td style="width=10%;">
+                    <td style="width: 10%;">
                     </td>
-                    <td style="width=45%;">
+                    <td style="width: 45%;">
                         <!-- 右边显示队友 -->
-                        <div style="width=100%;">
+                        <div style="width: 100%">
                             <div class="page-header">
                                 <h1 style="text-align: center">
                                     <small>已选队友</small>
@@ -256,7 +256,7 @@
         }
         // 接收到信息后进行的操作
         xmlhttp.onreadystatechange = function() {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
                 var searchUserTbody = document.getElementById("searchUserTbody");
                 searchUserTbody.innerHTML = xmlhttp.responseText;
             }

@@ -23,7 +23,7 @@
 			{% endif %}
 			
           </ul>-->
-          <ul class="nav navbar-nav navbar-right" style="background-color: #1a87b7">
+          <ul class="nav navbar-nav navbar-right">
 			{% if not request.session.username %}
 				<li><a 
                     href="https://accounts.net9.org/api/authorize?client_id=0eHhovG3K1NYkhbnYuYmej1h9wY&redirect_uri=http://{{request.get_host}}/authorized">登录</a></li>
@@ -36,6 +36,7 @@
 			{% endif %}
 			
           </ul>
+
         </div>
       </div>
     </nav>
