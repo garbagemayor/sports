@@ -141,6 +141,7 @@ class Signs(models.Model):
         print u'    ' + u'prize = ' + unicode(self.prize)
         print u'}'
 
+
 class IMG(models.Model):
     id = models.IntegerField(primary_key=True)                  # 数据库中的编号
     img = models.ImageField(upload_to='img')                    # 图片本身，本质上是图片文件在HomePage/static/media/下的相对路径

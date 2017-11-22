@@ -2,51 +2,27 @@
 from __future__ import unicode_literals
 
 import json
-
 import re
+
+import django.utils.timezone as timezone
 import requests
-from Users.models import Notification
-from Users.models import NotificationController
-from django.core.paginator import Paginator
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.views.decorators.csrf import csrf_exempt,csrf_protect
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.db.models.signals import post_save, post_delete
+from django.dispatch import receiver
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render, render_to_response
+from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 
 from HomePage.models import Events
+from HomePage.models import IMG
 from HomePage.models import Signs as Sign
 from HomePage.models import Users as User
 from HomePage.models import utcToLocal
-from HomePage.models import IMG
-
-from django.db.models.signals import post_save, post_delete
-from django.dispatch import receiver
-import django.utils.timezone as timezone
 from Users.forms import EditForm
+from Users.models import Notification
+from Users.models import NotificationController
 
-"""
-def auth(request):
-    r = requests.post(
-        'https://accounts.net9.org/api/access_token?client_id=0eHhovG3K1NYkhbnYuYmej1h9wY&client_secret=moK3EkYsQvossfoMwmCd&code='
-        + request.GET['code'])
-    rr = requests.get('https://accounts.net9.org/api/userinfo?access_token=' + r.json()['access_token'])
-    j = rr.json()
-    user = User.objects.get_or_create(name=j['user']['name'])
-    #  if user[1]:
-    User.objects.filter(name=j['user']['name']).update(email=j['user']['email'], mobile=j['user']['mobile'],
-                                                           fullname=j['user']['fullname'],
-                                                           classnumber=j['user']['groups'][0])
-    request.session['username'] = j['user']['name']
-    request.session['userid'] = user[0].id
-    print "user = ", user
-    print "session.userid = ", request.session['userid']
-    request.session['auth'] = user[0].authority
-    messages.add_message(request, messages.INFO, '登陆成功! ' + request.session['username'] + ' 欢迎来到体育赛事报名平台！')
-    return HttpResponseRedirect("/events/")
-"""
 
 def auth(request):
     r = requests.post(
@@ -60,7 +36,6 @@ def auth(request):
         User.objects.create(name=j['user']['name'])
     user = User.objects.get(name=j['user']['name'])
 
-
     # 先获取一堆信息出来再说
     user_name = j['user']['name']
     user_fullname = j['user']['fullname']
@@ -70,13 +45,14 @@ def auth(request):
     user_birthday = user_birthday[0:4] + '-' + user_birthday[4:6] + '-' + user_birthday[6:8]
     user_classnumber = None
     user_degree = None
-    if j['user']['bachelor']['year'] != None:
-        user_classnumber = u'计算机系' + unicode(str(j['user']['bachelor']['year'])) + u'级' + unicode(str(j['user']['bachelor']['classNumber'])) + u'班'
+    if j['user']['bachelor']['year'] is not None:
+        user_classnumber = u'计算机系' + unicode(str(j['user']['bachelor']['year'])) + u'级' + unicode(
+            str(j['user']['bachelor']['classNumber'])) + u'班'
         user_degree = 0
-    if j['user']['master']['year'] != None:
+    if j['user']['master']['year'] is not None:
         user_classnumber = u'计算机系研究生' + j['user']['master']['year'] + u'级' + j['user']['master']['classNumber'] + u'班'
         user_degree = 1
-    if j['user']['doctor']['year'] != None:
+    if j['user']['doctor']['year'] is not None:
         user_classnumber = u'计算机系博士' + j['user']['doctor']['year'] + u'级' + j['user']['doctor']['classNumber'] + u'班'
         user_degree = 2
 
@@ -101,45 +77,44 @@ def auth(request):
     isDifferent = False
     if not isNewUser:
         # 如果这个老用户，居然还能从account9上获取到新信息，也就忍了
-        if user.name == None:
+        if user.name is None:
             user.name = user_name
             user.save()
-        if user.fullname == None:
+        if user.fullname is None:
             user.fullname = user_fullname
             user.save()
-        if user.mobile == None:
+        if user.mobile is None:
             user.mobile = user_mobile
             user.save()
-        if user.email == None:
+        if user.email is None:
             user.email = user_email
             user.save()
-        if user.birthday == None:
+        if user.birthday is None:
             user.birthday = user_birthday
             user.save()
-        if user.classnumber == None:
+        if user.classnumber is None:
             user.classnumber = user_classnumber
             user.save()
-        if user.degree == None:
+        if user.degree is None:
             user.degree = user_degree
             user.save()
         # 检查老用户信息是否一致，如果不一致，封号哭哭哟
-        if user.name != user_name                       \
-            or user.fullname != user_fullname           \
-            or user.mobile != user_mobile               \
-            or user.email != user_email                 \
-            or user.birthday != user_birthday           \
-            or user.classnumber != user_classnumber     \
-            or user.degree != user_degree:
+        if user.name != user_name \
+                or user.fullname != user_fullname \
+                or user.mobile != user_mobile \
+                or user.email != user_email \
+                or user.birthday != user_birthday \
+                or user.classnumber != user_classnumber \
+                or user.degree != user_degree:
             isDifferent = True
 
     # 检测其他一些，从account9上获取不到的信息
     needMore = False
-    if user.certification_id == None        \
-        or user.student_number == None      \
-        or user.cloth_size == None          \
-        or user.gender == None:
+    if user.certification_id is None \
+            or user.student_number is None \
+            or user.cloth_size is None \
+            or user.gender is None:
         needMore = True
-
 
     # 弹出各种情况下的消息窗口
     messages.add_message(request, messages.INFO, '登陆成功! ' + request.session['username'] + ' 欢迎来到体育赛事报名平台！')
@@ -152,6 +127,7 @@ def auth(request):
     else:
         return HttpResponseRedirect("/events/")
     return HttpResponseRedirect("/user/profile/")
+
 
 def logout(request):
     if request.session['username']:
@@ -259,8 +235,8 @@ def edit_information(request):
 
         messages.add_message(request, messages.INFO, '修改成功！')
         return HttpResponseRedirect('/user/')
-    # return render(request, "Users/users.html", info_list)
-    return render_to_response("Users/users.html", info_list)
+    return render(request, "Users/users.html", info_list)
+    # return render_to_response("Users/users.html", info_list)
 
 
 def my_events(request):
@@ -285,7 +261,8 @@ def my_events(request):
         return render(request, 'Events/myevents.html', {'events_list': events_list})
     else:
         messages.add_message(request, messages.INFO, '请登录！')
-        return HttpResponseRedirect("https://accounts.net9.org/api/authorize?client_id=0eHhovG3K1NYkhbnYuYmej1h9wY&redirect_uri=http://"+request.get_host()+"/authorized")
+        return HttpResponseRedirect(
+            "https://accounts.net9.org/api/authorize?client_id=0eHhovG3K1NYkhbnYuYmej1h9wY&redirect_uri=http://" + request.get_host() + "/authorized")
 
 
 def others(request, Id):
@@ -301,8 +278,7 @@ def others(request, Id):
     if user:
         # 没有POST就搞一个新的form
         form = EditForm()
-        info_list = {}
-        info_list['form'] = form
+        info_list = {'form': form}
         my_infos = User.objects.get(id=Id)
         info_list['userid'] = Id
         info_list['id'] = my_infos.name
@@ -328,7 +304,7 @@ def others(request, Id):
 def manager(request):
     user = User.objects.filter().exclude(authority=0)
     for u in user:
-        u.auth=getauth(u.authority)
+        u.auth = getauth(u.authority)
     status = 0
     if request.method == "POST":
         if len(user) < 7:
@@ -359,22 +335,25 @@ def demanager(request, Id):
         messages.add_message(request, messages.INFO, '无此操作权限！')
     return HttpResponseRedirect("/managers/managers/")
 
+
 def backend(request):
     return render(request, 'Users/backend.html')
+
 
 @csrf_exempt
 def team(request):
     if request.method == 'POST':
         new_img = IMG.objects.get(id=1)
-        if len(request.POST['name'])>1:
-            new_img.name=request.POST['name']
+        if len(request.POST['name']) > 1:
+            new_img.name = request.POST['name']
         if request.FILES.get('img'):
-            new_img.img=request.FILES.get('img')
-        if len(request.POST['name'])>1:
-            new_img.detail=request.POST['detail']        
+            new_img.img = request.FILES.get('img')
+        if len(request.POST['name']) > 1:
+            new_img.detail = request.POST['detail']
         new_img.save()
         return HttpResponseRedirect("/main/")
     return render(request, 'Users/team.html')
+
 
 @csrf_exempt
 def celebrity(request):
@@ -389,6 +368,7 @@ def celebrity(request):
         return HttpResponseRedirect("/main/")
     return render(request, 'Users/celebrity.html')
 
+
 @csrf_exempt
 def photos(request):
     if request.method == 'POST':
@@ -397,10 +377,11 @@ def photos(request):
             img=request.FILES.get('img'),
             detail=request.POST['detail'],
             imgtype=2
-        )     
+        )
         new_img.save()
         return HttpResponseRedirect("/main/")
     return render(request, 'Users/team.html')
+
 
 def gets2(i):
     if i == 1:
@@ -420,6 +401,7 @@ def getauth(i):
         return "管理员"
     elif i >= 2:
         return "超级管理员"
+
 
 def keep_info(request):
     info_list = {'gender': request.POST['gender'], 'mobile': request.POST['mobile'], 'email': request.POST['email'],
@@ -454,15 +436,33 @@ def legal_birthday(birthday):
     pattern = "^(199[0-9]|20[0-9]{2})-[0-9]{2}-[0-9]{2}$"
     return re.match(pattern, birthday)
 
+
+"""
+def send_message(request, user_id):
+    if request.method == 'POST':
+        form = EmailForm(request.POST)
+        if form.is_valid():
+            t = form.cleaned_data['title']
+            c = form.cleaned_data['content']
+            Notification.objects.create(sender=request.session['userid'],
+                                        target=user_id, title=t, content=c, createTime=timezone.now())
+            return HttpResponseRedirect('/user/' + str(user_id))
+        return render(request, 'RegistrationRecord/edit_email.html', {'form': form})
+    else:
+        form = EmailForm()
+        return render(request, 'RegistrationRecord/edit_email.html', {'form': form})
+"""
+
+
 def notification(request):
     if request.method == 'POST':
-        checkbox_list=request.POST.getlist("checked")
+        checkbox_list = request.POST.getlist("checked")
         for i in checkbox_list:
             Notification.objects.filter(id=i).delete()
         user_id = request.session['userid']
         record_list = list(Notification.objects.filter(target=user_id))
         # 分页模块
-        paginator=Paginator(record_list, 10)
+        paginator = Paginator(record_list, 10)
         page = request.GET.get('page')
         try:
             record_list = paginator.page(page)
@@ -470,15 +470,14 @@ def notification(request):
             record_list = paginator.page(1)
         except EmptyPage:
             record_list = paginator.page(paginator.num_pages)
-        message_map = {}
-        message_map['record_list'] = record_list
+        message_map = {'record_list': record_list}
         return render(request, 'Users/notification.html', message_map)
     user_id = request.session['userid']
     record_list = list(Notification.objects.filter(target=user_id))
     for record in record_list:
         record.createTimeStr = utcToLocal(record.createTime).strftime("%Y-%m-%d %H:%M:%S")
     # 分页模块
-    paginator=Paginator(record_list, 10)
+    paginator = Paginator(record_list, 10)
     page = request.GET.get('page')
     try:
         record_list = paginator.page(page)
@@ -486,20 +485,21 @@ def notification(request):
         record_list = paginator.page(1)
     except EmptyPage:
         record_list = paginator.page(paginator.num_pages)
-    message_map = {}
-    message_map['record_list'] = record_list
+    message_map = {'record_list': record_list}
     return render(request, 'Users/notification.html', message_map)
+
 
 def notification_count(request):
     user_id = request.session['userid']
     obj = NotificationController.objects.get_or_create(userId=user_id)
     return HttpResponse(obj[0].unReadCount)
 
+
 def notes(request, note_id):
-    message_map = {}
-    message_map['note'] = Notification.objects.get(id=note_id)
+    message_map = {'note': Notification.objects.get(id=note_id)}
     request.session['noteid'] = note_id
     return render(request, 'Users/note.html', message_map)
+
 
 def mark_as_read(request):
     note_id = request.session['noteid']
@@ -513,12 +513,14 @@ def mark_as_read(request):
     count = NotificationController.objects.get(userId=user_id).unReadCount
     return HttpResponse(count)
 
+
 @receiver(post_save, sender=Notification)
 def incr_notifications_counter(sender, instance, created, **kwargs):
     obj = NotificationController.objects.get_or_create(userId=instance.target)
     if not obj[1]:
         obj[0].unReadCount = obj[0].unReadCount + 1
         obj[0].save()
+
 
 @receiver(post_delete, sender=Notification)
 def decr_notifications_counter(sender, instance, **kwargs):

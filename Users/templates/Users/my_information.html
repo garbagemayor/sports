@@ -21,25 +21,25 @@
 			<br><br>
             <fieldset>
                 <legend contenteditable="false">个人资料</legend>
-                <label contenteditable="false" style="width: 20%; height: 50px">用户名</label>
-                <label contenteditable="false" style="width: 20%; height: 50px">{{ id }}</label>
+                <label contenteditable="false" style="width: 30%; height: 50px">用户名</label>
+                <label contenteditable="false" style="width: 50%; height: 50px">{{ id }}</label>
                 <br/>
-                <label contenteditable="false" style="width: 20%; height: 50px">姓名</label>
-                <label contenteditable="false" style="width: 20%; height: 50px">{{ name }}</label>
+                <label contenteditable="false" style="width: 30%; height: 50px">姓名</label>
+                <label contenteditable="false" style="width: 50%; height: 50px">{{ name }}</label>
                 <br/>
-                <label contenteditable="false" style="width: 20%; height: 50px">性别</label>
-                <label contenteditable="false" style="width: 20%; height: 50px" id="gender">{{ gender }}</label>
+                <label contenteditable="false" style="width: 30%; height: 50px">性别</label>
+                <label contenteditable="false" style="width: 50%; height: 50px" id="gender">{{ gender }}</label>
                  <script>
                     var gender = '{{ gender }}';
                     if (gender === 'M') {$("#gender").html("男");}
                     if (gender === 'F') {$("#gender").html("女");}
                 </script>
                 <br/>
-                <label contenteditable="false" style="width: 20%; height: 50px">所在班级</label>
-                <label contenteditable="false" style="width: 20%; height: 50px">{{ classnumber }}</label>
+                <label contenteditable="false" style="width: 30%; height: 50px">所在班级</label>
+                <label contenteditable="false" style="width: 50%; height: 50px">{{ classnumber }}</label>
                 <br/>
-                <label contenteditable="false" style="width: 20%; height: 50px">用户类型</label>
-                <label contenteditable="false" style="width: 20%; height: 50px" id="authority">{{ authority }}</label>
+                <label contenteditable="false" style="width: 30%; height: 50px">用户类型</label>
+                <label contenteditable="false" style="width: 50%; height: 50px" id="authority">{{ authority }}</label>
                  <script>
                     var authority = '{{ authority }}';
                     if (authority === '0') {$("#authority").html("普通用户");}
@@ -47,31 +47,31 @@
                     else {$('#authority').html("超级管理员");}
                 </script>
                 <br/>
-                <label contenteditable="false" style="width: 20%; height: 50px">手机号</label>
-                <label contenteditable="false" style="width: 20%; height: 50px">{{ mobile }}</label>
+                <label contenteditable="false" style="width: 30%; height: 50px">手机号</label>
+                <label contenteditable="false" style="width: 50%; height: 50px">{{ mobile }}</label>
                 <br/>
-                <label contenteditable="false" style="width: 20%; height: 50px">电子邮箱</label>
-                <label contenteditable="false" style="width: 20%; height: 50px">{{ email }}</label>
+                <label contenteditable="false" style="width: 30%; height: 50px">电子邮箱</label>
+                <label contenteditable="false" style="width: 50%; height: 50px">{{ email }}</label>
                 <br/>
-                <label contenteditable="false" style="width: 20%; height: 50px">学号</label>
-                <label contenteditable="false" style="width: 20%; height: 50px">{{ student_number }}</label>
+                <label contenteditable="false" style="width: 30%; height: 50px">学号</label>
+                <label contenteditable="false" style="width: 50%; height: 50px">{{ student_number }}</label>
                 <br/>
-                <label contenteditable="false" style="width: 20%; height: 50px">证件类型</label>
-                <label contenteditable="false" style="width: 20%; height: 50px" id="certification_type">{{ certification_type }}</label>
+                <label contenteditable="false" style="width: 30%; height: 50px">证件类型</label>
+                <label contenteditable="false" style="width: 50%; height: 50px" id="certification_type">{{ certification_type }}</label>
                 <script>
                     var c_type = '{{ certification_type }}'
                     if (c_type === '0') {$("#certification_type").html("身份证")}
                     if (c_type === '1') {$("#certification_type").html("护照")}
                 </script>
                 <br/>
-                <label contenteditable="false" style="width: 20%; height: 50px">证件号</label>
-                <label contenteditable="false" style="width: 20%; height: 50px">{{ certification_id }}</label>
+                <label contenteditable="false" style="width: 30%; height: 50px">证件号</label>
+                <label contenteditable="false" style="width: 50%; height: 50px">{{ certification_id }}</label>
                 <br/>
-                <label contenteditable="false" style="width: 20%; height: 50px">出生日期</label>
-                <label contenteditable="false" style="width: 20%; height: 50px">{{ birthday }}</label>
+                <label contenteditable="false" style="width: 30%; height: 50px">出生日期</label>
+                <label contenteditable="false" style="width: 50%; height: 50px">{{ birthday }}</label>
                 <br/>
-                <label contenteditable="false" style="width: 20%; height: 50px">攻读学位</label>
-                <label contenteditable="false" style="width: 20%; height: 50px" id="degree">{{ degree }}</label>
+                <label contenteditable="false" style="width: 30%; height: 50px">攻读学位</label>
+                <label contenteditable="false" style="width: 50%; height: 50px" id="degree">{{ degree }}</label>
                 <script>
                     var degree = '{{ degree }}';
                     if (degree === '0') {$("#degree").html("本科生");}
@@ -79,8 +79,8 @@
                     if (degree === 'null') {$('#degree').html("尚未登记");}
                 </script>
                 <br/>
-                <label contenteditable="false" style="width: 20%; height: 50px">衣服尺码</label>
-                <label contenteditable="false" style="width: 20%; height: 50px" id="size">{{ cloth_size }}</label>
+                <label contenteditable="false" style="width: 30%; height: 50px">衣服尺码</label>
+                <label contenteditable="false" style="width: 50%; height: 50px" id="size">{{ cloth_size }}</label>
                 <script>
                     var size = '{{ cloth_size }}';
                     if (size === 'S') {$("#size").html("S(男生165/女生160)");}
@@ -89,8 +89,8 @@
                     if (size === 'null') {$('#size').html("尚未登记");}
                 </script>
                 <br/>
-                <label contenteditable="false" style="width: 20%; height: 50px">所在宿舍</label>
-                <label contenteditable="false" style="width: 20%; height: 50px">{{ room_address }}</label>
+                <label contenteditable="false" style="width: 30%; height: 50px">所在宿舍</label>
+                <label contenteditable="false" style="width: 50%; height: 50px">{{ room_address }}</label>
                 <script>
                     $("label:contains('None')").html("尚未登记")
                 </script>

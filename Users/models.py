@@ -5,6 +5,7 @@ from django.db import models
 from django.db.models.signals import post_save, post_delete
 import django.utils.timezone as timezone
 
+
 # Create your models here.
 class Notification(models.Model):
     id = models.IntegerField(primary_key=True)                  # 数据库中的编号
@@ -25,13 +26,14 @@ class Notification(models.Model):
 
     def __str__(self):
         return '<Notification %s: %s %s %s %s %s %s>' % (self.id,
-                self.sender, self.target, self.title,
-                self.content, self.isRead, self.createTime)
+                                                         self.sender, self.target, self.title,
+                                                         self.content, self.isRead, self.createTime)
+
 
 class NotificationController(models.Model):
-    id = models.IntegerField(primary_key=True)                  # 数据库中的编号
-    userId = models.IntegerField()                     # 用户的数据库编号
-    unReadCount = models.IntegerField(default=0) # 未读条数
+    id = models.IntegerField(primary_key=True)  # 数据库中的编号
+    userId = models.IntegerField()  # 用户的数据库编号
+    unReadCount = models.IntegerField(default=0)  # 未读条数
 
     #  def mark_as_readed(self, notification_id):
     #      affected_rows = Notification.objects.filter(pk=notification_id,
