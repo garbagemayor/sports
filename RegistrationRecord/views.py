@@ -120,35 +120,61 @@ def recordPage(request, event_id):
     event = Events.objects.get(id=event_id)
     request.session['eventname'] = event.name
     if request.method=="POST":
-        checkbox_list = request.POST.getlist("checked")
         EMAIL_FROM = '924486024@qq.com'
-        title = ""
-        body = request.POST['content']
-        result = request.POST.getlist('result')
-        result = True if result == "True" else False
-        leaderOnly = False
-        if event.teamMode == 1:
-            leaderOnly = request.POST.getlist('leaderOnly')
-            leaderOnly = True if leaderOnly == "True" else False
-        title = "审核通过" if result else "审核不通过"
-        title = event.name + title
-        for checked_item in checkbox_list:
-            leaderId = int(checked_item.split('|')[0]);
-            if leaderOnly:
-                send_mail(title, body, EMAIL_FROM, [Users.objects.get(id=leaderId).email])
-            teammateIdStrList = re.findall(r'\d+', checked_item.split('|')[1])
-            Signs.objects.filter(eventId=event_id,userId=leaderId).update(exmStatus=2 if result else 3)
-            for teammateIdStr in teammateIdStrList:
-                teammateId = int(teammateIdStr)
-                user = Users.objects.get(id=teammateId)
-                content = user.name + body
-                Notification.objects.create(sender=request.session['username'],
-                                            senderId=request.session['userid'],
-                                            target=teammateId,
-                                            title=title,
-                                            content=content)
-                if not leaderOnly and user.email:
-                    send_mail(title, content, EMAIL_FROM, [user.email])
+        print request.POST
+        checkbox_list = request.POST.getlist("checked")
+        passExanime = request.POST.getlist("passExanimeSelector")
+        emailOrNote = request.POST.getlist("emailOrNoteSelector")
+        sendMessage = request.POST.getlist("sendMessageSelector")
+        content = request.POST['content']
+        print checkbox_list
+        print passExanime
+        print emailOrNote
+        print sendMessage
+        print content
+        title = "已通过审核" if passExanime[0] == '1' else "未通过审核"
+        title = event.name + "：" + title
+        print title
+        # 这个部分只操作数据库
+        for checkbox_item in checkbox_list:
+            captainId = int(checkbox_item.split('|')[0]);
+            teammateIdStrList = re.findall(r'\d+', checkbox_item.split('|')[1])
+            Signs.objects.filter(eventId=event_id,userId=captainId).update(exmStatus=2 if passExanime[0] == '1' else 3)
+        # 这个部分只操作站内信
+        if emailOrNote[0] == '1' or emailOrNote[0] == '3':
+            for checkbox_item in checkbox_list:
+                captainId = int(checkbox_item.split('|')[0]);
+                teammateIdStrList = re.findall(r'\d+', checkbox_item.split('|')[1])
+                if sendMessage == None or sendMessage[0] == 1:
+                    Notification.objects.create(
+                        sender=request.session['username'],
+                        senderId=request.session['userid'],
+                        target=captainId,
+                        title=title,
+                        content=content)
+                else:
+                    for teammateIdStr in teammateIdStrList:
+                        teammateId = int(teammateIdStr)
+                        content_tmp = Users.objects.get(id=teammateId).name + content
+                        Notification.objects.create(
+                            sender=request.session['username'],
+                            senderId=request.session['userid'],
+                            target=teammateId,
+                            title=title,
+                            content=content)
+        # 这个部分只操作邮件
+        if emailOrNote[0] == '2' or emailOrNote[0] == '3':
+            email_list = []
+            for checkbox_item in checkbox_list:
+                captainId = int(checkbox_item.split('|')[0]);
+                teammateIdStrList = re.findall(r'\d+', checkbox_item.split('|')[1])
+                if sendMessage == None or sendMessage[0] == 1:
+                    email_list.append(Users.objects.get(id=captainId).email)
+                else:
+                    for teammateIdStr in teammateIdStrList:
+                        teammateId = int(teammateIdStr)
+                        email_list.append(Users.objects.get(id=teammateId).email)
+            send_mail(title, content, EMAIL_FROM, email_list)
                  
         messages.add_message(request, messages.INFO, '审核成功')
     # 当前赛事的所有报名记录

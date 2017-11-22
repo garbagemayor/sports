@@ -24,184 +24,248 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
 <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
 <form name="EditForm" method="POST" novalidate="">
-{% csrf_token %}
-<div class="container-fluid">
-    <div class="row-fluid">
-        <div class="span12">
-	        <div class="page-header">
-                <h1 style="text-align: center">
-                    {{event.name}}
-                    <small>报名记录</small>
-                </h1>
-            </div>
+    {% csrf_token %}
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="page-header">
+                    <h1 style="text-align: center">
+                        {{event.name}}
+                        <small>报名记录</small>
+                    </h1>
+                </div>
                 <button class="btn btn-default" type="button" onclick="location.href='/record_download_csv/{{event.id}}'">
                     下载报名表(.csv)
                 </button>
                 <button class="btn btn-default" type="button" onclick="location.href='/record_download_xlsx/{{event.id}}'">
                     下载报名表(.xlsx)
                 </button>
-                <button class="btn btn-success" type="button" data-toggle="modal"
-                    data-target="#confirm1" style="float:right">审核
+                <button class="btn btn-success" type="button" data-toggle="modal" data-target="#confirm1" style="float:right">审核
                 </button>
                 <button class="btn btn-success" type="button" onclick="location.href='/events/{{event.id}}'" style="float:right">
                     返回比赛页面
                 </button>
                 <table class="table table-hover">
                     <thead>
-                       <tr>
-                            <th>
-                                报名时间
-                            </th>
-                           {% if event.teamMode == 1 %}
-                           <th>
-                               队长
-                           </th>
-                           {% endif %}
-                            <th>
-                                用户名
-                            </th>
-                            <th>
-                                姓名
-                            </th>
-                            <th>
-                                联系电话
-                            </th>
-                            <th>
-                                邮箱
-                            </th>
-        					<th>
-                                审核状态
-                            </th>
-        					<th>
-                                选择
-                            </th>
-                        </tr>
+                    <tr>
+                        <th>
+                            报名时间
+                        </th>
+                        {% if event.teamMode == 1 %}
+                        <th>
+                            队长
+                        </th>
+                        {% endif %}
+                        <th>
+                            用户名
+                        </th>
+                        <th>
+                            姓名
+                        </th>
+                        <th>
+                            联系电话
+                        </th>
+                        <th>
+                            邮箱
+                        </th>
+                        <th>
+                            审核状态
+                        </th>
+                        <th>
+                            选择
+                        </th>
+                    </tr>
                     </thead>
                     <tbody>
-                        {% for record in record_list %}
-                        <tr class="{{record.statusToClass}}" ondblclick="location.href='/user/{{record.record.userId}}'">
-                            <td>
-                                {{ record.timeRegStr }}
-                            </td>
-                            {% if event.teamMode == 1 %}
-                            <td>
-                                {{ record.captainFullname }}
-                            </td>
+                    {% for record in record_list %}
+                    <tr class="{{record.statusToClass}}" ondblclick="location.href='/user/{{record.record.userId}}'">
+                        <td>
+                            {{ record.timeRegStr }}
+                        </td>
+                        {% if event.teamMode == 1 %}
+                        <td>
+                            {{ record.captainFullname }}
+                        </td>
+                        {% endif %}
+                        <td>
+                            <a href="/user/{{record.user.id}}">{{ record.name | linebreaksbr }}</a>
+                        </td>
+                        <td>
+                            {{ record.fullname | linebreaksbr }}
+                        </td>
+                        <td>
+                            {{ record.mobile | linebreaksbr}}
+                        </td>
+                        <td>
+                            {{ record.email | linebreaksbr}}
+                        </td>
+                        <td>
+                            {{ record.statusStr | linebreaksbr}}
+                        </td>
+                        <td>
+                            {% if record.status == 1 %}
+                            <input type="checkbox" name="checked" value="{{record.userId}}|{{record.userIdSet}}"/>
                             {% endif %}
-                            <td>
-                                <a href="/user/{{record.user.id}}">{{ record.name | linebreaksbr }}</a>
-                            </td>
-                            <td>
-                                {{ record.fullname | linebreaksbr }}
-                            </td>
-                            <td>
-                                {{ record.mobile | linebreaksbr}}
-                            </td>
-                            <td>
-                                {{ record.email | linebreaksbr}}
-                            </td>
-                            <td>
-                                {{ record.statusStr | linebreaksbr}}
-                            </td>
-                            <td>
-                                {% if record.status == 1 %}
-                                <input type="checkbox" name="checked" value="{{record.userId}}|{{record.userIdSet}}"/>
-                                {% endif %}
-                            </td>
-                        </tr>
-                        {% endfor %}
+                        </td>
+                    </tr>
+                    {% endfor %}
                     </tbody>
                 </table>
+            </div>
         </div>
     </div>
-</div>
 
-<nav style="text-align: center">
-<ul class="pagination">
-    {% if record_list.has_previous %}
-        <li><a href="?page={{ record_list.previous_page_number }}">&laquo;</a></li>
-    {% endif %}
-    {% if record_list.number > 2 %}
-        <li><a href="?page={{ record_list.number|add:"-2"}}">{{record_list.number|add:"-2"}}</a></li>
-    {% endif %}
-    {% if record_list.number > 1 %}
-        <li><a href="?page={{ record_list.previous_page_number }}">{{record_list.number|add:"-1"}}</a></li>
-    {% endif %}
-        <li class="active"><a>{{record_list.number}}<span class="sr-only">(current)</span></a></li>
-    {% if record_list.number < record_list.paginator.num_pages %}
-        <li><a href="?page={{ record_list.next_page_number }}">{{record_list.number|add:"1"}}</a></li>
-    {% endif %}
-    {% if record_list.number < record_list.paginator.num_pages|add:"-1" %}
-        <li><a href="?page={{ record_list.number|add:"2"}}">{{record_list.number|add:"2"}}</a></li>
-    {% endif %}
-    {% if record_list.has_next %}
-        <li><a href="?page={{ record_list.next_page_number }}">&raquo;</a></li>
-    {% endif %}
-</ul>
-</nav>
+    <nav style="text-align: center">
+        <ul class="pagination">
+            {% if record_list.has_previous %}
+            <li><a href="?page={{ record_list.previous_page_number }}">&laquo;</a></li>
+            {% endif %}
+            {% if record_list.number > 2 %}
+            <li><a href="?page={{ record_list.number|add:"-2"}}">{{record_list.number|add:"-2"}}</a></li>
+            {% endif %}
+            {% if record_list.number > 1 %}
+            <li><a href="?page={{ record_list.previous_page_number }}">{{record_list.number|add:"-1"}}</a></li>
+            {% endif %}
+            <li class="active"><a>{{record_list.number}}<span class="sr-only">(current)</span></a></li>
+            {% if record_list.number < record_list.paginator.num_pages %}
+            <li><a href="?page={{ record_list.next_page_number }}">{{record_list.number|add:"1"}}</a></li>
+            {% endif %}
+            {% if record_list.number < record_list.paginator.num_pages|add:"-1" %}
+            <li><a href="?page={{ record_list.number|add:"2"}}">{{record_list.number|add:"2"}}</a></li>
+            {% endif %}
+            {% if record_list.has_next %}
+            <li><a href="?page={{ record_list.next_page_number }}">&raquo;</a></li>
+            {% endif %}
+        </ul>
+    </nav>
 
-<div class="modal fade" id="confirm1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" 
-						aria-hidden="true">&times;
-				</button>
-                <h4 class="modal-title" id="myModalLabel" style="text-align:center">
-                    审核选项
-                </h4>
-			</div>
-            <div class="modal-body">
-                <div style="text-align: center;">
-                    {{ form.result }}
+    <div class="modal fade" id="confirm1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" hidden="hidden">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-hidden="true">&times;
+                    </button>
+                    <h2 class="modal-title" id="confirm1_title" style="text-align:center">
+                        <b>审核选项</b>
+                    </h2>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <div class="form-group">
+                <!-- 审核的各个选项 -->
+                <div style="text-align: center;">
+                    <div class="dropdown" style="display:inline;">
+                        <button type="button" class="btn dropdown-toggle" id="passExamineBtn" data-toggle="dropdown">
+                            通过审核 <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" onclick="passExanimeListener('true')">通过审核</a>
+                            </li>
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" onclick="passExanimeListener('false')">拒绝通过审核</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="dropdown" style="display:inline;">
+                        <button type="button" class="btn dropdown-toggle" id="emailOrNoteBtn" data-toggle="dropdown">
+                            仅发送站内信 <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" onclick="emailOrNoteListener('1')">仅发送站内信</a>
+                            </li>
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" onclick="emailOrNoteListener('2')">仅发送邮件</a>
+                            </li>
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" onclick="emailOrNoteListener('3')">发送站内信和邮件</a>
+                            </li>
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" onclick="emailOrNoteListener('4')">不发送任何消息</a>
+                            </li>
+                        </ul>
+                    </div>
+                    {% if event.teamMode == 1 %}
+                    <div class="dropdown" style="display:inline;">
+                        <button type="button" class="btn dropdown-toggle" id="sendMessageBtn" data-toggle="dropdown">
+                            仅给队长发送 <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" onclick="sendMessageListener('true')">仅给队长发送</a>
+                            </li>
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" onclick="sendMessageListener('false')">给全队发送</a>
+                            </li>
+                        </ul>
+                    </div>
+                    {% endif %}
+                </div>
+                <!-- 审核消息编辑器 -->
+                <div class="modal-body" id="editor_container">
                     <div style="text-align: center;">
-                        <button class="btn btn-success" type="button"
-                                                        data-toggle="modal"
-                                                        data-target="#confirm2" 
-                                                        data-dismiss="modal"
-                                                        id="get-template"
-                            style="float:right">审核
+                        {{ form.passExanimeSelector }}
+                        {{ form.emailOrNoteSelector }}
+                        {% if event.teamMode == 1 %}
+                        {{ form.sendMessageSelector }}
+                        {% endif %}
+                    </div>
+                    {{ form.content }}
+                </div>
+                <div class="modal-footer">
+                    <div class="form-group">
+                        <div style="text-align: center;">
+                            <button id="okAndSend" class="btn btn-primary" type="submit">确定并发送</button>
+                        </div>
                     </div>
                 </div>
-            </div>
-		</div><!-- /.modal-content -->
-	</div><!-- /.modal-dialog -->
-</div>
 
-<div class="modal fade" id="confirm2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" 
-						aria-hidden="true">&times;
-				</button>
-                <h4 class="modal-title" id="myModalLabel" style="text-align:center">
-                    发送审核信息
-                </h4>
-			</div>
-            <div class="modal-body" id="editor_container">
-                {{ form.content }}
-                {% if event.teamMode == 1 %}
-                <div style="text-align: center;">
-                    <label for="{{ form.teamMode.id_for_label }}">只发送给队长</label>
-                    {{ form.leaderOnly }}
-                </div>
-                {% endif %}
-            </div>
-            <div class="modal-footer">
-                <div class="form-group">
-                    <div style="text-align: center;">
-                        <button class="btn btn-primary" type="submit">发送</button>
-                    </div>
-                </div>
-            </div>
-		</div><!-- /.modal-content -->
-	</div><!-- /.modal-dialog -->
-</div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+
+    <script>
+    function passExanimeListener(selection) {
+        var btn = document.getElementById("passExamineBtn");
+        if (selection == 'true') {
+            btn.innerHTML = "通过审核";
+        } else if (selection == 'false') {
+            btn.innerHTML = "拒绝通过审核";
+        }
+        btn.innerHTML = btn.innerHTML + '<span class="caret"></span>';
+    }
+    </script>
+    <script>
+    function emailOrNoteListener(selection) {
+        var btn = document.getElementById("emailOrNoteBtn");
+        var ok = document.getElementById("okAndSend");
+        if (selection == '1') {
+            btn.innerHTML = "仅发送站内信";
+            ok.innerHTML = "确定并发送";
+        } else if (selection == '2') {
+            btn.innerHTML = "仅发送邮件";
+            ok.innerHTML = "确定并发送";
+        } else if (selection == '3') {
+            btn.innerHTML = "发送站内信和邮件";
+            ok.innerHTML = "确定并发送";
+        } else if (selection == '4') {
+            btn.innerHTML = "不发送任何消息";
+            ok.innerHTML = "确定";
+        }
+        btn.innerHTML = btn.innerHTML + '<span class="caret"></span>';
+    }
+    </script>
+    <script>
+    function sendMessageListener(selection) {
+        var btn = document.getElementById("sendMessageBtn");
+        if (selection == 'true') {
+            btn.innerHTML = "仅给队长发送";
+        } else if (selection == 'false') {
+            btn.innerHTML = "给全队发送";
+        }
+        btn.innerHTML = btn.innerHTML + '<span class="caret"></span>';
+    }
+    </script>
+
 </form>
 
 <!-- Start simple MDE -->
