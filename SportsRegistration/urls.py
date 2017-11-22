@@ -33,8 +33,9 @@ urlpatterns = [
                   url(r'^$',  RedirectView.as_view(url='/main/')),
                   url(r'^main/$', HomePage_view.index, name='homepage'),
                   url(r'^broadcast/$', HomePage_view.broadcast, name='broadcast'),
+                  url(r'^broadcast/(\d+)/$', HomePage_view.broadcastpage, name='broadcastpage'),
 
-                  #赛事
+                 #赛事
                   url(r'^events/$', Events_view.index, name='eventslist'),                          #所有赛事页
                   url(r'^events/(\d+)/$', Events_view.page, name='eventspage'),                     #赛事详情页
                   # url(r'^events/(\d+)/maketeam/$',

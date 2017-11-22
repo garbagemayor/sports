@@ -232,7 +232,7 @@ $('#indicatorContainer_{{line.id}}').radialIndicator({
     },
 	radius: 30,
     minValue: 0,
-    maxValue: {%if line.maxRegCnt == -1 %} 100, {% else %} {{line.maxRegCnt}}, {% endif %}
+    maxValue: {%if line.maxRegCnt == -1 %} 50, {% else %} {{line.maxRegCnt}}, {% endif %}
 	initValue: {{line.nowRegCnt}}
 });
 	</script>

@@ -2,8 +2,9 @@
 from __future__ import unicode_literals
 
 from django.shortcuts import render
-from HomePage.models import Events, IMG
+from HomePage.models import Events, IMG, Users
 from HomePage.models import Broadcast
+from HomePage.models import utcToLocal
 from django.core.paginator import Paginator
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
@@ -50,3 +51,14 @@ def broadcast(request):
         broadcast_list = paginator.page(paginator.num_pages)
 
     return render(request, 'HomePage/broadcast.html', {'broadcast': broadcast_list})
+
+def broadcastpage(request, Id):
+    b = Broadcast.objects.filter(id=Id)
+    if b:
+        b=b[0]
+        b.time = utcToLocal(b.time).strftime("%Y-%m-%d %H:%M:%S")
+        b.publishername = Users.objects.get(id=b.publisher).name
+        return render(request, 'HomePage/broadcastpage.html', {'broadcast': b})
+    else:
+        return render(request, 'HomePage/broadcastpage.html')
+
