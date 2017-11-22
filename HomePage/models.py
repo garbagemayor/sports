@@ -156,3 +156,15 @@ class IMG(models.Model):
         print u'    ' + u'detail = ' + unicode(self.detail)
         print u'    ' + u'imgtype = ' + unicode(self.imgtype)
         print u'}'
+
+class broadcast(models.Model):
+    id = models.IntegerField(primary_key=True)                    # 赛事的数据库编号
+    detail = models.TextField(default='暂无')
+    time = models.DateTimeField(default=timezone.now)
+
+    def printAll(self):
+        print u'<class HomePage.models.broadcast> {'
+        print u'    ' + u'id = ' + unicode(self.id)
+        print u'    ' + u'detail = ' + unicode(self.detail)
+        print u'    ' + u'time = ' + unicode(self.time)
+        print u'}'
