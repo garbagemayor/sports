@@ -12,11 +12,9 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 # Create your views here.
 
 def index(request):
-    team = IMG.objects.filter(id=1)
-    team = team[0]
-    celebrity = list(IMG.objects.filter(imgtype=1))
-    celebrity = celebrity[-1]
-    photos = IMG.objects.filter(imgtype=2)
+    team = list(IMG.objects.filter(headline=True,imgtype=0))
+    game = list(IMG.objects.filter(headline=True,imgtype=1))
+    celebrity = list(IMG.objects.filter(headline=True,imgtype=2))
     print request.get_host()
     events_list = Events.objects.all()[::-1]
     events1 = []
@@ -45,7 +43,7 @@ def index(request):
                    'events3_len' : len(events3),
                    'team': team,
                    'celebrity': celebrity,
-                   'photos': photos})
+                   'game': game})
 
 def broadcast(request):
     broadcast_list = list(Broadcast.objects.all()[::-1])
