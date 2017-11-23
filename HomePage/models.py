@@ -175,3 +175,15 @@ class Broadcast(models.Model):
         print u'    ' + u'detail = ' + unicode(self.detail)
         print u'    ' + u'time = ' + unicode(self.time)
         print u'}'
+
+class Attention(models.Model):
+    id = models.IntegerField(primary_key=True)
+    userid = models.IntegerField(null=True)
+    status = models.IntegerField(default=0)
+
+    def printAll(self):
+        print u'<class HomePage.models.broadcast> {'
+        print u'    ' + u'id = ' + unicode(self.id)
+        print u'    ' + u'userid = ' + unicode(self.userid)
+        print u'    ' + u'status = ' + unicode(self.status)
+        print u'}'
