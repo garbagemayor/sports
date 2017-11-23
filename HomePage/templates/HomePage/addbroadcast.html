@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="">
+
+{% block Title %}
+<title id="baseIndexTitle">添加新赛事 - 清华大学计算机系体育赛事平台</title>
+{% endblock %}
+
+    
+
+	<!-- Bootstrap -->
+	<link href="/static/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/static/css/font-awesome.min.css" rel="stylesheet">
+	
+	<!----><link href="/static/css/owl.carousel.css" rel="stylesheet">
+	<link href="/static/css/owl.theme.css" rel="stylesheet">
+	<link href="/static/css/owl.transitions.css" rel="stylesheet">
+    <script src="/static/css/bootstrap-theme.min.css"></script>
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+	
+    
+    <link href="/static/style.css" rel="stylesheet">
+	
+	<link  href="/static/css/ystep.css" rel="stylesheet">		  
+	<link href="/static/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">	
+	<link rel="stylesheet" href="/static/css/spinner/bootstrap-spinner.min.css">
+
+    <script src="/static/js/jquery.spinner.min.js"></script>
+
+  </head>
+
+	<body onload="openwin()" data-spy="scroll" data-target=".main-nav">
+
+		
+		{% include 'header.html' %}
+
+<div class="container">
+	<ol class="breadcrumb">
+    <li><a href="/main/">平台</a></li>
+    <li><a href="/broadcast/">公告</a></li>
+    <li><a class="active">发布公告</a></li>
+</ol>
+        
+						<div class="page-header">
+        <h1 style="text-align: center">
+          发布公告 <small></small>
+        </h1>
+		</div>
+
+	<br>
+	<br>
+
+<form class="form-horizontal" role="form" method="post" >
+{% csrf_token %}
+	<div class="form-group">
+		<label class="col-sm-3 control-label">标题</label>
+		<div class="col-sm-4">
+			<input class="form-control" name="title" type="text"  placeholder="标题">
+		</div>
+	</div>
+	
+	<div class="form-group">
+		<label for="name" class="col-sm-3 control-label">内容</label>
+		<div class="col-sm-7">
+			<textarea class="form-control" name="detail" rows="5"></textarea>
+		</div>
+	</div>
+	<br>
+	<div class="form-group">
+		<div class="col-sm-3">
+		</div>
+		<div class="col-sm-9">
+			<button class="btn btn-primary" {% if not request.session.auth %} disabled="disabled"{% endif %} type="submit" >确认添加</button>
+		</div>
+	</div>
+</form>
+</div>
+
+
+	
+
+	  
+		{% if messages %}
+		<script>
+			{% for msg in messages %}
+			alert('{{ msg.message }}');
+			{% endfor %}
+		</script>
+		{% endif %}
+  
+  
+  
+  </body>
+	
+    {% include 'footer.html' %}<!---->
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	
+	<script src="/static/js/jquery.min.js"></script>
+	<script src="/static/js/jquery.easing.min.js"></script>
+	<script src="/static/js/jquery.stellar.js"></script>
+	<script src="/static/js/jquery.appear.js"></script>
+	<script src="/static/js/jquery.nicescroll.min.js"></script>
+	<script src="/static/js/jquery.countTo.js"></script>
+	<script src="/static/js/jquery.shuffle.modernizr.js"></script>
+	<script src="/static/js/jquery.shuffle.js"></script>
+	<script src="/static/js/owl.carousel.js"></script>
+	<script src="/static/js/jquery.ajaxchimp.min.js"></script>	
+    <script src="/static/js/jquery-ui-1.10.1.custom.min.js" type="text/javascript"></script>
+	<!--<script src="/static/js/script.js"></script>-->
+	<script src="/static/js/gsdk-checkbox.js"></script>
+	<script src="/static/js/gsdk-radio.js"></script>
+	<script src="/static/js/gsdk-bootstrapswitch.js"></script>
+	<script src="/static/js/get-shit-done.js"></script>
+    <script src="/static/js/custom.js"></script>
+  </body>
+</html>
+
+
+

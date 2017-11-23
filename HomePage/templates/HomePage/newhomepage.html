@@ -103,16 +103,9 @@
 						</div>
 						<div>
 							<ul class="list-group">
-								<li class="list-group-item"><a href="/user/">哈哈哈哈</a></li>
-								<li class="list-group-item">
-									<span class="badge">新</span>
-									24*7 支持
-								</li>
-								<li class="list-group-item">每年更新成本</li>
-								<li class="list-group-item">
-									<span class="badge">新</span>
-									折扣优惠
-								</li>
+								{% for line in broadcast %}									
+									<li class="list-group-item">{% if line.new %}<span class="badge">新</span>{% endif %}<a href="/broadcast/{{line.id}}">{{line.title}}</a></li>
+								{% endfor %}
 							</ul>
 						</div>
 						<br>
@@ -429,7 +422,7 @@
 <script>
 	$(function(){
 		// 初始化轮播
-			$("#myCarousel").carousel({interval:1000});/*
+			$("#myCarousel").carousel({interval:2000});/*
 		$(".start-slide").click(function(){
 			$("#myCarousel").carousel({interval:1000});
 		});

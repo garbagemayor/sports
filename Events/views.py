@@ -5,6 +5,7 @@ from django.shortcuts import render
 from HomePage.models import Signs as Sign
 from HomePage.models import Events, Users
 from HomePage.models import utcToLocal
+from HomePage.models import Broadcast
 from django.core.paginator import Paginator
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponse, HttpResponseRedirect
@@ -263,7 +264,7 @@ def teamsign(request, eventId, selectedStr="", other=""):
                 teammateId.append(request.session['userid'])
             e = Events.objects.get(id=eventId)
             if e.maxRegCnt != -1 and e.maxRegCnt <= e.nowRegCnt:
-                messages.add_message(request, messages.INFO, '报名已经满了，你是怎么点到报名按钮的？')
+                messages.add_message(request, messages.INFO, '报名已满！')
             else:
                 e.nowRegCnt += 1;
                 e.save()
@@ -320,10 +321,7 @@ def addevents(request):
         if len(checkbox) == 0:
             messages.add_message(request, messages.INFO, "请选择赛事类型！")
             return render(request, "Events/addevents.html")
-
-            # if not request.POST['type']:
-            # messages.add_message(request, messages.INFO, "请选择赛事类型！")
-            # return render(request, "Events/addevents.html")
+        
 
         if int(request.POST['teammax']) < int(request.POST['teammin']):
             messages.add_message(request, messages.INFO, "团队人数有误！")
@@ -340,6 +338,14 @@ def addevents(request):
         if not request.POST['time3']:
             messages.add_message(request, messages.INFO, "请填写全部时间！")
             return render(request, "Events/addevents.html")
+
+        
+        broadcast = request.POST.getlist("broadcast")
+        if len(broadcast) > 0:
+            messages.add_message(request, messages.INFO, "成功添加公告！")
+            Broadcast.objects.create(title=request.POST['name']+" 已创建", detail=request.POST['name']+"即将开始！\n新的风暴已经出现！\n欢迎大家踊跃报名！\n 报名开始时间:"+request.POST['time1'], publisher=request.session['userid'])
+            
+
 
         if Events.objects.create(name=request.POST['name'], desc=request.POST['detail'], teamMode=checkbox[0],
                                  teamMin=request.POST['teammin'], teamMax=request.POST['teammax'],

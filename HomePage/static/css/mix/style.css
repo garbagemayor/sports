@@ -186,11 +186,21 @@ body {
 /* Grid Breakpoints
 ---------------------------------------------------------------------- */
 
-/* 2 Columns */
+
+/* 1 Columns */
 
 .mix,
 .gap {
-    width: calc(100%/2 - (((2 - 1) * 1rem) / 2));
+    width: 100%;
+}
+
+/* 2 Columns */
+
+@media screen and (min-width: 500px) {
+	.mix,
+	.gap {
+		width: calc(100%/2 - (((2 - 1) * 1rem) / 2));
+	}
 }
 
 /* 3 Columns */
