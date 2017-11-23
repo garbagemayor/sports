@@ -38,9 +38,10 @@ class Users(models.Model):
     cloth_size = models.CharField(max_length=1, null=True, choices=CLOTH_SIZE_CHOICES)
     # 衣服尺码
     gender = models.CharField(max_length=1, null=True, choices=GENDER_CHOICES)
-                                                                # 性别
-    degree = models.IntegerField(null=True)                     # 攻读学位 0为本科 1为研究生
+    # 性别
+    degree = models.IntegerField(null=True)  # 攻读学位 0为本科 1为研究生
     broadcast = models.IntegerField(default=0)
+
     # fullAddress = models.CharField(max_length=256, null=True)   # 详细地址
     # desc = models.TextField(default=u"暂无简介")                 # 个人简介
     # portrait = models.ImageField(null=True)                     # 头像
@@ -145,12 +146,12 @@ class Signs(models.Model):
 
 
 class IMG(models.Model):
-    id = models.IntegerField(primary_key=True)                  # 数据库中的编号
-    name = models.CharField(max_length=50)                    # 图片本身，本质上是图片文件在HomePage/static/media/下的相对路径
-    url = models.CharField(max_length=100)                      # 一坨用来显示在首页上的文字
-    detail = models.TextField(default='暂无')                    # 另一坨用来显示在首页上的文字
-    imgtype = models.IntegerField(default=0)                    # 不知道这是什么
-    headline = models.BooleanField(default=False)                  # 是否在首页
+    id = models.IntegerField(primary_key=True)  # 数据库中的编号
+    name = models.CharField(max_length=50)  # 图片本身，本质上是图片文件在HomePage/static/media/下的相对路径
+    url = models.CharField(max_length=100)  # 一坨用来显示在首页上的文字
+    detail = models.TextField(default='暂无')  # 另一坨用来显示在首页上的文字
+    imgtype = models.IntegerField(default=0)  # 不知道这是什么
+    headline = models.BooleanField(default=False)  # 是否在首页
 
     def printAll(self):
         print u'<class HomePage.models.IMG> {'
@@ -162,12 +163,13 @@ class IMG(models.Model):
         print u'    ' + u'headline = ' + unicode(self.headline)
         print u'}'
 
+
 class Broadcast(models.Model):
     id = models.IntegerField(primary_key=True)
     title = models.CharField(default="", max_length=256)
     detail = models.TextField(default='暂无')
     time = models.DateTimeField(default=timezone.now)
-    publisher = models.IntegerField(default=0) 
+    publisher = models.IntegerField(default=0)
 
     def printAll(self):
         print u'<class HomePage.models.broadcast> {'

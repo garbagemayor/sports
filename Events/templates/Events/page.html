@@ -76,7 +76,7 @@
                 <dd>
                     {{ events.nowRegCnt }}
                     {% if events.maxRegCnt == events.nowRegCnt %}
-                    <font color="red">（报名已满）</font>
+                    <span style="color: red; ">（报名已满）</span>
                     {% endif %}
                 </dd>
             </dl>
@@ -354,9 +354,12 @@
 </script>
 
 <script src="/static/js/ystep.js"></script>
+<script src="/static/js/device.min.js"></script>
 <script type="text/javascript">
+    var size = "large";
+    if (device.mobile()===true) { size = "small" }
     $(".ystep1").loadStep({
-        size: "large",
+        size: size,
         color: "blue",
         steps: [{
             title: "即将开始",
@@ -373,6 +376,7 @@
         }]
     });
     $(".ystep1").setStep({{events.status}});
+    $(".ystep-lg").style = "width: 300px;";
 </script>
 
 {% endblock %}
