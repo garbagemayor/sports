@@ -55,12 +55,8 @@ def index(request):
                    'team': team,
                    'celebrity': celebrity,
                    'game': game,
-<<<<<<< HEAD
-                   'broadcast':broadcast_list})
-
-=======
+                   'broadcast':broadcast_list,
                    'game_len': game_len})
->>>>>>> homepage
 
 def broadcast(request):
     broadcast_list = list(Broadcast.objects.all()[::-1])
