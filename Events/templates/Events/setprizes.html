@@ -45,7 +45,7 @@
                     </thead>
                     <tbody>
                         {% for i in prize_number %}
-                        <tr class="{{record.status}}" ondblclick="location.href='/user/{{record.user_id}}'">
+                        <tr class="{{record.status}}">
                             <td>
                                 <input id="rank_{{i}}" name="rank_{{i}}" type="text" class="form-control" placeholder="名次">
                             </td>

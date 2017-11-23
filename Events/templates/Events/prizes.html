@@ -42,6 +42,11 @@
                 </tr>
                 </thead>
                 <tbody>
+                {% if prize_list_len == 0 %}
+                <tr class="danger">
+                    <td colspan="4" style="text-align: center;">暂无记录</td>
+                </tr>
+                {% endif %}
                 {% for record in prize_list %}
                 <tr class="{{record.status}}" ondblclick="location.href='/user/{{record.user_id}}'">
                     <td>

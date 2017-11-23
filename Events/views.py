@@ -166,6 +166,7 @@ def delete_events(request, Id):
 
 def setprizes(request, Id):
     events = Events.objects.get(id=Id)
+    Sign.objects.filter(eventId=Id).delete()
     if request.method == "POST":
         for i in range(1, 9):
             u = Users.objects.filter(student_number=request.POST['number_' + str(i)])
@@ -193,7 +194,7 @@ def viewprizes(request, Id):
         prize['name'] = user.fullname
         prize['score'] = i.score
         prize_list.append(prize)
-    return render(request, 'Events/prizes.html', {'event': events, 'prize_list': prize_list})
+    return render(request, 'Events/prizes.html', {'event': events, 'prize_list': prize_list, 'prize_list_len' : len(prize_list)})
 
 
 def nextphase(request, Id):
