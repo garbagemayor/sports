@@ -201,6 +201,7 @@ def recordPage(request, event_id):
     message_map['record_list_len'] = record_list_len
     message_map['record_list'] = record_list
     message_map['form'] = form
+    message_map['request'] = request
     return render(request, 'RegistrationRecord/registration_record.html', message_map)
 
 # 文件传输迭代器

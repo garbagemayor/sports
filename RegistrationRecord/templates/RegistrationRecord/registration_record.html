@@ -40,10 +40,13 @@
                 <button class="btn btn-default" type="button" onclick="location.href='/record_download_xlsx/{{event.id}}'">
                     下载报名表(.xlsx)
                 </button>
+
+                {% if not request.session.userid == None %}
                 <button class="btn btn-success" type="button" data-toggle="modal" data-target="#confirm1" style="float:right"
                         onclick="onloadExaminePart()" id="loadExaminePartBtn">
                     审核
                 </button>
+                {% endif %}
                 <button class="btn btn-success" type="button" onclick="location.href='/events/{{event.id}}'" style="float:right">
                     返回比赛页面
                 </button>
