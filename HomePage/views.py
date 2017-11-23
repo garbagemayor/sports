@@ -7,6 +7,8 @@ from HomePage.models import Broadcast
 from HomePage.models import utcToLocal
 from django.core.paginator import Paginator
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.http import HttpResponse, HttpResponseRedirect
+from django.contrib import messages
 
 # Create your views here.
 
@@ -72,3 +74,14 @@ def broadcastpage(request, Id):
     else:
         return render(request, 'HomePage/broadcastpage.html')
 
+
+def addbroadcast(request):    
+    if request.method == "POST":
+        if not request.POST['title']:
+            messages.add_message(request, messages.INFO, "标题不能为空！")
+            return render(request, "HomePage/addbroadcast.html")
+
+        Broadcast.objects.create(title=request.POST['title'], detail=request.POST['detail'], publisher=request.session['userid'])
+        messages.add_message(request, messages.INFO, "成功发布公告'"+request.POST['title']+"'！")
+        return HttpResponseRedirect('/broadcast/')
+    return render(request, "HomePage/addbroadcast.html")
