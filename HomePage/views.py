@@ -9,6 +9,7 @@ from django.core.paginator import Paginator
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import messages
+import django.utils.timezone as timezone
 
 # Create your views here.
 
@@ -17,6 +18,11 @@ def index(request):
     game = list(IMG.objects.filter(headline=True,imgtype=1))
     celebrity = list(IMG.objects.filter(headline=True,imgtype=2)) 
     broadcast_list = list(Broadcast.objects.all()[::-1])
+    for b in broadcast_list:
+        #print b.time.date()
+        #print timezone.now().date()
+        if b.time.date() >= timezone.now().date():
+            b.new="新"
     events_list=Events.objects.all()[::-1]
     events1=[]
     events2=[]
@@ -53,6 +59,10 @@ def index(request):
 
 def broadcast(request):
     broadcast_list = list(Broadcast.objects.all()[::-1])
+    for b in broadcast_list:
+        #print b.time.date()
+        if b.time.date() >= timezone.now().date():
+            b.new="新"
     paginator = Paginator(broadcast_list, 10)
     page = request.GET.get('page')
     try:

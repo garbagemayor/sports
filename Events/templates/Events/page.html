@@ -40,12 +40,6 @@
                 <dd>
                     {{ events.timeEvnStStr }}
                 </dd>
-                <dt>
-                    详细信息
-                </dt>
-                <dd>
-                    {{events.desc}}
-                </dd>
                 {% if events.teamMode == 0 %}
                 <dt>
                     总人数限制
@@ -78,6 +72,12 @@
                     {% if events.maxRegCnt == events.nowRegCnt %}
                     <font color="red">（报名已满）</font>
                     {% endif %}
+                </dd>
+                <dt>
+                    详细信息
+                </dt>
+                <dd>
+                    {{events.desc|linebreaks}}
                 </dd>
             </dl>
             <br><br>

@@ -104,7 +104,7 @@
 						<div>
 							<ul class="list-group">
 								{% for line in broadcast %}									
-									<li class="list-group-item"><span class="badge">新</span><a href="/broadcast/{{line.id}}">{{line.title}}</a></li>
+									<li class="list-group-item">{% if line.new %}<span class="badge">新</span>{% endif %}<a href="/broadcast/{{line.id}}">{{line.title}}</a></li>
 								{% endfor %}
 							</ul>
 						</div>
@@ -422,7 +422,7 @@
 <script>
 	$(function(){
 		// 初始化轮播
-			$("#myCarousel").carousel({interval:1000});/*
+			$("#myCarousel").carousel({interval:2000});/*
 		$(".start-slide").click(function(){
 			$("#myCarousel").carousel({interval:1000});
 		});
