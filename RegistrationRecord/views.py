@@ -48,9 +48,9 @@ class RecordItem:
         self.statusStr = [u"", u"等待审核", u"审核通过", u"审核未通过"][self.status]
         self.statusToClass = [u"", u"info", u"success", u"warning", u"danger"][self.status]
         # 队长的信息
-        if self.teamSize > 1:
-            self.captainName = toUtf8WithNone(user.name)
-            self.captainFullname = toUtf8WithNone(user.fullname)
+
+        self.captainName = toUtf8WithNone(user.name)
+        self.captainFullname = toUtf8WithNone(user.fullname)
         # 报名用户的信息
         self.name = toUtf8WithNone(user.name)
         self.fullname = toUtf8WithNone(user.fullname)
@@ -183,6 +183,7 @@ def recordPage(request, event_id):
     for record_db in record_db_list:
         ri = RecordItem(record_db)
         record_list.append(ri)
+    record_list[0].printAll()
     record_list_len = len(record_list)
     # 分页模块
     paginator=Paginator(record_list, 10)
