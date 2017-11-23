@@ -93,7 +93,7 @@ def set_prizes_static_refresh(request, numberList='', others=''):
     print "n_list = ", n_list
     for i in range(1, 9):
         u = Users.objects.filter(student_number=n_list[i])
-        if len(u) == 0:
+        if len(u) == 0 and n_list[i] != '0':
             text = n_list[i]
     return HttpResponse(text)
 
@@ -169,7 +169,12 @@ def setprizes(request, Id):
     if request.method == "POST":
         for i in range(1, 9):
             u = Users.objects.filter(student_number=request.POST['number_' + str(i)])
+            if len(u) == 0:
+                continue
             u = u[0]
+            s = Sign.objects.filter(userId=u.id, eventId=Id)
+            if len(s) == 0:
+                Sign.objects.create(userId=u.id, eventId=Id)
             Sign.objects.filter(userId=u.id, eventId=Id).update(score=request.POST['score_' + str(i)], prize=i)
         return HttpResponseRedirect('/events/viewprizes/' + Id + '/')
 
@@ -180,13 +185,13 @@ def viewprizes(request, Id):
     events = Events.objects.get(id=Id)
     s = Sign.objects.filter(eventId=Id).exclude(prize='0')
     prize_list = []
+    print "prize length : ", len(s)
     for i in s:
-        prize = {}
-        prize.rank = s.prize
-        user = Users.objects.get(id=s.userId)
-        prize.number = user.student_number
-        prize.name = user.fullname
-        prize.score = s.score
+        prize = {'rank': i.prize}
+        user = Users.objects.get(id=i.userId)
+        prize['number'] = user.student_number
+        prize['name'] = user.fullname
+        prize['score'] = i.score
         prize_list.append(prize)
     return render(request, 'Events/prizes.html', {'event': events, 'prize_list': prize_list})
 
