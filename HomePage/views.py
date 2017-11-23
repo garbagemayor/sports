@@ -14,6 +14,8 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 def index(request):
     team = list(IMG.objects.filter(headline=True,imgtype=0))
     game = list(IMG.objects.filter(headline=True,imgtype=1))
+    game[0].active = 1
+    game_len = range(len(game))
     celebrity = list(IMG.objects.filter(headline=True,imgtype=2))
     print request.get_host()
     events_list = Events.objects.all()[::-1]
@@ -43,7 +45,8 @@ def index(request):
                    'events3_len' : len(events3),
                    'team': team,
                    'celebrity': celebrity,
-                   'game': game})
+                   'game': game,
+                   'game_len': game_len})
 
 def broadcast(request):
     broadcast_list = list(Broadcast.objects.all()[::-1])

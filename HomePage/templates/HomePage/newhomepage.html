@@ -156,43 +156,37 @@
 		
 		</br></br></br></br></br>
 		
-		<section class="show" id="show">
-			<div class="container-fluid ">
-				<div class="row">
-					<div class="col-md-12">
-						<div class="section-title st-center">
-							<h3>风采展示</h3>
-							<p>生命因运动精彩  体育让梦想成真</p>
-						</div>
-		
-			<div id="myCarousel" class="carousel slide">
-	<!-- 轮播（Carousel）指标 -->
-	<ol class="carousel-indicators">
-		<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-		<li data-target="#myCarousel" data-slide-to="1"></li>
-		<li data-target="#myCarousel" data-slide-to="2"></li>
-	</ol>   
-
-	<!-- 轮播（Carousel）项目 -->
-	<div class="carousel-inner">
-		<div class="item active">
-		<img src="http://oblc5mnxs.bkt.clouddn.com/IMG_0128.jpg" style="width:100%">
-		</div>
-		{% for img in game %}
-		<div class="item">
-		<img src="{{img.url}}" style="width:100%">
-		</div>
-		{% endfor %}
-	</div>
-	<!-- 轮播（Carousel）导航 -->
-	<a class="carousel-control left" href="#myCarousel" data-slide="prev">‹</a>
-	<a class="carousel-control right" href="#myCarousel" data-slide="next">›</a>
-</div>
-					</div>
-
-					</div>
-				</div>
-
+<section class="show" id="show">
+    <div class="container" style="width:90%; text-align: center;">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="section-title st-center">
+                    <h3>风采展示</h3>
+                    <p>生命因运动精彩 体育让梦想成真</p>
+                </div>
+                <div id="myCarousel" class="carousel slide" >
+                    <!-- 轮播（Carousel）指标 -->
+                    <ol class="carousel-indicators">
+                        {% for i in game_len %}
+                        <li data-target="#myCarousel" data-slide-to="{{i}}" {% if i == 0 %} class="active" {% endif %}></li>
+                        {% endfor %}
+                    </ol>
+                    <!-- 轮播（Carousel）项目 -->
+                    <div class="carousel-inner">
+                        {% for img in game %}
+                        <div class="item {% if img.active == 1 %} active {% endif %} ">
+                            <img src="{{img.url}}" class="img-responsive" style="width:100%">
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <!-- 轮播（Carousel）导航 -->
+                    <a class="carousel-control left" href="#myCarousel" data-slide="prev">‹</a>
+                    <a class="carousel-control right" href="#myCarousel" data-slide="next">›</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 <!-- 控制按钮 
 
 <div style="text-align:center;">
@@ -284,7 +278,7 @@
 					</div>
 				</div>
 			</div>-->
-		</section>
+
 		
 		
 		</br></br></br>
@@ -429,7 +423,7 @@
 <script>
 	$(function(){
 		// 初始化轮播
-			$("#myCarousel").carousel({interval:1000});/*
+			$("#myCarousel").carousel({interval:2000});/*
 		$(".start-slide").click(function(){
 			$("#myCarousel").carousel({interval:1000});
 		});
