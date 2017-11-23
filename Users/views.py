@@ -531,7 +531,7 @@ def deactive(request):
 def remove_item(request):
     checkbox_list=request.POST['idlist']
     for checked_item in re.findall(r'\d+', checkbox_list):
-        IMG.objects.get(id=checked_item).delete()
+        IMG.objects.get(id=int(checked_item)).delete()
     return HttpResponse('ok')
 
 def picture(request):

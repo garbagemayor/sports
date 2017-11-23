@@ -48,17 +48,23 @@
     </div>
     <!-- /.modal-dialog -->
 </div>
+<div id="publicStaticVar" hidden="hidden">0</div>
 <ul class="nav nav-pills" id="tablist">
-    <li role="presentation" class="active">
+    <li role="presentation" class="active" onclick="onSelected(0)">
         <a href="#team" id="team-tab" role="tab" data-toggle="tab">系队</a>
     </li>
-    <li role="presentation">
-        <a href="#game" id="game-tab" role="tab" data-toggle="tab">风采</a>
+    <li role="presentation" onclick="onSelected(1)">
+        <a href="#game" id="game-tab" role="tab" data-toggle="tab" >风采</a>
     </li>
-    <li role="presentation">
+    <li role="presentation" onclick="onSelected(2)">
         <a href="#celebrity" id="celebrity-tab" role="tab" data-toggle="tab">名人堂</a>
     </li>
 </ul>
+<script>
+    function onSelected(k) {
+        document.getElementById("publicStaticVar").innerHTML = k;
+    }
+</script>
 <div class="tab-content">
     <div role="tabpanel" class="tab-pane fade in active" id="team">
         <div class="col-md-12">
@@ -67,7 +73,17 @@
                     <tr>
                         <th>图片</th>
                         <th>描述</th>
-                        <th>选择</th>
+                        <th>
+                            <font face="黑体" color="#ACCBE8">
+                                <div style="display:inline;" onclick="selectAll()">
+                                    全选
+                                </div>
+                                /
+                                <div style="display:inline;" onclick="selectInv()">
+                                    反选
+                                </div>
+                            </font>
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -76,7 +92,7 @@
                         <td><img class="thumbnail" src="{{img.url}}" style="max-height:200px"></td>
                         <td>{{img.detail}}</td>
                         <td>
-                            <input type="checkbox" name="checked" value="{{img.id}}">
+                            <input type="checkbox" name="checkedLteam" value="{{img.id}}">
                         </td>
                     </tr>
                     {% endfor %}
@@ -91,7 +107,17 @@
                     <tr>
                         <th>图片</th>
                         <th>描述</th>
-                        <th>选择</th>
+                        <th>
+                            <font face="黑体" color="#ACCBE8">
+                                <div style="display:inline;" onclick="selectAll()">
+                                    全选
+                                </div>
+                                /
+                                <div style="display:inline;" onclick="selectInv()">
+                                    反选
+                                </div>
+                            </font>
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -100,7 +126,7 @@
                         <td><img class="thumbnail" src="{{img.url}}" style="max-height:200px"></td>
                         <td>{{img.detail}}</td>
                         <td>
-                            <input type="checkbox" name="checked" value="{{img.id}}">
+                            <input type="checkbox" name="checkedLgame" value="{{img.id}}">
                         </td>
                     </tr>
                     {% endfor %}
@@ -115,7 +141,17 @@
                     <tr>
                         <th>图片</th>
                         <th>描述</th>
-                        <th>选择</th>
+                        <th>
+                            <font face="黑体" color="#ACCBE8">
+                                <div style="display:inline;" onclick="selectAll()">
+                                    全选
+                                </div>
+                                /
+                                <div style="display:inline;" onclick="selectInv()">
+                                    反选
+                                </div>
+                            </font>
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -124,7 +160,7 @@
                         <td><img class="thumbnail" src="{{img.url}}" style="max-height:200px"></td>
                         <td>{{img.detail}}</td>
                         <td>
-                            <input type="checkbox" name="checked" value="{{img.id}}">
+                            <input type="checkbox" name="checkedLcelebrity" value="{{img.id}}">
                         </td>
                     </tr>
                     {% endfor %}
@@ -133,6 +169,24 @@
         </div>
     </div>
 </div>
+<script>
+        function selectAll() {
+            var a = localStorage.getItem('lastTab').substring(1);
+            var clist = document.getElementsByName("checkedL" + a);
+            for (var i = 0; i < clist.length; i ++) {
+                clist[i].checked = true;
+            }
+        }
+    </script>
+<script>
+        function selectInv(k) {
+            var a = localStorage.getItem('lastTab').substring(1);
+            var clist = document.getElementsByName("checkedL" + a);
+            for (var i = 0; i < clist.length; i ++) {
+                clist[i].checked = ! clist[i].checked;
+            }
+        }
+    </script>
 <div class="row">
     <button class="btn btn-success" type="button" data-toggle="modal" id="add_button" data-target="#add" style="float:left">添加
     </button>
@@ -150,22 +204,11 @@ var simplemde = new SimpleMDE({
     spellChecker: false,
 });
 
-var activeTab = 0;
-var activeTabName;
-$("#team-tab").click(function() {
-    activeTab = 0;
-    activeTabName = "team-tab";
-    console.log(activeTab);
-});
-$("#game-tab").click(function() {
-    activeTab = 1;
-    activeTabName = "game-tab";
-    console.log(activeTab);
-});
-$("#celebrity-tab").click(function() {
-    activeTab = 2;
-    activeTabName = "game-tab";
-    console.log(activeTab);
+var lastTab = localStorage.getItem('lastTab');
+$("a[href=" + lastTab + "]").tab('show');
+$("a[data-toggle='tab']").click(function() {
+    localStorage.setItem('lastTab', $(this).attr('href'));
+    console.log(localStorage.getItem('lastTab'));
 });
 
 // 添加图片,更新表格,保持在当前tab
@@ -174,10 +217,11 @@ $("#submit").click(function() {
             csrfmiddlewaretoken: "{{ csrf_token }}",
             url: $("#preview").attr('src'),
             detail: simplemde.value(),
-            imgtype: activeTab,
+            imgtype: document.getElementById("publicStaticVar").innerHTML,
         },
         function(ret) {
             console.log(ret);
+            location.reload();
         });
 });
 
@@ -193,8 +237,7 @@ $("#set_headline").click(function() {
         },
         function(ret) {
             console.log(ret);
-            $('#feedback').html("放置成功");
-            $('#success').show();
+            alert("放置成功");
         });
 });
 
@@ -210,15 +253,15 @@ $("#deactive").click(function() {
         },
         function(ret) {
             console.log(ret);
-            $('#feedback').html("撤回成功");
-            $('#success').show();
+            alert("撤回成功");
         });
 });
 
 // 把选中图片删掉
 $("#remove_item").click(function() {
     var tmpl = [];
-    $(":checked").each(function() {
+    var name = "checkedL" + localStorage.getItem('lastTab').substring(1);
+    $("input[name=" + name +"]").each(function() {
         tmpl.push($(this).val());
     });
     console.log(tmpl);
@@ -228,8 +271,8 @@ $("#remove_item").click(function() {
         },
         function(ret) {
             console.log(ret);
-            $('#feedback').html("删除成功");
-            $('#success').show();
+            alert("删除成功");
+            location.reload();
         });
 });
 </script>
