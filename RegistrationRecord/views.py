@@ -183,7 +183,6 @@ def recordPage(request, event_id):
     for record_db in record_db_list:
         ri = RecordItem(record_db)
         record_list.append(ri)
-    record_list[0].printAll()
     record_list_len = len(record_list)
     # 分页模块
     paginator=Paginator(record_list, 10)

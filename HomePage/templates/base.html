@@ -96,9 +96,12 @@
 										<button class="btn btn-block btn-sm btn-info" onclick="location.href='/broadcast/'">
                                             <i class="fa fa-fw fa-home"></i> 公告
                                         </button>
+
+                                        {% if not request.session.userid == None %}
 										<button class="btn btn-block btn-sm btn-danger" onclick="location.href='/addbroadcast/'">
                                             <i class="fa fa-fw fa-home"></i> 添加公告
                                         </button>
+                                        {% endif %}
 										////////// 
 									</div>
 								</div>

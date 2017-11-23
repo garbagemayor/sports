@@ -161,12 +161,12 @@
             <!-- 两个按钮 -->
             <nav style="text-align: center; margin-bottom:20px">
                 <button class="btn btn-primary" id="signBtn"
-                        {% if events.status != 2 or events.maxRegCnt == events.nowRegCnt %} name="sign" disabled="disabled" {% endif %}
+                        {% if events.status != 2 or events.maxRegCnt == events.nowRegCnt or request.session.uerid == None %} name="sign" disabled="disabled" {% endif %}
                         {% if events.teamMode == 0 %} onclick="location.href='/events/sign/{{events.id}}/'" {% else %} onclick="makeTeam()" {% endif %}>
                     {% if events.teamMode == 0 %} 立即报名 {% else %} 组建队伍 {% endif %}
                 </button>
                 <button class="btn btn-link" id="designBtn" onclick="location.href='/events/design/{{events.id}}/'"
-                        {% if not events.status == 2 %} name="sign" disabled="disabled"{% endif %}>
+                        {% if not events.status == 2 or request.session.uerid == None %} name="sign" disabled="disabled"{% endif %}>
                     取消报名
                 </button>
                 </form>
@@ -395,9 +395,11 @@
 	      
       <br>
         {% if request.session.auth > 0 %}   
-		<div style="text-align: center">
+		<!--
+        <div style="text-align: center">
 			<button class="btn btn-block btn-sm btn-warning" type='button' disabled="disabled" onclick="location.href='/events/next/{{events.id}}'">下一阶段</button>
-        </div>       
+        </div>
+        -->
 		<div style="text-align: center">
 			<button class="btn btn-block btn-sm btn-danger" data-toggle="modal" data-target="#myModal">删除该赛事</button>
         </div>       
