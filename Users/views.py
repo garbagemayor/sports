@@ -20,10 +20,10 @@ from HomePage.models import IMG
 from HomePage.models import Signs as Sign
 from HomePage.models import Users as User
 from HomePage.models import utcToLocal
-from Users.forms import EditForm
 from Users.models import Notification
 from Users.models import NotificationController
 from qiniu import Auth
+from django.core import serializers
 
 
 def auth(request):
@@ -251,6 +251,8 @@ def my_events(request):
                 tmp = tmp[0]
                 tmp.s2 = gets2(tmp.getStatus())
                 events_list.append(tmp)
+        events_list_len = len(events_list)
+        print "events_list_len", events_list_len
         paginator = Paginator(events_list, 3)
         page = request.GET.get('page')
         try:
@@ -260,7 +262,9 @@ def my_events(request):
         except EmptyPage:
             events_list = paginator.page(paginator.num_pages)
 
-        return render(request, 'Events/myevents.html', {'events_list': events_list})
+        return render(request, 'Events/myevents.html',
+                      {'events_list': events_list,
+                       'events_list_len': events_list_len})
     else:
         messages.add_message(request, messages.INFO, '请登录！')
         return HttpResponseRedirect(
@@ -341,50 +345,6 @@ def demanager(request, Id):
 def backend(request):
     return render(request, 'Users/backend.html')
 
-
-@csrf_exempt
-def team(request):
-    if request.method == 'POST':
-        new_img = IMG.objects.get(id=1)
-        if len(request.POST['name']) > 1:
-            new_img.name = request.POST['name']
-        if request.FILES.get('img'):
-            new_img.img = request.FILES.get('img')
-        if len(request.POST['name']) > 1:
-            new_img.detail = request.POST['detail']
-        new_img.save()
-        return HttpResponseRedirect("/main/")
-    return render(request, 'Users/team.html')
-
-
-@csrf_exempt
-def celebrity(request):
-    if request.method == 'POST':
-        new_img = IMG(
-            name=request.POST['name'],
-            img=request.FILES.get('img'),
-            detail=request.POST['detail'],
-            imgtype=1
-        )
-        new_img.save()
-        return HttpResponseRedirect("/main/")
-    return render(request, 'Users/celebrity.html')
-
-
-@csrf_exempt
-def photos(request):
-    if request.method == 'POST':
-        new_img = IMG(
-            name=request.POST['name'],
-            img=request.FILES.get('img'),
-            detail=request.POST['detail'],
-            imgtype=2
-        )
-        new_img.save()
-        return HttpResponseRedirect("/main/")
-    return render(request, 'Users/team.html')
-
-
 def gets2(i):
     if i == 1:
         return "info"
@@ -461,23 +421,12 @@ def notification(request):
         checkbox_list = request.POST.getlist("checked")
         for i in checkbox_list:
             Notification.objects.filter(id=i).delete()
-        user_id = request.session['userid']
-        record_list = list(Notification.objects.filter(target=user_id))
-        # 分页模块
-        paginator = Paginator(record_list, 10)
-        page = request.GET.get('page')
-        try:
-            record_list = paginator.page(page)
-        except PageNotAnInteger:
-            record_list = paginator.page(1)
-        except EmptyPage:
-            record_list = paginator.page(paginator.num_pages)
-        message_map = {'record_list': record_list}
-        return render(request, 'Users/notification.html', message_map)
     user_id = request.session['userid']
     record_list = list(Notification.objects.filter(target=user_id))
+    record_list = record_list[::-1]
     for record in record_list:
         record.createTimeStr = utcToLocal(record.createTime).strftime("%Y-%m-%d %H:%M:%S")
+    record_list_len = len(record_list)
     # 分页模块
     paginator = Paginator(record_list, 10)
     page = request.GET.get('page')
@@ -487,7 +436,10 @@ def notification(request):
         record_list = paginator.page(1)
     except EmptyPage:
         record_list = paginator.page(paginator.num_pages)
-    message_map = {'record_list': record_list}
+    message_map = {
+        'record_list': record_list,
+        'record_list_len': record_list_len
+    }
     return render(request, 'Users/notification.html', message_map)
 
 
@@ -554,4 +506,37 @@ def qiniu_uptoken(request):
     token = q.upload_token(bucket_name)
     token_dict = {'uptoken': token}
     return JsonResponse(token_dict)
+
+def new_img(request):
+    new_img = IMG(
+            url=request.POST['url'],
+            detail=request.POST['detail'],
+            imgtype=request.POST['imgtype'],
+        )
+    new_img.save()
+    return HttpResponse('ok')
+
+def set_headline(request):
+    checkbox_list=request.POST['idlist']
+    for checked_item in re.findall(r'\d+', checkbox_list):
+        IMG.objects.filter(id=int(checked_item)).update(headline=True)
+    return HttpResponse('ok')
+
+def deactive(request):
+    checkbox_list=request.POST['idlist']
+    for checked_item in re.findall(r'\d+', checkbox_list):
+        IMG.objects.filter(id=int(checked_item)).update(headline=False)
+    return HttpResponse('ok')
+
+def remove_item(request):
+    checkbox_list=request.POST['idlist']
+    for checked_item in re.findall(r'\d+', checkbox_list):
+        IMG.objects.get(id=checked_item).delete()
+    return HttpResponse('ok')
+
+def picture(request):
+    img_list = {}
+    for i in range(3):
+        img_list['l' + str(i)] = IMG.objects.filter(imgtype=i)
+    return render(request, 'Users/picture.html', img_list)
 

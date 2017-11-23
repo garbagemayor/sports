@@ -24,7 +24,7 @@ elif platform == "win32":
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "SportsRegistration.settings")
 django.setup()
 
-from HomePage.models import Users, Events, Signs, IMG
+from HomePage.models import Users, Events, Signs, IMG, Broadcast
 import django.utils.timezone as timezone
 import datetime
 
@@ -192,30 +192,75 @@ e.teamMax = 4
 e.maxRegCnt = 5
 e.save()
 
+print u'在Broadcast表中添加信息'
+
+Broadcast.objects.get_or_create(id=1)
+b = Broadcast.objects.get(id=1)
+b.title = u'哈哈哈'
+b.detail = u'什么都没有'
+b.publisher = 2
+b.save()
+
+Broadcast.objects.get_or_create(id=2)
+b = Broadcast.objects.get(id=2)
+b.title = u'哈哈哈'
+b.detail = u'什么都没有'
+b.publisher = 2
+b.save()
+
+Broadcast.objects.get_or_create(id=3)
+b = Broadcast.objects.get(id=3)
+b.title = u'哈哈哈'
+b.detail = u'什么都没有'
+b.publisher = 2
+b.save()
+
 print u'在IMG表中添加对象'
 
 i = 0
 i += 1
 IMG.objects.get_or_create(id=i)
 g = IMG.objects.get(id=i)
-g.img = u'img/team.jpg'
-g.name = u'计算机系女篮'
-g.detail = u'2015年建队，队伍成员不仅有充满活力的本科生，还有球场经验老道的研究生学姐。虽然队史不长，但贵系女篮在马杯赛 事上敢打敢拼，已经成为了一支不容小觑的新生力量。'
+g.url = u'http://oblc5mnxs.bkt.clouddn.com/IMG_0068.JPG'
+g.name = u'毽绳'
+g.detail = u'贵系毽绳队夺得马杯甲组总分第一!'
 g.imgtype = 0
+g.headline = True
 g.save()
 
 i += 1
 IMG.objects.get_or_create(id=i)
 g = IMG.objects.get(id=i)
-g.img = u'img/celebrity.jpg'
+g.url = u'http://oblc5mnxs.bkt.clouddn.com/IMG_0128.jpg'
+g.name = u'球王'
+g.detail = u'球王过人精彩瞬间'
+g.imgtype = 1
+g.headline = True
+g.save()
+
+i += 1
+IMG.objects.get_or_create(id=i)
+g = IMG.objects.get(id=i)
+g.url = u'http://oblc5mnxs.bkt.clouddn.com/IMG_0141.jpg'
+g.name = u'姚指导'
+g.detail = u'姚指导回眸一笑'
+g.imgtype = 1
+g.headline = True
+g.save()
+
+i += 1
+IMG.objects.get_or_create(id=i)
+g = IMG.objects.get(id=i)
+g.url = u'http://oblc5mnxs.bkt.clouddn.com/Picture2.png'
 g.name = u'李晨曦'
 g.detail = u'李晨曦，清华大学计算机系2013级博士生，马拉松国家二级运动员，曾创下北京国际马拉松赛全程2小时51分18秒完赛的个人最佳成绩，42.195千米的赛道，平均每千米用时约4分4秒，被称为“清华马拉松第一人”，原虎扑翻译团版主、虎扑新声编辑。'
-g.imgtype = 1
+g.imgtype = 2
+g.headline = True
 g.save()
 
 print u'添加完成'
 
-del Users, Events, Signs
+del Users, Events, Signs, IMG, Broadcast
 del timezone
 del datetime
 del django

@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% block Title %}
+<title id="baseIndexTitle">公告 - 清华大学计算机系体育赛事平台</title>
+{% endblock %}
+
+{% block bread %}
+<ol class="breadcrumb">
+    <li><a href="/main/">平台</a></li>
+    <li><a class="active">公告</a></li>
+</ol>
+{% endblock %}
+
+{% block content %}
+
+
+{% block extracss %}
+	<link href="/static/css/mix/reset.css" rel="stylesheet"/>
+    <link href="/static/css/mix/style.css" rel="stylesheet"/>
+	<!--<link rel="stylesheet" type="text/css" href="/static/css/radialindicator/normalize.css" />
+	<link rel="stylesheet" type="text/css" href="/static/css/radialindicator/default.css">
+	<link href="/static/css/radialindicator/project_base.css"  rel="stylesheet" type="text/css" />
+    <link href="/static/css/radialindicator/radialindicator.css"  rel="stylesheet" type="text/css" />-->
+	<link href="/static/css/radialindicator/base.css"  rel="stylesheet" type="text/css" />
+{% endblock %}
+
+<div class="container-fluid">
+	<div class="row-fluid">
+		<div class="span12">
+			<div class="page-header">
+				<h1 style="text-align: center">
+				通告 <small>颁诏天下</small>
+				</h1>
+			</div>	
+	
+        
+        
+        
+				<div class="container-fluid">
+					<br>
+						<div>
+							<ul class="list-group">
+								{% for line in broadcast %}
+									
+									<li class="list-group-item"><span class="badge">新</span><a href="/broadcast/{{line.id}}">{{line.title}}</a></li>
+								{% endfor %}
+							
+							</ul>
+						</div>
+						<br>
+        </div>
+    </div>
+
+<nav style="text-align: center">
+<ul class="pagination">
+    {% if broadcast.has_previous %}
+        <li><a href="?page={{ broadcast.previous_page_number }}">&laquo;</a></li>
+    {% endif %}
+    {% if broadcast.number > 2 %}
+        <li><a href="?page={{ broadcast.number|add:"-2"}}">{{broadcast.number|add:"-2"}}</a></li>
+    {% endif %}
+    {% if broadcast.number > 1 %}
+        <li><a href="?page={{ broadcast.previous_page_number }}">{{broadcast.number|add:"-1"}}</a></li>
+    {% endif %}
+        <li class="active"><a>{{broadcast.number}}<span class="sr-only">(current)</span></a></li>
+    {% if broadcast.number < broadcast.paginator.num_pages %}
+        <li><a href="?page={{ broadcast.next_page_number }}">{{broadcast.number|add:"1"}}</a></li>
+    {% endif %}
+    {% if broadcast.number < broadcast.paginator.num_pages|add:"-1" %}
+        <li><a href="?page={{ broadcast.number|add:"2"}}">{{broadcast.number|add:"2"}}</a></li>
+    {% endif %}
+    {% if broadcast.has_next %}
+        <li><a href="?page={{ broadcast.next_page_number }}">&raquo;</a></li>
+    {% endif %}
+</ul>
+</nav>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+
+	<script type="text/javascript"  src="/static/js/base.js"></script>
+	<script type="text/javascript"  src="/static/js/project_base.js"></script>	
+    <script src="/static/js/radialindicator.js"></script>
+    <script src="/static/js/demo.js"></script>
+
+
+
+
+{% endblock %}
+
+

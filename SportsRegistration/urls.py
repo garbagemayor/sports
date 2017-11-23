@@ -32,10 +32,11 @@ urlpatterns = [
                   # 主页
                   url(r'^$', RedirectView.as_view(url='/main/')),
                   url(r'^main/$', HomePage_view.index, name='homepage'),
-
-                  # 赛事
-                  url(r'^events/$', Events_view.index, name='eventslist'),  # 所有赛事页
-                  url(r'^events/(\d+)/$', Events_view.page, name='eventspage'),  # 赛事详情页
+                  url(r'^broadcast/$', HomePage_view.broadcast, name='broadcast'),
+                  url(r'^broadcast/(\d+)/$', HomePage_view.broadcastpage, name='broadcastpage'),
+                  #赛事
+                  url(r'^events/$', Events_view.index, name='eventslist'),                          #所有赛事页
+                  url(r'^events/(\d+)/$', Events_view.page, name='eventspage'),                     #赛事详情页
                   # url(r'^events/(\d+)/maketeam/$',
                   #     Events_view.page_maketeam, name='eventspage_m'),                              #赛事详情页，并显示团队报名模块
                   # url(r'^events/(\d+)/maketeam/fn=([^;]*);sn=([^;]*);se=((\d+,)*)/$',
@@ -75,10 +76,12 @@ urlpatterns = [
                   url(r'^managers/$', Users_view.backend, name='backend'),
                   url(r'^managers/managers/$', Users_view.manager, name='manager'),
                   url(r'^managers/(\d+)/$', Users_view.demanager, name='demanager'),  # 删除管理员
-                  url(r'^managers/team/$', Users_view.team, name='team'),
-                  url(r'^managers/celebrity/$', Users_view.celebrity, name='celebrity'),
-                  url(r'^managers/photos/$', Users_view.photos, name='photos'),
+                  url(r'^managers/picture/$', Users_view.picture, name='picture'),
                   url(r'^qiniu/$', Users_view.qiniu_uptoken, name='qiniu'),
+                  url(r'^newimg/$', Users_view.new_img, name='newimg'),
+                  url(r'^setheadline/$', Users_view.set_headline, name='setheadline'),
+                  url(r'^deactive/$', Users_view.deactive, name='deactive'),
+                  url(r'^removeitem/$', Users_view.remove_item, name='removeitem'),
 
                   # 记录
                   url(r'^record/(\d+)/$', Record_view.recordPage, name='recordpage'),  # 某赛事报名情况

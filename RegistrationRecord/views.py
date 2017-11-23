@@ -46,7 +46,7 @@ class RecordItem:
         self.timeRegStr = utcToLocal(record.timeReg).strftime("%Y-%m-%d %H:%M:%S")
         self.status = record.exmStatus
         self.statusStr = [u"", u"等待审核", u"审核通过", u"审核未通过"][self.status]
-        self.statusToClass = [u"", u"info", u"success", u"error"][self.status]
+        self.statusToClass = [u"", u"info", u"success", u"warning", u"danger"][self.status]
         # 队长的信息
         if self.teamSize > 1:
             self.captainName = toUtf8WithNone(user.name)
@@ -96,8 +96,9 @@ class RecordItem:
         print u'    ' + u'status = ' + unicode(self.status)
         print u'    ' + u'statusStr = ' + unicode(self.statusStr)
         print u'    ' + u'statusToClass = ' + unicode(self.statusToClass)
-        print u'    ' + u'captainName = ' + unicode(self.captainName)
-        print u'    ' + u'captainFullname = ' + unicode(self.captainFullname)
+        if self.teamSize > 1:
+            print u'    ' + u'captainName = ' + unicode(self.captainName)
+            print u'    ' + u'captainFullname = ' + unicode(self.captainFullname)
         print u'    ' + u'name = ' + unicode(self.name)
         print u'    ' + u'fullname = ' + unicode(self.fullname)
         print u'    ' + u'certification_type = ' + unicode(self.certification_type)
@@ -119,37 +120,61 @@ def recordPage(request, event_id):
     event = Events.objects.get(id=event_id)
     request.session['eventname'] = event.name
     if request.method=="POST":
-        checkbox_list=request.POST.getlist("checked")
         EMAIL_FROM = '924486024@qq.com'
-        title = ""
-        body = request.POST['content']
-        result = request.POST['result']
-        leaderOnly = False
-        if event.teamMode == 1:
-            leaderOnly = request.POST['leaderOnly']
-        if result:
-            title = event.name + "审核通过"
-        else:
-            title = event.name + "审核不通过"
-        for checked_item in checkbox_list:
-            leaderId = int(checked_item.split('|')[0]);
-            if leaderOnly:
-                send_mail(title, body, EMAIL_FROM, [Users.objects.get(id=leaderId).email])
-
-            for iii in re.findall(r'\d+', checked_item.split('|')[1]):
-                i = int(iii)
-                if result:
-                    Signs.objects.filter(eventId=event_id,userId=i).update(exmStatus=2)
+        print request.POST
+        checkbox_list = request.POST.getlist("checked")
+        passExamine = request.POST.getlist("passExamineSelector")
+        emailOrNote = request.POST.getlist("emailOrNoteSelector")
+        sendMessage = request.POST.getlist("sendMessageSelector")
+        content = request.POST['content']
+        print "checkbox_list", checkbox_list
+        print "passExanime", passExamine
+        print "emailOrNote", emailOrNote
+        print "sendMessage", sendMessage
+        print "content", content
+        title = "已通过审核" if passExamine[0] == '1' else "未通过审核"
+        title = event.name + "：" + title
+        print title
+        # 这个部分只操作数据库
+        for checkbox_item in checkbox_list:
+            captainId = int(checkbox_item.split('|')[0]);
+            teammateIdStrList = re.findall(r'\d+', checkbox_item.split('|')[1])
+            Signs.objects.filter(eventId=event_id,userId=captainId).update(exmStatus=2 if passExamine[0] == '1' else 3)
+        # 这个部分只操作站内信
+        if emailOrNote[0] == '1' or emailOrNote[0] == '3':
+            for checkbox_item in checkbox_list:
+                captainId = int(checkbox_item.split('|')[0]);
+                teammateIdStrList = re.findall(r'\d+', checkbox_item.split('|')[1])
+                if sendMessage == None or len(sendMessage) == 0 or sendMessage[0] == 1:
+                    Notification.objects.create(
+                        sender=request.session['username'],
+                        senderId=request.session['userid'],
+                        target=captainId,
+                        title=title,
+                        content=content)
                 else:
-                    Signs.objects.filter(eventId=event_id,userId=i).update(exmStatus=3)
-                user = Users.objects.get(id=i)
-                content = user.name + body
-                Notification.objects.create(sender=request.session['username'], senderId=request.session['userid'],
-                                            target=i, title=title, content=content, createTime=timezone.now())
-                if not leaderOnly:
-                    e = user.email
-                    if e:
-                        send_mail(title, content, EMAIL_FROM, [e])
+                    for teammateIdStr in teammateIdStrList:
+                        teammateId = int(teammateIdStr)
+                        content_tmp = Users.objects.get(id=teammateId).name + content
+                        Notification.objects.create(
+                            sender=request.session['username'],
+                            senderId=request.session['userid'],
+                            target=teammateId,
+                            title=title,
+                            content=content)
+        # 这个部分只操作邮件
+        if emailOrNote[0] == '2' or emailOrNote[0] == '3':
+            email_list = []
+            for checkbox_item in checkbox_list:
+                captainId = int(checkbox_item.split('|')[0]);
+                teammateIdStrList = re.findall(r'\d+', checkbox_item.split('|')[1])
+                if sendMessage == None or sendMessage[0] == 1:
+                    email_list.append(Users.objects.get(id=captainId).email)
+                else:
+                    for teammateIdStr in teammateIdStrList:
+                        teammateId = int(teammateIdStr)
+                        email_list.append(Users.objects.get(id=teammateId).email)
+            send_mail(title, content, EMAIL_FROM, email_list)
                  
         messages.add_message(request, messages.INFO, '审核成功')
     # 当前赛事的所有报名记录
@@ -158,6 +183,7 @@ def recordPage(request, event_id):
     for record_db in record_db_list:
         ri = RecordItem(record_db)
         record_list.append(ri)
+    record_list_len = len(record_list)
     # 分页模块
     paginator=Paginator(record_list, 10)
     page = request.GET.get('page')
@@ -171,6 +197,7 @@ def recordPage(request, event_id):
     # 信息放在一起
     message_map = {}
     message_map['event'] = event
+    message_map['record_list_len'] = record_list_len
     message_map['record_list'] = record_list
     message_map['form'] = form
     return render(request, 'RegistrationRecord/registration_record.html', message_map)

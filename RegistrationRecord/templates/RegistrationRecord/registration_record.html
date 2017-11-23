@@ -24,184 +24,337 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
 <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
 <form name="EditForm" method="POST" novalidate="">
-{% csrf_token %}
-<div class="container-fluid">
-    <div class="row-fluid">
-        <div class="span12">
-	        <div class="page-header">
-                <h1 style="text-align: center">
-                    {{event.name}}
-                    <small>报名记录</small>
-                </h1>
-            </div>
+    {% csrf_token %}
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="page-header">
+                    <h1 style="text-align: center">
+                        {{event.name}}
+                        <small>报名记录</small>
+                    </h1>
+                </div>
                 <button class="btn btn-default" type="button" onclick="location.href='/record_download_csv/{{event.id}}'">
                     下载报名表(.csv)
                 </button>
                 <button class="btn btn-default" type="button" onclick="location.href='/record_download_xlsx/{{event.id}}'">
                     下载报名表(.xlsx)
                 </button>
-                <button class="btn btn-success" type="button" data-toggle="modal"
-                    data-target="#confirm1" style="float:right">审核
+                <button class="btn btn-success" type="button" data-toggle="modal" data-target="#confirm1" style="float:right"
+                        onclick="onloadExaminePart()" id="loadExaminePartBtn">
+                    审核
                 </button>
                 <button class="btn btn-success" type="button" onclick="location.href='/events/{{event.id}}'" style="float:right">
                     返回比赛页面
                 </button>
                 <table class="table table-hover">
                     <thead>
-                       <tr>
-                            <th>
-                                报名时间
-                            </th>
-                           {% if event.teamMode == 1 %}
-                           <th>
-                               队长
-                           </th>
-                           {% endif %}
-                            <th>
-                                用户名
-                            </th>
-                            <th>
-                                姓名
-                            </th>
-                            <th>
-                                联系电话
-                            </th>
-                            <th>
-                                邮箱
-                            </th>
-        					<th>
-                                审核状态
-                            </th>
-        					<th>
-                                选择
-                            </th>
-                        </tr>
+                    <tr>
+                        <th>
+                            报名时间
+                        </th>
+                        {% if event.teamMode == 1 %}
+                        <th>
+                            队长
+                        </th>
+                        {% endif %}
+                        <th>
+                            用户名
+                        </th>
+                        <th>
+                            姓名
+                        </th>
+                        <th>
+                            联系电话
+                        </th>
+                        <th>
+                            邮箱
+                        </th>
+                        <th>
+                            审核状态
+                        </th>
+                        <th>
+                            <font face="黑体" color="#ACCBE8">
+                                <div style="display:inline;" onclick="selectAll()">
+                                    全选
+                                </div>
+                                /
+                                <div style="display:inline;" onclick="selectInv()">
+                                    反选
+                                </div>
+                            </font>
+                        </th>
+                    </tr>
                     </thead>
                     <tbody>
-                        {% for record in record_list %}
-                        <tr class="{{record.statusToClass}}" ondblclick="location.href='/user/{{record.record.userId}}'">
-                            <td>
-                                {{ record.timeRegStr }}
-                            </td>
-                            {% if event.teamMode == 1 %}
-                            <td>
-                                {{ record.captainFullname }}
-                            </td>
+                    {% if record_list_len == 0 %}
+                    <tr class="danger">
+                        <td colspan="{% if event.teamMode == 0 %} 7 {% else %} 8 {% endif %}" style="text-align: center;">暂无记录</td>
+                    </tr>
+                    {% endif %}
+                    {% for record in record_list %}
+                    <tr class="{{record.statusToClass}}" ondblclick="location.href='/user/{{record.record.userId}}'">
+                        <td>
+                            {{ record.timeRegStr }}
+                        </td>
+                        {% if event.teamMode == 1 %}
+                        <td>
+                            {{ record.captainFullname }}
+                        </td>
+                        {% endif %}
+                        <td>
+                            <a href="/user/{{record.user.id}}">{{ record.name | linebreaksbr }}</a>
+                        </td>
+                        <td>
+                            {{ record.fullname | linebreaksbr }}
+                        </td>
+                        <td>
+                            {{ record.mobile | linebreaksbr}}
+                        </td>
+                        <td>
+                            {{ record.email | linebreaksbr}}
+                        </td>
+                        <td>
+                            {{ record.statusStr | linebreaksbr}}
+                        </td>
+                        <td>
+                            {% if record.status == 1 %}
+                            <input type="checkbox" name="checked" value="{{record.userId}}|{{record.userIdSet}}"/>
                             {% endif %}
-                            <td>
-                                <a href="/user/{{record.user.id}}">{{ record.name | linebreaksbr }}</a>
-                            </td>
-                            <td>
-                                {{ record.fullname | linebreaksbr }}
-                            </td>
-                            <td>
-                                {{ record.mobile | linebreaksbr}}
-                            </td>
-                            <td>
-                                {{ record.email | linebreaksbr}}
-                            </td>
-                            <td>
-                                {{ record.statusStr | linebreaksbr}}
-                            </td>
-                            <td>
-                                {% if record.status == 1 %}
-                                <input type="checkbox" name="checked" value="{{record.userId}}|{{record.userIdSet}}"/>
-                                {% endif %}
-                            </td>
-                        </tr>
-                        {% endfor %}
+                        </td>
+                    </tr>
+                    {% endfor %}
                     </tbody>
                 </table>
+            </div>
         </div>
     </div>
-</div>
+    <script>
+        function selectAll() {
+            var clist = document.getElementsByName("checked");
+            for (var i = 0; i < clist.length; i ++) {
+                clist[i].checked = true;
+            }
+        }
+    </script>
+    <script>
+        function selectInv() {
+            var clist = document.getElementsByName("checked");
+            for (var i = 0; i < clist.length; i ++) {
+                clist[i].checked = ! clist[i].checked;
+            }
+        }
+    </script>
 
-<nav style="text-align: center">
-<ul class="pagination">
-    {% if record_list.has_previous %}
-        <li><a href="?page={{ record_list.previous_page_number }}">&laquo;</a></li>
-    {% endif %}
-    {% if record_list.number > 2 %}
-        <li><a href="?page={{ record_list.number|add:"-2"}}">{{record_list.number|add:"-2"}}</a></li>
-    {% endif %}
-    {% if record_list.number > 1 %}
-        <li><a href="?page={{ record_list.previous_page_number }}">{{record_list.number|add:"-1"}}</a></li>
-    {% endif %}
-        <li class="active"><a>{{record_list.number}}<span class="sr-only">(current)</span></a></li>
-    {% if record_list.number < record_list.paginator.num_pages %}
-        <li><a href="?page={{ record_list.next_page_number }}">{{record_list.number|add:"1"}}</a></li>
-    {% endif %}
-    {% if record_list.number < record_list.paginator.num_pages|add:"-1" %}
-        <li><a href="?page={{ record_list.number|add:"2"}}">{{record_list.number|add:"2"}}</a></li>
-    {% endif %}
-    {% if record_list.has_next %}
-        <li><a href="?page={{ record_list.next_page_number }}">&raquo;</a></li>
-    {% endif %}
-</ul>
-</nav>
+    <nav style="text-align: center">
+        <ul class="pagination">
+            {% if record_list.has_previous %}
+            <li><a href="?page={{ record_list.previous_page_number }}">&laquo;</a></li>
+            {% endif %}
+            {% if record_list.number > 2 %}
+            <li><a href="?page={{ record_list.number|add:"-2"}}">{{record_list.number|add:"-2"}}</a></li>
+            {% endif %}
+            {% if record_list.number > 1 %}
+            <li><a href="?page={{ record_list.previous_page_number }}">{{record_list.number|add:"-1"}}</a></li>
+            {% endif %}
+            <li class="active"><a>{{record_list.number}}<span class="sr-only">(current)</span></a></li>
+            {% if record_list.number < record_list.paginator.num_pages %}
+            <li><a href="?page={{ record_list.next_page_number }}">{{record_list.number|add:"1"}}</a></li>
+            {% endif %}
+            {% if record_list.number < record_list.paginator.num_pages|add:"-1" %}
+            <li><a href="?page={{ record_list.number|add:'2'}}">{{record_list.number|add:'2'}}</a></li>
+            {% endif %}
+            {% if record_list.has_next %}
+            <li><a href="?page={{ record_list.next_page_number }}">&raquo;</a></li>
+            {% endif %}
+        </ul>
+    </nav>
 
-<div class="modal fade" id="confirm1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" 
-						aria-hidden="true">&times;
-				</button>
-                <h4 class="modal-title" id="myModalLabel" style="text-align:center">
-                    审核选项
-                </h4>
-			</div>
-            <div class="modal-body">
-                <div style="text-align: center;">
-                    {{ form.result }}
+    <script>
+    function onloadExaminePart() {
+        var pes = document.getElementById("id_passExamineSelector");
+        pes.onchange = function() { onPesChangedListener(); };
+        var ens = document.getElementById("id_emailOrNoteSelector");
+        ens.onchange = function() { onEnsChangedListener(); };
+        var sms = document.getElementById("id_sendMessageSelector");
+        sms.onchange = function() { onSmsChangedListener(); };
+        onPesChangedListener();
+    }
+    </script>
+    <script>
+    function onPesChangedListener() {
+        var pes = document.getElementById("id_passExamineSelector");
+        var result = pes.options[pes.options.selectedIndex].value;
+        var result_content = result == 1 ? "已通过审核" : "未通过审核";
+        var content = "您在比赛“" + "{{event.name}}" + "”中的报名" + result_content
+        var form_view = document.getElementById("editor_container");
+        form_view = form_view.children[4];
+        form_view = form_view.children[5];
+        /*
+        alert(form_view.innerHTML);
+        content = '<div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: -17px; border-right-width: 13px; min-height: 144px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines"><div style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre>x</pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-cursors" style="visibility: hidden;"><div class="CodeMirror-cursor" style="left: 339.2px; top: 76px; height: 20px;">&nbsp;</div></div><div class="CodeMirror-code"><pre class=" CodeMirror-line "><span style="padding-right: 0.1px;">' + content + '</span></pre></div></div></div></div></div>';
+        form_view.innerHTML = content;
+        alert(123);
+        return;
+        */
+        form_view = form_view.children[0];
+        form_view.style = "margin-left: 0px; margin-bottom: -17px; border-right-width: 13px; min-height: 28px; padding-right: 0px; padding-bottom: 0px;"
+        form_view = form_view.children[0];
+        form_view.style = "position: relative; top: 0px;"
+        form_view = form_view.children[0];
+        form_view = form_view.children[0];
+        form_view = form_view.children[4];
+        content = "<pre class=\"CodeMirror-line\"><span style=\"padding-right: 0.1px;\">" + content + "</span></pre>";
+        form_view.innerHTML = content
+    }
+    </script>
+    <script>
+    function onEnsChangedListener() {
+        var ens = document.getElementById("id_emailOrNoteSelector");
+        var val = ens.options[ens.options.selectedIndex].value;
+        var sms = document.getElementById("id_sendMessageSelector");
+        var ok = document.getElementById("okAndSend");
+        if (val == 1 || val == 2 || val == 3) {
+            sms.hidden = "";
+            ok.innerHTML = "确认并发送";
+        } else if (val == 4) {
+            sms.hidden = "hidden";
+            ok.innerHTML = "确认";
+        }
+        onSltChangedListener();
+    }
+    </script>
+    <script>
+    function onSmsChangedListener() {
+    }
+    </script>
+    <div class="modal fade" id="confirm1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-hidden="true">&times;
+                    </button>
+                    <h2 class="modal-title" id="confirm1_title" style="text-align:center">
+                        <b>审核选项</b>
+                    </h2>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <div class="form-group">
-                    <div style="text-align: center;">
-                        <button class="btn btn-success" type="button"
-                                                        data-toggle="modal"
-                                                        data-target="#confirm2" 
-                                                        data-dismiss="modal"
-                                                        id="get-template"
-                            style="float:right">审核
+                <!-- 审核的各个选项 -->
+                <div style="text-align: center;" hidden="hidden">
+                    <div class="dropdown" style="display:inline;">
+                        <button type="button" class="btn dropdown-toggle" id="passExamineBtn" data-toggle="dropdown">
+                            通过审核 <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" onclick="passExanimeListener('true')">通过审核</a>
+                            </li>
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" onclick="passExanimeListener('false')">拒绝通过审核</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="dropdown" style="display:inline;">
+                        <button type="button" class="btn dropdown-toggle" id="emailOrNoteBtn" data-toggle="dropdown">
+                            仅发送站内信 <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" onclick="emailOrNoteListener('1')">仅发送站内信</a>
+                            </li>
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" onclick="emailOrNoteListener('2')">仅发送邮件</a>
+                            </li>
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" onclick="emailOrNoteListener('3')">发送站内信和邮件</a>
+                            </li>
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" onclick="emailOrNoteListener('4')">不发送任何消息</a>
+                            </li>
+                        </ul>
+                    </div>
+                    {% if event.teamMode == 1 %}
+                    <div class="dropdown" style="display:inline;">
+                        <button type="button" class="btn dropdown-toggle" id="sendMessageBtn" data-toggle="dropdown">
+                            仅给队长发送 <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" onclick="sendMessageListener('true')">仅给队长发送</a>
+                            </li>
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" onclick="sendMessageListener('false')">给全队发送</a>
+                            </li>
+                        </ul>
+                    </div>
+                    {% endif %}
+                </div>
+                <!-- 审核消息编辑器 -->
+                <div class="modal-body" id="editor_container">
+                    <div style="text-align: center;" onload="onloadSelector()">
+                        {{ form.passExamineSelector }}
+                        {{ form.emailOrNoteSelector }}
+                        {% if event.teamMode == 1 %}
+                        {{ form.sendMessageSelector }}
+                        {% endif %}
+                    </div>
+                    <br>
+                    {{ form.content }}
+                </div>
+                <div class="modal-footer">
+                    <div class="form-group">
+                        <div style="text-align: center;">
+                            <button id="okAndSend" class="btn btn-primary" type="submit">确定并发送</button>
+                        </div>
                     </div>
                 </div>
-            </div>
-		</div><!-- /.modal-content -->
-	</div><!-- /.modal-dialog -->
-</div>
 
-<div class="modal fade" id="confirm2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" 
-						aria-hidden="true">&times;
-				</button>
-                <h4 class="modal-title" id="myModalLabel" style="text-align:center">
-                    发送审核信息
-                </h4>
-			</div>
-            <div class="modal-body" id="editor_container">
-                {{ form.content }}
-                {% if event.teamMode == 1 %}
-                <div style="text-align: center;">
-                    <label for="{{ form.teamMode.id_for_label }}">只发送给队长</label>
-                    {{ form.leaderOnly }}
-                </div>
-                {% endif %}
-            </div>
-            <div class="modal-footer">
-                <div class="form-group">
-                    <div style="text-align: center;">
-                        <button class="btn btn-primary" type="submit">发送</button>
-                    </div>
-                </div>
-            </div>
-		</div><!-- /.modal-content -->
-	</div><!-- /.modal-dialog -->
-</div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+    <script>
+    function passExanimeListener(selection) {
+        var btn = document.getElementById("passExamineBtn");
+        if (selection == 'true') {
+            btn.innerHTML = "通过审核";
+        } else if (selection == 'false') {
+            btn.innerHTML = "拒绝通过审核";
+        }
+        btn.innerHTML = btn.innerHTML + '<span class="caret"></span>';
+    }
+    </script>
+    <script>
+    function emailOrNoteListener(selection) {
+        var btn = document.getElementById("emailOrNoteBtn");
+        var ok = document.getElementById("okAndSend");
+        if (selection == '1') {
+            btn.innerHTML = "仅发送站内信";
+            ok.innerHTML = "确定并发送";
+        } else if (selection == '2') {
+            btn.innerHTML = "仅发送邮件";
+            ok.innerHTML = "确定并发送";
+        } else if (selection == '3') {
+            btn.innerHTML = "发送站内信和邮件";
+            ok.innerHTML = "确定并发送";
+        } else if (selection == '4') {
+            btn.innerHTML = "不发送任何消息";
+            ok.innerHTML = "确定";
+        }
+        btn.innerHTML = btn.innerHTML + '<span class="caret"></span>';
+    }
+    </script>
+    <script>
+    function sendMessageListener(selection) {
+        var btn = document.getElementById("sendMessageBtn");
+        if (selection == 'true') {
+            btn.innerHTML = "仅给队长发送";
+        } else if (selection == 'false') {
+            btn.innerHTML = "给全队发送";
+        }
+        btn.innerHTML = btn.innerHTML + '<span class="caret"></span>';
+    }
+    </script>
+
 </form>
 
 <!-- Start simple MDE -->
@@ -211,7 +364,7 @@
         status: false,
         spellChecker: false,
     });
-    $("#get-template").click(function(){
+    $("#loadExaminePartBtn123123").click(function(){
         var x = document.forms["EditForm"]["result"].value;
         console.log(x);
         $.post("{% url 'confirm' %}",

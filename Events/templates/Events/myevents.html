@@ -4,6 +4,14 @@
 <title id="baseIndexTitle">我的赛事 - 清华大学计算机系体育赛事平台</title>
 {% endblock %}
 
+{% block bread %}
+	<ol class="breadcrumb">
+    <li><a href="/main/">平台</a></li>
+    <li><a href="/events/">赛事</a></li>
+    <li><a class="active">我的赛事</a></li>
+</ol>
+{% endblock %}
+
 {% block content %}
 <div class="container-fluid">
     <div class="row-fluid">
@@ -31,6 +39,11 @@
                 </tr>
                 </thead>
                 <tbody>
+                {% if events_list_len == 0 %}
+                <tr class="danger">
+                    <td colspan="4" style="text-align: center;">暂无记录</td>
+                </tr>
+                {% endif %}
                 {% for line in events_list %}
                 <tr class="{{line.s2}}" ondblclick="location.href='/events/{{line.id}}'">
                     <td>

@@ -64,8 +64,8 @@
 			<button class="btn btn-warning" data-mixitup-control data-filter=".yellow">等待比赛</button>
 			<button class="btn btn-danger" data-mixitup-control data-filter=".red">已结束</button>
 			
-            <button type="button" data-mixitup-control class="control" data-sort="default:asc">Asc</button>
-            <button type="button" data-mixitup-control class="control" data-sort="default:desc">Desc</button>
+            <button type="button" data-mixitup-control class="control" data-sort="default:asc"></button>
+            <button type="button" data-mixitup-control class="control" data-sort="default:desc"></button>
         </div>
 
         <div class="container-mix">
@@ -86,6 +86,8 @@
 						<div class="col-md-4">
 							<br>
 							<div class="prg-cont rad-prg" id="indicatorContainer_{{line.id}}" style="width:100%"></div>
+							<br><br>
+							<a href="/events/{{line.id}}" class="btn btn-primary btn-sm">详情</a>
 						</div>
 					</div>
 				</div>
@@ -119,6 +121,11 @@
                 </tr>
                 </thead>
                 <tbody>
+                {% if events_list_len == 0 %}
+                <tr class="danger">
+                    <td colspan="4" style="text-align: center;">暂无记录</td>
+                </tr>
+                {% endif %}
                 {% for line in events_list %}
                 <tr class="{{line.s3}}" ondblclick="location.href='/events/{{line.id}}'">
                     <td onclick="location.href='/events/{{line.id}}'">
@@ -230,7 +237,7 @@ $('#indicatorContainer_{{line.id}}').radialIndicator({
     },
 	radius: 30,
     minValue: 0,
-    maxValue: {%if line.maxRegCnt == -1 %} 100, {% else %} {{line.maxRegCnt}}, {% endif %}
+    maxValue: {%if line.maxRegCnt == -1 %} 50, {% else %} {{line.maxRegCnt}}, {% endif %}
 	initValue: {{line.nowRegCnt}}
 });
 	</script>
