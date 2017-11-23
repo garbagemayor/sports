@@ -196,21 +196,21 @@ print u'在Broadcast表中添加信息'
 
 Broadcast.objects.get_or_create(id=1)
 b = Broadcast.objects.get(id=1)
-b.title = u'哈哈哈'
+b.title = u'冬季迷你马拉松来啦!!!'
 b.detail = u'什么都没有'
 b.publisher = 2
 b.save()
 
 Broadcast.objects.get_or_create(id=2)
 b = Broadcast.objects.get(id=2)
-b.title = u'哈哈哈'
-b.detail = u'什么都没有'
+b.title = u'听说这样可以算阿甘?'
+b.detail = u'哈哈哈'
 b.publisher = 2
 b.save()
 
 Broadcast.objects.get_or_create(id=3)
 b = Broadcast.objects.get(id=3)
-b.title = u'哈哈哈'
+b.title = u'呃呃鹅鹅鹅鹅鹅鹅'
 b.detail = u'什么都没有'
 b.publisher = 2
 b.save()
@@ -222,7 +222,7 @@ i += 1
 IMG.objects.get_or_create(id=i)
 g = IMG.objects.get(id=i)
 g.url = u'http://oblc5mnxs.bkt.clouddn.com/IMG_0068.JPG'
-g.name = u'毽绳'
+g.name = u'新的风暴已经出现'
 g.detail = u'贵系毽绳队夺得马杯甲组总分第一!'
 g.imgtype = 0
 g.headline = True

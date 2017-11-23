@@ -277,7 +277,7 @@ def teamsign(request, eventId, selectedStr="", other=""):
                 s.timeReg = timezone.now()
                 s.exmStatus = 1
                 s.save()
-                messages.add_message(request, messages.INFO, '向数据库添加团队报名信息成功！')
+                #  messages.add_message(request, messages.INFO, '向数据库添加团队报名信息成功！')
     else:
         # messages.add_message(request, messages.INFO, '请登录！')
         return HttpResponseRedirect(

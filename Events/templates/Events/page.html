@@ -161,12 +161,12 @@
             <!-- 两个按钮 -->
             <nav style="text-align: center; margin-bottom:20px">
                 <button class="btn btn-primary" id="signBtn"
-                        {% if events.status != 2 or events.maxRegCnt == events.nowRegCnt or request.session.uerid == None %} name="sign" disabled="disabled" {% endif %}
+                        {% if events.status != 2 or events.maxRegCnt == events.nowRegCnt or request.session.userid == None %} name="sign" disabled="disabled" {% endif %}
                         {% if events.teamMode == 0 %} onclick="location.href='/events/sign/{{events.id}}/'" {% else %} onclick="makeTeam()" {% endif %}>
                     {% if events.teamMode == 0 %} 立即报名 {% else %} 组建队伍 {% endif %}
                 </button>
                 <button class="btn btn-link" id="designBtn" onclick="location.href='/events/design/{{events.id}}/'"
-                        {% if not events.status == 2 or request.session.uerid == None %} name="sign" disabled="disabled"{% endif %}>
+                        {% if not events.status == 2 or request.session.userid == None %} name="sign" disabled="disabled"{% endif %}>
                     取消报名
                 </button>
                 </form>
