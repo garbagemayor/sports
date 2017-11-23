@@ -52,7 +52,7 @@ def page(request, Id):
     events.timeRegEnStr = utcToLocal(events.timeRegEn).strftime("%Y-%m-%d %H:%M:%S")
     events.timeEvnStStr = utcToLocal(events.timeEvnSt).strftime("%Y-%m-%d %H:%M:%S")
     request.session['eventsid'] = Id
-    return render(request, 'Events/page.html', {'events': events})
+    return render(request, 'Events/page.html', {'events': events, "request": request})
 
 
 @csrf_exempt
@@ -73,7 +73,8 @@ def page_static_refresh_search(request, searchFullName='', searchStudentNumber='
     print "searchUserList = ", searchUserList
     return render(request, 'Events/page_static_refresh.html',
                   {"searchUserList": searchUserList,
-                   "refresh_mode": "search"})
+                   "refresh_mode": "search",
+                   "request": request})
 
 
 @csrf_exempt
