@@ -143,7 +143,9 @@ def logout(request):
 
 
 def my_information(request):
-    user_id = request.session['userid']
+    user_id = request.session.get('userid')
+    if not user_id:
+        return HttpResponseRedirect("/")
     info_list = {}
     if user_id:
         my_infos = User.objects.get(id=user_id)

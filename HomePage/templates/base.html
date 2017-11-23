@@ -126,6 +126,7 @@
 									</div>
 								</div>
 							</div>
+                            {% if not request.session.userid == None %}
 							<div class="panel panel-default panel-link">
 								<div class="panel-heading">
 									<h4 class="panel-title">
@@ -156,6 +157,7 @@
 									</div>
 								</div>
 							</div>
+                            {% endif %}
 							{% if request.session.auth > 0 %}
 							<div class="panel panel-default panel-link">
 								<div class="panel-heading">
