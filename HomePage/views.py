@@ -16,18 +16,19 @@ import django.utils.timezone as timezone
 def index(request):
     team = list(IMG.objects.filter(headline=True,imgtype=0))
     game = list(IMG.objects.filter(headline=True,imgtype=1))
-    celebrity = list(IMG.objects.filter(headline=True,imgtype=2)) 
     broadcast_list = list(Broadcast.objects.all()[::-1])
     for b in broadcast_list:
         #print b.time.date()
         #print timezone.now().date()
         if b.time.date() >= timezone.now().date():
             b.new="新"
+    game[0].active = 1
+    game_len = range(len(game))
+    celebrity = list(IMG.objects.filter(headline=True,imgtype=2))
     events_list=Events.objects.all()[::-1]
     events1=[]
     events2=[]
     events3=[]
-    
     for e in events_list:
         if e.getStatus()==1:
             events1.append(e)
@@ -54,8 +55,12 @@ def index(request):
                    'team': team,
                    'celebrity': celebrity,
                    'game': game,
+<<<<<<< HEAD
                    'broadcast':broadcast_list})
 
+=======
+                   'game_len': game_len})
+>>>>>>> homepage
 
 def broadcast(request):
     broadcast_list = list(Broadcast.objects.all()[::-1])
