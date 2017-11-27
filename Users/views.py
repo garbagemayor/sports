@@ -8,22 +8,21 @@ import django.utils.timezone as timezone
 import requests
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
-from django.shortcuts import render, render_to_response
+from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
+from qiniu import Auth
 
 from HomePage.models import Events
 from HomePage.models import IMG
 from HomePage.models import Signs as Sign
 from HomePage.models import Users as User
 from HomePage.models import utcToLocal
+from RegistrationRecord.forms import EditForm
 from Users.models import Notification
 from Users.models import NotificationController
-from qiniu import Auth
-from django.core import serializers
 
 
 def auth(request):
@@ -121,11 +120,11 @@ def auth(request):
     # 弹出各种情况下的消息窗口
     messages.add_message(request, messages.INFO, '登陆成功! ' + request.session['username'] + ' 欢迎来到体育赛事报名平台！')
     if isNewUser:
-        messages.add_message(request, messages.INFO, '检测到您是首次登录这个系统，请立即补充个人信息否则封号！')
+        messages.add_message(request, messages.INFO, '检测到您是首次登录这个系统，请立即补充个人信息，否则无法报名比赛！')
     elif isDifferent:
-        messages.add_message(request, messages.INFO, '检测到你的个人信息与account9上的信息存在差异，请立即修改否则封号！')
+        messages.add_message(request, messages.INFO, '检测到你的个人信息与account9上的信息存在差异，请立即检查以免与个人信息不符！')
     elif needMore:
-        messages.add_message(request, messages.INFO, '检测到您还需要填写更多信息，请立即填写否则封号！')
+        messages.add_message(request, messages.INFO, '检测到您还需要填写更多信息，请立即填写，否则无法报名比赛！')
     else:
         return HttpResponseRedirect("/events/")
     return HttpResponseRedirect("/user/profile/")
@@ -347,6 +346,7 @@ def demanager(request, Id):
 def backend(request):
     return render(request, 'Users/backend.html')
 
+
 def gets2(i):
     if i == 1:
         return "info"
@@ -486,59 +486,64 @@ def decr_notifications_counter(sender, instance, **kwargs):
             obj[0].unReadCount = obj[0].unReadCount - 1
             obj[0].save()
 
+
 def qiniu_uptoken(request):
-    #需要填写你的 Access Key 和 Secret Key
+    # 需要填写你的 Access Key 和 Secret Key
     access_key = 'iuFSDhrkjCI_bYpSCzZumRBlYNZ48oVC6UZN9b4R'
     secret_key = 'IwYY8y0rNGhueVayu2k2e-o1m6jDQ4KOmHEkPmet'
-    #构建鉴权对象
+    # 构建鉴权对象
     q = Auth(access_key, secret_key)
-    #要上传的空间
+    # 要上传的空间
     bucket_name = 'lroot'
-    #上传到七牛后保存的文件名
+    # 上传到七牛后保存的文件名
     # key = ''
-    #生成上传 Token，可以指定过期时间等
+    # 生成上传 Token，可以指定过期时间等
     # 上传策略示例
     # https://developer.qiniu.com/kodo/manual/1206/put-policy
     policy = {
-     # 'callbackUrl':'https://requestb.in/1c7q2d31',
-     # 'callbackBody':'filename=$(fname)&filesize=$(fsize)'
-     # 'persistentOps':'imageView2/1/w/200/h/200'
-     }
-    #3600为token过期时间，秒为单位。3600等于一小时
+        # 'callbackUrl':'https://requestb.in/1c7q2d31',
+        # 'callbackBody':'filename=$(fname)&filesize=$(fsize)'
+        # 'persistentOps':'imageView2/1/w/200/h/200'
+    }
+    # 3600为token过期时间，秒为单位。3600等于一小时
     token = q.upload_token(bucket_name)
     token_dict = {'uptoken': token}
     return JsonResponse(token_dict)
 
+
 def new_img(request):
     new_img = IMG(
-            url=request.POST['url'],
-            detail=request.POST['detail'],
-            imgtype=request.POST['imgtype'],
-        )
+        url=request.POST['url'],
+        detail=request.POST['detail'],
+        imgtype=request.POST['imgtype'],
+    )
     new_img.save()
     return HttpResponse('ok')
 
+
 def set_headline(request):
-    checkbox_list=request.POST['idlist']
+    checkbox_list = request.POST['idlist']
     for checked_item in re.findall(r'\d+', checkbox_list):
         IMG.objects.filter(id=int(checked_item)).update(headline=True)
     return HttpResponse('ok')
 
+
 def deactive(request):
-    checkbox_list=request.POST['idlist']
+    checkbox_list = request.POST['idlist']
     for checked_item in re.findall(r'\d+', checkbox_list):
         IMG.objects.filter(id=int(checked_item)).update(headline=False)
     return HttpResponse('ok')
 
+
 def remove_item(request):
-    checkbox_list=request.POST['idlist']
+    checkbox_list = request.POST['idlist']
     for checked_item in re.findall(r'\d+', checkbox_list):
         IMG.objects.get(id=int(checked_item)).delete()
     return HttpResponse('ok')
+
 
 def picture(request):
     img_list = {}
     for i in range(3):
         img_list['l' + str(i)] = IMG.objects.filter(imgtype=i)
     return render(request, 'Users/picture.html', img_list)
-

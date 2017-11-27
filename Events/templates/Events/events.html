@@ -77,7 +77,7 @@
 				<div class="container" style="width:100%">
 					<div class="row">
 						<div class="col-md-8">
-							<div style="background:light{{line.s4}};">
+							<div style="background:transparent;">
 								<p>报名截止：{{line.timeEvnStStr}}
 								<br>比赛时间：{{line.timeEvnStStr}}</p>
 					
@@ -228,18 +228,23 @@
     <script src="/static/js/demo.js"></script>
 	{% for line in events_list %}
 	<script type="text/javascript" >
-$('#indicatorContainer_{{line.id}}').radialIndicator({
+    $('#indicatorContainer_{{line.id}}').radialIndicator({
     barColor: {
         0: '#FF0000',
         33: '#eecc00',
         66: '#0066FF',
         100: '#33CC33'
-    },
-	radius: 30,
+            },
+    	radius: 30,
     minValue: 0,
-    maxValue: {%if line.maxRegCnt == -1 %} 50, {% else %} {{line.maxRegCnt}}, {% endif %}
-	initValue: {{line.nowRegCnt}}
-});
+    maxValue:
+        {% if line.maxRegCnt == -1 %}
+            50
+        {% else %}
+            {{line.maxRegCnt}}
+        {% endif %},
+	    initValue: {{line.nowRegCnt}}
+    });
 	</script>
 	{% endfor %}
 

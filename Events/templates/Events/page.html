@@ -1,7 +1,7 @@
 ﻿{% extends 'base2.html' %}
 
 {% block Title %}
-<title id="baseIndexTitle">{{events.name}} - 清华大学计算机系体育赛事平台</title>
+<title id="baseIndexTitle" xmlns="http://www.w3.org/1999/html">{{events.name}} - 清华大学计算机系体育赛事平台</title>
 {% endblock %}
 {% block bread %}
 	<ol class="breadcrumb">
@@ -136,7 +136,7 @@
                         <div style="width: 100%">
                             <div class="page-header">
                                 <h1 style="text-align: center">
-                                    <small>已选队友</small>
+                                    <small>已有队员</small>
                                 </h1>
                             </div>
                             <!-- 这个标签的innerHTML用来存储已经添加的所有userId，类似全局变量，避免重复添加 -->
@@ -161,14 +161,20 @@
             <!-- 两个按钮 -->
             <nav style="text-align: center; margin-bottom:20px">
                 <button class="btn btn-primary" id="signBtn"
-                        {% if events.status != 2 or events.maxRegCnt == events.nowRegCnt or request.session.uerid == None %} name="sign" disabled="disabled" {% endif %}
+                        {% if events.status != 2 or events.maxRegCnt == events.nowRegCnt or request.session.userid == None %} name="sign" disabled="disabled" {% endif %}
                         {% if events.teamMode == 0 %} onclick="location.href='/events/sign/{{events.id}}/'" {% else %} onclick="makeTeam()" {% endif %}>
                     {% if events.teamMode == 0 %} 立即报名 {% else %} 组建队伍 {% endif %}
                 </button>
                 <button class="btn btn-link" id="designBtn" onclick="location.href='/events/design/{{events.id}}/'"
-                        {% if not events.status == 2 or request.session.uerid == None %} name="sign" disabled="disabled"{% endif %}>
+                        {% if not events.status == 2 or request.session.userid == None %} name="sign" disabled="disabled"{% endif %}>
                     取消报名
                 </button>
+                <br>
+                <div style="text-align: center;">
+                    {% if request.session.userid == None %}
+                    <p style="color: red;">请登陆后报名！</p>
+                    {% endif %}
+                </div>
                 </form>
             </nav>
             <br><br><br>
