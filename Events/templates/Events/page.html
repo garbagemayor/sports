@@ -81,25 +81,16 @@
                 </dd>
             </dl>
             <br><br>
-            <!--
-            <script src="/static/js/device.min.js"></script>
-            <script>
-                if (device.mobile() === true) {
-                    $("[name = 'makeTeamPartName1']").attr("hidden", "hidden")
-                } else {
-                    $("[name = 'makeTeamPartName2']").attr("hidden", "hidden")
-                }
-            </script>-->
+
+
             <!-- 这一坨屎就是用来组建团队的 -->
-            <div id="makeTeamPart" hidden="hidden">
-                <table class="table table-hover">
-                    <tbody><tr>
-                    <td style="width: 45%;">
+            <div id="makeTeamPart1" hidden="hidden">
+                    <div style="width: auto">
                         <!-- 左边查找队友 -->
                         <div style="width: 100%;">
                             <div class="page-header">
                                 <h1 style="text-align: center">
-                                    <small>查找队友</small>
+                                    <small>查找队员</small>
                                 </h1>
                             </div>
                             <div name="searchForm">
@@ -113,7 +104,75 @@
                                     <input type="text" class="form-control" id="studentNumber" name="studentnumber" placeholder="请输入学号"
                                            {% if studentNumber != ""  %} value="{{studentNumber}}" {% endif %}>
                                 </div>
-                                <button type="submit" class="btn btn-default" onclick="searchTeammate()">查找</button>
+                                <div style="text-align: center;">
+                                    <button type="submit" class="btn btn-default" onclick="searchTeammate()">查找</button>
+                                </div>
+                            </div>
+                            <table class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <th>昵称</th>
+                                    <th>姓名</th>
+                                    <th>学号</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody id="searchUserTbody">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div style="width: auto;">
+                        <!-- 右边显示队友 -->
+                        <div style="width: 100%">
+                            <div class="page-header">
+                                <h1 style="text-align: center">
+                                    <small>已有队员</small>
+                                </h1>
+                            </div>
+                            <!-- 这个标签的innerHTML用来存储已经添加的所有userId，类似全局变量，避免重复添加 -->
+                            <div id="selectedListDiv" hidden="hidden">,</div>
+                            <table class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <th>昵称</th>
+                                    <th>姓名</th>
+                                    <th>学号</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody id="selectedUserTbody">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+            </div>
+            <div id="makeTeamPart2" hidden="hidden">
+                <table class="table table-hover">
+                    <tbody><tr>
+                    <td style="width: 45%;">
+                        <!-- 左边查找队友 -->
+                        <div style="width: 100%;">
+                            <div class="page-header">
+                                <h1 style="text-align: center">
+                                    <small>查找队员</small>
+                                </h1>
+                            </div>
+                            <div name="searchForm">
+                                <div class="form-group">
+                                    <label for="fullName">姓名：</label>
+                                    <input type="text" class="form-control" id="fullName" name="fullname" placeholder="请输入姓名"
+                                           {% if fullName != ""  %} value="{{fullName}}" {% endif %}>
+                                </div>
+                                <div class="form-group">
+                                    <label for="studentNumber">学号：</label>
+                                    <input type="text" class="form-control" id="studentNumber" name="studentnumber" placeholder="请输入学号"
+                                           {% if studentNumber != ""  %} value="{{studentNumber}}" {% endif %}>
+                                </div>
+                                <div style="text-align: center;">
+                                    <button type="submit" class="btn btn-default" onclick="searchTeammate()">查找</button>
+                                </div>
                             </div>
                             <table class="table table-hover">
                                 <thead>
@@ -158,6 +217,14 @@
                     </tr></tbody>
                 </table>
             </div>
+            <script src="/static/js/device.min.js"></script>
+            <script>
+                if (device.mobile() === true) {
+                    $("#makeTeamPart1").attr("id", "makeTeamPart")
+                } else {
+                    $("#makeTeamPart2").attr("id", "makeTeamPart")
+                }
+            </script>
             <!-- 两个按钮 -->
             <nav style="text-align: center; margin-bottom:20px">
                 <button class="btn btn-primary" id="signBtn"
