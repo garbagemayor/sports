@@ -24,6 +24,7 @@ elif platform == "win32":
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "SportsRegistration.settings")
 django.setup()
 
+from Users.models import Notification, NotificationController
 from HomePage.models import Users, Events, Signs, IMG, Broadcast
 import django.utils.timezone as timezone
 import datetime
@@ -256,6 +257,32 @@ g.name = u'李晨曦'
 g.detail = u'李晨曦，清华大学计算机系2013级博士生，马拉松国家二级运动员，曾创下北京国际马拉松赛全程2小时51分18秒完赛的个人最佳成绩，42.195千米的赛道，平均每千米用时约4分4秒，被称为“清华马拉松第一人”，原虎扑翻译团版主、虎扑新声编辑。'
 g.imgtype = 2
 g.headline = True
+g.save()
+
+print u'在Notification表中添加对象'
+
+i = 0
+i += 1
+Notification.objects.get_or_create(id=i)
+g = Notification.objects.get(id=i)
+g.sender = u'luoy15'
+g.senderID = 3
+g.target = 3
+g.title = u'感谢您使用本报名系统'
+g.content = u'感谢您使用本报名系统!!!'
+g.isRead = False
+g.createTime = timezone.now()
+g.welcome = True
+g.save()
+
+print u'在NotificationController表中添加对象'
+
+i = 0
+i += 1
+NotificationController.objects.get_or_create(id=i)
+g = NotificationController.objects.get(id=i)
+g.userId = 3
+g.unreadCount = 1
 g.save()
 
 print u'添加完成'

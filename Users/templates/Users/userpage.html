@@ -125,9 +125,12 @@
                 </h4>
             </div>
             <div class="modal-body">
-                {% csrf_token %}
-                {{ form.as_p }}
-            </div>
+                    {% csrf_token %}
+                    <div style="text-align: center">
+                        {{ form.title }}
+                    </div>
+                    {{ form.content }}
+                </div>
             <div class="modal-footer">
                 <div class="form-group">
                     <div style="text-align: center;">
@@ -143,7 +146,8 @@
 <script>
     var simplemde = new SimpleMDE({
         element: document.getElementById("editor"),
-        autofocus: true
+        status: false,
+        spellChecker: false,
     });
 </script>
 

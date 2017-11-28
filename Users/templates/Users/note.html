@@ -1,21 +1,41 @@
-{% extends 'base.html' %}
-
-{% block Title %}
+{% extends 'base.html' %} {% block Title %}
 <title id="baseIndexTitle">站内信 - 清华大学计算机系体育赛事平台</title>
-{% endblock %}
+{% endblock %} {% block content %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+<script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+<div class="container-fluid">
+    <div class="span12">
+        <div class="text-center">
+            <h1>
+                {{note.title}}
+                <small>{{note.sender}}</small>
+                <small>{{note.createTime | date:"Y-m-d H:i:s"}}</small>
+            </h1>
+        </div>
+        <div>
+            <div id="content">
+            </div>
+        </div>
+        <div>
+            <a href="/notification/" role="button" class="btn btn-success" style="float: right">返回</a>
+        </div>
+    </div>
+    <div id="editor">
+        <textarea></textarea>
+    </div>
+</div>
+</div>
 
-{% block content %}
-<div class="page-header">
-    <h1 style="text-align: center">
-        {{note.title}}
-    </h1>
-</div>
-<div id="content">
-    {{note.content}}
-</div>
 <script>
-    $.get("{% url 'mark_as_read' %}", function(ret){
-         $('#noti').html(ret);
-    })
-</script>
-{% endblock %}
+    var simplemde = new SimpleMDE();
+    $('#editor').hide();
+    $(document).ready(function () {
+        $.get("{% url 'mark_as_read' %}", function (ret) {
+            $('#noti').html(ret);
+        })
+        $.get("{% url 'note_content' %}", function (ret) {
+            $('#content').html(simplemde.markdown(ret));
+        })
+    });
+
+</script> {% endblock %}

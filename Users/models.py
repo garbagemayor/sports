@@ -11,11 +11,12 @@ class Notification(models.Model):
     id = models.IntegerField(primary_key=True)                  # 数据库中的编号
     sender = models.CharField(max_length=256)
     senderId = models.IntegerField(default=0) # 发信用户id
-    target = models.IntegerField()                     # 用户的数据库编号
+    target = models.IntegerField(default=0)                     # 用户的数据库编号
     title = models.CharField(max_length=256)         # 站内信标题
     content = models.TextField(default=u"暂无简介")             # 信息
     isRead = models.BooleanField(default=False)             # 是否已读
     createTime = models.DateTimeField(default=timezone.now)      # 发信时间
+    welcome = models.BooleanField(default=False)
 
     #  def decr_notifications_counter(sender, instance, **kwargs):
     #    # 当删除的消息还没有被读过时，计数器 -1
@@ -32,8 +33,8 @@ class Notification(models.Model):
 
 class NotificationController(models.Model):
     id = models.IntegerField(primary_key=True)  # 数据库中的编号
-    userId = models.IntegerField()  # 用户的数据库编号
-    unReadCount = models.IntegerField(default=0)  # 未读条数
+    userId = models.IntegerField(default=0)  # 用户的数据库编号
+    unReadCount = models.IntegerField(default=1)  # 未读条数
 
     #  def mark_as_readed(self, notification_id):
     #      affected_rows = Notification.objects.filter(pk=notification_id,
