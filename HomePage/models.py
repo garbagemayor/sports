@@ -190,3 +190,16 @@ class Attention(models.Model):
         print u'    ' + u'userid = ' + unicode(self.userid)
         print u'    ' + u'status = ' + unicode(self.status)
         print u'}'
+
+class Team(models.Model):
+    id = models.IntegerField(primary_key=True)  # 数据库中的编号,同时对应图片数据库里的图片类型
+    sport = models.CharField(max_length=32, null=True)  # 项目名称:游泳
+    name = models.CharField(max_length=32, null=True)  # 官方名称:计算机系游泳队
+    achievement = models.CharField(max_length=100, null=True) # 战绩 07年马杯冠军 16年甲组男团第三
+    captain = models.CharField(max_length=32, null=True)  # 队长:吴雨舟
+    athlete = models.CharField(max_length=32, null=True)  # 传奇运动员:谢晓晖
+    detail = models.CharField(max_length=32, null=True) # 介绍
+    faq = models.CharField(max_length=1000, null=True) # 其他介绍
+    headline = models.BooleanField(default=False) # 是否在首页展示
+    def __str__(self):
+        return '<Team %s: %s %s %s>' % (self.id, self.sport, self.name, self.achievement)

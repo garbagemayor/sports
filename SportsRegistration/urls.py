@@ -83,6 +83,7 @@ urlpatterns = [
                   url(r'^managers/picture/$', Users_view.picture, name='picture'),
                   url(r'^qiniu/$', Users_view.qiniu_uptoken, name='qiniu'),
                   url(r'^newimg/$', Users_view.new_img, name='newimg'),
+                  url(r'^imglist/$', Users_view.imglist, name='imglist'),                  
                   url(r'^setheadline/$', Users_view.set_headline, name='setheadline'),
                   url(r'^deactive/$', Users_view.deactive, name='deactive'),
                   url(r'^removeitem/$', Users_view.remove_item, name='removeitem'),

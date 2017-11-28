@@ -16,7 +16,7 @@ from django.views.decorators.csrf import csrf_exempt
 from qiniu import Auth
 
 from HomePage.models import Events
-from HomePage.models import IMG
+from HomePage.models import IMG, Team
 from HomePage.models import Signs as Sign
 from HomePage.models import Users as User
 from HomePage.models import utcToLocal
@@ -547,16 +547,27 @@ def remove_item(request):
 
 
 def picture(request):
-    img_list = {}
-    for i in range(3):
-        img_list['l' + str(i)] = IMG.objects.filter(imgtype=i)
-    return render(request, 'Users/picture.html', img_list)
+    mmap = {'team_list': []}
+    id_list = [1, 2]
+    for i in id_list:
+        mmap['team_list'].append(Team.objects.get(id=i))
+    return render(request, 'Users/picture.html', mmap)
+
+def imglist(requests):
+    id_list = requests.POST['id_list']
+    urlmap = {}
+    for i in re.findall(r'\d+', id_list):
+        imglist = list(IMG.objects.filter(imgtype=int(i)))
+        urlmap['team' + i] = []
+        for img in imglist:
+            urlmap['team' + i].append(img.url)
+    return JsonResponse(urlmap)
 
 def note_content(requests):
     noteid = int(requests.session['noteid'])
     obj = Notification.objects.get(id=noteid)
     if obj.welcome:
-        content = '- 尊敬的' + requests.session['username'] + ":\n" + obj.content
+        content = '- 亲爱的' + requests.session['username'] + ":\n" + obj.content
     else:
         content = obj.content        
     return HttpResponse(content)
