@@ -555,8 +555,8 @@ def picture(request):
 def note_content(requests):
     noteid = int(requests.session['noteid'])
     obj = Notification.objects.get(id=noteid)
-    if noteid > 1:
-        content = obj.content
-    else:
+    if obj.welcome:
         content = '- 尊敬的' + requests.session['username'] + ":\n" + obj.content
+    else:
+        content = obj.content        
     return HttpResponse(content)

@@ -16,6 +16,7 @@ class Notification(models.Model):
     content = models.TextField(default=u"暂无简介")             # 信息
     isRead = models.BooleanField(default=False)             # 是否已读
     createTime = models.DateTimeField(default=timezone.now)      # 发信时间
+    welcome = models.BooleanField(default=False)
 
     #  def decr_notifications_counter(sender, instance, **kwargs):
     #    # 当删除的消息还没有被读过时，计数器 -1

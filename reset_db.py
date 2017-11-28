@@ -272,6 +272,7 @@ g.title = u'感谢您使用本报名系统'
 g.content = u'感谢您使用本报名系统!!!'
 g.isRead = False
 g.createTime = timezone.now()
+g.welcome = True
 g.save()
 
 print u'在NotificationController表中添加对象'
