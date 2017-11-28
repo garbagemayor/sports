@@ -546,12 +546,19 @@ def remove_item(request):
     return HttpResponse('ok')
 
 
+def team(request):
+    mmap = {'team_list': []}
+    id_list = [1, 2]
+    for i in id_list:
+        mmap['team_list'].append(Team.objects.get(id=i))
+    return render(request, 'Users/team.html', mmap)
+
 def picture(request):
     mmap = {'team_list': []}
     id_list = [1, 2]
     for i in id_list:
         mmap['team_list'].append(Team.objects.get(id=i))
-    return render(request, 'Users/picture.html', mmap)
+    return render(request, 'Users/team.html', mmap)
 
 def imglist(requests):
     id_list = requests.POST['id_list']

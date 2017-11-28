@@ -14,9 +14,10 @@ import django.utils.timezone as timezone
 # Create your views here.
 
 def index(request):
-    team = list(IMG.objects.filter(headline=True,imgtype=0))
-    game = list(IMG.objects.filter(headline=True,imgtype=1))
+    team = list(IMG.objects.filter(headline=True,imgtype=1))
+    celebrity = list(IMG.objects.filter(headline=True,imgtype=3))
     broadcast_list = list(Broadcast.objects.all()[::-1])
+    game = list(IMG.objects.filter(headline=True,imgtype=-1))
     for b in broadcast_list:
         #print b.time.date()
         #print timezone.now().date()
@@ -24,8 +25,7 @@ def index(request):
             b.new="新"
     game[0].active = 1
     game_len = range(len(game))
-    celebrity = list(IMG.objects.filter(headline=True,imgtype=2))
-    background = IMG.objects.get(headline=True,imgtype=-1)
+    background = IMG.objects.get(headline=True,imgtype=(-2))
     print background.url
     events_list=Events.objects.all()[::-1]
     events1=[]

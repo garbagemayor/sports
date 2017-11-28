@@ -25,6 +25,7 @@ from Events import views as  Events_view
 from HomePage import views as  HomePage_view
 from RegistrationRecord import views as Record_view
 from Users import views as  Users_view
+from Manager import views as  Manager_view
 
 urlpatterns = [
                   url(r'^admin/', admin.site.urls),
@@ -80,13 +81,16 @@ urlpatterns = [
                   url(r'^managers/$', Users_view.backend, name='backend'),
                   url(r'^managers/managers/$', Users_view.manager, name='manager'),
                   url(r'^managers/(\d+)/$', Users_view.demanager, name='demanager'),  # 删除管理员
-                  url(r'^managers/picture/$', Users_view.picture, name='picture'),
+                  url(r'^team/$', Users_view.team, name='team'),
+                  url(r'^picture/$', Users_view.picture, name='picture'),
                   url(r'^qiniu/$', Users_view.qiniu_uptoken, name='qiniu'),
                   url(r'^newimg/$', Users_view.new_img, name='newimg'),
                   url(r'^imglist/$', Users_view.imglist, name='imglist'),                  
                   url(r'^setheadline/$', Users_view.set_headline, name='setheadline'),
                   url(r'^deactive/$', Users_view.deactive, name='deactive'),
                   url(r'^removeitem/$', Users_view.remove_item, name='removeitem'),
+                  url(r'^team/(\d+)$', Manager_view.team, name='team'),
+                  url(r'^team_edit/(\d+)$', Manager_view.team_edit, name='team_edit'),
 
                   # 记录
                   url(r'^record/(\d+)/$', Record_view.recordPage, name='recordpage'),  # 某赛事报名情况

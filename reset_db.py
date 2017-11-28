@@ -228,7 +228,8 @@ g.achievement = u'贵系泳队在07年获得了马杯冠军，此后在当年的
 g.captain = u'吴雨舟'
 g.athlete = u'谢晓晖'
 g.detail = u' 贵系游泳队是一个温暖的大家庭，在这儿我们有和谐男女比，每次一小时的训练安排，轻松又愉快。我们在平时的训练中也会提供相关的技术指导，让你完成从入门到精通的飞跃。提高技术、瘦身塑形、享受生活，贵系泳队欢迎你！'
-g.faq = u'训练安排及内容:开学前六周，每周固定1~2次训练。比赛前四周，每周固定2~3次强度训练。|加入我们:基本要求：能够踩水30秒\n能够连续游200米（不限泳姿）\n热爱游泳，积极参加训练\nPS:妹子我们当然是欢迎的啦，\n只要你愿意来，\n我们就在这里等你！'
+g.train = u'训练安排及内容:开学前六周，每周固定1~2次训练。比赛前四周，每周固定2~3次强度训练。'
+g.joinus = u'加入我们:基本要求：能够踩水30秒\n能够连续游200米（不限泳姿）\n热爱游泳，积极参加训练\nPS:妹子我们当然是欢迎的啦，\n只要你愿意来，\n我们就在这里等你！'
 g.headline = True
 g.save()
 
@@ -241,22 +242,21 @@ g.achievement = u'计算机系足球队是马杯上的传统强队，从2013年�
 g.captain = u'丁豪'
 g.athlete = u'刘加贺'
 g.detail = u'球队球风稳健，敢于拼搏。球队今年进行大换血，在刘加贺，丁孝基等一批核心球员的毕业离队的同时，我们也迎来了21世纪第一个足球特长生，校队核心后防刘明辉。在这个新老交替的关键时刻，我们需要更多的新鲜血液加入，为计算机系足球队带来无限的可能，为球队的未来打下坚实的基础。'
-g.faq = u'训练安排及内容:每周一场热身赛（11人制，90分钟）\n每周一次基本功训练（周末晚，2个小时）\n不定期体能训练（周中晚，40分钟）\n新生基本功训练（针对大一新生，持续一年，一周4次，一次50分钟）|加入我们:一. 集体选拔：\n(1) 基本功测试（占分30分）1.足球踢远 2.15米短传    3.一次性巅球\n4.50米冲刺跑 5.6*20折返跑 6.30米长传\n(2) 系内组织选拔赛（占分70分）\n新人（或者新老）对抗，11人制，90分钟\n通过选拔赛表现进行选拔。时间地点待定'
+g.train = u'训练安排及内容:每周一场热身赛（11人制，90分钟）\n每周一次基本功训练（周末晚，2个小时）\n不定期体能训练（周中晚，40分钟）\n新生基本功训练（针对大一新生，持续一年，一周4次，一次50分钟'
+g.joinus = u'加入我们:一. 集体选拔：\n(1) 基本功测试（占分30分）1.足球踢远 2.15米短传    3.一次性巅球\n4.50米冲刺跑 5.6*20折返跑 6.30米长传\n(2) 系内组织选拔赛（占分70分）\n新人（或者新老）对抗，11人制，90分钟\n通过选拔赛表现进行选拔。时间地点待定'
 g.headline = False
 g.save()
 
-print u'在IMG表中添加对象'
-
-i = 0
 i += 1
 IMG.objects.get_or_create(id=i)
 g = IMG.objects.get(id=i)
-g.url = u'http://oblc5mnxs.bkt.clouddn.com/IMG_0068.JPG'
-g.name = u'新的风暴已经出现'
-g.detail = u'贵系毽绳队夺得马杯甲组总分第一!'
-g.imgtype = 2
+g.url = u'http://oblc5mnxs.bkt.clouddn.com/Picture2.png'
+g.name = u'李晨曦'
+g.detail = u'李晨曦，清华大学计算机系2013级博士生，马拉松国家二级运动员，曾创下北京国际马拉松赛全程2小时51分18秒完赛的个人最佳成绩，42.195千米的赛道，平均每千米用时约4分4秒，被称为“清华马拉松第一人”，原虎扑翻译团版主、虎扑新声编辑。'
 g.headline = True
 g.save()
+
+print u'在IMG表中添加对象'
 
 i += 1
 IMG.objects.get_or_create(id=i)
@@ -278,13 +278,24 @@ g.imgtype = 1
 g.headline = True
 g.save()
 
+i = 0
+i += 1
+IMG.objects.get_or_create(id=i)
+g = IMG.objects.get(id=i)
+g.url = u'http://mmbiz.qpic.cn/mmbiz_jpg/g7L5gknq24qRwJVdqHlo2toEzutChE33ibNZCjXNjDRfJGKMtmwZ2oiarIiacZvkiaR02OKvUBChpwMqpMEJCk6SMw/640?wx_fmt=jpeg&tp=webp&wxfrom=5&wx_lazy=1'
+g.name = u'男足'
+g.detail = u'合照'
+g.imgtype = 2
+g.headline = True
+g.save()
+
 i += 1
 IMG.objects.get_or_create(id=i)
 g = IMG.objects.get(id=i)
 g.url = u'http://oblc5mnxs.bkt.clouddn.com/IMG_0128.jpg'
 g.name = u'球王'
 g.detail = u'球王过人精彩瞬间'
-g.imgtype = -2
+g.imgtype = -1
 g.headline = True
 g.save()
 
@@ -294,27 +305,15 @@ g = IMG.objects.get(id=i)
 g.url = u'http://oblc5mnxs.bkt.clouddn.com/IMG_0141.jpg'
 g.name = u'姚指导'
 g.detail = u'姚指导回眸一笑'
-g.imgtype = -2
-g.headline = True
-g.save()
-
-i += 1
-IMG.objects.get_or_create(id=i)
-g = IMG.objects.get(id=i)
-g.url = u'http://oblc5mnxs.bkt.clouddn.com/Picture2.png'
-g.name = u'李晨曦'
-g.detail = u'李晨曦，清华大学计算机系2013级博士生，马拉松国家二级运动员，曾创下北京国际马拉松赛全程2小时51分18秒完赛的个人最佳成绩，42.195千米的赛道，平均每千米用时约4分4秒，被称为“清华马拉松第一人”，原虎扑翻译团版主、虎扑新声编辑。'
-g.imgtype = 3
-g.headline = True
-g.save()
-
-i += 1
-IMG.objects.get_or_create(id=i)
-g = IMG.objects.get(id=i)
-g.url = u'http://oblc5mnxs.bkt.clouddn.com/Picture2.png'
-g.name = u'李晨曦'
-g.detail = u'李晨曦，清华大学计算机系2013级博士生，马拉松国家二级运动员，曾创下北京国际马拉松赛全程2小时51分18秒完赛的个人最佳成绩，42.195千米的赛道，平均每千米用时约4分4秒，被称为“清华马拉松第一人”，原虎扑翻译团版主、虎扑新声编辑。'
 g.imgtype = -1
+g.headline = True
+g.save()
+
+i += 1
+IMG.objects.get_or_create(id=i)
+g = IMG.objects.get(id=i)
+g.url = u'http://oblc5mnxs.bkt.clouddn.com/o_1bvhjn2821e1gh528qs1a0j5qp9.jpg'
+g.imgtype = -2
 g.headline = True
 g.save()
 
