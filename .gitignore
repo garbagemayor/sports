@@ -9,3 +9,4 @@ Users/migrations/*
 code.png
 *.DS_store
 venv/
+.vscode/

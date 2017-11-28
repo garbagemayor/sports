@@ -20,9 +20,10 @@ from HomePage.models import IMG
 from HomePage.models import Signs as Sign
 from HomePage.models import Users as User
 from HomePage.models import utcToLocal
-from RegistrationRecord.forms import EditForm
+from Users.forms import EditForm
 from Users.models import Notification
 from Users.models import NotificationController
+from django.core import serializers
 
 
 def auth(request):
@@ -452,7 +453,10 @@ def notification_count(request):
 
 
 def notes(request, note_id):
-    message_map = {'note': Notification.objects.get(id=note_id)}
+    obj = Notification.objects.get(id=note_id)
+    message_map = {}
+    message_map['note'] = obj
+    message_map['note_s'] = serializers.serialize("json", [obj,])
     request.session['noteid'] = note_id
     return render(request, 'Users/note.html', message_map)
 
@@ -547,3 +551,12 @@ def picture(request):
     for i in range(3):
         img_list['l' + str(i)] = IMG.objects.filter(imgtype=i)
     return render(request, 'Users/picture.html', img_list)
+
+def note_content(requests):
+    noteid = int(requests.session['noteid'])
+    obj = Notification.objects.get(id=noteid)
+    if noteid > 1:
+        content = obj.content
+    else:
+        content = '- 尊敬的' + requests.session['username'] + ":\n" + obj.content
+    return HttpResponse(content)
