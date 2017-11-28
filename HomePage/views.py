@@ -25,6 +25,8 @@ def index(request):
     game[0].active = 1
     game_len = range(len(game))
     celebrity = list(IMG.objects.filter(headline=True,imgtype=2))
+    background = IMG.objects.get(headline=True,imgtype=3)
+    print background.url
     events_list=Events.objects.all()[::-1]
     events1=[]
     events2=[]
@@ -55,6 +57,7 @@ def index(request):
                    'team': team,
                    'celebrity': celebrity,
                    'game': game,
+                   'background': background,
                    'broadcast':broadcast_list,
                    'game_len': game_len})
 

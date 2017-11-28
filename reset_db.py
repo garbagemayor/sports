@@ -259,6 +259,16 @@ g.imgtype = 2
 g.headline = True
 g.save()
 
+i += 1
+IMG.objects.get_or_create(id=i)
+g = IMG.objects.get(id=i)
+g.url = u'http://oblc5mnxs.bkt.clouddn.com/Picture2.png'
+g.name = u'李晨曦'
+g.detail = u'李晨曦，清华大学计算机系2013级博士生，马拉松国家二级运动员，曾创下北京国际马拉松赛全程2小时51分18秒完赛的个人最佳成绩，42.195千米的赛道，平均每千米用时约4分4秒，被称为“清华马拉松第一人”，原虎扑翻译团版主、虎扑新声编辑。'
+g.imgtype = 3
+g.headline = True
+g.save()
+
 print u'在Notification表中添加对象'
 
 i = 0
