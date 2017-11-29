@@ -86,9 +86,7 @@ urlpatterns = [
                   url(r'^qiniu/$', Users_view.qiniu_uptoken, name='qiniu'),
                   url(r'^newimg/$', Users_view.new_img, name='newimg'),
                   url(r'^imglist/$', Users_view.imglist, name='imglist'),                  
-                  url(r'^setheadline/$', Users_view.set_headline, name='setheadline'),
-                  url(r'^deactive/$', Users_view.deactive, name='deactive'),
-                  url(r'^removeitem/$', Users_view.remove_item, name='removeitem'),
+                  url(r'^set_img/$', Users_view.set_img, name='set_img'),
                   url(r'^team/(\d+)$', Manager_view.team, name='team'),
                   url(r'^team_edit/(\d+)$', Manager_view.team_edit, name='team_edit'),
 

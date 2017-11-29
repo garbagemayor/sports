@@ -258,10 +258,11 @@ g.save()
 
 print u'在IMG表中添加对象'
 
+i = 0
 i += 1
 IMG.objects.get_or_create(id=i)
 g = IMG.objects.get(id=i)
-g.url = u'http://mmbiz.qpic.cn/mmbiz_jpg/g7L5gknq24rdhbuOcKc736giahnlGeoYNMblKg0GzP2dQfs6O7Ty4afVagCbnxcjgyFyAysQpqLicfoNq6IJM3hA/640?wx_fmt=jpeg&tp=webp&wxfrom=5&wx_lazy=1'
+g.url = u'http://oblc5mnxs.bkt.clouddn.com/o_1bvhfaodp1a9d9a6csm1sq3iv19.jpg'
 g.name = u'合照'
 g.detail = u'泳队合照'
 g.imgtype = 1
@@ -278,7 +279,6 @@ g.imgtype = 1
 g.headline = True
 g.save()
 
-i = 0
 i += 1
 IMG.objects.get_or_create(id=i)
 g = IMG.objects.get(id=i)

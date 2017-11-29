@@ -20,7 +20,7 @@ from HomePage.models import IMG, Team
 from HomePage.models import Signs as Sign
 from HomePage.models import Users as User
 from HomePage.models import utcToLocal
-from Users.forms import EditForm
+from Users.forms import OptionForm, EditForm
 from Users.models import Notification
 from Users.models import NotificationController
 from django.core import serializers
@@ -525,26 +525,20 @@ def new_img(request):
     return HttpResponse('ok')
 
 
-def set_headline(request):
+def set_img(request):
     checkbox_list = request.POST['idlist']
+    option = int(request.POST['option'])
     for checked_item in re.findall(r'\d+', checkbox_list):
-        IMG.objects.filter(id=int(checked_item)).update(headline=True)
+        if option == 1:
+            IMG.objects.filter(imgtype=-2).update(imgtype=0)
+            IMG.objects.filter(id=int(checked_item)).update(imgtype=-2,headline=True)
+        elif option == 2:
+            IMG.objects.filter(id=int(checked_item)).update(imgtype=-1,headline=True)
+        elif option == 3:
+            IMG.objects.filter(id=int(checked_item)).update(headline=False)
+        elif option == 4:
+            IMG.objects.filter(id=int(checked_item)).delete()
     return HttpResponse('ok')
-
-
-def deactive(request):
-    checkbox_list = request.POST['idlist']
-    for checked_item in re.findall(r'\d+', checkbox_list):
-        IMG.objects.filter(id=int(checked_item)).update(headline=False)
-    return HttpResponse('ok')
-
-
-def remove_item(request):
-    checkbox_list = request.POST['idlist']
-    for checked_item in re.findall(r'\d+', checkbox_list):
-        IMG.objects.get(id=int(checked_item)).delete()
-    return HttpResponse('ok')
-
 
 def team(request):
     mmap = {'team_list': []}
@@ -554,11 +548,16 @@ def team(request):
     return render(request, 'Users/team.html', mmap)
 
 def picture(request):
-    mmap = {'team_list': []}
-    id_list = [1, 2]
-    for i in id_list:
-        mmap['team_list'].append(Team.objects.get(id=i))
-    return render(request, 'Users/team.html', mmap)
+    mmap = {'img_list': []}
+    mmap['background_list'] = list(IMG.objects.filter(imgtype=-2))
+    mmap['game_list'] = list(IMG.objects.filter(imgtype=-1))
+    mmap['option_form'] = OptionForm()
+    type_list = [-2, -1, 0, 1, 2]
+    for i in type_list:
+        for img in list(IMG.objects.filter(imgtype=i)):
+            mmap['img_list'].append(img)
+        # print mmap['img_list']
+    return render(request, 'Users/picture.html', mmap)
 
 def imglist(requests):
     id_list = requests.POST['id_list']

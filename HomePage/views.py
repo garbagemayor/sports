@@ -25,8 +25,7 @@ def index(request):
             b.new="新"
     game[0].active = 1
     game_len = range(len(game))
-    background = IMG.objects.get(headline=True,imgtype=(-2))
-    print background.url
+    background = IMG.objects.get(headline=True,imgtype=-2)
     events_list=Events.objects.all()[::-1]
     events1=[]
     events2=[]
