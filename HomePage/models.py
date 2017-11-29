@@ -191,7 +191,7 @@ class Attention(models.Model):
         print u'    ' + u'status = ' + unicode(self.status)
         print u'}'
 
-class Team(models.Model):
+class Team(models.Model): # 系队和名人堂
     id = models.IntegerField(primary_key=True)  # 数据库中的编号,同时对应图片数据库里的图片类型
     sport = models.CharField(max_length=32, null=True)  # 项目名称:游泳
     name = models.CharField(max_length=32, null=True)  # 官方名称:计算机系游泳队
@@ -205,3 +205,10 @@ class Team(models.Model):
     faq = models.CharField(max_length=1000, null=True) # 招新
     def __str__(self):
         return '<Team %s: %s %s %s>' % (self.id, self.sport, self.name, self.achievement)
+
+class ImgLabel(models.Model): # 图片imgtype和名称的对应
+    id = models.IntegerField(primary_key=True) # 数据库中的编号
+    imgtype = models.IntegerField(default=0) # 图片类型
+    label = models.CharField(max_length=32, null=True) # 类型对应项目:如0-默认,-1-风采,-2-首页背景
+    def __str__(self):
+        return '<ImgLabel %s: %s %s>' % (self.id, self.imgtype, self.label)

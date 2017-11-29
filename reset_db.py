@@ -25,7 +25,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "SportsRegistration.settings")
 django.setup()
 
 from Users.models import Notification, NotificationController
-from HomePage.models import Users, Events, Signs, IMG, Broadcast, Team
+from HomePage.models import Users, Events, Signs, IMG, Broadcast, Team, ImgLabel
 import django.utils.timezone as timezone
 import datetime
 
@@ -316,6 +316,45 @@ g.url = u'http://oblc5mnxs.bkt.clouddn.com/o_1bvhjn2821e1gh528qs1a0j5qp9.jpg'
 g.imgtype = -2
 g.headline = True
 g.save()
+
+print u'在ImgLabel表中添加对象'
+
+i = 0
+i += 1
+ImgLabel.objects.get_or_create(id=i)
+g = ImgLabel.objects.get(id=i)
+g.imgtype = -1
+g.label = u'设为首页背景'
+g.save()
+
+i += 1
+ImgLabel.objects.get_or_create(id=i)
+g = ImgLabel.objects.get(id=i)
+g.imgtype = -2
+g.label = u'设为风采展示'
+g.save()
+
+i += 1
+ImgLabel.objects.get_or_create(id=i)
+g = ImgLabel.objects.get(id=i)
+g.imgtype = -3
+g.label = u'从主页撤回'
+g.save()
+
+i += 1
+ImgLabel.objects.get_or_create(id=i)
+g = ImgLabel.objects.get(id=i)
+g.imgtype = -4
+g.label = u'彻底删除'
+g.save()
+
+for team in Team.objects.all():
+    i += 1
+    ImgLabel.objects.get_or_create(id=i)
+    g = ImgLabel.objects.get(id=i)
+    g.imgtype = team.id
+    g.label = team.name
+    g.save()
 
 print u'在Notification表中添加对象'
 

@@ -20,7 +20,7 @@ from HomePage.models import IMG, Team
 from HomePage.models import Signs as Sign
 from HomePage.models import Users as User
 from HomePage.models import utcToLocal
-from Users.forms import OptionForm, EditForm
+from Users.forms import EditForm
 from Users.models import Notification
 from Users.models import NotificationController
 from django.core import serializers
@@ -529,14 +529,14 @@ def set_img(request):
     checkbox_list = request.POST['idlist']
     option = int(request.POST['option'])
     for checked_item in re.findall(r'\d+', checkbox_list):
-        if option == 1:
-            IMG.objects.filter(imgtype=-2).update(imgtype=0)
+        if option == -2: # 首页背景
+            IMG.objects.filter(imgtype=-2).update(imgtype=0,headline=False)
             IMG.objects.filter(id=int(checked_item)).update(imgtype=-2,headline=True)
-        elif option == 2:
+        elif option == -1: # 风采展示
             IMG.objects.filter(id=int(checked_item)).update(imgtype=-1,headline=True)
-        elif option == 3:
+        elif option == -3: # 撤回
             IMG.objects.filter(id=int(checked_item)).update(headline=False)
-        elif option == 4:
+        elif option == -4: # 删除
             IMG.objects.filter(id=int(checked_item)).delete()
     return HttpResponse('ok')
 
@@ -548,6 +548,7 @@ def team(request):
     return render(request, 'Users/team.html', mmap)
 
 def picture(request):
+    from Manager.forms import OptionForm
     mmap = {'img_list': []}
     mmap['background_list'] = list(IMG.objects.filter(imgtype=-2))
     mmap['game_list'] = list(IMG.objects.filter(imgtype=-1))
