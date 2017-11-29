@@ -31,6 +31,7 @@ import datetime
 
 print u'在Users表中添加对象'
 
+'''
 i = 0
 i += 1
 Users.objects.get_or_create(id=i)
@@ -103,6 +104,7 @@ u.name = u'userD'
 u.fullname = u'用户D'
 u.authority = 0
 u.save()
+'''
 
 print u'在Events表中添加对象'
 
