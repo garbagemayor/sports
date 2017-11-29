@@ -150,7 +150,7 @@ class IMG(models.Model):
     name = models.CharField(max_length=50)                    # 图片本身，本质上是图片文件在HomePage/static/media/下的相对路径
     url = models.CharField(max_length=100)                      # 一坨用来显示在首页上的文字
     detail = models.TextField(default='暂无')                    # 另一坨用来显示在首页上的文字
-    imgtype = models.IntegerField(default=0)                    # 不知道这是什么
+    imgtype = models.IntegerField(default=0)                    # 图片类型 -2主页背景 -1轮播图 0未分类 正数给系队和名人堂
     headline = models.BooleanField(default=False)                  # 是否在首页
     activate = models.IntegerField(default=0) 
 
@@ -190,3 +190,25 @@ class Attention(models.Model):
         print u'    ' + u'userid = ' + unicode(self.userid)
         print u'    ' + u'status = ' + unicode(self.status)
         print u'}'
+
+class Team(models.Model): # 系队和名人堂
+    id = models.IntegerField(primary_key=True)  # 数据库中的编号,同时对应图片数据库里的图片类型
+    sport = models.CharField(max_length=32, null=True)  # 项目名称:游泳
+    name = models.CharField(max_length=32, null=True)  # 官方名称:计算机系游泳队
+    achievement = models.CharField(max_length=100, null=True) # 战绩 07年马杯冠军 16年甲组男团第三
+    captain = models.CharField(max_length=32, null=True)  # 队长:吴雨舟
+    athlete = models.CharField(max_length=32, null=True)  # 传奇运动员:谢晓晖
+    detail = models.CharField(max_length=1000, null=True) # 介绍
+    train = models.CharField(max_length=1000, null=True) # 训练
+    joinus = models.CharField(max_length=1000, null=True) # 招新
+    headline = models.BooleanField(default=False) # 是否在首页展示
+    faq = models.CharField(max_length=1000, null=True) # 招新
+    def __str__(self):
+        return '<Team %s: %s %s %s>' % (self.id, self.sport, self.name, self.achievement)
+
+class ImgLabel(models.Model): # 图片imgtype和名称的对应
+    id = models.IntegerField(primary_key=True) # 数据库中的编号
+    imgtype = models.IntegerField(default=0) # 图片类型
+    label = models.CharField(max_length=32, null=True) # 类型对应项目:如0-默认,-1-风采,-2-首页背景
+    def __str__(self):
+        return '<ImgLabel %s: %s %s>' % (self.id, self.imgtype, self.label)
