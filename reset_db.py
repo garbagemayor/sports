@@ -358,30 +358,6 @@ for team in Team.objects.all():
 
 print u'在Notification表中添加对象'
 
-i = 0
-i += 1
-Notification.objects.get_or_create(id=i)
-g = Notification.objects.get(id=i)
-g.sender = u'luoy15'
-g.senderID = 3
-g.target = 3
-g.title = u'感谢您使用本报名系统'
-g.content = u'感谢您使用本报名系统!!!'
-g.isRead = False
-g.createTime = timezone.now()
-g.welcome = True
-g.save()
-
-print u'在NotificationController表中添加对象'
-
-i = 0
-i += 1
-NotificationController.objects.get_or_create(id=i)
-g = NotificationController.objects.get(id=i)
-g.userId = 3
-g.unreadCount = 1
-g.save()
-
 print u'添加完成'
 
 del Users, Events, Signs, IMG, Broadcast
