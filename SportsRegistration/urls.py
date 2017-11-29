@@ -36,6 +36,7 @@ urlpatterns = [
                   url(r'^broadcast/$', HomePage_view.broadcast, name='broadcast'),
                   url(r'^broadcast/(\d+)/$', HomePage_view.broadcastpage, name='broadcastpage'),
                   url(r'^addbroadcast/$', HomePage_view.addbroadcast, name='addbroadcast'),
+                  url(r'^faq/$', HomePage_view.faq, name='faq'),
                   
                   
                   #赛事

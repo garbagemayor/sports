@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block Title %}
+<title id="baseIndexTitle">F.A.Q - 清华大学计算机系体育赛事平台</title>
+{% endblock %}
+
+{% block bread %}
+<ol class="breadcrumb">
+    <li><a href="/main/">平台</a></li>
+    <li><a class="active">F.A.Q</a></li>
+</ol>
+{% endblock %}
+
+{% block content %}
+
+
+{% block extracss %}
+	<link href="/static/css/mix/reset.css" rel="stylesheet"/>
+    <link href="/static/css/mix/style.css" rel="stylesheet"/>
+	<!--<link rel="stylesheet" type="text/css" href="/static/css/radialindicator/normalize.css" />
+	<link rel="stylesheet" type="text/css" href="/static/css/radialindicator/default.css">
+	<link href="/static/css/radialindicator/project_base.css"  rel="stylesheet" type="text/css" />
+    <link href="/static/css/radialindicator/radialindicator.css"  rel="stylesheet" type="text/css" />-->
+	<link href="/static/css/radialindicator/base.css"  rel="stylesheet" type="text/css" />
+{% endblock %}
+
+<div class="container-fluid">
+	<div class="row-fluid">
+		<div class="span12">
+			<div class="page-header">
+				<h1 style="text-align: center">
+				F.A.Q <small></small>
+				</h1>
+			</div>
+			内容
+		</div>
+	</div>
+</div>
+
+	<script type="text/javascript"  src="/static/js/base.js"></script>
+	<script type="text/javascript"  src="/static/js/project_base.js"></script>	
+    <script src="/static/js/radialindicator.js"></script>
+    <script src="/static/js/demo.js"></script>
+
+{% endblock %}
+
+
