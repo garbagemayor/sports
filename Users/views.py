@@ -23,7 +23,6 @@ from HomePage.models import utcToLocal
 from Users.forms import EditForm
 from Users.models import Notification
 from Users.models import NotificationController
-from Users.welcome import welcome_content
 from django.core import serializers
 
 designer_name = ['nodgd', 'tyt123', "luoy15", "yangjy15"]
@@ -249,7 +248,7 @@ def edit_information(request):
                     sender=u"系统",
                     target=user_id,
                     title=u"欢迎使用体育赛事报名平台！",
-                    content=welcome_content)
+                    content=u"建议立即仔细阅读<a href=\"/faq/\">《体育赛事报名平台服务协议》</a>")
 
         return HttpResponseRedirect('/user/')
     return render(request, "Users/users.html", info_list)
