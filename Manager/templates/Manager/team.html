@@ -81,5 +81,59 @@
         </div>
     </div>
 </div>
-
+<script>
+    // 七牛上传模块
+    $(function() {
+        var uploader = Qiniu.uploader({
+            disable_statistics_report: false, // 禁止自动发送上传统计信息到七牛，默认允许发送
+            runtimes: 'html5,flash,html4', // 上传模式,依次退化
+            browse_button: 'pickfiles', // 上传选择的点选按钮，**必需**
+            uptoken_url: '/qiniu/', // Ajax 请求 uptoken 的 Url，**强烈建议设置**（服务端提供）
+            get_new_uptoken: false, // 设置上传文件的时候是否每次都重新获取新的 uptoken
+            unique_names: true, // 默认 false，key 为文件名。若开启该选项，JS-SDK 会为每个文件自动生成key（文件名）
+            domain: 'http://oblc5mnxs.bkt.clouddn.com/', // bucket 域名，下载资源时用到，如：'http://xxx.bkt.clouddn.com/' **必需**
+            container: 'container', // 上传区域 DOM ID，默认是 browser_button 的父元素，
+            max_file_size: '100mb', // 最大文件体积限制
+            max_retries: 3, // 上传失败最大重试次数
+            dragdrop: true, // 开启可拖曳上传
+            drop_element: 'container', // 拖曳上传区域元素的 ID，拖曳文件或文件夹后可触发上传
+            chunk_size: '4mb', // 分块上传时，每块的体积
+            auto_start: true, // 选择文件后自动上传，若关闭需要自己绑定事件触发上传,
+            init: {
+                'FilesAdded': function(up, files) {
+                    plupload.each(files, function(file) {
+                        $('#success').hide();
+                    });
+                },
+                'BeforeUpload': function(up, file) {
+                },
+                'UploadProgress': function(up, file) {
+                },
+                'FileUploaded': function(up, file, info) {
+                    var domain = up.getOption('domain');
+                    var res = JSON.parse(info);
+                    var sourceLink = domain + res.key; //获取上传成功后的文件的Url
+                    $('#preview').attr('src', sourceLink);
+                    $('#preview').show();
+                    $('#pickfiles').hide();
+    
+                },
+                'Error': function(up, err, errTip) {
+                },
+                'UploadComplete': function() {
+                },
+                'Key': function(up, file) {
+                    var key = "";
+                    return key
+                }
+            }
+        });
+        uploader.bind('FileUploaded', function() {
+            console.log('hello man,a file is uploaded');
+        });
+    });
+    </script>
+    <script src="https://cdn.staticfile.org/plupload/2.1.1/moxie.js"></script>
+    <script src="https://cdn.staticfile.org/plupload/2.1.1/plupload.dev.js"></script>
+    <script src="https://cdn.staticfile.org/qiniu-js-sdk/1.0.14-beta/qiniu.js"></script>
 {% endblock %}

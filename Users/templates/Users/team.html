@@ -12,42 +12,6 @@
     <div class="alert-success" id="feedback">
     </div>
 </div>
-<div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;
-                </button>
-                <h4 class="modal-title" id="myModalLabel" style="text-align:center">
-                                    添加图片和描述
-                                </h4>
-            </div>
-            <div class="modal-body">
-                <div class="col-md-12">
-                    <div id="container">
-                        <button class="btn btn-primary" id="pickfiles">
-                            添加图片</button>
-                    </div>
-                </div>
-                <div class="col-md-12">
-                    <img id="preview" src="" style="display: none;" class="thumbnail">
-                </div>
-                <div class="col-md-12">
-                    <textarea id="editor"></textarea>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <div class="form-group">
-                    <div style="text-align: center;">
-                        <button class="btn btn-primary" id="submit" data-dismiss="modal">确认</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
-</div>
 <div id="publicStaticVar" hidden="hidden">0</div>
 <div class="container-fluid">
         <div class="span12">
@@ -161,11 +125,7 @@
     <button class="btn btn-success" type="button" data-toggle="modal" id="add_button" data-target="#add" style="float:left">添加
     </button>
     <button class="btn btn-success" type="button" id="remove_item" style="float:right">删除
-    </button>
-    <button class="btn btn-success" type="button" id="set_headline" style="float:right">添加到首页
-    </button>
-    <button class="btn btn-success" type="button" id="deactive" style="float:right">从首页撤回
-    </button>
+    </button>   
 </div>
 <script>
 var simplemde = new SimpleMDE({
@@ -174,18 +134,9 @@ var simplemde = new SimpleMDE({
     spellChecker: false,
 });
 
-// 添加图片,更新表格,保持在当前tab
+// 添加系队,跳转
 $("#submit").click(function() {
-    $.post("{% url 'newimg' %}", {
-            csrfmiddlewaretoken: "{{ csrf_token }}",
-            url: $("#preview").attr('src'),
-            detail: simplemde.value(),
-            imgtype: document.getElementById("publicStaticVar").innerHTML,
-        },
-        function(ret) {
-            console.log(ret);
-            location.reload();
-        });
+
 });
 
 // 显示各个队伍的缩略图
@@ -220,55 +171,24 @@ $("a[data-toggle='tab']").click(function() {
     console.log(localStorage.getItem('lastTab'));
 });
 
-// 把选中图片放到首页
-$("#set_headline").click(function() {
-    var tmpl = [];
-    $(":checked").each(function() {
-        tmpl.push($(this).val());
-    });
-    $.post("{% url 'setheadline' %}", {
-            csrfmiddlewaretoken: "{{ csrf_token }}",
-            idlist: tmpl.toString(),
-        },
-        function(ret) {
-            console.log(ret);
-            alert("放置成功");
-        });
+// 图片编辑
+$("#set_submit").click(function () {
+var tmpl = [];
+$(":checked").each(function () {
+tmpl.push($(this).val());
 });
-
-// 把选中图片撤回
-$("#deactive").click(function() {
-    var tmpl = [];
-    $(":checked").each(function() {
-        tmpl.push($(this).val());
-    });
-    $.post("{% url 'deactive' %}", {
-            csrfmiddlewaretoken: "{{ csrf_token }}",
-            idlist: tmpl.toString(),
-        },
-        function(ret) {
-            console.log(ret);
-            alert("撤回成功");
-        });
+var tmp = $("#id_option").val();
+console.log(tmp);
+$.post("{% url 'set_img' %}", {
+csrfmiddlewaretoken: "{{ csrf_token }}",
+idlist: tmpl.toString(),
+option: tmp,
+},
+function (ret) {
+    console.log(ret);
+    alert("设置成功");
+    location.reload();
 });
-
-// 把选中图片删掉
-$("#remove_item").click(function() {
-    var tmpl = [];
-    var name = "checkedL" + localStorage.getItem('lastTab').substring(1);
-    $("input[name=" + name +"]").each(function() {
-        tmpl.push($(this).val());
-    });
-    console.log(tmpl);
-    $.post("{% url 'removeitem' %}", {
-            csrfmiddlewaretoken: "{{ csrf_token }}",
-            idlist: tmpl.toString(),
-        },
-        function(ret) {
-            console.log(ret);
-            alert("删除成功");
-            location.reload();
-        });
 });
 </script>
 <script>

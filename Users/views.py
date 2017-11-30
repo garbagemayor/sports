@@ -551,6 +551,8 @@ def set_img(request):
             IMG.objects.filter(id=int(checked_item)).update(headline=False)
         elif option == -4: # 删除
             IMG.objects.filter(id=int(checked_item)).delete()
+        else:
+            IMG.objects.filter(id=int(checked_item)).update(imgtype=option)
     return HttpResponse('ok')
 
 def team(request):

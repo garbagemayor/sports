@@ -145,10 +145,11 @@ class Signs(models.Model):
 
 class IMG(models.Model):
     id = models.IntegerField(primary_key=True)                  # 数据库中的编号
-    name = models.CharField(max_length=50)                    # 图片本身，本质上是图片文件在HomePage/static/media/下的相对路径
-    url = models.CharField(max_length=100)                      # 一坨用来显示在首页上的文字
-    detail = models.TextField(default='暂无')                    # 另一坨用来显示在首页上的文字
+    name = models.CharField(max_length=50)                    # 名称
+    url = models.CharField(max_length=100)                      # qiniu云链接
+    detail = models.TextField(default='暂无')                    # 首页上的介绍
     imgtype = models.IntegerField(default=0)                    # 图片类型 -2主页背景 -1轮播图 0未分类 正数给系队和名人堂
+    # imgtypes = models.CharField(validators=[validate_comma_separated_integer_list], max_length=256, null=True) # 图片    
     headline = models.BooleanField(default=False)                  # 是否在首页
     activate = models.IntegerField(default=0) 
 
