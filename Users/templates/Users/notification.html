@@ -67,7 +67,11 @@
                         <tr ondblclick="location.href='/notes/{{record.id}}'"
                             {% if not record.isRead %} class="success" {% else %} class="info" {% endif %}>
                             <td>
+                                {% if not record.sender == "系统" %}
                                 <a href="/user/{{record.senderId}}">{{record.sender}}</a>
+                                {% else %}
+                                {{ record.sender }}
+                                {% endif %}
                             </td>
                             <td>
                                 <a href="/notes/{{record.id}}">{{record.title}}</a>
@@ -79,7 +83,11 @@
                                 {% if record.isRead %} 已读 {% else %} 未读 {% endif %}
                             </td>
                             <td>
+                                {% if not record.sender == "系统" %}
                                 <input type="checkbox" name="checked" value="{{record.id}}"/>
+                                {% else %}
+                                不可选
+                                {% endif %}
                             </td>
                         </tr>
                         {% endfor %}

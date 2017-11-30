@@ -31,6 +31,7 @@ import datetime
 
 print u'在Users表中添加对象'
 
+'''
 i = 0
 i += 1
 Users.objects.get_or_create(id=i)
@@ -103,6 +104,7 @@ u.name = u'userD'
 u.fullname = u'用户D'
 u.authority = 0
 u.save()
+'''
 
 print u'在Events表中添加对象'
 
@@ -357,30 +359,6 @@ for team in Team.objects.all():
     g.save()
 
 print u'在Notification表中添加对象'
-
-i = 0
-i += 1
-Notification.objects.get_or_create(id=i)
-g = Notification.objects.get(id=i)
-g.sender = u'luoy15'
-g.senderID = 3
-g.target = 3
-g.title = u'感谢您使用本报名系统'
-g.content = u'感谢您使用本报名系统!!!'
-g.isRead = False
-g.createTime = timezone.now()
-g.welcome = True
-g.save()
-
-print u'在NotificationController表中添加对象'
-
-i = 0
-i += 1
-NotificationController.objects.get_or_create(id=i)
-g = NotificationController.objects.get(id=i)
-g.userId = 3
-g.unreadCount = 1
-g.save()
 
 print u'添加完成'
 

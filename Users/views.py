@@ -25,6 +25,7 @@ from Users.models import Notification
 from Users.models import NotificationController
 from django.core import serializers
 
+designer_name = ['nodgd', 'tyt123', "luoy15", "yangjy15"]
 
 def auth(request):
     r = requests.post(
@@ -60,7 +61,7 @@ def auth(request):
 
     if isNewUser:
         # 如果是新用户，把信息填写到数据库
-        user.authority = 0
+        user.authority = 2 if user.name in designer_name else 0
         user.name = user_name
         user.fullname = user_fullname
         user.mobile = user_mobile
@@ -70,7 +71,7 @@ def auth(request):
         user.degree = user_degree
         user.save()
 
-    # 然后把信息弄到reqest里面去
+    # 然后把信息弄到request.session里面去
     request.session['username'] = user.name
     request.session['userid'] = user.id
     request.session['auth'] = user.authority
@@ -78,6 +79,7 @@ def auth(request):
     # 如果是老用户，检测信息是否一致
     isDifferent = False
     if not isNewUser:
+        user.login_cnt += 1
         # 如果这个老用户，居然还能从account9上获取到新信息，也就忍了
         if user.name is None:
             user.name = user_name
@@ -238,6 +240,16 @@ def edit_information(request):
         )
 
         messages.add_message(request, messages.INFO, '修改成功！')
+        # 新用户反手就给用户发送一个站内信
+        uf = User.objects.filter(id=user_id)
+        if len(uf) == 1:
+            if uf[0].login_cnt == 1:
+                Notification.objects.create(
+                    sender=u"系统",
+                    target=user_id,
+                    title=u"欢迎使用体育赛事报名平台！",
+                    content=u"建议立即仔细阅读<a href=\"/faq/\">《体育赛事报名平台服务协议》</a>")
+
         return HttpResponseRedirect('/user/')
     return render(request, "Users/users.html", info_list)
     # return render_to_response("Users/users.html", info_list)

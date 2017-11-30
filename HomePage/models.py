@@ -27,20 +27,18 @@ class Users(models.Model):
     name = models.CharField(max_length=32, null=True)  # account9上的ID
     fullname = models.CharField(max_length=32, null=True)  # 姓名
     certification_type = models.IntegerField(default=0)  # 证件类型 默认0为身份证，护照为1
-    certification_id = models.CharField(max_length=32, null=True)
-    # 证件号码
+    certification_id = models.CharField(max_length=32, null=True) # 证件号码
     mobile = models.CharField(max_length=32, null=True)  # 手机号
     classnumber = models.CharField(max_length=32, null=True)  # 班级
     email = models.CharField(max_length=32, null=True)  # 邮箱
     student_number = models.CharField(max_length=32, null=True)  # 学号
     birthday = models.CharField(max_length=32, null=True)  # 生日
     room_address = models.CharField(max_length=32, null=True)  # 宿舍楼和房间号
-    cloth_size = models.CharField(max_length=1, null=True, choices=CLOTH_SIZE_CHOICES)
-    # 衣服尺码
-    gender = models.CharField(max_length=1, null=True, choices=GENDER_CHOICES)
-    # 性别
+    cloth_size = models.CharField(max_length=1, null=True, choices=CLOTH_SIZE_CHOICES) # 衣服尺码
+    gender = models.CharField(max_length=1, null=True, choices=GENDER_CHOICES) # 性别
     degree = models.IntegerField(null=True)  # 攻读学位 0为本科 1为研究生
     broadcast = models.IntegerField(default=0)
+    login_cnt = models.IntegerField(default=1) # 登陆次数统计
 
     # fullAddress = models.CharField(max_length=256, null=True)   # 详细地址
     # desc = models.TextField(default=u"暂无简介")                 # 个人简介

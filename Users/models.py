@@ -34,7 +34,7 @@ class Notification(models.Model):
 class NotificationController(models.Model):
     id = models.IntegerField(primary_key=True)  # 数据库中的编号
     userId = models.IntegerField(default=0)  # 用户的数据库编号
-    unReadCount = models.IntegerField(default=1)  # 未读条数
+    unReadCount = models.IntegerField(default=0)  # 未读条数
 
     #  def mark_as_readed(self, notification_id):
     #      affected_rows = Notification.objects.filter(pk=notification_id,

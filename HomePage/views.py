@@ -98,3 +98,7 @@ def addbroadcast(request):
         messages.add_message(request, messages.INFO, "成功发布公告'"+request.POST['title']+"'！")
         return HttpResponseRedirect('/broadcast/')
     return render(request, "HomePage/addbroadcast.html")
+
+def faq(request):
+
+    return render(request, 'HomePage/faq.html')
