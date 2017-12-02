@@ -85,18 +85,19 @@ def team_add(request):
     mmap['joinus'] = '加入我们'
     mmap['headline'] = False
     mmap['no_edit'] = False
-    mmap['id'] = len(list(Team.objects.filter())) + 1
-    team_id = len(list(Team.objects.filter())) + 1
+    mmap['id'] = len(list(Team.objects.filter())) - 4
+    team_id = len(list(Team.objects.filter())) - 4
     if request.POST:
-        print "in post"
-        print request.POST.get('headline')
+        # print request.POST.get('headline')
         if request.POST.get('headline') != None:
+            print "add headline"
             Team.objects.filter(cate=request.POST['cate']).update(headline=False)
             for obj in list(Team.objects.filter(cate=request.POST['cate'])):
                 IMG.objects.filter(imgtype=obj.id).update(headline=False)
-            IMG.objects.filter(imgtype=team_id).update(headline=True)
+            IMG.objects.filter(imgtype=team_id).update(headline=True,imgtypename=request.POST['name'])
             headline = True
         else:
+            print "add without headline"
             headline = False
         g = Team.objects.create(
             cate=request.POST['cate'],
@@ -110,7 +111,6 @@ def team_add(request):
             joinus=request.POST['joinus'],
             headline=headline,
         )
-        IMG.objects.filter(imgtype=team_id).update(imgtypename=request.POST['name'])
         messages.add_message(request, messages.INFO, '添加成功！')
         return HttpResponseRedirect('/team/')
     return render(request, "Manager/team.html", mmap)
