@@ -90,6 +90,9 @@ urlpatterns = [
                   url(r'^set_img/$', Users_view.set_img, name='set_img'),
                   url(r'^team/(\d+)$', Manager_view.team, name='team'),
                   url(r'^team_edit/(\d+)$', Manager_view.team_edit, name='team_edit'),
+                  url(r'^team_add/$', Manager_view.team_add, name='team_add'),
+                  url(r'^team_remove/$', Manager_view.team_remove, name='team_remove'),
+
 
                   # 记录
                   url(r'^record/(\d+)/$', Record_view.recordPage, name='recordpage'),  # 某赛事报名情况

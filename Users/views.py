@@ -556,8 +556,9 @@ def set_img(request):
     return HttpResponse('ok')
 
 def team(request):
-    mmap = {'team_list': []}
-    mmap['team_list'] = list(Team.objects.all())
+    mmap = {'team_list': [], 'celebrity_list': []}
+    mmap['team_list'] = list(Team.objects.filter(cate=1))
+    mmap['celebrity_list'] = list(Team.objects.filter(cate=2))
     return render(request, 'Users/team.html', mmap)
 
 def picture(request):
@@ -579,8 +580,10 @@ def imglist(requests):
     for i in re.findall(r'\d+', id_list):
         imglist = list(IMG.objects.filter(imgtype=int(i)))
         urlmap['team' + i] = []
+        urlmap['celebrity' + i] = []
         for img in imglist:
             urlmap['team' + i].append(img.url)
+            urlmap['celebrity' + i].append(img.url)
     return JsonResponse(urlmap)
 
 def note_content(requests):

@@ -192,6 +192,7 @@ class Attention(models.Model):
 
 class Team(models.Model): # 系队和名人堂
     id = models.IntegerField(primary_key=True)  # 数据库中的编号,同时对应图片数据库里的图片类型
+    cate = models.IntegerField(default=0)  # 类型:1为系队,2为名人
     sport = models.CharField(max_length=32, null=True)  # 项目名称:游泳
     name = models.CharField(max_length=32, null=True)  # 官方名称:计算机系游泳队
     achievement = models.CharField(max_length=100, null=True) # 战绩 07年马杯冠军 16年甲组男团第三
