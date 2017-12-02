@@ -224,6 +224,7 @@ i = 0
 i += 1
 Team.objects.get_or_create(id=i)
 g = Team.objects.get(id=i)
+g.cate = 1
 g.sport = u'游泳'
 g.name = u'计算机系游泳队'
 g.achievement = u'贵系泳队在07年获得了马杯冠军，此后在当年的黄金一代全部毕业离校之后，开始走下坡路，团体排名稳定在五到八名之间，但在去年的马杯赛场上，贵系健儿们顶住压力，捷报频传，最终取得了甲组男团第三名的优异成绩。'
@@ -238,6 +239,7 @@ g.save()
 i += 1
 Team.objects.get_or_create(id=i)
 g = Team.objects.get(id=i)
+g.cate = 1
 g.sport = u'男足'
 g.name = u'计算机系男子足球队'
 g.achievement = u'计算机系足球队是马杯上的传统强队，从2013年开始已经连续4年打入马杯甲组八强，并且在2014年获得马杯甲组季军。'
@@ -250,11 +252,11 @@ g.headline = False
 g.save()
 
 i += 1
-IMG.objects.get_or_create(id=i)
-g = IMG.objects.get(id=i)
-g.url = u'http://oblc5mnxs.bkt.clouddn.com/Picture2.png'
+Team.objects.get_or_create(id=i)
+g = Team.objects.get(id=i)
+g.cate = 2
 g.name = u'李晨曦'
-g.detail = u'李晨曦，清华大学计算机系2013级博士生，马拉松国家二级运动员，曾创下北京国际马拉松赛全程2小时51分18秒完赛的个人最佳成绩，42.195千米的赛道，平均每千米用时约4分4秒，被称为“清华马拉松第一人”，原虎扑翻译团版主、虎扑新声编辑。'
+g.achievement = u'很多很多'
 g.headline = True
 g.save()
 
@@ -274,7 +276,7 @@ g.save()
 i += 1
 IMG.objects.get_or_create(id=i)
 g = IMG.objects.get(id=i)
-g.url = u'https://mmbiz.qpic.cn/mmbiz_jpg/g7L5gknq24rdhbuOcKc736giahnlGeoYNOOLE9YUicibibo9JSM1Jx0El3wsXamia4PaH1953Aic6etLrjebXqts9Nnw/640?wx_fmt=jpeg&tp=webp&wxfrom=5&wx_lazy=1'
+g.url = u'http://oblc5mnxs.bkt.clouddn.com/IMG_7516.JPG'
 g.name = u'传奇'
 g.detail = u'努力就能成功'
 g.imgtype = 1
@@ -284,12 +286,23 @@ g.save()
 i += 1
 IMG.objects.get_or_create(id=i)
 g = IMG.objects.get(id=i)
-g.url = u'http://mmbiz.qpic.cn/mmbiz_jpg/g7L5gknq24qRwJVdqHlo2toEzutChE33ibNZCjXNjDRfJGKMtmwZ2oiarIiacZvkiaR02OKvUBChpwMqpMEJCk6SMw/640?wx_fmt=jpeg&tp=webp&wxfrom=5&wx_lazy=1'
+g.url = u'http://oblc5mnxs.bkt.clouddn.com/IMG_0128.jpg'
 g.name = u'男足'
 g.detail = u'合照'
 g.imgtype = 2
 g.headline = True
 g.save()
+
+i += 1
+IMG.objects.get_or_create(id=i)
+g = IMG.objects.get(id=i)
+g.url = u'http://oblc5mnxs.bkt.clouddn.com/Picture2.png'
+g.name = u'李晨曦'
+g.detail = u'名人堂'
+g.imgtype = 3
+g.headline = True
+g.save()
+
 
 i += 1
 IMG.objects.get_or_create(id=i)
@@ -325,14 +338,14 @@ i = 0
 i += 1
 ImgLabel.objects.get_or_create(id=i)
 g = ImgLabel.objects.get(id=i)
-g.imgtype = -1
+g.imgtype = -2
 g.label = u'设为首页背景'
 g.save()
 
 i += 1
 ImgLabel.objects.get_or_create(id=i)
 g = ImgLabel.objects.get(id=i)
-g.imgtype = -2
+g.imgtype = -1
 g.label = u'设为风采展示'
 g.save()
 

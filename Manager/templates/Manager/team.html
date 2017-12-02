@@ -11,6 +11,43 @@
     </li>
 </ol>
 {% endblock %} {% block extracss %}{% endblock %} {% block content %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+<script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+<div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel" style="text-align:center">
+                    添加图片和描述
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="col-md-12">
+                    <div id="container">
+                        <button class="btn btn-primary" id="pickfiles">
+                            添加图片</button>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <img id="preview" src="" style="display: none;" class="thumbnail">
+                </div>
+                <div class="col-md-12">
+                    <textarea id="editor"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="form-group">
+                    <div style="text-align: center;">
+                        <button class="btn btn-primary" id="add_submit" data-dismiss="modal">确认</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="container-fluid">
     <div class="row-fluid">
         <div class="span12">
@@ -19,12 +56,25 @@
                     {{name}}
                     <small>{{sport}}</small>
                 </h1>
+                <div class="row" title="image" id="team{{id}}"></div>
             </div>
             <form method="POST">
                 {% csrf_token %}
                 <!-- <button class="btn btn-default" onclick="location.href='/user/myevents'">查看我的赛事</button>			 -->
-                <fieldset>
+                <fieldset id="f1">
                     <legend contenteditable="false" style="text-align: center">系队介绍</legend>
+                    <label contenteditable="false" style="width: 30%; height: 50px">项目</label>
+                    {% if no_edit %}
+                    <label contenteditable="false" style="width: 50%; height: 50px">{{ sport }}</label>
+                    {% else %}
+                    <input type="text" value="{{ sport }}" name="sport">
+                    {% endif %}
+                    <label contenteditable="false" style="width: 30%; height: 50px">名称</label>
+                    {% if no_edit %}
+                    <label contenteditable="false" style="width: 50%; height: 50px">{{ name }}</label>
+                    {% else %}
+                    <input type="text" value="{{ name }}" name="name">
+                    {% endif %}
 
                     <label contenteditable="false" style="width: 30%; height: 50px">现任队长</label>
                     {% if no_edit %}
@@ -67,19 +117,155 @@
                     {% else %}
                     <input type="text" value="{{ joinus }}" name="joinus">
                     {% endif %}
+
+                    <label contenteditable="false" style="width: 30%; height: 50px">是否在主页</label>
+                                      {% if  no_edit %}
+                                        <label contenteditable="false" style="width: 50%; height: 50px">{{ headline }}</label>
+                                         {% else %}
+                                        <input type="text" value="{{ headline }}" name="headline"> {% endif %}
                 </fieldset>
-                
+                <fieldset id="f2">
+                        <legend contenteditable="false" style="text-align: center">名人介绍</legend>
+                        <label contenteditable="false" style="width: 30%; height: 50px">姓名</label>
+                        {% if no_edit %}
+                        <label contenteditable="false" style="width: 50%; height: 50px">{{ name }}</label>
+                        {% else %}
+                        <input type="text" value="{{ name }}" name="name">
+                        {% endif %}
+
+                        <label contenteditable="false" style="width: 30%; height: 50px">介绍</label>
+                        {% if no_edit %}
+                        <label contenteditable="false" style="width: 50%; height: 50px">{{ detail }}</label>
+                        {% else %}
+                        <input type="text" value="{{ detail }}" name="detail">
+                        {% endif %}
+
+                </fieldset>
                 <div style="text-align: center;">
-                    {% if no_edit %}
-                    <a class="btn btn-primary" href="/team_edit/{{id}}">修改</a>
-                    {% else %}
-                    <button class="btn btn-primary" type="submit" onclick="location.href='/team_edit/{{id}}'">保存</button>
-                    {% endif %}
-                </div>
-                
+                {% if no_edit %}
+                <a class="btn btn-primary" href="/team_edit/{{id}}">修改</a>
+                {% else %}
+                <button class="btn btn-success" type="button" data-toggle="modal" id="add_button" data-target="#add">添加图片
+                </button>
+                <button class="btn btn-primary" type="submit" onclick="location.href='/team_edit/{{id}}'">保存</button>
+                {% endif %}
+            </div>
+            <input type="text" id= "cate" name="cate" style="display: none;">
             </form>
         </div>
     </div>
 </div>
+<script>
+    var lastTab = localStorage.getItem('lastTab');
+    if (lastTab == '#team') {
+        console.log("team add");
+        $("#cate").val(1);
+        console.log($("#cate").val());
+        $("#f2").hide();
+    }
+    else {
+        console.log("celebrity add");
+        $("#cate").val(2);
+        console.log($("#cate").val());
+        $("#f1").hide();
+    }
+    var simplemde = new SimpleMDE({
+        element: document.getElementById("editor"),
+        status: false,
+        spellChecker: false,
+    });
+    // 添加图片,更新表格,保持在当前tab
+    $("#add_submit").click(function () {
+        $.post("{% url 'newimg' %}", {
+            csrfmiddlewaretoken: "{{ csrf_token }}",
+            url: $("#preview").attr('src'),
+            detail: simplemde.value(),
+            imgtype: $("[title|='image']").attr("id").substr(4, $("[title|='image']").attr("id").length - 1),
+        },
+            function (ret) {
+                // console.log(ret);
+                location.reload();
+            });
+    });
+    // 显示各个队伍的缩略图
+    $(document).ready(function () {
+        var tmp = new String;
+        $("[title|='image']").each(function () {
+            // console.log($(this).attr("id").substr(4, $(this).attr("id").length - 1));
+            tmp = tmp + "|" + $(this).attr("id");
+        });
+        $.post("{% url 'imglist' %}", {
+            csrfmiddlewaretoken: "{{ csrf_token }}",
+            id_list: tmp,
+        },
+            function (ret) {
+                // console.log(ret);
+                $.each(ret, function (key, item) {
+                    // console.log(key, item);
+                    for (var i = item.length - 1; i >= 0; i--) {
+                        var div = $("<div class='col-sm-6 col-md-3'>");
+                        var a = $("<a class='thumbnail'>").attr("href", item[i]);
+                        var img = $("<img class='thumbnail' style='max-height: 200px'>").attr("src", item[i]);
+                        $("#" + key).append(div);
+                        $(div).append(a);
+                        $(a).append(img);
+                    };
+                });
+            });
+    });
 
+    // 七牛上传模块
+    $(function() {
+        var uploader = Qiniu.uploader({
+            disable_statistics_report: false, // 禁止自动发送上传统计信息到七牛，默认允许发送
+            runtimes: 'html5,flash,html4', // 上传模式,依次退化
+            browse_button: 'pickfiles', // 上传选择的点选按钮，**必需**
+            uptoken_url: '/qiniu/', // Ajax 请求 uptoken 的 Url，**强烈建议设置**（服务端提供）
+            get_new_uptoken: false, // 设置上传文件的时候是否每次都重新获取新的 uptoken
+            unique_names: true, // 默认 false，key 为文件名。若开启该选项，JS-SDK 会为每个文件自动生成key（文件名）
+            domain: 'http://oblc5mnxs.bkt.clouddn.com/', // bucket 域名，下载资源时用到，如：'http://xxx.bkt.clouddn.com/' **必需**
+            container: 'container', // 上传区域 DOM ID，默认是 browser_button 的父元素，
+            max_file_size: '100mb', // 最大文件体积限制
+            max_retries: 3, // 上传失败最大重试次数
+            dragdrop: true, // 开启可拖曳上传
+            drop_element: 'container', // 拖曳上传区域元素的 ID，拖曳文件或文件夹后可触发上传
+            chunk_size: '4mb', // 分块上传时，每块的体积
+            auto_start: true, // 选择文件后自动上传，若关闭需要自己绑定事件触发上传,
+            init: {
+                'FilesAdded': function(up, files) {
+                    plupload.each(files, function(file) {
+                        $('#success').hide();
+                    });
+                },
+                'BeforeUpload': function(up, file) {
+                },
+                'UploadProgress': function(up, file) {
+                },
+                'FileUploaded': function(up, file, info) {
+                    var domain = up.getOption('domain');
+                    var res = JSON.parse(info);
+                    var sourceLink = domain + res.key; //获取上传成功后的文件的Url
+                    $('#preview').attr('src', sourceLink);
+                    $('#preview').show();
+                    $('#pickfiles').hide();
+    
+                },
+                'Error': function(up, err, errTip) {
+                },
+                'UploadComplete': function() {
+                },
+                'Key': function(up, file) {
+                    var key = "";
+                    return key
+                }
+            }
+        });
+        uploader.bind('FileUploaded', function() {
+            console.log('hello man,a file is uploaded');
+        });
+    });
+    </script>
+    <script src="https://cdn.staticfile.org/plupload/2.1.1/moxie.js"></script>
+    <script src="https://cdn.staticfile.org/plupload/2.1.1/plupload.dev.js"></script>
+    <script src="https://cdn.staticfile.org/qiniu-js-sdk/1.0.14-beta/qiniu.js"></script>
 {% endblock %}

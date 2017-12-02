@@ -540,6 +540,7 @@ def new_img(request):
 def set_img(request):
     checkbox_list = request.POST['idlist']
     option = int(request.POST['option'])
+    print option
     for checked_item in re.findall(r'\d+', checkbox_list):
         if option == -2: # 首页背景
             IMG.objects.filter(imgtype=-2).update(imgtype=0,headline=False)
@@ -550,13 +551,14 @@ def set_img(request):
             IMG.objects.filter(id=int(checked_item)).update(headline=False)
         elif option == -4: # 删除
             IMG.objects.filter(id=int(checked_item)).delete()
+        else:
+            IMG.objects.filter(id=int(checked_item)).update(imgtype=option)
     return HttpResponse('ok')
 
 def team(request):
-    mmap = {'team_list': []}
-    id_list = [1, 2]
-    for i in id_list:
-        mmap['team_list'].append(Team.objects.get(id=i))
+    mmap = {'team_list': [], 'celebrity_list': []}
+    mmap['team_list'] = list(Team.objects.filter(cate=1))
+    mmap['celebrity_list'] = list(Team.objects.filter(cate=2))
     return render(request, 'Users/team.html', mmap)
 
 def picture(request):
@@ -578,8 +580,10 @@ def imglist(requests):
     for i in re.findall(r'\d+', id_list):
         imglist = list(IMG.objects.filter(imgtype=int(i)))
         urlmap['team' + i] = []
+        urlmap['celebrity' + i] = []
         for img in imglist:
             urlmap['team' + i].append(img.url)
+            urlmap['celebrity' + i].append(img.url)
     return JsonResponse(urlmap)
 
 def note_content(requests):
