@@ -532,10 +532,9 @@ def new_img(request):
         url=request.POST['url'],
         detail=request.POST['detail'],
         imgtype=request.POST['imgtype'],
-        # imgtypename=Team.objects.get(id=request.POST['imgtype']).name,
     )
     new_img.save()
-    return HttpResponse('ok')
+    return HttpResponse('new a img')
 
 
 def set_img(request):
@@ -551,7 +550,7 @@ def set_img(request):
             IMG.objects.filter(id=int(checked_item)).delete()
         else:
             IMG.objects.filter(id=int(checked_item)).update(imgtypename=Team.objects.get(id=option).name,imgtype=option)
-    return HttpResponse('ok')
+    return HttpResponse('set img ok')
 
 def team(request):
     mmap = {'team_list': [], 'celebrity_list': []}
@@ -571,6 +570,7 @@ def picture(request):
 
 def imglist(requests):
     id_list = requests.POST['id_list']
+    cate = requests.POST['cate']
     urlmap = {}
     for i in re.findall(r'\d+', id_list):
         imglist = list(IMG.objects.filter(imgtype=int(i)))

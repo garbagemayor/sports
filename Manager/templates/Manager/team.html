@@ -199,6 +199,8 @@
         },
             function (ret) {
                 $("[title|='image']").empty();
+                $('#preview').hide();
+                $('#pickfiles').show();
                 var tmp = $("[title|='image']").attr("id");
                 console.log(tmp);
                 $.post("{% url 'imglist' %}", {
