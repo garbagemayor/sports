@@ -165,6 +165,7 @@ class IMG(models.Model):
     url = models.CharField(max_length=100)                      # qiniu云链接
     detail = models.TextField(default='暂无')                    # 首页上的介绍
     imgtype = models.IntegerField(default=0)                    # 图片类型 -2主页背景 -1轮播图 0未分类 正数给系队和名人堂
+    imgtypename = models.CharField(max_length=50)                    # 图片类型名称 -2主页背景 -1轮播图 0未分类 正数给系队和名人堂
     # imgtypes = models.CharField(validators=[validate_comma_separated_integer_list], max_length=256, null=True) # 图片    
     headline = models.BooleanField(default=False)                  # 是否在首页
     activate = models.IntegerField(default=0) 
@@ -221,10 +222,3 @@ class Team(models.Model): # 系队和名人堂
     faq = models.CharField(max_length=1000, null=True) # 招新
     def __str__(self):
         return '<Team %s: %s %s %s>' % (self.id, self.sport, self.name, self.achievement)
-
-class ImgLabel(models.Model): # 图片imgtype和名称的对应
-    id = models.IntegerField(primary_key=True) # 数据库中的编号
-    imgtype = models.IntegerField(default=0) # 图片类型
-    label = models.CharField(max_length=32, null=True) # 类型对应项目:如0-默认,-1-风采,-2-首页背景
-    def __str__(self):
-        return '<ImgLabel %s: %s %s>' % (self.id, self.imgtype, self.label)

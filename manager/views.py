@@ -14,6 +14,8 @@ from django.http import HttpResponseRedirect, HttpResponse
 def team(request, team_id):
     obj = Team.objects.get(id=team_id)
     mmap = {}
+    mmap['team_add'] = obj.name
+    mmap['celebrity_add'] = obj.name
     mmap['id'] = obj.id
     mmap['sport'] = obj.sport
     mmap['name'] = obj.name
@@ -31,6 +33,8 @@ def team(request, team_id):
 def team_edit(request, team_id):
     obj = Team.objects.get(id=team_id)
     mmap = {}
+    mmap['team_add'] = '系队信息编辑'
+    mmap['celebrity_add'] = '名人信息编辑'
     mmap['id'] = obj.id
     mmap['sport'] = obj.sport
     mmap['name'] = obj.name
@@ -43,6 +47,15 @@ def team_edit(request, team_id):
     mmap['headline'] = obj.headline
     mmap['no_edit'] = False
     if request.POST:
+        print request.POST.get('headline')
+        if request.POST.get('headline') != None:
+            Team.objects.filter(cate=request.POST['cate']).update(headline=False)
+            for obj in list(Team.objects.filter(cate=request.POST['cate'])):
+                IMG.objects.filter(imgtype=obj.id).update(headline=False)
+            IMG.objects.filter(imgtype=team_id).update(headline=True)
+            headline = True
+        else:
+            headline = False
         Team.objects.filter(id=team_id).update(
             name=request.POST['name'],
             captain=request.POST['captain'],
@@ -51,15 +64,17 @@ def team_edit(request, team_id):
             detail=request.POST['detail'],
             train=request.POST['train'],
             joinus=request.POST['joinus'],
-            headline=request.POST['headline'],
+            headline=headline,
         )
 
         messages.add_message(request, messages.INFO, '修改成功！')
-        return HttpResponseRedirect('/team/' + team_id)
+        return HttpResponseRedirect('/team/')
     return render(request, "Manager/team.html", mmap)
 
 def team_add(request):
     mmap = {}
+    mmap['team_add'] = '添加系队'
+    mmap['celebrity_add'] = '添加名人'
     mmap['sport'] = '项目'
     mmap['name'] = '官方名称'
     mmap['captain'] = '队长'
@@ -73,6 +88,15 @@ def team_add(request):
     mmap['id'] = len(list(Team.objects.filter())) + 1
     if request.POST:
         print "in post"
+        print request.POST.get('headline')
+        if request.POST.get('headline') != None:
+            Team.objects.filter(cate=request.POST['cate']).update(headline=False)
+            for obj in list(Team.objects.filter(cate=request.POST['cate'])):
+                IMG.objects.filter(imgtype=obj.id).update(headline=False)
+            IMG.objects.filter(imgtype=team_id).update(headline=True)
+            headline = True
+        else:
+            headline = False
         g = Team.objects.create(
             cate=request.POST['cate'],
             sport=request.POST['sport'],
@@ -83,7 +107,7 @@ def team_add(request):
             detail=request.POST['detail'],
             train=request.POST['train'],
             joinus=request.POST['joinus'],
-            headline=request.POST['headline'],
+            headline=headline,
         )
         messages.add_message(request, messages.INFO, '添加成功！')
         return HttpResponseRedirect('/team/')

@@ -25,7 +25,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "SportsRegistration.settings")
 django.setup()
 
 from Users.models import Notification, NotificationController
-from HomePage.models import Users, Events, Signs, IMG, Broadcast, Team, ImgLabel
+from HomePage.models import Users, Events, Signs, IMG, Broadcast, Team
 import django.utils.timezone as timezone
 import datetime
 
@@ -256,8 +256,39 @@ Team.objects.get_or_create(id=i)
 g = Team.objects.get(id=i)
 g.cate = 2
 g.name = u'李晨曦'
+g.detail = u'李晨曦，清华大学计算机系2013级博士生，马拉松国家二级运动员，曾创下北京国际马拉松赛全程2小时51分18秒完赛的个人最佳成绩，42.195千米的赛道，平均每千米用时约4分4秒，被称为“清华马拉松第一人”，原虎扑翻译团版主、虎扑新声编辑。'
 g.achievement = u'很多很多'
 g.headline = True
+g.save()
+
+i = 0
+Team.objects.get_or_create(id=i)
+g = Team.objects.get(id=i)
+g.name = u'未分类'
+g.save()
+
+i = -1
+Team.objects.get_or_create(id=i)
+g = Team.objects.get(id=i)
+g.name = u'风采展示'
+g.save()
+
+i = -2
+Team.objects.get_or_create(id=i)
+g = Team.objects.get(id=i)
+g.name = u'首页背景'
+g.save()
+
+i = -3
+Team.objects.get_or_create(id=i)
+g = Team.objects.get(id=i)
+g.name = u'从主页撤回'
+g.save()
+
+i = -4
+Team.objects.get_or_create(id=i)
+g = Team.objects.get(id=i)
+g.name = u'删除'
 g.save()
 
 print u'在IMG表中添加对象'
@@ -266,10 +297,11 @@ i = 0
 i += 1
 IMG.objects.get_or_create(id=i)
 g = IMG.objects.get(id=i)
-g.url = u'http://oblc5mnxs.bkt.clouddn.com/o_1bvhfaodp1a9d9a6csm1sq3iv19.jpg'
+g.url = u'http://oblc5mnxs.bkt.clouddn.com/IMG_0001.png'
 g.name = u'合照'
 g.detail = u'泳队合照'
 g.imgtype = 1
+g.imgtypename = u'计算机系游泳队'
 g.headline = True
 g.save()
 
@@ -280,6 +312,7 @@ g.url = u'http://oblc5mnxs.bkt.clouddn.com/IMG_7516.JPG'
 g.name = u'传奇'
 g.detail = u'努力就能成功'
 g.imgtype = 1
+g.imgtypename = u'计算机系游泳队'
 g.headline = True
 g.save()
 
@@ -290,6 +323,7 @@ g.url = u'http://oblc5mnxs.bkt.clouddn.com/IMG_0128.jpg'
 g.name = u'男足'
 g.detail = u'合照'
 g.imgtype = 2
+g.imgtypename = u'计算机系男子足球队'
 g.headline = True
 g.save()
 
@@ -300,6 +334,7 @@ g.url = u'http://oblc5mnxs.bkt.clouddn.com/Picture2.png'
 g.name = u'李晨曦'
 g.detail = u'名人堂'
 g.imgtype = 3
+g.imgtypename = u'李晨曦'
 g.headline = True
 g.save()
 
@@ -311,6 +346,7 @@ g.url = u'http://oblc5mnxs.bkt.clouddn.com/IMG_0128.jpg'
 g.name = u'球王'
 g.detail = u'球王过人精彩瞬间'
 g.imgtype = -1
+g.imgtypename = u'风采展示'
 g.headline = True
 g.save()
 
@@ -321,57 +357,18 @@ g.url = u'http://oblc5mnxs.bkt.clouddn.com/IMG_0141.jpg'
 g.name = u'姚指导'
 g.detail = u'姚指导回眸一笑'
 g.imgtype = -1
+g.imgtypename = u'风采展示'
 g.headline = True
 g.save()
 
 i += 1
 IMG.objects.get_or_create(id=i)
 g = IMG.objects.get(id=i)
-g.url = u'http://oblc5mnxs.bkt.clouddn.com/o_1bvhjn2821e1gh528qs1a0j5qp9.jpg'
+g.url = u'http://oblc5mnxs.bkt.clouddn.com/IMG_0093.JPG'
 g.imgtype = -2
+g.imgtypename = u'主页背景'
 g.headline = True
 g.save()
-
-print u'在ImgLabel表中添加对象'
-
-i = 0
-i += 1
-ImgLabel.objects.get_or_create(id=i)
-g = ImgLabel.objects.get(id=i)
-g.imgtype = -2
-g.label = u'设为首页背景'
-g.save()
-
-i += 1
-ImgLabel.objects.get_or_create(id=i)
-g = ImgLabel.objects.get(id=i)
-g.imgtype = -1
-g.label = u'设为风采展示'
-g.save()
-
-i += 1
-ImgLabel.objects.get_or_create(id=i)
-g = ImgLabel.objects.get(id=i)
-g.imgtype = -3
-g.label = u'从主页撤回'
-g.save()
-
-i += 1
-ImgLabel.objects.get_or_create(id=i)
-g = ImgLabel.objects.get(id=i)
-g.imgtype = -4
-g.label = u'彻底删除'
-g.save()
-
-for team in Team.objects.all():
-    i += 1
-    ImgLabel.objects.get_or_create(id=i)
-    g = ImgLabel.objects.get(id=i)
-    g.imgtype = team.id
-    g.label = team.name
-    g.save()
-
-print u'在Notification表中添加对象'
 
 print u'添加完成'
 
