@@ -126,7 +126,7 @@
 					<div class="col-md-12">
 						<div class="section-title st-center">
 							<h3>系队展示</h3>
-							<p>{{team.name}}</p>
+							<p>{{ img.sentence }}</p>
 						</div>
 								<div class="col-md-6">
 										{{team.detail}}
@@ -329,6 +329,8 @@
 									<li> <a href="/events/{{line.id}}">{{line.name}} </a></li>
 									{% endfor %}
 								</ul>
+								<ul style="height:100px;">
+								</ul>
 							</div>
 							<!--<div class="events-footer">
 								<a href="/events/"  class="btn btn-default">查看</a>
@@ -350,16 +352,15 @@
 									<li> <a href="/events/{{line.id}}">{{line.name}} </a></li>
 									{% endfor %}
 								</ul>
-							</div>
-							<div class="events-footer">
-								<a href="/events/"  class="btn btn-main">查看更多</a>
+								<ul style="height:100px;">
+								</ul>
 							</div>
 						</div>
 					</div>
 					<div class="col-md-4">
 						<div class="events-table">
 							<div class="events-header">
-								<div class="pt-price">比赛结束<small></small></div>
+								<div class="pt-price">已经结束<small></small></div>
 							</div>
 							<div class="events-body">
 								<ul>
@@ -369,13 +370,18 @@
 									{% for line in events3 %}
 									<li> <a href="/events/{{line.id}}">{{line.name}} </a></li>
 									{% endfor %}
-								</ul>								
+								</ul>
+								<ul style="height:100px;">
+								</ul>
 							</div>
 							<!--<div class="events-footer">
 								<a href="/events/" class="btn btn-default">查看</a>
 							</div>-->
 						</div>
 					</div>
+				</div>
+				<div class="events-footer" style="text-align: center;">
+					<a href="/events/"  class="btn btn-main">查看所有</a>
 				</div>
 			</div>
 		</section>

@@ -48,6 +48,24 @@ def index(request):
     if len(broadcast_list)>5:
         broadcast_list=broadcast_list[:5]
 
+    positive_energy_sentence = [
+        u"从来不会轻易被打败，我们只会越来越强",
+        u"只要你不回避与退缩，生命的掌声终会为你响起",
+        u"认真你就输了，一直认真你就赢了",
+        u"如果这世界上真有奇迹，那只是努力的另一个名字",
+        u"世界上总会有人成功，为什么不能是你呢",
+        u"任何人的成功，都不是虚头，他们一定付出了你没有想到的努力和代价",
+        u"人不断地成长，就是为了超越环境的限制",
+        u"没有过不去的阴雨天，也没有永远的晴天",
+        u"人生没有容易的事情，如果有容易的事，人们不都去做了么",
+        u"无论你现在到底有多艰难，请不要轻易放弃所坚持的东西",
+        u"风雨中这是一场无火的战争，需要战胜的只有自己",
+        u"成功者找方法，失败者找理由",
+        # 都是这里挑选的： http://www.tcomall.com/post/1871.html
+    ]
+    for i in range(len(team)):
+        team[i].sentence = positive_energy_sentence[i % len(positive_energy_sentence)]
+
     return render(request, "HomePage/newhomepage.html",
                   {'events1': events1,
                    'events1_len' : len(events1),
