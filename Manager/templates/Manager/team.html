@@ -56,8 +56,8 @@
                     {{team_add}}
                 </h1>
                 <h1 style="text-align: center" id="h2">
-                        {{celebrity_add}}
-                    </h1>
+                    {{celebrity_add}}
+                </h1>
                 <div class="row" title="image" id="team{{id}}"></div>
             </div>
             <form method="POST" class="form-horizontal">
@@ -142,13 +142,16 @@
                             <textarea type="text" class="form-control" name="detail" placeholder="{{detail}}">{{detail}}</textarea> {% endif %}
                         </div>
                     </div>
+                    {% if request.session.auth > 0 %}
                     <div class="form-group">
                         <label for="firstname" class="col-sm-2 control-label">主页显示</label>
                         <div class="col-sm-10">
                             <input type="checkbox" class="form-control" name="headline" {% if headline %} checked {% endif %}></input>
                         </div>
                     </div>
+                    {% endif %}
                 </div>
+                {% if request.session.auth > 0 %}
                 <div style="text-align: center;">
                     {% if no_edit %}
                     <a class="btn btn-primary" href="/team_edit/{{id}}">修改</a>
@@ -159,6 +162,7 @@
                     {% endif %}
                 </div>
                 <input type="text" id="cate" name="cate" style="display: none;">
+                {% endif %}
             </form>
         </div>
     </div>
@@ -186,6 +190,7 @@
     });
     // 添加图片,更新表格,保持在当前tab
     $("#add_submit").click(function () {
+        console.log("imgtype is" + $("[title|='image']").attr("id").substr(4, $("[title|='image']").attr("id").length - 1))
         $.post("{% url 'newimg' %}", {
             csrfmiddlewaretoken: "{{ csrf_token }}",
             url: $("#preview").attr('src'),
@@ -193,17 +198,35 @@
             imgtype: $("[title|='image']").attr("id").substr(4, $("[title|='image']").attr("id").length - 1),
         },
             function (ret) {
+                $("[title|='image']").empty();
+                var tmp = $("[title|='image']").attr("id");
+                console.log(tmp);
+                $.post("{% url 'imglist' %}", {
+                    csrfmiddlewaretoken: "{{ csrf_token }}",
+                    id_list: tmp,
+                },
+                    function (ret) {
+                        // console.log(ret);
+                        $.each(ret, function (key, item) {
+                            // console.log(key, item);
+                            for (var i = item.length - 1; i >= 0; i--) {
+                                var div = $("<div class='col-sm-6 col-md-3'>");
+                                var a = $("<a class='thumbnail'>").attr("href", item[i]);
+                                var img = $("<img class='thumbnail' style='max-height: 200px'>").attr("src", item[i]);
+                                $("#" + key).append(div);
+                                $(div).append(a);
+                                $(a).append(img);
+                            };
+                        });
+                    });
                 // console.log(ret);
-                location.reload();
+                // location.reload();
             });
     });
     // 显示各个队伍的缩略图
     $(document).ready(function () {
-        var tmp = new String;
-        $("[title|='image']").each(function () {
-            // console.log($(this).attr("id").substr(4, $(this).attr("id").length - 1));
-            tmp = tmp + "|" + $(this).attr("id");
-        });
+        var tmp = $("[title|='image']").attr("id");
+        console.log(tmp);
         $.post("{% url 'imglist' %}", {
             csrfmiddlewaretoken: "{{ csrf_token }}",
             id_list: tmp,
@@ -242,40 +265,39 @@
             chunk_size: '4mb', // 分块上传时，每块的体积
             auto_start: true, // 选择文件后自动上传，若关闭需要自己绑定事件触发上传,
             init: {
-                'FilesAdded': function(up, files) {
-                    plupload.each(files, function(file) {
+                'FilesAdded': function (up, files) {
+                    plupload.each(files, function (file) {
                         $('#success').hide();
                     });
                 },
-                'BeforeUpload': function(up, file) {
+                'BeforeUpload': function (up, file) {
                 },
-                'UploadProgress': function(up, file) {
+                'UploadProgress': function (up, file) {
                 },
-                'FileUploaded': function(up, file, info) {
+                'FileUploaded': function (up, file, info) {
                     var domain = up.getOption('domain');
                     var res = JSON.parse(info);
                     var sourceLink = domain + res.key; //获取上传成功后的文件的Url
                     $('#preview').attr('src', sourceLink);
                     $('#preview').show();
                     $('#pickfiles').hide();
-    
+
                 },
-                'Error': function(up, err, errTip) {
+                'Error': function (up, err, errTip) {
                 },
-                'UploadComplete': function() {
+                'UploadComplete': function () {
                 },
-                'Key': function(up, file) {
+                'Key': function (up, file) {
                     var key = "";
                     return key
                 }
             }
         });
-        uploader.bind('FileUploaded', function() {
+        uploader.bind('FileUploaded', function () {
             console.log('hello man,a file is uploaded');
         });
     });
-    </script>
-    <script src="https://cdn.staticfile.org/plupload/2.1.1/moxie.js"></script>
-    <script src="https://cdn.staticfile.org/plupload/2.1.1/plupload.dev.js"></script>
-    <script src="https://cdn.staticfile.org/qiniu-js-sdk/1.0.14-beta/qiniu.js"></script>
-{% endblock %}
+</script>
+<script src="https://cdn.staticfile.org/plupload/2.1.1/moxie.js"></script>
+<script src="https://cdn.staticfile.org/plupload/2.1.1/plupload.dev.js"></script>
+<script src="https://cdn.staticfile.org/qiniu-js-sdk/1.0.14-beta/qiniu.js"></script> {% endblock %}
