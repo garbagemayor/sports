@@ -40,7 +40,23 @@ class Users(models.Model):
     broadcast = models.IntegerField(default=0)
     login_cnt = models.IntegerField(default=1) # 登陆次数统计
 
-    # fullAddress = models.CharField(max_length=256, null=True)   # 详细地址
+    def finishAll(self):
+        self.printAll()
+        return  self.name != None and \
+            self.fullname != None and \
+            self.certification_type != None and \
+            self.certification_id != None and \
+            self.mobile != None and \
+            self.classnumber != None and \
+            self.email != None and \
+            self.student_number != None and \
+            self.birthday != None and \
+            self.cloth_size != None and \
+            self.gender != None and \
+            self.degree != None
+
+
+        # fullAddress = models.CharField(max_length=256, null=True)   # 详细地址
     # desc = models.TextField(default=u"暂无简介")                 # 个人简介
     # portrait = models.ImageField(null=True)                     # 头像
     # firstLogin = models.DateTimeField(default=timezone.now)     # 首次登录时间

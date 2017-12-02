@@ -71,10 +71,14 @@ def page_static_refresh_search(request, searchFullName='', searchStudentNumber='
         else:
             searchUserList = list(Users.objects.filter(fullname=searchFullName, student_number=searchStudentNumber))
     print "searchUserList = ", searchUserList
-    return render(request, 'Events/page_static_refresh.html',
-                  {"searchUserList": searchUserList,
-                   "refresh_mode": "search",
-                   "request": request})
+    for i in range(len(searchUserList)):
+        searchUserList[i].refresh_mode = "search" if searchUserList[i].finishAll() else "disable"
+    return render(request,
+                  'Events/page_static_refresh.html', {
+                      "searchUserList": searchUserList,
+                      "request": request
+                  }
+                  )
 
 
 @csrf_exempt
@@ -83,9 +87,13 @@ def page_static_refresh_selected(request, searchUserId=''):
     print "searchUserId = ", searchUserId
     searchUserList = list(Users.objects.filter(id=int(searchUserId)))
     print "searchUserList = ", searchUserList
-    return render(request, 'Events/page_static_refresh.html',
-                  {"searchUserList": searchUserList,
-                   "refresh_mode": "selected"})
+    for i in range(len(searchUserList)):
+        searchUserList[i].refresh_mode = "selected"
+    return render(request,
+                  'Events/page_static_refresh.html', {
+                      "searchUserList": searchUserList,
+                      "refresh_mode": "selected"
+                   })
 
 
 def set_prizes_static_refresh(request, numberList='', others=''):

@@ -117,7 +117,7 @@
                                     <th>操作</th>
                                 </tr>
                                 </thead>
-                                <tbody id="searchUserTbody">
+                                <tbody id="searchUserTbody" name="searchUserTbody">
                                 </tbody>
                             </table>
                         </div>
@@ -142,7 +142,7 @@
                                     <th>操作</th>
                                 </tr>
                                 </thead>
-                                <tbody id="selectedUserTbody">
+                                <tbody name="selectedUserTbody">
                                 </tbody>
                             </table>
                         </div>
@@ -183,7 +183,7 @@
                                     <th>操作</th>
                                 </tr>
                                 </thead>
-                                <tbody id="searchUserTbody">
+                                <tbody id="searchUserTbody" name="searchUserTbody">
                                 </tbody>
                             </table>
                         </div>
@@ -209,7 +209,7 @@
                                     <th>操作</th>
                                 </tr>
                                 </thead>
-                                <tbody id="selectedUserTbody">
+                                <tbody name="selectedUserTbody">
                                 </tbody>
                             </table>
                         </div>
@@ -345,12 +345,15 @@
         // 接收到信息后进行的操作
         xmlhttp.onreadystatechange = function() {
             if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-                var searchUserTbody = document.getElementById("searchUserTbody");
-                searchUserTbody.innerHTML = xmlhttp.responseText;
+                var a = document.getElementsByName("searchUserTbody");
+                a[0].innerHTML = xmlhttp.responseText;
+                a[1].innerHTML = xmlhttp.responseText;
             }
         }
-        var fn = document.getElementById("fullName").value;
-        var sn = document.getElementById("studentNumber").value;
+        var fnl = document.getElementsByName("fullname");
+        var fn = fnl[0].value != "" ? fnl[0].value : fnl[1].value;
+        var snl = document.getElementsByName("studentnumber");
+        var sn = snl[0].value != "" ? snl[0].value : snl[1].value;
         var urlGET = "/events/static_refresh/"
                    + "fn=" + fn + ";"
                    + "sn=" + sn + "/"
@@ -380,8 +383,9 @@
         // 接收到信息后进行的操作
         xmlhttp.onreadystatechange = function() {
             if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                var selectedUserTbody = document.getElementById("selectedUserTbody");
-                selectedUserTbody.innerHTML = selectedUserTbody.innerHTML + xmlhttp.responseText;
+                var a = document.getElementsByName("selectedUserTbody");
+                a[0].innerHTML = xmlhttp.responseText;
+                a[1].innerHTML = xmlhttp.responseText;
             }
         }
         var urlGET = "/events/static_refresh/"
@@ -412,9 +416,9 @@
         // 接收到信息后进行的操作
         xmlhttp.onreadystatechange = function() {
             if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                var html_code = xmlhttp.responseTextl;
-                var selectedUserTbody = document.getElementById("selectedUserTbody");
-                selectedUserTbody.innerHTML = selectedUserTbody.innerHTML.replace(xmlhttp.responseText, "");
+                var a = document.getElementsByName("selectedUserTbody");
+                a[0].innerHTML = a[0].innerHTML.replace(xmlhttp.responseText, "");
+                a[1].innerHTML = a[1].innerHTML.replace(xmlhttp.responseText, "");
             }
         }
         var urlGET = "/events/static_refresh/"
