@@ -532,7 +532,7 @@ def new_img(request):
         url=request.POST['url'],
         detail=request.POST['detail'],
         imgtype=request.POST['imgtype'],
-        imgtypename=Team.objects.get(id=request.POST['imgtype']).name,
+        # imgtypename=Team.objects.get(id=request.POST['imgtype']).name,
     )
     new_img.save()
     return HttpResponse('ok')
