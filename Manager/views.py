@@ -86,6 +86,7 @@ def team_add(request):
     mmap['headline'] = False
     mmap['no_edit'] = False
     mmap['id'] = len(list(Team.objects.filter())) + 1
+    team_id = len(list(Team.objects.filter())) + 1
     if request.POST:
         print "in post"
         print request.POST.get('headline')
@@ -109,6 +110,7 @@ def team_add(request):
             joinus=request.POST['joinus'],
             headline=headline,
         )
+        IMG.objects.filter(imgtype=team_id).update(imgtypename=request.POST['name'])
         messages.add_message(request, messages.INFO, '添加成功！')
         return HttpResponseRedirect('/team/')
     return render(request, "Manager/team.html", mmap)
