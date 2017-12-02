@@ -58,7 +58,7 @@ u = Users.objects.get(id=i)
 u.name = u'luoy15'
 u.fullname = u'罗华一'
 u.email = u'luohy15@mails.tsinghua.edu.cn'
-u.student_number = u'2015011305'
+u.student_number = u'2015011304'
 u.authority = 2
 u.save()
 

@@ -25,7 +25,7 @@ from Users.models import Notification
 from Users.models import NotificationController
 from django.core import serializers
 
-designer_name = ['nodgd', 'tyt123', "luoy15", "yangjy15"]
+designer_name = ["steventang",'nodgd', 'tyt123', "luoy15", "yangjy15"]
 
 def auth(request):
     r = requests.post(
