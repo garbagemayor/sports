@@ -274,7 +274,7 @@ g.save()
 i += 1
 IMG.objects.get_or_create(id=i)
 g = IMG.objects.get(id=i)
-g.url = u'https://mmbiz.qpic.cn/mmbiz_jpg/g7L5gknq24rdhbuOcKc736giahnlGeoYNOOLE9YUicibibo9JSM1Jx0El3wsXamia4PaH1953Aic6etLrjebXqts9Nnw/640?wx_fmt=jpeg&tp=webp&wxfrom=5&wx_lazy=1'
+g.url = u'http://oblc5mnxs.bkt.clouddn.com/IMG_7516.JPG'
 g.name = u'传奇'
 g.detail = u'努力就能成功'
 g.imgtype = 1
@@ -284,7 +284,7 @@ g.save()
 i += 1
 IMG.objects.get_or_create(id=i)
 g = IMG.objects.get(id=i)
-g.url = u'http://mmbiz.qpic.cn/mmbiz_jpg/g7L5gknq24qRwJVdqHlo2toEzutChE33ibNZCjXNjDRfJGKMtmwZ2oiarIiacZvkiaR02OKvUBChpwMqpMEJCk6SMw/640?wx_fmt=jpeg&tp=webp&wxfrom=5&wx_lazy=1'
+g.url = u'http://oblc5mnxs.bkt.clouddn.com/IMG_0128.jpg'
 g.name = u'男足'
 g.detail = u'合照'
 g.imgtype = 2
@@ -325,14 +325,14 @@ i = 0
 i += 1
 ImgLabel.objects.get_or_create(id=i)
 g = ImgLabel.objects.get(id=i)
-g.imgtype = -1
+g.imgtype = -2
 g.label = u'设为首页背景'
 g.save()
 
 i += 1
 ImgLabel.objects.get_or_create(id=i)
 g = ImgLabel.objects.get(id=i)
-g.imgtype = -2
+g.imgtype = -1
 g.label = u'设为风采展示'
 g.save()
 

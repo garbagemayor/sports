@@ -540,6 +540,7 @@ def new_img(request):
 def set_img(request):
     checkbox_list = request.POST['idlist']
     option = int(request.POST['option'])
+    print option
     for checked_item in re.findall(r'\d+', checkbox_list):
         if option == -2: # 首页背景
             IMG.objects.filter(imgtype=-2).update(imgtype=0,headline=False)
@@ -554,9 +555,7 @@ def set_img(request):
 
 def team(request):
     mmap = {'team_list': []}
-    id_list = [1, 2]
-    for i in id_list:
-        mmap['team_list'].append(Team.objects.get(id=i))
+    mmap['team_list'] = list(Team.objects.all())
     return render(request, 'Users/team.html', mmap)
 
 def picture(request):
