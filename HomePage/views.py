@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from django.shortcuts import render
-from HomePage.models import Events, IMG, Users
+from HomePage.models import Events, IMG, Users, Team
 from HomePage.models import Broadcast
 from HomePage.models import utcToLocal
 from django.core.paginator import Paginator
@@ -14,8 +14,10 @@ import django.utils.timezone as timezone
 # Create your views here.
 
 def index(request):
-    team = list(IMG.objects.filter(headline=True,imgtype=1))
-    celebrity = list(IMG.objects.filter(headline=True,imgtype=3))
+    team = Team.objects.get(headline=True,cate=1)
+    team_img = list(IMG.objects.filter(headline=True,imgtype=Team.objects.get(headline=True,cate=1).id))
+    celebrity = Team.objects.get(headline=True,cate=2)
+    celebrity_img = list(IMG.objects.filter(headline=True,imgtype=Team.objects.get(headline=True,cate=2).id))
     broadcast_list = list(Broadcast.objects.all()[::-1])
     game = list(IMG.objects.filter(headline=True,imgtype=-1))
     for b in broadcast_list:
@@ -54,7 +56,9 @@ def index(request):
                    'events3': events3,
                    'events3_len' : len(events3),
                    'team': team,
+                   'team_img': team_img,
                    'celebrity': celebrity,
+                   'celebrity_img': celebrity_img,
                    'game': game,
                    'background': background,
                    'broadcast':broadcast_list,

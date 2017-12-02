@@ -532,6 +532,7 @@ def new_img(request):
         url=request.POST['url'],
         detail=request.POST['detail'],
         imgtype=request.POST['imgtype'],
+        imgtypename=Team.objects.get(id=request.POST['imgtype']).name,
     )
     new_img.save()
     return HttpResponse('ok')
@@ -540,19 +541,16 @@ def new_img(request):
 def set_img(request):
     checkbox_list = request.POST['idlist']
     option = int(request.POST['option'])
-    print option
     for checked_item in re.findall(r'\d+', checkbox_list):
         if option == -2: # 首页背景
             IMG.objects.filter(imgtype=-2).update(imgtype=0,headline=False)
-            IMG.objects.filter(id=int(checked_item)).update(imgtype=-2,headline=True)
-        elif option == -1: # 风采展示
-            IMG.objects.filter(id=int(checked_item)).update(imgtype=-1,headline=True)
+            IMG.objects.filter(id=int(checked_item)).update(imgtype=-2,imgtypename=Team.objects.get(id=option).name,headline=True)
         elif option == -3: # 撤回
             IMG.objects.filter(id=int(checked_item)).update(headline=False)
         elif option == -4: # 删除
             IMG.objects.filter(id=int(checked_item)).delete()
         else:
-            IMG.objects.filter(id=int(checked_item)).update(imgtype=option)
+            IMG.objects.filter(id=int(checked_item)).update(imgtypename=Team.objects.get(id=option).name,imgtype=option)
     return HttpResponse('ok')
 
 def team(request):
@@ -567,11 +565,8 @@ def picture(request):
     mmap['background_list'] = list(IMG.objects.filter(imgtype=-2))
     mmap['game_list'] = list(IMG.objects.filter(imgtype=-1))
     mmap['option_form'] = OptionForm()
-    type_list = [-2, -1, 0, 1, 2]
-    for i in type_list:
-        for img in list(IMG.objects.filter(imgtype=i)):
-            mmap['img_list'].append(img)
-        # print mmap['img_list']
+    for img in list(IMG.objects.all()):
+        mmap['img_list'].append(img)
     return render(request, 'Users/picture.html', mmap)
 
 def imglist(requests):

@@ -93,6 +93,8 @@
                     <table class="table table-striped table-hover text-left" style="margin-top:40px;">
                         <thead>
                             <tr>
+                                <!-- <th>type</th> -->
+                                <!-- <th>id</th> -->
                                 <th>类型</th>
                                 <th>缩略图</th>
                                 <th>
@@ -111,9 +113,11 @@
                         <tbody>
                             {% for img in img_list %}
                             <tr {% if img.headline %} class="success" {% else %} class="info" {% endif %}>
-                                <td>{{img.imgtype}}</td>
+                                <!-- <td>{{img.imgtype}}</td> -->
+                                <!-- <td>{{img.id}}</td> -->
+                                <td>{{img.imgtypename}}</td>
                                 <td>
-                                    <img class="thumbnail" src="{{img.url}}" style="max-height:100px">
+                                        <a href="{{img.url}}"><img class="thumbnail" src="{{img.url}}" style="max-height:100px"></a>
                                 </td>
                                 <td>
                                     <input type="checkbox" name="checkedLall" value="{{img.id}}">
@@ -147,9 +151,9 @@
                         <tbody>
                             {% for img in background_list %}
                             <tr {% if img.headline %} class="success" {% else %} class="info" {% endif %}>
-                                <td>{{img.imgtype}}</td>
+                                <td>{{img.imgtypename}}</td>
                                 <td>
-                                    <img class="thumbnail" src="{{img.url}}" style="max-height:100px">
+                                        <a href="{{img.url}}"><img class="thumbnail" src="{{img.url}}" style="max-height:100px"></a>
                                 </td>
                                 <td>
                                     <input type="checkbox" name="checkedLbackground" value="{{img.id}}">
@@ -183,9 +187,9 @@
                         <tbody>
                             {% for img in game_list %}
                             <tr {% if img.headline %} class="success" {% else %} class="info" {% endif %}>
-                                <td>{{img.imgtype}}</td>
+                                <td>{{img.imgtypename}}</td>
                                 <td>
-                                    <img class="thumbnail" src="{{img.url}}" style="max-height:100px">
+                                    <a href="{{img.url}}"><img class="thumbnail" src="{{img.url}}" style="max-height:100px"></a>
                                 </td>
                                 <td>
                                     <input type="checkbox" name="checkedLgame" value="{{img.id}}">
@@ -220,7 +224,7 @@ clist[i].checked = !clist[i].checked;
 <div>
 <button class="btn btn-success" type="button" data-toggle="modal" id="add_button" data-target="#add" style="float:left">添加
 </button>
-<button class="btn btn-success" type="button" data-toggle="modal" id="set_button" data-target="#set" style="float:right">编辑
+<button class="btn btn-success" type="button" data-toggle="modal" id="set_button" data-target="#set" style="float:left">选项
 </button>
 </div>
 <script>
@@ -253,22 +257,24 @@ console.log(localStorage.getItem('lastTab'));
 
 // 图片编辑
 $("#set_submit").click(function () {
-var tmpl = [];
-$(":checked").each(function () {
-tmpl.push($(this).val());
-});
-var tmp = $("#id_option").val();
-console.log(tmp);
-$.post("{% url 'set_img' %}", {
-csrfmiddlewaretoken: "{{ csrf_token }}",
-idlist: tmpl.toString(),
-option: tmp,
-},
-function (ret) {
-    console.log(ret);
-    alert("设置成功");
-    location.reload();
-});
+    var tmpl = [];
+    $(":checked[name^='checked']").each(function () {
+        console.log($(this).val());
+        tmpl.push($(this).val());
+    });
+    console.log(tmpl + " checked");
+    var tmp = $("#id_option").val();
+    console.log(tmp);
+    $.post("{% url 'set_img' %}", {
+        csrfmiddlewaretoken: "{{ csrf_token }}",
+        idlist: tmpl.toString(),
+        option: tmp,
+    },
+    function (ret) {
+        console.log(ret);
+        alert("设置成功");
+        location.reload();
+    });
 });
 
 </script>
