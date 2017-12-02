@@ -232,6 +232,11 @@ def nextphase(request, Id):
 def sign(request, Id):
     events = Events.objects.get(id=Id)
     if request.session.get('userid'):
+        user_id = request.session.get('userid')
+        user = Users.objects.get(id=user_id)
+        if not user.finishAll():
+            messages.add_message(request, messages.INFO, '报名失败，请先把信息填写完整！')
+            return HttpResponseRedirect('/events/' + Id + '/');
         sf = Sign.objects.filter(userId=request.session['userid'], eventId=Id)
         if len(sf) >= 1:
             messages.add_message(request, messages.INFO, '请勿重复报名！')
@@ -260,6 +265,11 @@ def sign(request, Id):
 def teamsign(request, eventId, selectedStr="", other=""):
     event = Events.objects.get(id=eventId)
     if request.session.get('userid'):
+        user_id = request.session.get('userid')
+        user = Users.objects.get(id=user_id)
+        if not user.finishAll():
+            messages.add_message(request, messages.INFO, '报名失败，请先把您自己信息填写完整！')
+            return HttpResponseRedirect('/events/' + eventId + '/');
         sf = Sign.objects.filter(userId=request.session['userid'], eventId=eventId)
         if len(sf) >= 1:
             messages.add_message(request, messages.INFO, '请勿重复报名！')
