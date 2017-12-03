@@ -24,7 +24,7 @@
                 </h4>
             </div>
             <div class="modal-body">
-                <div class="col-md-12">
+                <div class="col-md-12" style="text-align: center">
                     <div id="container">
                         <button class="btn btn-primary" id="pickfiles">
                             添加图片</button>
@@ -33,8 +33,8 @@
                 <div class="col-md-12">
                     <img id="preview" src="" style="display: none;" class="thumbnail">
                 </div>
-                <div class="col-md-12">
-                    <textarea id="editor"></textarea>
+                <div class="col-md-12" style="text-align: center">
+                    <input type="text" id="input1">
                 </div>
             </div>
             <div class="modal-footer">
@@ -52,76 +52,80 @@
     <div class="row-fluid">
         <div class="span12">
             <div class="page-header">
-                <h1 style="text-align: center" id="h1">
-                    {{team_add}}
-                </h1>
-                <h1 style="text-align: center" id="h2">
-                    {{celebrity_add}}
-                </h1>
-                <div class="row" title="image" id="team{{id}}"></div>
+                <div id="h1">
+                    <h1 style="text-align: center">
+                        {{team_add}}
+                    </h1>
+                    <div class="row" title="image" id="team{{id}}"></div>
+                </div>
+                <div id="h2">
+                    <h1 style="text-align: center" id="h2">
+                        {{celebrity_add}}
+                    </h1>
+                    <div class="row" title="image" id="celebrity{{id}}"></div>
+                </div>
             </div>
             <form method="POST" class="form-horizontal">
                 {% csrf_token %}
-                <!-- <button class="btn btn-default" onclick="location.href='/user/myevents'">查看我的赛事</button>			 -->
                 <div id="f1">
                     <div class="form-group">
-                        <label for="firstname" class="col-sm-2 control-label">项目</label>
+                        <label class="col-sm-2 control-label">项目</label>
                         <div class="col-sm-10">
                             {% if no_edit %} {{sport}} {% else %}
                             <input type="text" class="form-control" name="sport" value="{{sport}}" placeholder="{{sport}}"> {% endif %}
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="firstname" class="col-sm-2 control-label">名称</label>
+                        <label class="col-sm-2 control-label">名称</label>
                         <div class="col-sm-10">
                             {% if no_edit %} {{name}} {% else %}
-                            <input type="text" class="form-control" name="name" value="{{name}}" placeholder="{{sport}}"> {% endif %}
+                            <input type="text" class="form-control" name="name" value="{{name}}" placeholder="{{name}}"> {% endif %}
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="firstname" class="col-sm-2 control-label">现任队长</label>
+                        <label class="col-sm-2 control-label">现任队长</label>
                         <div class="col-sm-10">
                             {% if no_edit %} {{captain}} {% else %}
                             <input type="text" class="form-control" name="captain" value="{{captain}}" placeholder="{{captain}}"> {% endif %}
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="firstname" class="col-sm-2 control-label">战绩</label>
+                        <label class="col-sm-2 control-label">战绩</label>
                         <div class="col-sm-10">
                             {% if no_edit %} {{achievement}} {% else %}
                             <textarea type="text" class="form-control" name="achievement" placeholder="{{achievement}}">{{achievement}}</textarea> {% endif %}
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="firstname" class="col-sm-2 control-label">传奇运动员</label>
+                        <label class="col-sm-2 control-label">传奇运动员</label>
                         <div class="col-sm-10">
                             {% if no_edit %} {{athlete}} {% else %}
                             <input type="text" class="form-control" name="athlete" value="{{athlete}}" placeholder="{{athlete}}"> {% endif %}
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="firstname" class="col-sm-2 control-label">详细介绍</label>
+                        <label class="col-sm-2 control-label">详细介绍</label>
                         <div class="col-sm-10">
                             {% if no_edit %} {{detail}} {% else %}
                             <textarea type="text" class="form-control" name="detail" placeholder="{{detail}}">{{detail}}</textarea> {% endif %}
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="firstname" class="col-sm-2 control-label">训练计划</label>
+                        <label class="col-sm-2 control-label">训练计划</label>
                         <div class="col-sm-10">
                             {% if no_edit %} {{train}} {% else %}
                             <textarea type="text" class="form-control" name="train" placeholder="{{train}}">{{train}}</textarea> {% endif %}
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="firstname" class="col-sm-2 control-label">加入我们</label>
+                        <label class="col-sm-2 control-label">加入我们</label>
                         <div class="col-sm-10">
                             {% if no_edit %} {{joinus}} {% else %}
                             <textarea type="text" class="form-control" name="joinus" placeholder="{{joinus}}">{{joinus}}</textarea> {% endif %}
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="firstname" class="col-sm-2 control-label">主页显示</label>
+                        <label class="col-sm-2 control-label">主页显示</label>
                         <div class="col-sm-10">
                             <input type="checkbox" class="form-control" name="headline" {% if headline %} checked {% endif %}></input>
                         </div>
@@ -129,24 +133,24 @@
                 </div>
                 <div id="f2">
                     <div class="form-group">
-                        <label for="firstname" class="col-sm-2 control-label">姓名</label>
+                        <label class="col-sm-2 control-label">姓名</label>
                         <div class="col-sm-10">
-                            {% if no_edit %} {{name}} {% else %}
-                            <input type="text" class="form-control" name="name" value="{{name}}" placeholder="{{sport}}"> {% endif %}
+                            {% if no_edit %} {{name1}} {% else %}
+                            <input type="text" class="form-control" name="name1" value="{{name1}}" placeholder="{{name1}}"> {% endif %}
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="firstname" class="col-sm-2 control-label">详细介绍</label>
+                        <label class="col-sm-2 control-label">详细介绍</label>
                         <div class="col-sm-10">
-                            {% if no_edit %} {{detail}} {% else %}
-                            <textarea type="text" class="form-control" name="detail" placeholder="{{detail}}">{{detail}}</textarea> {% endif %}
+                            {% if no_edit %} {{detail1}} {% else %}
+                            <textarea type="text" class="form-control" name="detail1" placeholder="{{detail1}}">{{detail1}}</textarea> {% endif %}
                         </div>
                     </div>
                     {% if request.session.auth > 0 %}
                     <div class="form-group">
-                        <label for="firstname" class="col-sm-2 control-label">主页显示</label>
+                        <label class="col-sm-2 control-label">主页显示</label>
                         <div class="col-sm-10">
-                            <input type="checkbox" class="form-control" name="headline" {% if headline %} checked {% endif %}></input>
+                            <input type="checkbox" class="form-control" name="headline1" {% if headline1 %} checked {% endif %}></input>
                         </div>
                     </div>
                     {% endif %}
@@ -161,49 +165,52 @@
                     <button class="btn btn-primary" type="submit" onclick="location.href='/team_edit/{{id}}'">保存</button>
                     {% endif %}
                 </div>
-                <input type="text" id="cate" name="cate" style="display: none;">
-                {% endif %}
+                <input type="text" id="cate" name="cate" style="display: none;"> {% endif %}
             </form>
         </div>
     </div>
 </div>
 <script>
     var lastTab = localStorage.getItem('lastTab');
-    if (lastTab == '#team') {
-        console.log("team add");
-        $("#cate").val(1);
-        console.log($("#cate").val());
-        $("#h2").hide();
-        $("#f2").hide();
-    }
-    else {
+    if (lastTab == '#celebrity') {
         console.log("celebrity add");
         $("#cate").val(2);
-        console.log($("#cate").val());
+        // console.log($("#cate").val());
         $("#h1").hide();
         $("#f1").hide();
     }
-    var simplemde = new SimpleMDE({
-        element: document.getElementById("editor"),
-        status: false,
-        spellChecker: false,
-    });
+    else {
+        console.log("team add");
+        $("#cate").val(1);
+        // console.log($("#cate").val());
+        $("#h2").hide();
+        $("#f2").hide();
+    }
+    // var simplemde = new SimpleMDE({
+    //     element: document.getElementById("editor"),
+    //     status: false,
+    //     spellChecker: false,
+    // });
     // 添加图片,更新表格,保持在当前tab
     $("#add_submit").click(function () {
-        console.log("imgtype is" + $("[title|='image']").attr("id").substr(4, $("[title|='image']").attr("id").length - 1))
+        console.log("imgtype=" + $("[title|='image']").attr("id").substr(4, $("[title|='image']").attr("id").length - 1))
         $.post("{% url 'newimg' %}", {
             csrfmiddlewaretoken: "{{ csrf_token }}",
             url: $("#preview").attr('src'),
-            detail: simplemde.value(),
+            detail: $("#input1").val(),
             imgtype: $("[title|='image']").attr("id").substr(4, $("[title|='image']").attr("id").length - 1),
         },
             function (ret) {
                 $("[title|='image']").empty();
+                $('#preview').hide();
+                $('#pickfiles').show();
                 var tmp = $("[title|='image']").attr("id");
-                console.log(tmp);
+                var tmp1 = $("#cate").val();
+                console.log(tmp, tmp1);
                 $.post("{% url 'imglist' %}", {
                     csrfmiddlewaretoken: "{{ csrf_token }}",
                     id_list: tmp,
+                    cate: tmp1,
                 },
                     function (ret) {
                         // console.log(ret);
@@ -226,15 +233,17 @@
     // 显示各个队伍的缩略图
     $(document).ready(function () {
         var tmp = $("[title|='image']").attr("id");
-        console.log(tmp);
+        var tmp1 = $("#cate").val();
+        console.log(tmp, tmp1);
         $.post("{% url 'imglist' %}", {
             csrfmiddlewaretoken: "{{ csrf_token }}",
             id_list: tmp,
+            cate: tmp1,
         },
             function (ret) {
                 // console.log(ret);
                 $.each(ret, function (key, item) {
-                    // console.log(key, item);
+                    console.log(key, item);
                     for (var i = item.length - 1; i >= 0; i--) {
                         var div = $("<div class='col-sm-6 col-md-3'>");
                         var a = $("<a class='thumbnail'>").attr("href", item[i]);
