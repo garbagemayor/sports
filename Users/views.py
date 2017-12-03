@@ -323,38 +323,77 @@ def others(request, Id):
 @csrf_exempt
 def manager(request):
     user = User.objects.filter().exclude(authority=0)
-    for u in user:
-        u.auth = getauth(u.authority)
     status = 0
     if request.method == "POST":
-        if len(user) < 7:
+        if request.session.get('auth') < 2:
+            messages.add_message(request, messages.INFO, "无此操作权限！")
+        elif len(user) >= 7:
+            messages.add_message(request, messages.INFO, '管理员数量已达上限！')
+        else:
             if len(User.objects.filter(name=request.POST['name'])) == 0:
                 messages.add_message(request, messages.INFO, '查无此人！')
             else:
                 user = User.objects.get(name=request.POST['name'])
                 if user.authority < 1:
                     User.objects.filter(name=request.POST['name']).update(authority=1)
-                    messages.add_message(request, messages.INFO, '成功将' + request.session['username'] + '升至管理员！')
+                    messages.add_message(request, messages.INFO, '成功将' + request.POST['name'] + '升至管理员！')
                 else:
-                    messages.add_message(request, messages.INFO, '无此操作权限！')
-            user = User.objects.filter(authority=1)
-        else:
-            messages.add_message(request, messages.INFO, '管理员数量已达上限！')
-    return render(request, 'Users/manager.html', {'users_list': user, 'status': json.dumps(status)})
+                    messages.add_message(request, messages.INFO, '已经是管理员了！')
+            user = User.objects.filter().exclude(authority=0)
+    for u in user:
+        u.auth = getauth(u.authority)
+    return render(request,
+                  'Users/manager.html', {
+                      'session_auth': request.session['auth'],
+                      'session_name': request.session['username'],
+                      'session_userid': request.session['userid'],
+                      'users_list': user,
+                      'status': json.dumps(status)
+                  })
 
 
 def demanager(request, Id):
-    if request.session['auth'] > 1:
-        u = User.objects.filter(id=Id)
-        if u[0].authority > 1:
-            messages.add_message(request, messages.INFO, u[0].fullname + '是超级管理员！')
-        else:
+    u = User.objects.filter(id=Id)
+    if len(u) != 1:
+        messages.add_message(request, messages.INFO, "出错了！")
+        return HttpResponseRedirect("/")
+    u = u[0]
+    if request.session.get('auth') == 2:
+        if u.authority == 2:
+            cnt = len(User.objects.filter(authority=2))
+            if cnt <= 1:
+                messages.add_message(request, messages.INFO, "不能降级！降级之后平台就没有超级管理员了！")
+            else:
+                User.objects.filter(id=Id).update(authority=1)
+                if request.session.get('userid') == int(Id):
+                    request.session['auth'] = 1
+                messages.add_message(request, messages.INFO, "成功将" + u.name + "降至管理员！")
+        elif u.authority == 1:
             User.objects.filter(id=Id).update(authority=0)
-            messages.add_message(request, messages.INFO, u[0].fullname + '已不再是管理员！')
+            messages.add_message(request, messages.INFO, "成功将" + u.name + "降至用户！")
+    elif request.session.get('auth') == 1:
+        if u.id == request.session['userid']:
+            User.objects.filter(id=Id).update(authority=0)
+            request.session['auth'] = 0
+            messages.add_message(request, messages.INFO, "成功将" + u.name + "降至用户！")
+            return HttpResponseRedirect("/")
     else:
         messages.add_message(request, messages.INFO, '无此操作权限！')
     return HttpResponseRedirect("/managers/managers/")
 
+def inmanager(request, Id):
+    if request.session.get('auth') == 2:
+        u = User.objects.filter(id=Id)
+        if len(u) != 1:
+            messages.add_message(request, messages.INFO, "出错了！")
+            return HttpResponseRedirect("/")
+        u = u[0]
+        if u.authority == 1:
+            User.objects.filter(id=Id).update(authority=2)
+            messages.add_message(request, messages.INFO, "成功将" + u.name + "升至超级管理员！")
+    else:
+        messages.add_message(request, messages.INFO, '无此操作权限！')
+    return HttpResponseRedirect("/managers/managers/")
 
 def backend(request):
     return render(request, 'Users/backend.html')
