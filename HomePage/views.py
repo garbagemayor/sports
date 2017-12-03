@@ -105,7 +105,10 @@ def broadcastpage(request, Id):
     if b:
         b=b[0]
         b.time = utcToLocal(b.time).strftime("%Y-%m-%d %H:%M:%S")
-        b.publishername = Users.objects.get(id=b.publisher).name
+        if len(Users.objects.filter(id=b.publisher)) > 0:
+            b.publishername = Users.objects.filter(id=b.publisher)[0].name
+        else:
+            b.publishername = "系统"
         return render(request, 'HomePage/broadcastpage.html', {'broadcast': b})
     else:
         return render(request, 'HomePage/broadcastpage.html')
