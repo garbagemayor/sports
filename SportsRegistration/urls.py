@@ -82,6 +82,7 @@ urlpatterns = [
                   url(r'^managers/$', Users_view.backend, name='backend'),
                   url(r'^managers/managers/$', Users_view.manager, name='manager'),
                   url(r'^managers/(\d+)/$', Users_view.demanager, name='demanager'),  # 删除管理员
+                  url(r'^managers_up/(\d+)/$', Users_view.inmanager, name='inmanager'),  # 普通管理员升级为超级管理员
                   url(r'^team/$', Users_view.team, name='team'),
                   url(r'^picture/$', Users_view.picture, name='picture'),
                   url(r'^qiniu/$', Users_view.qiniu_uptoken, name='qiniu'),

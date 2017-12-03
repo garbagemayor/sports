@@ -16,8 +16,8 @@ import django.utils.timezone as timezone
 def index(request):
     team = Team.objects.get(headline=True,cate=1)
     team_img = list(IMG.objects.filter(headline=True,imgtype=Team.objects.get(headline=True,cate=1).id))
-    celebrity = Team.objects.get(headline=True,cate=2)
-    celebrity_img = list(IMG.objects.filter(headline=True,imgtype=Team.objects.get(headline=True,cate=2).id))
+    celebrity = Team.objects.filter(headline=True,cate=2)[0]
+    celebrity_img = list(IMG.objects.filter(headline=True,imgtype=celebrity.id))
     broadcast_list = list(Broadcast.objects.all()[::-1])
     game = list(IMG.objects.filter(headline=True,imgtype=-1))
     for b in broadcast_list:
