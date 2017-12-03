@@ -116,7 +116,7 @@ i = 0
 i += 1
 Events.objects.get_or_create(id=i)
 e = Events.objects.get(id=i)
-e.name = u'等待报名的个人比赛'
+e.name = u'2018年钟士模杯男子3000米'
 e.timeRegSt = t2
 e.timeRegEn = t2
 e.timeEvnSt = t2
@@ -127,7 +127,7 @@ e.save()
 i += 1
 Events.objects.get_or_create(id=i)
 e = Events.objects.get(id=i)
-e.name = u'报名截止的个人比赛'
+e.name = u'Code+程序设计竞赛志愿者'
 e.timeRegSt = t1
 e.timeRegEn = t1
 e.timeEvnSt = t2
@@ -138,7 +138,7 @@ e.save()
 i += 1
 Events.objects.get_or_create(id=i)
 e = Events.objects.get(id=i)
-e.name = u'正在进行的个人比赛'
+e.name = u'Code+程序设计竞赛'
 e.timeRegSt = t1
 e.timeRegEn = t1
 e.timeEvnSt = t1
@@ -149,7 +149,7 @@ e.save()
 i += 1
 Events.objects.get_or_create(id=i)
 e = Events.objects.get(id=i)
-e.name = u'已经结束的个人比赛'
+e.name = u'2017校园马拉松'
 e.timeRegSt = t1
 e.timeRegEn = t1
 e.timeEvnSt = t1
@@ -160,7 +160,7 @@ e.save()
 i += 1
 Events.objects.get_or_create(id=i)
 e = Events.objects.get(id=i)
-e.name = u'正在报名的个人比赛(1)'
+e.name = u'2017学生节志愿者'
 e.timeRegSt = t1
 e.timeRegEn = t2
 e.timeEvnSt = t2
@@ -172,7 +172,7 @@ e.save()
 i += 1
 Events.objects.get_or_create(id=i)
 e = Events.objects.get(id=i)
-e.name = u'正在报名的个人比赛(2)'
+e.name = u'2017年"一二九"长跑'
 e.timeRegSt = t1
 e.timeRegEn = t2
 e.timeEvnSt = t2
@@ -184,7 +184,7 @@ e.save()
 i += 1
 Events.objects.get_or_create(id=i)
 e = Events.objects.get(id=i)
-e.name = u'正在报名的团队比赛，2~4人'
+e.name = u'2018年美国UC Davis暑期实验团队项目'
 e.timeRegSt = t1
 e.timeRegEn = t2
 e.timeEvnSt = t2
@@ -199,23 +199,23 @@ print u'在Broadcast表中添加信息'
 
 Broadcast.objects.get_or_create(id=1)
 b = Broadcast.objects.get(id=1)
-b.title = u'冬季迷你马拉松来啦!!!'
-b.detail = u'什么都没有'
-b.publisher = 2
+b.title = u'2017年"一二九"长跑 已经开放报名'
+b.detail = u'欢迎大家踊跃报名'
+b.publisher = 0
 b.save()
 
 Broadcast.objects.get_or_create(id=2)
 b = Broadcast.objects.get(id=2)
-b.title = u'听说这样可以算阿甘?'
-b.detail = u'哈哈哈'
-b.publisher = 2
+b.title = u'2018年美国UC Davis暑期实验团队项目 已经开放报名'
+b.detail = u'欢迎大家踊跃报名'
+b.publisher = 0
 b.save()
 
 Broadcast.objects.get_or_create(id=3)
 b = Broadcast.objects.get(id=3)
-b.title = u'呃呃鹅鹅鹅鹅鹅鹅'
-b.detail = u'什么都没有'
-b.publisher = 2
+b.title = u'2017学生节志愿者 已经开放报名'
+b.detail = u'欢迎大家踊跃报名'
+b.publisher = 0
 b.save()
 
 print u'在Team表中添加对象'

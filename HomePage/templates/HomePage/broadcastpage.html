@@ -33,7 +33,11 @@
                     发布人
                 </dt>
                 <dd>
+                    {% if broadcast.publishername == "系统" %}
+                    系统
+                    {% else %}
                     <a href="/user/{{broadcast.publisher}}">{{broadcast.publishername}}</a>
+                    {% endif %}
                 </dd>
 				<br>
                 <dt>
