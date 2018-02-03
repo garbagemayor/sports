@@ -583,6 +583,8 @@ def set_img(request):
         if option == -2: # 首页背景
             IMG.objects.filter(imgtype=-2).update(imgtype=0,headline=False)
             IMG.objects.filter(id=int(checked_item)).update(imgtype=-2,imgtypename=Team.objects.get(id=option).name,headline=True)
+        elif option == -1: # 风采展示
+            IMG.objects.filter(id=int(checked_item)).update(imgtype=-1,imgtypename=Team.objects.get(id=option).name,headline=True)
         elif option == -3: # 撤回
             IMG.objects.filter(id=int(checked_item)).update(headline=False)
         elif option == -4: # 删除
